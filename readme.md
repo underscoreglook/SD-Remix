@@ -22,6 +22,8 @@ This section holds various data that describes the game, stored in various.
 * MAKER_CODE = This is the alphanumeric 2-length maker code we want to use, like 01 for Melee
 * REVISION = This is the version number for this game. It can be from 0 to 255. Is 2 for Melee 1.02.
 * GAME_NAME = The ASCII name for the game. It is "Super Smash Bros Melee" for Melee.
+##### FILES_STRUCTURE section
+The SSBM ISO isn't very tightly packed, because there's actually a lot of space leftover on the disc. As a result, some of the basic files (like the FST, DOL, and Debug stuff) are separated out by a huge amount. This section packs these items closer together. Read the comments in the config for more information.
 
 ### Characters
 All characters should be stored in the "chars" directory. The main tool people use at the moment to change character files is Crazy Hand, which works directly with ISO files. As a result, when a change is made, the raw Pl*.dat files should be copied over to the "chars" directory and committed, with good commit messages saying what exactly has changed, since it's hard to read binary file changes.
