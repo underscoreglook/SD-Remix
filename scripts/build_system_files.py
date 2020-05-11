@@ -6,6 +6,7 @@ from os import listdir, path
 # CONSTANTS #
 #===========#
 FST_ENTRY_SIZE = 12
+ISO_BLOCK_SIZE = 0x800
 CONFIG_FOLDER = "configs"
 GAME_CFG_FILENAME = "game.cfg"
 SYSTEM_DATA_FOLDER = "&&SystemData"
@@ -69,10 +70,10 @@ def createNewToc(buildRootDir, isoRootPathDir, newFilenames, nextFileOffset):
 		appendInteger(fstEntries, fileSize)
 		# When incrementing the next file offset, add the current filesize,
 		# but round up to give padding and align to disc sector
-		byteSize = fileSize % 256
+		byteSize = fileSize % ISO_BLOCK_SIZE
 		if byteSize > 0:
 			fileSize -= byteSize
-			fileSize += 256
+			fileSize += ISO_BLOCK_SIZE
 		nextFileOffset += fileSize
 		appendString(stringTable, filename)
 		stringTable.append(0) # null terminator
