@@ -1,0 +1,132 @@
+Character Changes
+-----------------
+None
+
+Visual And Data
+---------------
+New disc banner
+Name changed to SD Remix 3.2
+GameID is SDRE32, with version number set to 0x02
+Change "Debug Mode" to "SDR Options"
+Change "A tournament for 64 players" to "Settings for SD Remix"
+
+Settings Changes
+----------------
+Score display unlocked
+Score Display enabled by default for timed matches
+All Events Unlocked
+Name tag no longer resets on port close and CSS exit
+
+New Features
+------------
+Stage Striking (Z to unban, Y to ban all but random select, X to ban currently highlighted stage)
+Unbounded Pause Camera
+Every player can control the debug menu
+Hold A+B on game end for salty runback
+X + Y disables Start during game (helps recalibrate joysticks)
+Tags can be 8 characters and lower case can be togged with X
+Name tag boxes scale with name tag
+Debug menu exits to CSS
+L+R+A+Start during stage load goes back to CSS instead of Main Menu
+
+New Debug Menu
+--------------
+Debug menu is now the SDR Options menu. The options include:
+General Options >
+	Widescreen
+	Stock dependent platform colors (only works in 4 stock matches)
+	Hold Start for 2.5 seconds at the results screen to force other players to press Pause.
+Toggles:
+	Disabled: Turns the next two menu items off. Disables all toggles inside of those menus. Changes "Ready to fight" banner color to Yellow.
+	Enabled: Turns the next two menu items on. The toggles inside those menus follow what the user sets them as. Changes the "Ready to fight" banner to Green.
+	Only Melee+ Enabled: Turns the next two menu items off and changes the "Melee+ Toggles >" text in the menu item to "~Melee+ Enabled". Turns off all toggles in "Other Toggles >" and enables all toggles in "Melee+ Toggles >".
+Melee+ Toggles >
+	Handicap (Damage Ratio, Stock/Crew): Damage Ratio is normal handicap. Stock/Crew means stocks are controlled by handicap setting. Setting handicap to Auto enables Crew Battle mode, which automatically sets the handicap to whatever the remaining stocks were in the last match.
+	Ledge Invincibility (Normal, Dynamic): Dynamic means that ledge invincibility is treated like shields, where ledge invincibility is reduced each time it is used, but it recovers over time.
+	Wall Bracing (Disabled, Enabled): Wall bracing allows a player going into a wall to hold left or right to brace the next grounded (non-launching) attack, so that their feet leave the ground. This combats wall infinites.
+	Capped Points (Disabled, Enabled) - This uses the "Stock Match Time Limit" as the limit number (if the time limit is None, it behaves exactly as if you'd Disabled Capped Points entirely). During a timed match, if someone's number of points reach the limit, the match ends and they win. In coin battle, whoever reaches limit times 100 in coins ends the match and they win.
+Other Toggles >
+	Shields (Normal, Infinite)
+	Tap Jump (Enabled, Disabled)
+	Always Rain Bombs (Disabled, Enabled, Pokeballs): If enabled, bombs rain from the sky, like in sudden death. If Pokeballs, instead of bombs, pokeballs rain from the sky (may cause lag)
+	Random Hitbox Element (Disabled, Enabled) - Makes all non-projectile hits have a random element.
+Credits >
+	The credits for SD Remix 3.2
+Debug Mode >
+	This is a parsed down version of the old Debug Menu. It's got Dairantou, rule select, Global Data Edit, DBLevel (so you can turn on hitboxes and frame by frame among other things), and Publicity on/off).
+
+Stages
+------
+Background and laggy elements disabled if four players are playing
+Stage Selection now has an Alpha and Omega pages
+Omega page can be reached by pressing R on the Stage Select Screen
+Alpha page can be reached by pressing L on the Stage Select Screen
+Omega and alpha pages have altered graphics to show which page you're on
+Alpha stages are:
+	Icicle Mountain
+	Princess Peach's Castle
+	Rainbow Cruise
+	Kongo Jungle
+	Jungle Japes
+	Great Bay
+	Hyrule Temple
+	Yoshi's Island N64
+	Yoshi's Island
+	Fountain of Dreams
+	Green Greens
+	Corneria
+	Venom
+	Mount Olympus (Snag The Trophies)
+	Brinstar
+	Brinstar Depths
+	Onett
+	Fourside
+	Mute City
+	Big Blue
+	Kongo Jungle N64
+	PokeFloats
+	Mushroom Kingdom
+	Mushroom Kingdom II
+	Reversed Battlefield (Battlefield with platform heights reversed)
+	Whispy's Battle Grounds
+	Dream Land N64
+	Yoshi's Story
+	Pokemon Stadium
+Omega stages are:
+	Flat Zone
+	Omega Princess Peach's Castle (no bullet bill or switches)
+	Princess Peach's Flat (no spire in middle, no bullet bill or switches)
+	Omega Kongo Jungle (no barrel, klaptrap, rock, or logs)
+	Omega Jungle Japes (no klaptrap and water does nothing)
+	High Tide at Great Bay (no left platform, other platforms are same height)
+	Skyrule (modified portion of top left part of Hyrule Temple)
+	Omega Yoshi's Island N64 (only two platforms symmetrical, no clouds)
+	Omega Yoshi's Island (left side with rearranged rest of stage)
+	Omega Fountain of Dreams (no side platforms)
+	Omega Green Greens (No blocks, no wind, no apples)
+	Omega Corneria (no arwings, no great fox gun)
+	Warzone Corneria (extra arwings)
+	Omega Mount Olympus (Snag the Trophies stage with three platforms and reorganized ground)
+	Omega Brinstar (no lava)
+	Omega Brinstar Depths (no kraid, no rotation)
+	Omega Onett (No cars, no drugstore platforms)
+	Smashville Fourside (Version of Fourside similar to Brawl's Smashville)
+	Omega Mute City (no cars)
+	Omega Big Blue (no cars other than the first)
+	Omega Kongo Jungle N64 (no barrel)
+	Cranky's Treehouse (like jungle japes without side platforms and altered main platform)
+	Omega Mushroom Kingdom (no sides, less walls, lower pullies)
+	Omega Mushroom Kingdom II (no sides, bigger middle, no Birdo, no Pidget)
+	Battlefield
+	Final Destination
+	Omega Dream Land N64 (no wind)
+	Omega Yoshi's Story (no flyguys)
+	Omega Pokemon Stadium (no transformations)
+Icons and stage text altered to reflect new stages on Omega and Alpha pages.
+Default Random Stages options menu controls Omega Stages.
+Alpha stages on Random Stages options menu can be accessed by holding L while loading menu.
+Alpha and Omega random stages can be controlled separately.
+Pressing "A" on "Random" only selects a random stage from the current page.
+Pressing "Start" to choose a random stage selects a random stage from either page (though it doesn't actually show the page changing). Plays a sound if you're loading the omega version and a different sound if you're loading the alpha version.
+Default Omega random stages are Princess Peach's Flat, Kongo Jungle, Jungle Japes, Great Bay, Temple (Skyrule), Brinstar, Yoshi's N64, Yoshi's Island, Fountain of Dreams, Green Greens, Kongo Jungle N64, Cranky's Treehouse, Mute City, Big Blue, Fourside, Mushroom Kingdom, Mushroom Kingdom II, Battlefield, Final Destination, Dreamland N64, Yoshi's Story, Pokemon Stadium
+Default Alpha random stages are Fountain of Dreams, Battlefield, Whispy's Battlegrounds, Dreamland N64, Yoshi's Story, Pokemon Stadium

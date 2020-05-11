@@ -1,0 +1,166 @@
+SD Remix 3.1 Changelist (Relative to SD Remix 3.0)
+
+-------------------GENERAL CHANGES-------------------
+- New SD Remix-tailored title screen
+- Character select screen has different coloration
+- Character select screen ('USA' lang. setting) 'MELEE' graphic changed to 'SD REMIX'
+- C-Stick in Debug's Develop Mode no longer toggles camera [Achilles]
+- v3.0 Shield Colors reverted back to Melee default settings
+
+New Game Rule Defaults:
+- Item Frequency changed from 'Medium' to 'Off'
+- Rumble default for all players changed from 'On' to 'Off'
+- Default random select stage list is now:
+
+Yoshi's Island N64, Dreamland N64, Final Destination, Battlefield, Fourside, Green Greens, Pokemon Stadium, Fountain of Dreams, Yoshi's Story
+
+RECOMMENDATION: Green Greens is neutral, Fourside and Yoshi's Island N64 are counterpick
+
+
+-------------------CHARACTER CHANGES-------------------
+Captain Falcon:
+- UpB grab boxes set back to Melee default (i.e large grab box can only grab grounded opponents)
+
+Donkey Kong:
+- No changes from v3.0 to v3.1
+
+Fox:
+- No changes from Melee NTSC v1.0
+
+Mr. Game & Watch:
+- Dash length (dashdance) increased from 9 frames to 13 frames 
+- Fsmash angle trajectory reverted back to vMelee (v3.0: 45 deg, v3.1: 55 deg)
+- Dsmash base knockback increased from v3.0's 40 to v3.1's 50
+- Fair start-up reduced from 10 to 8
+- Fair knockback values changed; halved base knockback and slightly higher knockback growth
+- Bair shield damage reduced from v3.0's 4 to v3.1's 2 
+- Dair Meteor Smash hitbox now lasts two frames longer than v3.0 (v3.0: 3 frames, v3.1: 5 frames)
+- Dair landing lag base increased from v3.0's 15 to v3.1's 16
+- SideB (Judgment) #5 safer on hit
+- UpB reverted back to Melee default. No more wake-up invincibility
+
+Kirby:
+- No changes from v3.0 to v3.1
+
+Bowser:
+- Jab1 to Jab2 connects more consistently (increased weight-based knockback on Jab1)
+- Fsmash shield damage reduced (v3.0: 50 SDMG to v3.1: 30 SDMG)
+- Dair has a hitbox attached to foot for better range
+- Dair active frames increased to overall 9 frames
+- SideB grab range increased; only outermost hitbox is non-grab
+- Down-B shield damage reduced (v3.0: 35 to v3.1: 16)
+
+Link:
+- Initial dash slightly increased (base 1.3 to 1.4)
+- Ftilt start-up slightly reduced (start-up: 14 to 11)
+- Dtilt outermost hitbox now also Meteor Smashes
+- Dtilt start-up greatly reduced (start-up: 11 to 9)
+- Nair sweetspot damage increased by 1 (from 12 to 13)
+- Fair sweetspot base knockback very slightly increased (v3.0: BKB 20 to v3.1: BKB 25)
+- Bair first hit no longer uses weight-based knockback; scales purely on knockback growth
+- Bair second hit has slightly larger hitboxes than vMelee
+- Fthrow damage increased by 1 (from 5 to 6)
+- Bthrow damage increased by 1 (from 5 to 6)
+- Neutral B (arrows) have slightly larger hitboxes
+- DownB (Bomb Pull) reduced from v3.1: 35 to v3.0: 30
+
+Luigi:
+- Initial dash speed increased from base 1.3 to 1.4
+- Short hop rises to its apex slightly faster (base 1.4 to 1.5)
+- Dash length (dashdance) increased from 11 to 15
+- Dash Attack angle trajectory slightly more horizontal (v3.0: ANG 270 to v3.1: ANG 280)
+- Dair hitbox priority swapped. Meteor Smash hitbox takes priority if the two hitboxes overlap.
+- DownB (Luigi Cyclone) ground finale hitbox readjusted; crotch hitbox moved to head for more utility
+- DownB no longer needs to be charged to rise in the air [Achilles]
+
+Mario:
+- No changes from v3.0 to v3.1
+
+Marth:
+- ALL SD REMIX CHANGES REVERTED TO NTSC v1.0
+
+Mewtwo:
+- Hurtboxes no longer present on tail
+- Spotdodge duration decreased from v3.0: 29 to v3.1: 27 (tied with Marth)
+- Bair sweetspot system revised from v3.0 (old vMelee damage values put back into place; tip - weakest, base - strongest)
+- NeutralB (Shadow Ball) pre-charge frames reduced from 17 to 10
+
+Ness:
+- Usmash charge hitboxes do shield damage (SDMG 0 to SDMG =3)
+- Nair start-up reduced by one frame (5 to 4), sweetspot deals more damage (DMG 11 to DMG 13) - compare to Peach Nair
+- Nair landing lag decreased from 22 to 18
+- Fair innermost hitbox has same knockback properties as electric hitbox 
+- Dair landing lag decreased from 28 to 18
+- Dair autocancel window now correctly placed to REAL (after frame speed mods) frame 30 {in v3.0 and earlier; you never had to L-Cancel}
+- Dair cooldown frames decreased
+- Grab's hitbox has greatly increased horizontal range
+- Grab's active duration increased by 1 frame (2 to 3)
+- Dash Grab's hitbox  has greatly increased horizontal range
+- Dash Grab's active duration increased by 1 frame (2 to 3)
+- NeutralB (PK Flash) knockback values reworked from v3.0 (can KO 'realistically' after ~110%)
+- UpB (PK Thunder 2) travel distance decreased
+- DownB (PSI Magnet) body invincibility on frame 1 removed
+
+Peach: 
+- No changes from Melee NTSC v1.0
+
+Pikachu:
+- Dsmash connecting hitboxes have a less steep trajectory (v3.0: 220 deg, v3.1: 170 deg)
+
+Ice Climbers:
+- No changes from v3.0 to v3.1
+
+Jigglypuff:
+- No changes from Melee NTSC v1.0
+
+Samus:
+- Utilt shin invincbility correctly terminates after hitbox active frames
+
+Yoshi:
+- Grab hitbox on mouth not always active; terminates after 4 frames (i.e vMelee behavior)
+- Dash Grab mouth hitbox made larger; out for same duration as tongue hitboxes
+- Uthrow cooldown slightly decreased
+
+Zelda:
+- Friction coefficient reduced from 1 to 0.07 (longer wavedash)
+- Initial dash speed increased from 1.17 to 1.25
+- Initial run speed increased from 1.21 to 1.25
+- Dtilt base knockback increased (v3.0 BKB 20 to v3.1 BKB 30)
+- Nair landing hitboxes have increased duration (v3.0: 2 {1} to v3.1: 8 {4}) [L-Cancelling gives you duration in {*}]
+- Fthrow knockback growth increased (KBG 50 to KBG 60)
+- Bthrow knockback growth increased (KBG 60 to KBG 70)
+
+Sheik:
+- ALL SD REMIX CHANGES REVERTED TO NTSC v1.0
+
+Falco: 
+- No changes from Melee NTSC v1.0
+
+Young Link:
+- Dash Attack IASA reduced to match SD Remix Link's (v3.0: 40 to v3.1: 36)
+- Usmash connects better; second and third slashes no longer under frame speed modification (vMelee default)
+- Fair sweetspot hitboxes last 3 frames longer (v3.0: 3 to v3.1: 6)
+- Bair first hit sends slightly upward and away
+- Bair second hit is now identical to Bair first hit
+- Uthrow: base knockback increased (v3.0: 38 to v3.1: 64)
+
+Dr. Mario:
+- UpB landing lag reduced from 30 to 15 frames (UpB cancelling is now more useful)
+
+Roy:
+- Fair flubspot hitboxes reworked for better comboability over all percents
+- Bair hitboxes have increased knockback growth (v3.0: KBG 90 to v3.1: KBG 100)
+- Uair sweetspot has less knockback growth (v3.0: KBG 70 to v3.1: KBG 55)
+- Uair flubspot has increased damage (DMG 7 to 8) and less knockback growth 
+- Dair flubspot has higher base knockback (v3.0: BKB 40 to v3.1: BKB 60) and more knockback growth (v3.0: KBG 70 to v3.1: KBG 80) [better anti-ASDI down and anti-Crouch Cancel tool]
+- Dair cooldown in air decreased
+- SideB1 (Double-Edged Dance; DED) angle trajectories reworked to better connect to SideB2 and SideB2Up
+- SideB2Up (DED) can cancel into third follow-up 2 frames faster
+- SideB2 (DED) damage reverted to vMelee default (v3.0: 3 {3} to v3.1 6 {5}) *{} denotes flubspot
+
+Pichu:
+- No changes from v3.0 to v3.1
+
+Ganondorf:
+- No changes from v3.0 to v3.1
+
