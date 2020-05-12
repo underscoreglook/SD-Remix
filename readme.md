@@ -61,23 +61,3 @@ Third, we need to build the DOL. This is done via Melee Code Manager. Open the 1
 ### Building an ISO
 Make a fresh copy of the Melee v1.02 extracted root folder. Then copy everything in build/root into the root directory of Melee v1.02.
 After everything has been copied, build an ISO using GCR and the now altered Melee v1.02 root directory.
-
-
-## Repo Todo list
-
-Initial commit:
---------------
-Instructions in internal docs on how to create xdelta patches that are as small as they can be.
-Also, include docs on how to create other types of files, like DIOS MIOS and ISO bundles.
-Copy over SDRE32.ini file somewhere (maybe configs?)
-Once you have everything like this, create a new branch that is JUST the SDR 3.2.1 stuff so we can move on to the next step below
-
-After initial commit:
---------------------
-Move over relevant notes from personal files to this repo, particularly the PK Thunder stuff
-Start converting the raw changes to actual individual mods in the MCM
-Fill in the menu/assets directory with all known asset changes
-Eventually add SD Remix Lite to this repo
-Copy changes to 3.2.1 branch, so that it's cleaner
-Start making a netplay build, with stuff from todo list (consolidate todo lists from the other stuff and any leftovers), and based on suggestions
-Possibly make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the SDR Stage List.
