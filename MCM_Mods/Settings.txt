@@ -1,0 +1,86 @@
+SDR Default random omega stages
+Melee Code Manager doesn't have any settings for this, so it won't complain
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A7C ------ 00000000 -> FF7B79BE
+
+
+	-==-
+
+
+SDR Default random alpha stages
+While this conflicts with the settings selector in Melee Code Manager partly,
+the stage list is incorrect. Note, enabling this will make MCM complain.
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A78 ----- FFFFFFFF -> FF000020
+
+
+	-==-
+
+
+Set default game mode to stocks
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A4A ----- 00 -> 01
+
+
+	-==-
+
+
+Set default stocks to 4
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A4C ----- 03 -> 04
+
+
+	-==-
+
+
+Set default stock time limit to 8 mins
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A50 ----- 00 -> 08
+
+
+	-==-
+
+
+Set default friendly fire to ON
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A51 ----- 00 -> 01
+
+
+	-==-
+
+
+Set default score display to ON
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A53 ----- 00 -> 01
+
+
+	-==-
+
+
+Set default Item Frequency to NONE
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A60 ----- 02 -> FF
+
+
+	-==-
+
+
+Set all default controller rumble settings to OFF
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A70 ----- 01010101 -> 00000000

@@ -56,7 +56,7 @@ Second, create a text file called "isoRootPath.txt" in the configs directory and
 
 Third, run the "build.bat". This should (re)create a "root" directory in the "build" directory, and put all changed files except for the DOL file.
 
-Third, we need to build the DOL. This is done via Melee Code Manager. Open the 1.02 Melee DOL in MCM and go to the "SD Remix" tab and select everything in here. Then "Save as" to save a new DOL. This DOL should be saved as "build/root/&&systemdata/Start.dol".
+Third, we need to build the DOL. This is done via Melee Code Manager. Open the 1.02 Melee DOL in MCM and go to the "SD Remix" tab and select everything in here. Then "Save as" to save a new DOL. This DOL should be saved as "build/root/&&systemdata/Start.dol". NOTE: In the "Settings" mod group, there are a bunch of codes for setting default settings. Most of these can also be done through the Custom Rules UI in MCM, by selecting tournament rules. The two that can't be fixed this way are the omega and alpha stage mods. The alpha stage mods will likely cause 
 
 ### Building an ISO
 Make a fresh copy of the Melee v1.02 extracted root folder. Then copy everything in build/root into the root directory of Melee v1.02.
@@ -80,3 +80,4 @@ Fill in the menu/assets directory with all known asset changes
 Eventually add SD Remix Lite to this repo
 Copy changes to 3.2.1 branch, so that it's cleaner
 Start making a netplay build, with stuff from todo list (consolidate todo lists from the other stuff and any leftovers), and based on suggestions
+Possibly make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the SDR Stage List.
