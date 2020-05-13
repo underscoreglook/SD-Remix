@@ -1,6 +1,6 @@
 Short term:
 ----------
-Converting the raw changes to actual individual mods in the MCM
+Converting the raw changes to actual individual mods in the MCM (see if they match up to included mods, or if there are updates to the mods; if there are updates, put them in the End Goal section. Also, put any unused mods included in MCM into the End Goal section as well).
 Instructions in internal docs on how to create xdelta patches that are as small as they can be.
 Also, include docs on how to create other types of files, like DIOS MIOS and ISO bundles.
 Copy over SDRE32.ini file somewhere (maybe configs?)
