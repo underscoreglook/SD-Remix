@@ -1,0 +1,65 @@
+Magus's decompiled FSM Engine code
+
+ASM For the above
+===========================================
+mr	r3,r27				# [GET CHARACTER ID] moves an index address into r3 needed in function
+lbz	r31,108(r3)			# loads player number
+lis	r29,0x8045			# -32699
+ori	r29,r29,0x3084		# v1.00, 804510C4, v1.02, 80453084. player 1 character ID ((CHANGED??))
+mulli	r31,r31,3728	# players are 0xE90 apart
+add	r31,r29,r31
+lwz	r4,0(r31)			# loads character ID
+lbz	r31,8(r31)			# loads secondary instance flag
+cmpwi	r4,19			# Sheik/Zelda ID
+beq-	SHEIKZELDA		# go to "SHEIKZELDA", 0x1C
+cmpwi	r4,18			# Zelda/Sheik ID
+bne+	ACT				# go to "GET ACTION, SUBACTION, & FRAME" if not Zelda or Sheik, 0x20 "ACT"
+cmpwi	r31,1			# [DETERMINE ZELDA OR SHEIK][ZELDA/SHEIK] Zelda/Sheik & secondary instance = Sheik
+bne+	ACT				# go to "GET ACTION, SUBACTION, & FRAME" if not secondary instance, 0x18 "ACT"
+li	r4,19				# Set Sheik as character ID
+b	ACT					# go to "GET ACTION, SUBACTION, & FRAME" [/ZELDA/SHEIK], 0x10 "ACT"
+SHEIKZELDA:
+cmpwi	r31,1			# [SHEIK/ZELDA] Sheik/Zelda & secondary instance = Zelda
+bne+	ACT				# go to "GET ACTION, SUBACTION, & FRAME" if not secondary instance, 0x8 "ACT"
+li	r4,18				# Set Zelda as char ID [/SHEIK/ZELDA][/DETERMINE ZELDA OR SHEIK][/GET CHARACTER ID]
+ACT:
+lfs	f1,2196(r30)		# [GET ACTION, SUBACTION, & FRAME] loads current animation frame
+fctiwz	f1,f1			# converts animation frame to int, rounded towards zero
+stfd	f1,0(r2)		# stores int animation frame
+lwz	r5,4(r2)			# loads current animation frame into normal register
+lwz	r6,112(r3)			# loads current action
+lwz	r7,116(r3)			# loads current subaction
+ori	r7,r7,0x8000		# changes it to 00008XXX [/GET ACTION, SUBACTION, & FRAME]
+##########################
+### This part should be replaced based on the location of the FSM Data
+lis	r31,0x8040			# THIS IS ADDR of WHERE FSM DATA LIVES (+ next line)	8040B9A8
+ori	r31,r31,0xB9A8		# Actually, real entry is 0x8040B9B0, this is 0x8 before for looping
+##########################
+lwzu	r29,8(r31)		# [FSM ENTRY CHECK LOOP] loads fsm entry (ex: 11078072)
+cmpwi	r29,0			# 00000000 inidicates end of list
+beq-	0x60			# skip code if no matches in list
+rlwinm r28,r29,8,24,31	# extracts leftmost byte (character id; ex: 11078072 -> 00000011)
+cmpwi	r28,255			# wild card (FF) character ID check
+beq-	0x14			# continue to animation frame check if wild card match
+cmpw	r28,r4			# compares char id to char id in fsm line
+beq-	0xC				# continue to animation frame check if character ID match
+bgt-	0x48			# skip code if entries for character have been passed
+b	-0x24				# loops to go on to next entry if character's entries haven't been reached yet
+rlwinm r28,r29,16,24,31	# extracts 2nd from left byte (FSM timer; ex: 11078072 -> 00000007)
+cmpw	r28,r5			# compares to current frame
+bgt-	-0x30			# loops to go on to next entry if animation frame is before FSM entry's timer
+rlwinm r28,r29,0,16,31	# extracts right 2 bytes (action/subaction; ex: 11078072 -> 00008072)
+cmpw	r28,r6			# compares action/subaction entry to current action
+beq-	0xC				# go to "CHECK IF FSM OF 1" if match
+cmpw	r28,r7			# compares action/subaction entry to current subaction
+bne+	-0x44			# loops to go on to next entry if no action/subaction match [/FSM ENTRY CHECK LOOP]
+lwz	r28,4(r31)			# [CHECK IF FSM END] loads FSM speed entry as word
+cmpwi	r28,-1			# FFFFFFFF
+beq-	0x18			# skip code if frame speed of 1 (so smash charges can work) [/CHECK IF FSM END]
+lfs	f1,4(r31)			# [GO TO FRAME SPEED FUNCTION] loads float from FSM to be applied
+lis	r31,0x8006			# 1.00 = 8006F034, 1.02 = 8006F190
+ori	r31,r31,0xF190		# function used to change frame speed (on landing animations)
+mtlr	r31
+blrl					# go to frame speed function [/GO TO FRAME SPEED FUNCTION]
+lmw	r27,20(r1)			# entry point (800731C4). restores r27-r31 from stack
+b -0x398650
