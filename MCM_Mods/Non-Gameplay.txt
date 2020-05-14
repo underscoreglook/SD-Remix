@@ -1,0 +1,151 @@
+SDR Default random omega stages
+Melee Code Manager doesn't have any settings for this, so it won't complain
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A7C ------ 00000000 -> FF7B79BE
+
+
+	-==-
+
+
+All 51 Event Matches Open but Not Complete
+(Completed event matches are read from the memory card, or from the current boot as normal.)
+[achilles]
+Version -- DOL Offset ----- Hex to Replace ----------
+1.02 ------ 0x249AA4 ------ 2C1F0005 -> 48000058
+----------- 0x15FAC8 ------ 4182000C -> 60000000
+
+
+	-==-
+
+
+Unrestricted Pause Camera
+[achilles]
+Version ---- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ------- 0x221804 ---- C0230040 -> 39E00000 ---- lfs f1,0x40(r3) -> li r15,0
+------------ 0x02C190 ---- D03F02F8 -> 91FF02F8 ---- stfs f1,0x2F8(r31) -> stw r15,0x2F8(r31)
+------------ 0x221824 ---- C0230048 -> 3DE04700 ---- lfs f1,0x48(r3) -> lis r15,0x4700
+------------ 0x02C19C ---- D03F02FC -> 91FF02FC ---- stfs f1,0x2FC(r31) -> stw r15,0x2FC(r31)
+------------ 0x22183C ---- EC210032 -> 3DE04700 ---- fmuls f1,f1,f0 -> lis r15,0x4700
+------------ 0x02C16C ---- D03F02E8 -> 91FF02E8 ---- stfs f1,0x2E8(r31) -> stw r15,0x2E8(r31)
+------------ 0x221854 ---- EC210032 -> 3DE04700 ---- fmuls f1,f1,f0 -> lis r15,0x4700
+------------ 0x02C174 ---- D03F02EC -> 91FF02EC ---- stfs f1,0x2EC(r31) -> stw r15,0x2EC(r31)
+------------ 0x22186C ---- EC210032 -> 3DE04700 ---- fmuls f1,f1,f0 -> lis r15,0x4700
+------------ 0x02C184 ---- D03F02F4 -> 91FF02F4 ---- stfs f1,0x2F4(r31) -> stw r15,0x2F4(r31)
+------------ 0x221884 ---- EC210032 -> 3DE04700 ---- fmuls f1,f1,f0 -> lis r15,0x4700
+------------ 0x02C17C ---- D03F02F0 -> 91FF02F0 ---- stfs f1,0x2F0(r31) -> stw r15,0x2F0(r31)
+
+
+	-==-
+
+
+Normal C-Stick Functionality in 1P Mode
+-C-Stick functions in 1P modes like it does in VS mode
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+PAL ------- 0x168A30 ---- 48000008 -> 60000000
+1.01 ------ 0x167D6C ---- 48000008 -> 60000000
+1.02 ------ 0x168060 ---- 48000008 -> 60000000
+1.00 ------ 0x167744 ---- 48000008 -> 60000000
+
+
+	-==-
+
+
+Taunt Canceling
+- Taunting during dash carries momentum
+- Taunting can be interrupted by teeter animation
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.00 ------ 0x0C6CF4 ---- 40820034 -> 40820058 ---- ()
+----------- 0x0DB604 ---- 4BFA5439 -> 4BFA55B5 ---- ()
+
+1.01 ------ 0x0C6E38 ---- 40820034 -> 40820058 ---- ()
+----------- 0x0DB7DC ---- 4BFA5349 -> 4BFA54C5 ---- ()
+
+1.02 ------ 0x0C70AC ---- 40820034 -> 40820058 ---- ()
+----------- 0x0DBA50 ---- 4BFA5295 -> 4BFA5411 ---- ()
+
+PAL ------- 0x0C7850 ---- 40820034 -> 40820058 ---- ()
+----------- 0x0DC204 ---- 4BFA515D -> 4BFA52D9 ---- ()
+
+
+	-==-
+
+
+SDR Default random alpha stages
+While this conflicts with the settings selector in Melee Code Manager partly,
+the stage list is incorrect. Note, enabling this will make MCM complain.
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A78 ----- FFFFFFFF -> FF000020
+
+
+	-==-
+
+
+Set default game mode to stocks
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A4A ----- 00 -> 01
+
+
+	-==-
+
+
+Set default stocks to 4
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A4C ----- 03 -> 04
+
+
+	-==-
+
+
+Set default stock time limit to 8 mins
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A50 ----- 00 -> 08
+
+
+	-==-
+
+
+Set default friendly fire to ON
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A51 ----- 00 -> 01
+
+
+	-==-
+
+
+Set default score display to ON
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A53 ----- 00 -> 01
+
+
+	-==-
+
+
+Set default Item Frequency to NONE
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A60 ----- 02 -> FF
+
+
+	-==-
+
+
+Set all default controller rumble settings to OFF
+Conflicts with Melee Code Manager's Custom Rules section, so set there instead
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A70 ----- 01010101 -> 00000000

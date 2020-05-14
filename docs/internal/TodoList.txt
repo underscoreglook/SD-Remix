@@ -48,3 +48,35 @@ Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v2 (v1.02) [Mag
 PAL	0x74498, 0x7455C, 0x7548C, 0x73D00, 0x73E54, 0x74CD4, 0x74E28, 0x73FF4, 0x749B4
 
 Look for latest widescreen codes
+
+Shy Guys drop food even if items are at off (1.02)[flieskiller]
+0428fb1c 4800000c
+I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food as well, even if the food item is at off.
+
+[Debug Menus] Submenus Resemble Normal Menus
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80304254 --- 887F0000 -> 38600000
+1.02 ----- 0x8030425c --- 88A90004 -> 38A00006
+1.02 ----- 0x803030dc --- 80010058 -> 3C000000
+1.02 ----- 0x80303158 --- 80010050 -> 3C000000
+1.02 ----- 0x803031d4 --- 80010048 -> 3C000000
+1.02 ----- 0x80303244 --- 80010040 -> 3C000000
+
+
+
+
+
+=============
+= Code dump =
+=============
+
+Stale Moves in Develop Mode
+This leaves the DEBUG-ROM setting (3) to still not use stale moves.
+(Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-31#post-18625334)
+[Magus]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ------ 0x85E34 ---- 48000030 -> 41820030
+1.01 ------ 0x85C74 ---- 48000030 -> 41820030
+1.00 ------ 0x85B8C ---- 48000030 -> 41820030
+PAL ------- 0x864EC ---- 48000030 -> 41820030
