@@ -22,3 +22,29 @@ Other suggestions?
 Look at todo list for other stuff.
 Probably talk with the SDR team to get approval from whole team before making any changes.
 (Maybe also make a tool for creating Debug screen changes?)
+Also, take what's in the SDRE32.ini and possibly build them in? Like UCF or something
+
+
+
+
+
+POSSIBLE CODES
+==============
+These are possible new codes or updated codes
+
+Replace existing hitlag code with the following updated code
+Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v2 (v1.02) [Magus]
+040771E0 60000000
+040772A4 60000000
+040781D4 60000000
+04076A48 60000000
+04076B9C 60000000
+04077A1C 60000000
+04077B70 60000000
+04076D3C 60000000
+040776FC 60000000
+-DOL-
+1.02	0x73DC0, 0x73E84, 0x74DB4, 0x73628, 0x7377C, 0x745FC, 0x74750, 0x7391C, 0x742DC
+PAL	0x74498, 0x7455C, 0x7548C, 0x73D00, 0x73E54, 0x74CD4, 0x74E28, 0x73FF4, 0x749B4
+
+Look for latest widescreen codes

@@ -88,3 +88,15 @@ ori r31,r31, <<fsmData>>@l
 7C1C3800 4082FFBC 839F0004 2C1CFFFF
 41820018 C03F0004 3FE08006 63FFF190
 7FE803A6 4E800021 BB610014 4B000000
+
+
+	-==-
+
+
+Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v1
+Note: Is isn't comprehensive, there's a V2 of this code that covers all cases
+[Magus]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x73DC0 ------ 41820010 -> 60000000
+-------------- 0x73E84 ------ 41820010 -> 60000000
+-------------- 0x74DB4 ------ 41820010 -> 60000000
