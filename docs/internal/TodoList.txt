@@ -1,6 +1,9 @@
 Short term:
 ----------
-Converting the raw changes to actual individual mods in the MCM (see if they match up to included mods, or if there are updates to the mods; if there are updates, put them in the End Goal section. Also, put any unused mods included in MCM into the End Goal section as well).
+Reverse engineer the debug menu so finding other codes will be easier
+Converting the raw changes to actual individual mods in the MCM (see if they match up to included mods, or if there are
+ updates to the mods; if there are updates, put them in the End Goal section. Also, put any unused mods included in MCM
+  into the End Goal section as well).
 Instructions in internal docs on how to create xdelta patches that are as small as they can be.
 Also, include docs on how to create other types of files, like DIOS MIOS and ISO bundles.
 Copy over SDRE32.ini file somewhere (maybe configs?)
@@ -8,18 +11,20 @@ Try to figure out what all the changes to the menu files are, and fill in the as
 Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
 Move over relevant notes from personal files to this repo, particularly the PK Thunder stuff
 Add SD Remix Lite to this repo
-Once you have everything like this, create a new branch that is JUST the SDR 3.2.1 stuff so we can move on to the next step below
+Once you have everything like this, create a new branch that is JUST the SDR 3.2.1 stuff so we can move on to the next
+ step below
 
 End Goal, Netplay build:
 -----------------------
-Make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the SDR Stage List.
+Make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the
+ SDR Stage List.
 SDR Stage List should have all Melee viable stages, certain stages being frozen. Maybe try and get other stages too.
 Include some netplay specific codes built in
 Maybe include Magus's updated 1.00 hitlag code
 Probably good to have UCF and other such stuff
 Probably should update to new versions of existing codes, like grab attrition and widescreen.
 Other suggestions?
-Look at todo list for other stuff.
+Look at todolist for other stuff.
 Probably talk with the SDR team to get approval from whole team before making any changes.
 (Maybe also make a tool for creating Debug screen changes?)
 Also, take what's in the SDRE32.ini and possibly build them in? Like UCF or something
@@ -51,7 +56,8 @@ Look for latest widescreen codes
 
 Shy Guys drop food even if items are at off (1.02)[flieskiller]
 0428fb1c 4800000c
-I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food as well, even if the food item is at off.
+I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
+ as well, even if the food item is at off.
 
 [Debug Menus] Submenus Resemble Normal Menus
 [Dan Salvato]
@@ -80,3 +86,33 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.01 ------ 0x85C74 ---- 48000030 -> 41820030
 1.00 ------ 0x85B8C ---- 48000030 -> 41820030
 PAL ------- 0x864EC ---- 48000030 -> 41820030
+
+
+
+
+
+
+TODO New build system:
+======================
+Opitonal dolphin runner
+
+The goal is to automate as much of the process as possible. These are the targets I'd like to make:
+- Test ISO (either running Slippi or Debug Fast)
+- DIOS MIOS Files
+- xdelta patches (to be as small as possible). Should be comprable to existing xdelta patches.
+
+Step 4: Build ISO (TEST ISO DONE) [iso target]
+Step 5: Compare to original ISO and make xdelta patch (optionally can specify v1.00 or v1.01 ISOs) [xdelta target]
+Step 6: Convert to DIOS MIOS files? (TBD) [diosmios target]
+
+Build Targets:
+- ISO (builds an ISO)
+- DIOS MIOS (creates files for DIOS MIOS)
+- xdelta (creates xdelta files)
+- Full (builds everything)
+
+GCR CLI
+* Import file into ISO:
+    > gcr.exe [iso_path] [node_path_in_iso] i [destination_path]
+* Rebuild ISO:
+    > gcr.exe [path_to_root_folder] [iso_destination_path]

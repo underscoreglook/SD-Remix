@@ -1,2 +1,4 @@
 build
-configs/isoRootPath.txt
+configs/build.cfg
+__pycache__
+.idea

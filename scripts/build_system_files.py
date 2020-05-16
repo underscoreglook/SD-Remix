@@ -1,52 +1,63 @@
+"""
+Build script that, based on files in the sdrFiles build directory and our own configurations,
+builds the Table of Contents and Header files for the SDR ISO
+TODO: This probably should support files being deleted, which would shrink the FST
+"""
+
+import build
 import configparser
+import extract_melee_iso
 from os import listdir, path
 
 
-#===========#
+# ========= #
 # CONSTANTS #
-#===========#
+# ========= #
 FST_ENTRY_SIZE = 12
 ISO_BLOCK_SIZE = 0x800
-CONFIG_FOLDER = "configs"
-GAME_CFG_FILENAME = "game.cfg"
-SYSTEM_DATA_FOLDER = "&&SystemData"
+CONFIG_FILE = "configs/game.cfg"
 GAME_TOC_FILENAME = "Game.toc"
 ISO_HDR_FILENAME = "ISO.hdr"
 
 
-#==========================#
+# ======================== #
 # GAME TOC (FST) FUNCTIONS #
-#==========================#
+# ======================== #
 
-def appendBytes(destByteArray, sourceBytes):
+def appendBytes(destinationByteArray, sourceBytes):
 	for sourceByte in sourceBytes:
-		destByteArray.append(sourceByte)
+		destinationByteArray.append(sourceByte)
 
-def appendInteger(destByteArray, sourceInteger):
-	appendBytes(destByteArray, sourceInteger.to_bytes(4, byteorder="big", signed=False))
 
-def appendString(destByteArray, sourceString):
-	appendBytes(destByteArray, sourceString.encode("ascii"))
+def appendInteger(destinationByteArray, sourceInteger):
+	appendBytes(destinationByteArray, sourceInteger.to_bytes(4, byteorder="big", signed=False))
 
-# Determine which files are new files for SDR not in Melee
-def getSdrOnlyFilenames(buildRootDir, isoRootPathDir):
-	sdrFilenames = listdir(buildRootDir)
-	sdrOnlyFilenames = []
+
+def appendString(destinationByteArray, sourceString):
+	appendBytes(destinationByteArray, sourceString.encode("ascii"))
+
+
+def getSdrUniqueFilenames(sdrFilesDirectory, isoRootPathDirectory):
+	"""Determine which files are new files for SDR not in Melee"""
+	sdrFilenames = listdir(sdrFilesDirectory)
+	sdrUniqueFilenames = []
 	for sdrFilename in sdrFilenames:
-		sdrFilePath = path.join(buildRootDir, sdrFilename)
+		sdrFilePath = path.join(sdrFilesDirectory, sdrFilename)
 		if path.isdir(sdrFilePath): # Only deal with files, not dirs
 			continue;
 	
-		possibleMeleeFilename = path.join(isoRootPathDir, sdrFilename)
+		possibleMeleeFilename = path.join(isoRootPathDirectory, sdrFilename)
 		if not path.exists(possibleMeleeFilename): # This is SDR specific file
-			sdrOnlyFilenames.append(sdrFilename)
-	return sdrOnlyFilenames
+			sdrUniqueFilenames.append(sdrFilename)
+	return sdrUniqueFilenames
 
-# Add the new files to Game.toc, making sure not to change existing bytes on ISO, to make xdelta smaller
-def createNewToc(buildRootDir, isoRootPathDir, newFilenames, nextFileOffset):
+
+def createNewToc(sdrFilesDirectory, isoRootPathDirectory, newFilenames, nextFileOffset):
+	"""Add the new files to Game.toc, making sure not to change
+	existing bytes on ISO, to make xdelta smaller
+	"""
 	# First, get the old Game.toc data
-	stockGameTocFilename = path.join(isoRootPathDir, SYSTEM_DATA_FOLDER, GAME_TOC_FILENAME)
-	stockGameToc = None
+	stockGameTocFilename = path.join(isoRootPathDirectory, build.SYSDATA_FOLDER, GAME_TOC_FILENAME)
 	with open(stockGameTocFilename, "rb") as stockGameTocData:
 		stockGameToc = bytearray(stockGameTocData.read())
 		
@@ -66,7 +77,7 @@ def createNewToc(buildRootDir, isoRootPathDir, newFilenames, nextFileOffset):
 		nextStringOffset = len(stringTable)
 		appendInteger(fstEntries, nextStringOffset)
 		appendInteger(fstEntries, nextFileOffset)
-		fileSize = path.getsize(path.join(buildRootDir, filename))
+		fileSize = path.getsize(path.join(sdrFilesDirectory, filename))
 		appendInteger(fstEntries, fileSize)
 		# When incrementing the next file offset, add the current filesize,
 		# but round up to give padding and align to disc sector
@@ -82,35 +93,38 @@ def createNewToc(buildRootDir, isoRootPathDir, newFilenames, nextFileOffset):
 	return bytes(fstEntries + stringTable)
 
 
-#===================#
+# ================= #
 # ISO.hdr FUNCTIONS #
-#===================#
+# ================= #
 
-def getAndValidateGameConfigSections(baseDir):
-	configPath = path.join(baseDir, CONFIG_FOLDER, GAME_CFG_FILENAME)
+def getAndValidateGameConfigSections():
+	configPath = path.join(build.getBasePath(), CONFIG_FILE)
 	config = configparser.ConfigParser()
 	config.read(configPath)
 	if "METADATA" not in config:
-		print("METADATA missing from " + GAME_CFG_FILENAME)
+		print("METADATA missing from " + CONFIG_FILE)
 		exit(1)
 	if "FILES_STRUCTURE" not in config:
-		print("FILES_STRUCTURE missing from " + GAME_CFG_FILENAME)
+		print("FILES_STRUCTURE missing from " + CONFIG_FILE)
 		exit(1)
-	return config["METADATA"], config["FILES_STRUCTURE"]
-	
-def getOriginalIsoHdrData(isoRootPathDir):
-	isoHdrPath = path.join(isoRootPathDir, SYSTEM_DATA_FOLDER, ISO_HDR_FILENAME)
+	return config["METADATA"], config["FILES_STRUCTURE"], configPath
+
+
+def getOriginalIsoHdrData(isoRootPathDirectory):
+	isoHdrPath = path.join(isoRootPathDirectory, build.SYSDATA_FOLDER, ISO_HDR_FILENAME)
 	with open(isoHdrPath, "rb") as isoHdrFile:
 		return bytearray(isoHdrFile.read())
 
-# Does validation on config item and sets the config string into ISO.hdr
-# dest = The bytearray holding full ISO.hdr data
-# source = The config object holding our config metadata
-# key = The item in the config where our new string is
-# offset = Which byte in ISO.hdr to start writing to
-# min_length = The minimum length the string must be
-# max_length = The maximum length the string must be
-def setIsoHdrString(dest, source, key, offset, min_length, max_length, withTerminator=False):
+
+def setIsoHdrString(destination, source, key, offset, min_length, max_length, withTerminator=False):
+	"""Does validation on config item and sets the config string into ISO.hdr
+	dest = The bytearray holding full ISO.hdr data
+	source = The config object holding our config metadata
+	key = The item in the config where our new string is
+	offset = Which byte in ISO.hdr to start writing to
+	min_length = The minimum length the string must be
+	max_length = The maximum length the string must be
+	"""
 	if key not in source:
 		print(key + " missing from game.cfg")
 		exit(1)
@@ -124,16 +138,18 @@ def setIsoHdrString(dest, source, key, offset, min_length, max_length, withTermi
 		print(key + " must be at most length " + str(max_length))
 		exit(1)
 	for i in range(len(bytes)):
-		dest[offset + i] = bytes[i]
+		destination[offset + i] = bytes[i]
 
-# Does validation on config item and sets the config string into ISO.hdr
-# dest = The bytearray holding full ISO.hdr data
-# source = The config object holding our config metadata
-# key = The item in the config where our new string is
-# offset = Which byte in ISO.hdr to start writing to
-# min_length = The minimum length the string must be
-# max_length = The maximum length the string must be
-def setIsoHdrByte(dest, source, key, offset):
+
+def setIsoHdrByte(destination, source, key, offset):
+	""" Does validation on config item and sets the config string into ISO.hdr
+	dest = The bytearray holding full ISO.hdr data
+	source = The config object holding our config metadata
+	key = The item in the config where our new string is
+	offset = Which byte in ISO.hdr to start writing to
+	min_length = The minimum length the string must be
+	max_length = The maximum length the string must be
+	"""
 	if key not in source:
 		print(key + " missing from game.cfg")
 		exit(1)
@@ -141,98 +157,127 @@ def setIsoHdrByte(dest, source, key, offset):
 	if byte < 0 or byte > 255:
 		print(key + " must be between 0 and 255")
 		exit(1)
-	dest[offset] = byte
+	destination[offset] = byte
 
-# Takes the value in HDR at a location and adds the value from the config
-# dest = The bytearray holding full ISO.hdr data
-# source = The config object holding our config metadata
-# key = The item in the config that tells us how much to add by
-# offset = Which byte in ISO.hdr the integer starts
-def addToIsoHdrInteger(dest, source, key, offset):
+
+def addToIsoHdrInteger(destination, source, key, offset):
+	"""Takes the value in HDR at a location and adds the value from the config
+	dest = The bytearray holding full ISO.hdr data
+	source = The config object holding our config metadata
+	key = The item in the config that tells us how much to add by
+	offset = Which byte in ISO.hdr the integer starts
+	"""
 	if key not in source:
 		print(key + " missing from game.cfg")
 		exit(1)
 	addend = int(source[key])
-	original = int.from_bytes(dest[offset:(offset+4)], byteorder="big", signed=False)
+	original = int.from_bytes(destination[offset:(offset + 4)], byteorder="big", signed=False)
 	sum = addend + original
 	bytes = sum.to_bytes(4, byteorder="big", signed=False)
 	for i in range(len(bytes)):
-		dest[offset + i] = bytes[i]
-		
-# Like addToIsoHdrInteger except it sets the integer to the value exactly in the config
-def setIsoHdrInteger(dest, source, key, offset):
+		destination[offset + i] = bytes[i]
+
+
+def setIsoHdrInteger(destination, source, key, offset):
+	"""Like addToIsoHdrInteger except it sets the integer to the value exactly in the config"""
 	if key not in source:
 		print(key + " missing from game.cfg")
 		exit(1)
-	setIsoHdrIntegerRaw(dest, source, int(source[key]), offset)
-		
-# Like setToIsoHdrInteger except the new value is provided as a parameter instead of from config
-def setIsoHdrIntegerRaw(dest, source, value, offset):
+	setIsoHdrIntegerRaw(destination, source, int(source[key]), offset)
+
+
+def setIsoHdrIntegerRaw(destination, source, value, offset):
+	"""Like setToIsoHdrInteger except the new value is provided as a parameter instead of from config"""
 	bytes = value.to_bytes(4, byteorder="big", signed=False)
 	for i in range(len(bytes)):
-		dest[offset + i] = bytes[i]
+		destination[offset + i] = bytes[i]
 
 
-#=================#
+# =============== #
 # "MAIN FUNCTION" #
-#=================#
+# =============== #
 if __name__ == "__main__":
-	baseDir = path.join(path.dirname(__file__), "..")
-	metadata, filesStructure = getAndValidateGameConfigSections(baseDir)
-	
-	buildRootDir = path.join(baseDir, "build/root")
-	buildSystemDir = path.join(buildRootDir, SYSTEM_DATA_FOLDER)
-	
-	if not path.isdir(buildSystemDir):
-		print("System Data folder doesn't exist")
-		exit(1)
-	
-	isoRootPathDirFile = path.join(baseDir, "configs", "isoRootPath.txt")
-	if not path.exists(isoRootPathDirFile):
-		print("configs/isRootPath.txt is not specified")
-		exit(1)
-	
-	isoRootPathDir = None
-	with open(isoRootPathDirFile, "r") as isoRootPathDirFileData:
-		isoRootPathDir = isoRootPathDirFileData.readline()
+	# Get basic data
+	buildTracker = build.BuildTracker()
+	metadata, filesStructure, configFilePath = getAndValidateGameConfigSections()
+	shouldRebuild = buildTracker.hasFileChangedSinceLastBuild(configFilePath)
+
+	# Setup/Verify build directories
+	buildSystemDir = build.validateOrCreateBuildPath(build.SDR_FILES_DIR, build.SYSDATA_FOLDER)
+	buildFilesDir = path.normpath(path.join(buildSystemDir, ".."))
+
+	isoRootPathDir = path.join(build.getBuildPath(), extract_melee_iso.ROOT_NODE)
 	if not path.isdir(isoRootPathDir):
 		print("Melee ISO root dir invalid: " + isoRootPathDir)
 		exit(1)
+
+	# ======================== #
+	# Build Game.toc (the FST) #
+	# ======================== #
+	sdrOnlyFilenames = getSdrUniqueFilenames(buildFilesDir, isoRootPathDir)
+
+	# Only build if there are new or changed files
+	shouldBuildToc = shouldRebuild
+	if not shouldRebuild:
+		for filename in sdrOnlyFilenames:
+			filePath = path.join(buildFilesDir, filename)
+			if buildTracker.hasFileChangedSinceLastBuild(filePath):
+				shouldBuildToc = True
+				break
+
+	tocPath = path.join(buildSystemDir, GAME_TOC_FILENAME)
+	if shouldBuildToc:
+		if "FIRST_NEW_FILE_OFFSET" not in filesStructure:
+			print("FIRST_NEW_FILE_OFFSET missing from game.cfg")
+			exit(1)
+		firstFileOffset = int(filesStructure["FIRST_NEW_FILE_OFFSET"])
+		newToc = createNewToc(buildFilesDir, isoRootPathDir, sdrOnlyFilenames, firstFileOffset)
+
+		# Write new TOC to file
+		with open(tocPath, "wb") as newTocFile:
+			newTocFile.write(newToc)
+
+		buildTracker.markFileAsBuilt(configFilePath)
+		for filename in sdrOnlyFilenames:
+			filePath = path.join(buildFilesDir, filename)
+			buildTracker.markFileAsBuilt(filePath)
+		buildTracker.saveTrackedData()
+
+		print("TOC/FST file created at " + tocPath)
+	else:
+		print("TOC/FST file doesn't need to be rebuilt")
 	
-	sdrOnlyFilenames = getSdrOnlyFilenames(buildRootDir, isoRootPathDir)
-	if "FIRST_NEW_FILE_OFFSET" not in filesStructure:
-		print("FIRST_NEW_FILE_OFFSET missing from game.cfg")
-		exit(1)
-	firstFileOffset = int(filesStructure["FIRST_NEW_FILE_OFFSET"])
-	newToc = createNewToc(buildRootDir, isoRootPathDir, sdrOnlyFilenames, firstFileOffset)
-	
-	# Write new TOC to file
-	newTocPath = path.join(buildSystemDir, GAME_TOC_FILENAME)
-	with open(newTocPath, "wb") as newTocFile:
-		newTocFile.write(newToc)
-	print("TOC/FST file created")
-	
-	#
-	# Now to build the ISO.hdr file
-	#
-	
-	# Setup
-	isoHdrData = getOriginalIsoHdrData(isoRootPathDir)
-	
-	# Set new data
-	setIsoHdrString(isoHdrData, metadata, "GAME_ID", 0, 4, 4)
-	setIsoHdrString(isoHdrData, metadata, "MAKER_CODE", 4, 2, 2)
-	setIsoHdrByte(isoHdrData, metadata, "REVISION", 7)
-	setIsoHdrString(isoHdrData, metadata, "GAME_NAME", 0x20, 1, 0x3e0, True)
-	addToIsoHdrInteger(isoHdrData, filesStructure, "DH_BIN_LOCATION_MOVE_BYTES", 0x400)
-	addToIsoHdrInteger(isoHdrData, filesStructure, "DOL_LOCATION_MOVE_BYTES", 0x420)
-	addToIsoHdrInteger(isoHdrData, filesStructure, "TOC_LOCATION_MOVE_BYTES", 0x424)
-	setIsoHdrIntegerRaw(isoHdrData, filesStructure, len(newToc), 0x428) # FST Size
-	setIsoHdrIntegerRaw(isoHdrData, filesStructure, len(newToc), 0x42C) # Max FST Size
-	setIsoHdrInteger(isoHdrData, filesStructure, "NEW_USER_LENGTH", 0x434) # Max FST Size
-	
-	# Write file
-	headerBuildFilename = path.join(buildSystemDir, ISO_HDR_FILENAME)
-	with open(headerBuildFilename, "wb") as headerBuildFile:
-		headerBuildFile.write(bytes(isoHdrData))
-	print("Header file created")
+	# ============================= #
+	# Now to build the ISO.hdr file #
+	# ============================= #
+
+	# Only build if the config has changed or the Game.toc has changed
+	if shouldRebuild or buildTracker.hasFileChangedSinceLastBuild(tocPath):
+		# Setup
+		isoHdrData = getOriginalIsoHdrData(isoRootPathDir)
+
+		# Set new data
+		tocLength = path.getsize(tocPath)
+		setIsoHdrString(isoHdrData, metadata, "GAME_ID", 0, 4, 4)
+		setIsoHdrString(isoHdrData, metadata, "MAKER_CODE", 4, 2, 2)
+		setIsoHdrByte(isoHdrData, metadata, "REVISION", 7)
+		setIsoHdrString(isoHdrData, metadata, "GAME_NAME", 0x20, 1, 0x3e0, True)
+		addToIsoHdrInteger(isoHdrData, filesStructure, "DH_BIN_LOCATION_MOVE_BYTES", 0x400)
+		addToIsoHdrInteger(isoHdrData, filesStructure, "DOL_LOCATION_MOVE_BYTES", 0x420)
+		addToIsoHdrInteger(isoHdrData, filesStructure, "TOC_LOCATION_MOVE_BYTES", 0x424)
+		setIsoHdrIntegerRaw(isoHdrData, filesStructure, tocLength, 0x428) # FST Size
+		setIsoHdrIntegerRaw(isoHdrData, filesStructure, tocLength, 0x42C) # Max FST Size
+		setIsoHdrInteger(isoHdrData, filesStructure, "NEW_USER_LENGTH", 0x434) # Max FST Size
+
+		# Write file
+		headerBuildFilePath = path.join(buildSystemDir, ISO_HDR_FILENAME)
+		with open(headerBuildFilePath, "wb") as headerBuildFile:
+			headerBuildFile.write(bytes(isoHdrData))
+
+		buildTracker.markFileAsBuilt(configFilePath)
+		buildTracker.markFileAsBuilt(tocPath)
+		buildTracker.saveTrackedData()
+
+		print("Header file created at " + headerBuildFilePath)
+	else:
+		print("Header file doesn't need to be rebuilt")
