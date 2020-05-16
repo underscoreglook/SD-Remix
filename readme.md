@@ -40,6 +40,23 @@ First, it will extract the Melee ISO to the raw files, so we can use it as a bas
 Second, it will copy all the game files in "chars", "stages", and "menus" to a sdr build folder. It will also copy the
 dol file to the system folder in that sdr build folder.
 
+Third, it will build other system files, in particular, the Game's TOC and ISO Header files.
+
+### "full" target
+This target builds every other target below
+
+### 'iso' target
+This target builds a playable ISO in the build directory as "game.iso".
+
+### 'diosmios' target
+This target builds a folder in the build directory called "DiosMiosFiles", which contains files that can be copied
+into a Dios Mios compatible folder containing Super Smash Brothers Melee to turn it into SD Remix.
+
+### 'xdelta' target
+This builds an ISO, just like the ISO target, but then also creates xdelta patches with the base being various Melee
+ISOs. This uses version specific Melee ISOs and creates xdelta files in the build directory of the form
+"SDR 1.0[v].xdelta", where "[v]" is the version number of the ISO it's based of off.
+
 
 # File Structure
 
