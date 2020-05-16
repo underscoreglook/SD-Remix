@@ -13,6 +13,7 @@ import pickle
 # ========= #
 BUILD_FOLDER = "build"
 SYSDATA_FOLDER = "&&systemdata"
+ORIG_SYSDATA_FOLDER = "OrigSystemData"
 SDR_FILES_DIR = "sdrFiles"
 CHARS_FOLDER = 'chars'
 STAGES_FOLDER = "stages"

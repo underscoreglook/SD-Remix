@@ -5,6 +5,7 @@ Exits with 1 if there's a failure and files were not extracted.
 
 import build
 import build_config as Config
+import shutil
 import subprocess
 
 from os import path
@@ -54,7 +55,11 @@ if __name__ == "__main__":
 	print("Extracting Melee ISO: " + cliStr)
 	result = subprocess.call(cliStr)
 	if result == 0:
+		sourceSystemDataPath = path.join(rootPath, build.SYSDATA_FOLDER)
+		destSystemDataPath = path.join(buildPath, build.ORIG_SYSDATA_FOLDER)
+		shutil.copytree(sourceSystemDataPath, destSystemDataPath)
 		print("Melee ISO extracted successfully!")
 	else:
 		print("Something went wrong extracting the ISO")
+		shutil.rmtree(rootPath)
 	exit(result)

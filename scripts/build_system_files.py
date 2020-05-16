@@ -52,12 +52,12 @@ def getSdrUniqueFilenames(sdrFilesDirectory, isoRootPathDirectory):
 	return sdrUniqueFilenames
 
 
-def createNewToc(sdrFilesDirectory, isoRootPathDirectory, newFilenames, nextFileOffset):
+def createNewToc(sdrFilesDirectory, originalSystemDataDirectory, newFilenames, nextFileOffset):
 	"""Add the new files to Game.toc, making sure not to change
 	existing bytes on ISO, to make xdelta smaller
 	"""
 	# First, get the old Game.toc data
-	stockGameTocFilename = path.join(isoRootPathDirectory, build.SYSDATA_FOLDER, GAME_TOC_FILENAME)
+	stockGameTocFilename = path.join(originalSystemDataDirectory, GAME_TOC_FILENAME)
 	with open(stockGameTocFilename, "rb") as stockGameTocData:
 		stockGameToc = bytearray(stockGameTocData.read())
 		
@@ -110,8 +110,8 @@ def getAndValidateGameConfigSections():
 	return config["METADATA"], config["FILES_STRUCTURE"], configPath
 
 
-def getOriginalIsoHdrData(isoRootPathDirectory):
-	isoHdrPath = path.join(isoRootPathDirectory, build.SYSDATA_FOLDER, ISO_HDR_FILENAME)
+def getOriginalIsoHdrData(originalSystemDataPath):
+	isoHdrPath = path.join(originalSystemDataPath, ISO_HDR_FILENAME)
 	with open(isoHdrPath, "rb") as isoHdrFile:
 		return bytearray(isoHdrFile.read())
 
@@ -211,6 +211,11 @@ if __name__ == "__main__":
 		print("Melee ISO root dir invalid: " + isoRootPathDir)
 		exit(1)
 
+	origSystemDataPath = path.join(build.getBuildPath(), build.ORIG_SYSDATA_FOLDER)
+	if not path.isdir(origSystemDataPath):
+		print("Melee ISO extraction corrupted. Clean and build again.")
+		exit(1)
+
 	# ======================== #
 	# Build Game.toc (the FST) #
 	# ======================== #
@@ -231,7 +236,7 @@ if __name__ == "__main__":
 			print("FIRST_NEW_FILE_OFFSET missing from game.cfg")
 			exit(1)
 		firstFileOffset = int(filesStructure["FIRST_NEW_FILE_OFFSET"])
-		newToc = createNewToc(buildFilesDir, isoRootPathDir, sdrOnlyFilenames, firstFileOffset)
+		newToc = createNewToc(buildFilesDir, origSystemDataPath, sdrOnlyFilenames, firstFileOffset)
 
 		# Write new TOC to file
 		with open(tocPath, "wb") as newTocFile:
@@ -254,7 +259,7 @@ if __name__ == "__main__":
 	# Only build if the config has changed or the Game.toc has changed
 	if shouldRebuild or buildTracker.hasFileChangedSinceLastBuild(tocPath):
 		# Setup
-		isoHdrData = getOriginalIsoHdrData(isoRootPathDir)
+		isoHdrData = getOriginalIsoHdrData(origSystemDataPath)
 
 		# Set new data
 		tocLength = path.getsize(tocPath)
