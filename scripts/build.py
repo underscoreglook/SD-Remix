@@ -65,31 +65,31 @@ class BuildTracker:
     # Constants
     BUILD_TRACKER_FILE = ".build_tracker"  # should be hidden
     # Type hints
-    trackedData: dict
+    m_trackedData: dict
 
     def __init__(self):
         trackerFilePath = BuildTracker._getTrackerFilePath()
         if path.exists(trackerFilePath):
             with open(trackerFilePath, "rb") as file:
-                self.trackedData = pickle.load(file)
+                self.m_trackedData = pickle.load(file)
         else:
-            self.trackedData = {}
+            self.m_trackedData = {}
 
     @staticmethod
     def _getTrackerFilePath():
         return path.join(getBuildPath(), BuildTracker.BUILD_TRACKER_FILE)
 
     def saveTrackedData(self):
-        if self.trackedData:
+        if self.m_trackedData:
             trackerFilePath = BuildTracker._getTrackerFilePath()
             with open(trackerFilePath, "wb") as file:
-                pickle.dump(self.trackedData, file, pickle.HIGHEST_PROTOCOL)
+                pickle.dump(self.m_trackedData, file, pickle.HIGHEST_PROTOCOL)
 
     def hasFileChangedSinceLastBuild(self, sourceFilePath):
         """Returns true if the file at path sourceFilename has been modified since the last time we've built.
         Relies that the file was marked as built with markFileAsBuilt
         """
-        oldModifiedTime = self.trackedData.get(sourceFilePath)
+        oldModifiedTime = self.m_trackedData.get(sourceFilePath)
         if not oldModifiedTime:
             return True  # If file was never built, always true
         modifiedTime = path.getmtime(sourceFilePath)
@@ -97,4 +97,4 @@ class BuildTracker:
 
     def markFileAsBuilt(self, sourceFilePath):
         """Marks a source file as having been built already so we don't rebuilt it unnecessarily later"""
-        self.trackedData[sourceFilePath] = path.getmtime(sourceFilePath)
+        self.m_trackedData[sourceFilePath] = path.getmtime(sourceFilePath)

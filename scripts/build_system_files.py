@@ -20,82 +20,9 @@ GAME_TOC_FILENAME = "Game.toc"
 ISO_HDR_FILENAME = "ISO.hdr"
 
 
-# ======================== #
-# GAME TOC (FST) FUNCTIONS #
-# ======================== #
-
-def appendBytes(destinationByteArray, sourceBytes):
-	for sourceByte in sourceBytes:
-		destinationByteArray.append(sourceByte)
-
-
-def appendInteger(destinationByteArray, sourceInteger):
-	appendBytes(destinationByteArray, sourceInteger.to_bytes(4, byteorder="big", signed=False))
-
-
-def appendString(destinationByteArray, sourceString):
-	appendBytes(destinationByteArray, sourceString.encode("ascii"))
-
-
-def getSdrUniqueFilenames(sdrFilesDirectory, isoRootPathDirectory):
-	"""Determine which files are new files for SDR not in Melee"""
-	sdrFilenames = listdir(sdrFilesDirectory)
-	sdrUniqueFilenames = []
-	for sdrFilename in sdrFilenames:
-		sdrFilePath = path.join(sdrFilesDirectory, sdrFilename)
-		if path.isdir(sdrFilePath): # Only deal with files, not dirs
-			continue;
-	
-		possibleMeleeFilename = path.join(isoRootPathDirectory, sdrFilename)
-		if not path.exists(possibleMeleeFilename): # This is SDR specific file
-			sdrUniqueFilenames.append(sdrFilename)
-	return sdrUniqueFilenames
-
-
-def createNewToc(sdrFilesDirectory, originalSystemDataDirectory, newFilenames, nextFileOffset):
-	"""Add the new files to Game.toc, making sure not to change
-	existing bytes on ISO, to make xdelta smaller
-	"""
-	# First, get the old Game.toc data
-	stockGameTocFilename = path.join(originalSystemDataDirectory, GAME_TOC_FILENAME)
-	with open(stockGameTocFilename, "rb") as stockGameTocData:
-		stockGameToc = bytearray(stockGameTocData.read())
-		
-	# Next, split the old TOC into 2 parts: the FST Entries and String Table, based on num files in root dir
-	numFiles = int.from_bytes(stockGameToc[8:12], byteorder="big", signed=False)
-	fstEntries = stockGameToc[:(numFiles * FST_ENTRY_SIZE)]
-	stringTable = stockGameToc[(numFiles * FST_ENTRY_SIZE):]
-
-	# Write the new number of files in the root dir
-	numFiles += len(newFilenames)
-	numFilesBytes = numFiles.to_bytes(4, byteorder="big", signed=False)
-	for i in range(4):
-		fstEntries[8 + i] = numFilesBytes[i]
-	
-	# Add the new items to the TOC
-	for filename in newFilenames:
-		nextStringOffset = len(stringTable)
-		appendInteger(fstEntries, nextStringOffset)
-		appendInteger(fstEntries, nextFileOffset)
-		fileSize = path.getsize(path.join(sdrFilesDirectory, filename))
-		appendInteger(fstEntries, fileSize)
-		# When incrementing the next file offset, add the current filesize,
-		# but round up to give padding and align to disc sector
-		byteSize = fileSize % ISO_BLOCK_SIZE
-		if byteSize > 0:
-			fileSize -= byteSize
-			fileSize += ISO_BLOCK_SIZE
-		nextFileOffset += fileSize
-		appendString(stringTable, filename)
-		stringTable.append(0) # null terminator
-	
-	# Last, build new toc bytes and return it
-	return bytes(fstEntries + stringTable)
-
-
-# ================= #
-# ISO.hdr FUNCTIONS #
-# ================= #
+# ======= #
+# HELPERS #
+# ======= #
 
 def getAndValidateGameConfigSections():
 	configPath = path.join(build.getBasePath(), CONFIG_FILE)
@@ -109,6 +36,101 @@ def getAndValidateGameConfigSections():
 		exit(1)
 	return config["METADATA"], config["FILES_STRUCTURE"], configPath
 
+# ============== #
+# GAME TOC (FST) #
+# ============== #
+
+class FileSystemTable:
+	"""Holds all the data and methods to get and manipulate the ISO's FST"""
+	m_numFiles: int
+	m_fstEntries: bytearray
+	m_stringTable: bytearray
+	m_nextFileOffset: int
+	m_fileNames: set
+
+	@staticmethod
+	def appendBytes(destinationByteArray: bytearray, sourceBytes):
+		for sourceByte in sourceBytes:
+			destinationByteArray.append(sourceByte)
+
+	@staticmethod
+	def appendInteger(destinationByteArray, sourceInteger):
+		FileSystemTable.appendBytes(destinationByteArray, sourceInteger.to_bytes(4, byteorder="big", signed=False))
+
+	@staticmethod
+	def appendString(destinationByteArray, sourceString):
+		FileSystemTable.appendBytes(destinationByteArray, sourceString.encode("ascii"))
+
+	def __init__(self, gameTocFilePath):
+		if not path.exists(gameTocFilePath):
+			print("Original Game TOC does not exist")
+			exit(1)
+		with open(gameTocFilePath, "rb") as stockGameTocData:
+			stockGameToc = bytearray(stockGameTocData.read())
+
+		# Next, split the old TOC into 2 parts: the FST Entries and String Table, based on num files in root dir
+		self.m_numFiles = int.from_bytes(stockGameToc[8:12], byteorder="big", signed=False)
+		self.m_fstEntries = stockGameToc[:(self.m_numFiles * FST_ENTRY_SIZE)]
+		self.m_stringTable = stockGameToc[(self.m_numFiles * FST_ENTRY_SIZE):]
+		self.m_nextFileOffset = None
+
+		# Get the full list of filenames
+		self.m_fileNames = set()
+		currentPos = 0
+		while currentPos < len(self.m_stringTable):
+			try:
+				nextPos = self.m_stringTable.index(0, currentPos)
+				self.m_fileNames.add(self.m_stringTable[currentPos:nextPos].decode("ascii"))
+				currentPos = nextPos + 1
+			except ValueError:
+				break  # No more found
+
+	def setFirstNewFileOffset(self, fileOffset):
+		self.m_nextFileOffset = fileOffset
+
+	def addEntry(self, newFilename, housingDirectory):
+		"""Takes a new filename and adds it to the FST.
+		Requires the directory that file currently lives, in order to calculate file size.
+		"""
+		assert self.m_nextFileOffset is not None  # setFirstNewFileOffset needs to be called first
+
+		# Create the FST Entry itself
+		nextStringOffset = len(self.m_stringTable)
+		FileSystemTable.appendInteger(self.m_fstEntries, nextStringOffset)
+		FileSystemTable.appendInteger(self.m_fstEntries, self.m_nextFileOffset)
+		fileSize = path.getsize(path.join(housingDirectory, newFilename))
+		FileSystemTable.appendInteger(self.m_fstEntries, fileSize)
+
+		# When incrementing the next file offset, add the current fileSize,
+		# but round up to give padding and align to disc sector
+		byteSize = fileSize % ISO_BLOCK_SIZE
+		if byteSize > 0:
+			fileSize -= byteSize
+			fileSize += ISO_BLOCK_SIZE
+		self.m_nextFileOffset += fileSize
+
+		# Now add the filename to string table
+		FileSystemTable.appendString(self.m_stringTable, newFilename)
+		self.m_stringTable.append(0)  # null terminator
+		self.m_fileNames.add(newFilename)
+
+		self.m_numFiles += 1
+
+	def getBytesRepresentation(self):
+		# First, set the new number of files
+		numFilesBytes = self.m_numFiles.to_bytes(4, byteorder="big", signed=False)
+		for i in range(4):
+			self.m_fstEntries[8 + i] = numFilesBytes[i]
+		# Return the full bytes
+		return bytes(self.m_fstEntries + self.m_stringTable)
+
+	def contains(self, fileName):
+		return fileName in self.m_fileNames
+
+
+# ================= #
+# ISO.hdr FUNCTIONS #
+# ================= #
 
 def getOriginalIsoHdrData(originalSystemDataPath):
 	isoHdrPath = path.join(originalSystemDataPath, ISO_HDR_FILENAME)
@@ -205,11 +227,7 @@ if __name__ == "__main__":
 	# Setup/Verify build directories
 	buildSystemDir = build.validateOrCreateBuildPath(build.SDR_FILES_DIR, build.SYSDATA_FOLDER)
 	buildFilesDir = path.normpath(path.join(buildSystemDir, ".."))
-
-	isoRootPathDir = path.join(build.getBuildPath(), extract_melee_iso.ROOT_NODE)
-	if not path.isdir(isoRootPathDir):
-		print("Melee ISO root dir invalid: " + isoRootPathDir)
-		exit(1)
+	tocPath = path.join(buildSystemDir, GAME_TOC_FILENAME)  # Path of TOC to build to
 
 	origSystemDataPath = path.join(build.getBuildPath(), build.ORIG_SYSDATA_FOLDER)
 	if not path.isdir(origSystemDataPath):
@@ -219,7 +237,17 @@ if __name__ == "__main__":
 	# ======================== #
 	# Build Game.toc (the FST) #
 	# ======================== #
-	sdrOnlyFilenames = getSdrUniqueFilenames(buildFilesDir, isoRootPathDir)
+	fst = FileSystemTable(path.join(origSystemDataPath, GAME_TOC_FILENAME))
+
+	# Get filenames in SDR that oren't in Melee
+	sdrOnlyFilenames = []  # Running list of files unique to SDR
+	for filename in listdir(buildFilesDir):  # All files SDR replaces
+		if path.isdir(path.join(buildFilesDir, filename)):  # Only deal with files, not dirs
+			continue
+		if fst.contains(filename):  # If the file exists in Melee, skip
+			continue
+		# Now we know it's an SDR specific file
+		sdrOnlyFilenames.append(filename)
 
 	# Only build if there are new or changed files
 	shouldBuildToc = shouldRebuild
@@ -230,18 +258,21 @@ if __name__ == "__main__":
 				shouldBuildToc = True
 				break
 
-	tocPath = path.join(buildSystemDir, GAME_TOC_FILENAME)
 	if shouldBuildToc:
 		if "FIRST_NEW_FILE_OFFSET" not in filesStructure:
 			print("FIRST_NEW_FILE_OFFSET missing from game.cfg")
 			exit(1)
-		firstFileOffset = int(filesStructure["FIRST_NEW_FILE_OFFSET"])
-		newToc = createNewToc(buildFilesDir, origSystemDataPath, sdrOnlyFilenames, firstFileOffset)
+		fst.setFirstNewFileOffset(int(filesStructure["FIRST_NEW_FILE_OFFSET"]))
+
+		# Add the new items to the TOC
+		for filename in sdrOnlyFilenames:
+			fst.addEntry(filename, buildFilesDir)
 
 		# Write new TOC to file
 		with open(tocPath, "wb") as newTocFile:
-			newTocFile.write(newToc)
+			newTocFile.write(fst.getBytesRepresentation())
 
+		# Mark files so FST is rebuilt if source files unchanged
 		buildTracker.markFileAsBuilt(configFilePath)
 		for filename in sdrOnlyFilenames:
 			filePath = path.join(buildFilesDir, filename)
@@ -252,9 +283,9 @@ if __name__ == "__main__":
 	else:
 		print("TOC/FST file doesn't need to be rebuilt")
 	
-	# ============================= #
-	# Now to build the ISO.hdr file #
-	# ============================= #
+	# =============================== #
+	# Build the ISO.hdr (header) file #
+	# =============================== #
 
 	# Only build if the config has changed or the Game.toc has changed
 	if shouldRebuild or buildTracker.hasFileChangedSinceLastBuild(tocPath):
