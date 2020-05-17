@@ -54,7 +54,7 @@ This target builds a playable ISO in the build directory as "game.iso".
 
 ### 'xdelta' target
 This builds an ISO, just like the ISO target, but then also creates xdelta patches with the base being various Melee
-ISOs. This uses version specific Melee ISOs and creates xdelta files in the build directory of the form
+ISOs. This uses version specific Melee ISOs and creates xdelta files in the build directory of the names
 "SDR from 1.0[v].xdelta", where "[v]" is the minor version number of the ISO it's based of off.
 
 This requires the xdelta executable and copies of all the Melee NTSC ISOs.
