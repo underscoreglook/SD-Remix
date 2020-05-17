@@ -15,10 +15,13 @@ BUILD_FOLDER = "build"
 SYSDATA_FOLDER = "&&systemdata"
 ORIG_SYSDATA_FOLDER = "OrigSystemData"
 SDR_FILES_DIR = "sdrFiles"
+MELEE_FILES_DIR = "root"
 CHARS_FOLDER = 'chars'
 STAGES_FOLDER = "stages"
 MENUS_FOLDER = "menus"
 DOL_FOLDER = "dol"
+ROOT_NODE = "root"
+ISO_FILENAME = "game.iso"
 
 
 # ========= #
@@ -33,8 +36,15 @@ def getPathFromBase(*directories):
     return path.normpath(path.join(getBasePath(), *directories))
 
 
-def getBuildPath():
-    return getPathFromBase(BUILD_FOLDER)
+def getBuildPath(*directories):
+    return getPathFromBase(BUILD_FOLDER, *directories)
+
+
+def validateDirectory(directoryPath):
+    if not path.isdir(directoryPath):
+        print(directoryPath + " must exist and be a directory")
+        exit(1)
+    return directoryPath
 
 
 def validateOrCreatePath(absolutePath):

@@ -23,21 +23,21 @@ if [%1]==[] (
 
 :: Set up build options based on target
 if %TARGET%==full (
-    SET buildIso="yes"
-    SET buildDios="yes"
-    SET buildDelta="yes"
+    SET buildIso=yes
+    SET buildDios=yes
+    SET buildDelta=yes
 ) ELSE ( IF %TARGET%==iso (
-    SET buildIso="yes"
-    SET buildDios="no"
-    SET buildDelta="no"
+    SET buildIso=yes
+    SET buildDios=no
+    SET buildDelta=no
 ) ELSE ( IF %TARGET%==diosmios (
-    SET buildIso="no"
-    SET buildDios="yes"
-    SET buildDelta="no"
+    SET buildIso=no
+    SET buildDios=yes
+    SET buildDelta=no
 ) ELSE ( IF %TARGET%==xdelta (
-    SET buildIso="yes"
-    SET buildDM="no"
-    SET buildDelta="yes"
+    SET buildIso=yes
+    SET buildDM=no
+    SET buildDelta=yes
 ) ELSE (
     echo "%TARGET%" is not a valid target.
     echo Valid Targets:
@@ -67,6 +67,12 @@ python.exe scripts\copy_game_files.py || exit /b %ERRORLEVEL%
 echo.
 echo Building system files...
 python.exe scripts\build_system_files.py
+
+if %buildIso%==yes (
+    echo.
+    echo Building the ISO...
+    python.exe scripts\build_iso.py
+)
 
 :: In case we've double clicked on the bat file, keep it around so we can read the output until keyboard input
 echo.

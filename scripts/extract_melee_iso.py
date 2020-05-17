@@ -17,19 +17,6 @@ from os import path
 ROOT_NODE = "root"
 
 
-# ======= #
-# HELPERS #
-# ======= #
-
-def validatePath(itemPath, fileDesc):
-	if not itemPath:
-		print(fileDesc + " path not specified, run configure again")
-		exit(1)
-	if not path.exists(itemPath):
-		print(fileDesc + " doesn't exist, run configure again")
-		exit(1)
-
-
 # =============== #
 # "MAIN FUNCTION" #
 # =============== #
@@ -38,28 +25,28 @@ if __name__ == "__main__":
 	buildPath = build.validateOrCreateBuildPath()
 		
 	# If already extracted, then don't extract
-	rootPath = path.join(buildPath, ROOT_NODE)
-	if path.exists(rootPath):
+	meleeFilesPath = path.join(buildPath, build.MELEE_FILES_DIR)
+	if path.exists(meleeFilesPath):
 		print("Melee ISO already extracted, skipping")
 		exit(0) # Considered a success
 		
 	# Get and validate paths of external items
 	paths = Config.getOrCreatePathsConfigSection()
 	isoPath = Config.getConfigValue(Config.ISO_PATH_KEY, paths)
-	validatePath(isoPath, "Melee NTSC ISO")
+	Config.validatePath(isoPath, "Melee NTSC ISO")
 	gcrPath = Config.getConfigValue(Config.GCR_PATH_KEY, paths)
-	validatePath(gcrPath, "GameCube Rebuilder")
+	Config.validatePath(gcrPath, "GameCube Rebuilder")
 		
 	# Do the extraction, from the iso, extracting the root node, to the build directory
 	cliStr = "\"" + gcrPath + "\" \"" + isoPath + "\" \"" + ROOT_NODE + "\" e \"" + buildPath + "\""
 	print("Extracting Melee ISO: " + cliStr)
 	result = subprocess.call(cliStr)
 	if result == 0:
-		sourceSystemDataPath = path.join(rootPath, build.SYSDATA_FOLDER)
+		sourceSystemDataPath = path.join(meleeFilesPath, build.SYSDATA_FOLDER)
 		destSystemDataPath = path.join(buildPath, build.ORIG_SYSDATA_FOLDER)
 		shutil.copytree(sourceSystemDataPath, destSystemDataPath)
 		print("Melee ISO extracted successfully!")
 	else:
 		print("Something went wrong extracting the ISO")
-		shutil.rmtree(rootPath)
+		shutil.rmtree(meleeFilesPath)
 	exit(result)

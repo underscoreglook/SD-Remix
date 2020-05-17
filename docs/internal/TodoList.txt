@@ -94,22 +94,14 @@ PAL ------- 0x864EC ---- 48000030 -> 41820030
 
 TODO New build system:
 ======================
-Opitonal dolphin runner
+Opitonal dolphin runner, either slippi or debug fast
 
 The goal is to automate as much of the process as possible. These are the targets I'd like to make:
-- Test ISO (either running Slippi or Debug Fast)
 - DIOS MIOS Files
 - xdelta patches (to be as small as possible). Should be comprable to existing xdelta patches.
 
-Step 4: Build ISO (TEST ISO DONE) [iso target]
 Step 5: Compare to original ISO and make xdelta patch (optionally can specify v1.00 or v1.01 ISOs) [xdelta target]
 Step 6: Convert to DIOS MIOS files? (TBD) [diosmios target]
-
-Build Targets:
-- ISO (builds an ISO)
-- DIOS MIOS (creates files for DIOS MIOS)
-- xdelta (creates xdelta files)
-- Full (builds everything)
 
 GCR CLI
 * Import file into ISO:

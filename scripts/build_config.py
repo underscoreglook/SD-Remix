@@ -76,6 +76,15 @@ def handleConfigItem(configSection, key, prompt, fileTypes):
 		print("Skipped " + key)
 
 
+def validatePath(itemPath, fileDesc):
+	if not itemPath:
+		print(fileDesc + " path not specified, run configure again")
+		exit(1)
+	if not path.exists(itemPath):
+		print(fileDesc + " doesn't exist, run configure again")
+		exit(1)
+
+
 # =============== #
 # "MAIN FUNCTION" #
 # =============== #
@@ -84,13 +93,13 @@ if __name__ == "__main__":
 	configPath = getBuildConfigPath()
 	config = getBuildConfig(configPath)
 	paths = getOrCreatePathsConfigSection(config)
-	
+
 	ISO_TYPES = (FILE_TYPE_ISO, FILE_TYPE_GCM, FILE_TYPE_ALL)
 	handleConfigItem(paths, ISO_PATH_KEY, "Select Normal Melee ISO (NTSC)", ISO_TYPES)
 	EXEC_TYPES = (FILE_TYPE_EXE, FILE_TYPE_ALL)
 	handleConfigItem(paths, GCR_PATH_KEY, "Select GameCube Rebuilder Executable", EXEC_TYPES)
 	handleConfigItem(paths, DOLPHIN_PATH_KEY, "Select Dolphin Executable", EXEC_TYPES)
-	
+
 	with open(configPath, "w") as configFile:
 		config.write(configFile)
 	print("Configure finished!")
