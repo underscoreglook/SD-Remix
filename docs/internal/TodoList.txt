@@ -11,8 +11,10 @@ Try to figure out what all the changes to the menu files are, and fill in the as
 Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
 Move over relevant notes from personal files to this repo, particularly the PK Thunder stuff
 Add SD Remix Lite to this repo
+At this point, tag the commit as 3.2.1, and create a release set from this, with xdelta, dios mios, and IOS set.
+Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
 Once you have everything like this, create a new branch that is JUST the SDR 3.2.1 stuff so we can move on to the next
- step below
+ step below.
 
 End Goal, Netplay build:
 -----------------------
