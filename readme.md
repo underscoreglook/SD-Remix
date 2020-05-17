@@ -157,3 +157,14 @@ would otherwise be useful for players.
 This is the Dolphin Gecko Code file. It holds codes meant to be used with Slippi build of Dolphin so players can
 have a better experience playing on Netplay. The player must add the file to Sys/GameSettings/ in their Slippi
 folder.
+
+#### "Drag Melee ISO To This File.bat"
+This batch file is to make it super duper easy to create an ISO file. This is meant to be bundled with the xdelta
+patches. When releasing an xdelta patch, we should include the xdelta patch in the same directory as "sdr.xdelta",
+along with the version of xdelta used to make the patch as "xdelta3.exe" (we use xdelta 3.0.11).
+
+Remember to name the zip file with the correct version of Melee that this applies to, and include a readme with
+instructions on how to use the patch, along with instructions on how to find the Melee version (as well as a link to
+the website). We'll also want to include the changelist along with this.
+
+We'll need to update the website's instructions once we switch to this method.
