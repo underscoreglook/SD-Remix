@@ -1,0 +1,53 @@
+For SDR 3.2.1, there are two random stage lists, one for Omega and one for Alpha.
+In order to create a netplay code to set these for netplay, you can use this sheet to create
+the desired random stage lists for both Omega and Alpha. You can also use this for future
+development as well.
+
+This is the original code to set the random stages for singles
+043D4A78 E70000B0 #Singles Stages [Magus]
+
+Binary = Hex quick reference
+0001 = 1
+0010 = 2
+0100 = 4
+1000 = 8
+
+With the following tables, OR the different values together and combine it with the start of the
+gecko code in the title of the table. Values that are empty should be assumed to just be the
+previous value vertically above it except bit shifted left.
+
+OMEGA	043D4A7C
+=====================
+Peach's Castle	E0000001		Princess Peach's Flat	E0001000
+Kongo Jungle	E0000002		Jungle Japes
+Great Bay		E0000004		Temple
+Brinstar						Brinstar Depths
+Yoshi N64		E0000010		Yoshi's Island			E0010000
+Fountain of Dr					Green Greens
+Corneria						Warzone Corneria
+Kongo Jungle64					Cranky's Treehouse
+Mute City		E0000100		Big Blue				E0100000
+Onett			E0000200		Fourside
+Mushroom King	E0000800		Mushroom Kingdom II
+Flat Zone		E0000400		Mount Olympus			E0800000
+Battlefield		E1000000		Final Destination		E2000000
+Dream Land 64	E4000000		Yoshi's Story			E8000000
+Pokemon Stadium	F0000000
+
+ALPHA	043D4A78
+=====================
+Peach's Castle	E0000001		Princess Peach's Flat	E0001000
+Kongo Jungle	E0000002		Jungle Japes
+Great Bay		E0000004		Temple
+Brinstar						Brinstar Depths
+Yoshi N64		E0000010		Yoshi's Island			E0010000
+Fountain of Dr					Green Greens
+Corneria						Warzone Corneria
+Kongo Jungle64					Cranky's Treehouse
+Mute City		E0000100		Big Blue				E0100000
+Onett			E0000200		Fourside
+Mushroom King	E0000800		Mushroom Kingdom II
+Flat Zone		E0000400		Mount Olympus			E0800000
+Battlefield		E1000000		Final Destination		E2000000
+Dream Land 64	E4000000		Yoshi's Story			E8000000
+Pokemon Stadium	F0000000

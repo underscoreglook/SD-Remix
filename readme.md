@@ -141,3 +141,19 @@ also be a good way to see what assets have been changed in SD Remix.
 
 ## Scripts
 The scripts directory holds the scripts necessary for building SDR.
+
+## docs
+This contains both docs intended for external consumption (for players) and for internal consumption (for devs).
+
+### internal
+This folder is meant for any documentation that's designed for other developers, such as notes for codes, how
+different parts of the codebase is designed, explanation of changes, etc.
+
+### external
+This folder is meant to hold any documentation that is meant to be bundled with builds, put on the website, or
+would otherwise be useful for players.
+
+#### SDRE32.ini
+This is the Dolphin Gecko Code file. It holds codes meant to be used with Slippi build of Dolphin so players can
+have a better experience playing on Netplay. The player must add the file to Sys/GameSettings/ in their Slippi
+folder.
