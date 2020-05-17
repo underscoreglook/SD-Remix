@@ -57,6 +57,9 @@ This builds an ISO, just like the ISO target, but then also creates xdelta patch
 ISOs. This uses version specific Melee ISOs and creates xdelta files in the build directory of the form
 "SDR 1.0[v].xdelta", where "[v]" is the version number of the ISO it's based of off.
 
+## Testing Built Iso
+If you specified a Dolphin exe using configure.bat and also built an ISO using the build script, you can use the play_iso.bat to play the ISO you've built.
+
 
 # File Structure
 
