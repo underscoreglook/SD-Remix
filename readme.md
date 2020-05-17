@@ -19,9 +19,8 @@ Requires:
 * Requires: GameCube Rebuilder. The current version we use is 1.1.
 * Requires: An ISO of SSBM NTSC (any version, tested with v1.02).
 * Optional: Dolphin (if you want to use the "Run With Dolphin" script)
-* Optional: xdelta 3.0.11 executable (tested with 64 bit version)
-* Optional: ISOs of all three versions of SSBM NTSC, to create xdelta patches from.
-
+* Optional: xdelta 3.0.11 executable (tested with 64 bit version, for xdelta target)
+* Optional: ISOs of all three versions of SSBM NTSC, to create xdelta patches from (for xdelta target)
 
 ## Configure Build
 The first time you build, you first need to run configure.bat. This will ask you to specify the location of various
@@ -53,10 +52,6 @@ This target builds every other target below
 ### 'iso' target
 This target builds a playable ISO in the build directory as "game.iso".
 
-### 'diosmios' target
-This target builds a folder in the build directory called "DiosMiosFiles", which contains files that can be copied
-into a Dios Mios compatible folder containing Super Smash Brothers Melee to turn it into SD Remix.
-
 ### 'xdelta' target
 This builds an ISO, just like the ISO target, but then also creates xdelta patches with the base being various Melee
 ISOs. This uses version specific Melee ISOs and creates xdelta files in the build directory of the form
@@ -68,6 +63,22 @@ This requires the xdelta executable and copies of all the Melee NTSC ISOs.
 If you specified a Dolphin exe using configure.bat and also built an ISO using the build script, you can use the
 play_iso.bat to play the ISO you've built.
 
+## Creating DIOS MIOS file replacements
+There are still some people that use DIOS MIOS with extracted files. It is not supported by our build system because
+there are much easier ways to play SDR nowadays, and it comparatively doesn't save much time. However, here's the
+way to create a fileset that can be dropped into a GALE01 folder for use with DIOS MIOS with GCReEx folder format.
+1. Use the build script to build either the "iso" or "full" targets.
+2. Create a folder where the DIOS MIOS SD Remix files will go. I'll call in "DIOS_MIOS_SDR" in these instructions.
+3. Create a directory inside "DIOS_MIOS_SDR" called "root".
+4. Copy all the files in build/sdrFiles to SDR_FILES/root. Do NOT copy the "&&systemdata" folder.
+5. Download GCReEx.
+6. Copy build/game.iso to the GCReEx folder, in the same folder as the EXE.
+7. Open a command line in the GCReEx folder, run
+8. Run the command "gcreex.exe -x game.iso". It should extract the SDR ISO in GCReEx format in a folder it creates
+based on the GAME_ID and MAKER_CODE from configs/game.cfg.
+9. After it's finished, copy the "sys" folder within the created folder into your "DIOS_MIOS_SDR" folder.
+10. The DIOS_MIOS_SDR folder should now be the complete set of files needed to play with DIOS MIOS. Package it with
+any other files (like a readme, changelist, or whatever).
 
 # File Structure
 

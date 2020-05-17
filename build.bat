@@ -24,19 +24,12 @@ if [%1]==[] (
 :: Set up build options based on target
 if %TARGET%==full (
     SET buildIso=yes
-    SET buildDios=yes
     SET buildDelta=yes
 ) ELSE ( IF %TARGET%==iso (
     SET buildIso=yes
-    SET buildDios=no
-    SET buildDelta=no
-) ELSE ( IF %TARGET%==diosmios (
-    SET buildIso=no
-    SET buildDios=yes
     SET buildDelta=no
 ) ELSE ( IF %TARGET%==xdelta (
     SET buildIso=yes
-    SET buildDM=no
     SET buildDelta=yes
 ) ELSE (
     echo "%TARGET%" is not a valid target.
@@ -44,11 +37,10 @@ if %TARGET%==full (
     echo - clean:    Cleans the build folder, so next build starts from scratch
     echo - full:     Builds all targets
     echo - iso:      Only builds a playable ISO
-    echo - diosmios: Creates a folder with files that can conveniently be used with DIOS MIOS
     echo - xdelta:   Creates an xdelta patch that can be applied to a Melee ISO to get SD Remix. Also builds the ISO.
     pause
     exit /b 1
-))))
+)))
 
 :: Proceed with the build
 echo Build starting for target %TARGET%...

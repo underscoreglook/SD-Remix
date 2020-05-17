@@ -86,17 +86,3 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.01 ------ 0x85C74 ---- 48000030 -> 41820030
 1.00 ------ 0x85B8C ---- 48000030 -> 41820030
 PAL ------- 0x864EC ---- 48000030 -> 41820030
-
-
-
-
-
-
-TODO New build system:
-======================
-The goal is to automate as much of the process as possible. These are the targets I'd like to make:
-- DIOS MIOS Files
-- xdelta patches (to be as small as possible). Should be comprable to existing xdelta patches.
-
-Step 5: Compare to original ISO and make xdelta patch (optionally can specify v1.00 or v1.01 ISOs) [xdelta target]
-Step 6: Convert to DIOS MIOS files? (TBD) [diosmios target]
