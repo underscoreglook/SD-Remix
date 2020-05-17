@@ -19,7 +19,7 @@ Requires:
 * Requires: GameCube Rebuilder. The current version we use is 1.1.
 * Requires: An ISO of SSBM NTSC (any version, tested with v1.02).
 * Optional: Dolphin (if you want to use the "Run With Dolphin" script)
-* Optional: xdelta 3.0.11 executable (command line version)
+* Optional: xdelta 3.0.11 executable (tested with 64 bit version)
 * Optional: ISOs of all three versions of SSBM NTSC, to create xdelta patches from.
 
 
