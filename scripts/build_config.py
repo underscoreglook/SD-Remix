@@ -19,6 +19,10 @@ PATHS_SECTION_KEY = "PATHS"
 ISO_PATH_KEY = "ISO_PATH"
 GCR_PATH_KEY = "GCR_PATH"
 DOLPHIN_PATH_KEY = "DOLPHIN_PATH"
+XDELTA_PATH_KEY = "XDELTA_PATH"
+ISO_1_00_PATH_KEY = "ISO_1_00_PATH"
+ISO_1_01_PATH_KEY = "ISO_1_01_PATH"
+ISO_1_02_PATH_KEY = "ISO_1_02_PATH"
 FILE_TYPE_ALL = ("Any File", "*.*")
 FILE_TYPE_ISO = ("ISO", "*.iso")
 FILE_TYPE_GCM = ("GCM", "*.gcm")
@@ -98,7 +102,13 @@ if __name__ == "__main__":
 	handleConfigItem(paths, ISO_PATH_KEY, "Select Normal Melee ISO (NTSC)", ISO_TYPES)
 	EXEC_TYPES = (FILE_TYPE_EXE, FILE_TYPE_ALL)
 	handleConfigItem(paths, GCR_PATH_KEY, "Select GameCube Rebuilder Executable", EXEC_TYPES)
-	handleConfigItem(paths, DOLPHIN_PATH_KEY, "Select Dolphin Executable", EXEC_TYPES)
+	handleConfigItem(paths, DOLPHIN_PATH_KEY, "Optional: Dolphin Executable", EXEC_TYPES)
+
+	# Optional xdelta and version ISOs to make xdelta files
+	handleConfigItem(paths, XDELTA_PATH_KEY, "Optional: xDelta Executable", EXEC_TYPES)
+	handleConfigItem(paths, ISO_1_00_PATH_KEY, "Optional: Melee v1.00 ISO", ISO_TYPES)
+	handleConfigItem(paths, ISO_1_01_PATH_KEY, "Optional: Melee v1.01 ISO", ISO_TYPES)
+	handleConfigItem(paths, ISO_1_02_PATH_KEY, "Optional: Melee v1.02 ISO", ISO_TYPES)
 
 	with open(configPath, "w") as configFile:
 		config.write(configFile)

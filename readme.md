@@ -15,17 +15,22 @@ windows is supported.
 ## Prerequisites
 Currently, only Windows is supported for building.
 Requires:
-* Requires Python 3 to be installed, and that "python.exe" is in your PATH.
-* Requires GameCube Rebuilder. The current version we use is 1.1.
+* Requires: Python 3 to be installed, and that "python.exe" is in your PATH.
+* Requires: GameCube Rebuilder. The current version we use is 1.1.
+* Requires: An ISO of SSBM NTSC (any version, tested with v1.02).
 * Optional: Dolphin (if you want to use the "Run With Dolphin" script)
-* Finally: Requires an ISO of SSBM NTSC.
+* Optional: xdelta 3.0.11 executable (command line version)
+* Optional: ISOs of all three versions of SSBM NTSC, to create xdelta patches from.
+
 
 ## Configure Build
 The first time you build, you first need to run configure.bat. This will ask you to specify the location of various
 prerequisites. Based on this should create a config file that holds the paths to all of these items so you don't need
-to specify them on each build.
+to specify them on each build. If a prerequisite is optional, you may simply cancel the open file dialog and it will
+be skipped.
 
-You may run this again if you change the locations of prerequisites or if something went wrong.
+You may run this again if you change the locations of prerequisites, something went wrong, or you want to include an
+optional item that you previously didn't specify.
 
 ## Build
 The build script is build.bat. By default, running this does a full build. However, you can pass an argument to the
@@ -55,10 +60,13 @@ into a Dios Mios compatible folder containing Super Smash Brothers Melee to turn
 ### 'xdelta' target
 This builds an ISO, just like the ISO target, but then also creates xdelta patches with the base being various Melee
 ISOs. This uses version specific Melee ISOs and creates xdelta files in the build directory of the form
-"SDR 1.0[v].xdelta", where "[v]" is the version number of the ISO it's based of off.
+"SDR from 1.0[v].xdelta", where "[v]" is the minor version number of the ISO it's based of off.
+
+This requires the xdelta executable and copies of all the Melee NTSC ISOs.
 
 ## Testing Built Iso
-If you specified a Dolphin exe using configure.bat and also built an ISO using the build script, you can use the play_iso.bat to play the ISO you've built.
+If you specified a Dolphin exe using configure.bat and also built an ISO using the build script, you can use the
+play_iso.bat to play the ISO you've built.
 
 
 # File Structure

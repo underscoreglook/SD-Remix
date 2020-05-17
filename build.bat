@@ -66,12 +66,18 @@ python.exe scripts\copy_game_files.py || exit /b %ERRORLEVEL%
 
 echo.
 echo Building system files...
-python.exe scripts\build_system_files.py
+python.exe scripts\build_system_files.py || exit /b %ERRORLEVEL%
 
 if %buildIso%==yes (
     echo.
     echo Building the ISO...
-    python.exe scripts\build_iso.py
+    python.exe scripts\build_iso.py || exit /b %ERRORLEVEL%
+)
+
+if %buildDelta%==yes (
+    echo.
+    echo Creating the patches...
+    python.exe scripts\create_patches.py || exit /b %ERRORLEVEL%
 )
 
 :: In case we've double clicked on the bat file, keep it around so we can read the output until keyboard input

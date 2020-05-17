@@ -1,3 +1,3 @@
 @ECHO OFF
 
-python.exe scripts\configure_build.py
+python.exe scripts\build_config.py
