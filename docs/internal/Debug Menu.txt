@@ -1,0 +1,787 @@
+ACTUAL REFERENCE
+================
+Debug menu structure
+https://docs.google.com/document/d/1VCfULUB1crg2EWkCaDZJGqufP0alZax0mZ1Byhd7Lk4/pub
+
+Custom Submenu (Latest version, we use an older one at the moment)
+https://docs.google.com/document/d/1ieOVWtJ-xhNahU3GRFUoL9PQ0Pb8XUQuY9WCVQwy_II/edit#
+
+
+Quick reference:
+================
+
+Debug Menu Entry: (First one for main menu is at 803FA4E0), it's 8 dwords (0x20 bytes)
+----------------------------------------------------------
+Dword1                Dword2            Dword3        Dword4
+0 = Disabled          Function pointer  Entry Label   Pointer to a string
+1 = Press A for menu  When interact,    (String ptr)  list table
+2 = <-> strings        press input,                   (when dword is == 2)
+3 = <-> ints          Will call func
+8 = <-> floats         like press A
+9 = end of list       null == nop
+
+Dword5                Dword6            Dword7             Dword8
+If Dword1 is 2,3,8    Submenu to load   Number of          if Dword1 is 2,3,8
+then either default   (use dan's custm  items in dword4's  How much to increase/decrease
+value or default       submenu cod)     table (float)       the value when press left/right
+entry in Dword4's                                          (value is float)
+table.
+
+For Dword4, the table it points to looks like this:
+A collection of Dwords that are (Dword7) items big, each of which is the address of a string
+
+In short:
+Type    ActionFn    Label   StringList || DefaultListItem    SubmenuFn    StringListSize    StringListStep
+
+
+
+
+
+
+
+These variables are free for us to use, with a couple that I want to use as well, along with what we use it for
+Fixed Variables
+---------------
+803fa25c	PUBLICITY
+804d4a08	DBLEVEL
+
+Free Variables
+--------------
+803fa350	Toggles (disabled, enabled, melee+ only)
+803fa354	Alpha/Omega Toggle (default 1)
+803fa358	Alpha/Omega Random Select Option Screen Toggle (default 1)
+803fa35c	End match even with pause off
+803fa360	(default 1)
+803fa364	(default 1)
+803fa368	Handicap
+803fa36c	Overtime
+803fa370	Ledge Invincibility
+803fa374	(default 1)
+803fa378	Capped points
+803fa37c	Next Screen ID (from SSS)
+803fa380	Enabled DOL Toggles
+803fa384	Enabled Go change to Gr
+803fa388	Shields
+803fa38c	Tap Jump
+803fa390	Always Rain Bombs
+803fa394
+803fa39c	Random Hit Element
+803fa3a0	Widescreen
+803fa3a4	Stock platform colors
+803fa3a8	Change rumble on character screen
+803fa3ac	Hold start to exit results
+803fa3b0	(default 1)
+803fa3b4	(default 1)
+803fa3b8	(default 1)
+803fa3bc	(default 3)
+803fa3c0	(default 1)
+803fa3c4	(default 2)
+803fa3c8	(default 3)
+803fa3cc	(default 3)
+803fa3d0	Wall Bracing
+803fa3d4
+803fa3d8
+803fa3e0
+804d5908
+804d590c
+804d5910
+804d6dc8
+804d6dcc
+804d6dd4
+804d6ddc
+804d6de0
+804d6de4
+804d6de8
+804d6dec
+804d6df0
+804d6df4
+804d6e0c
+804d6e10
+804d6e14
+
+
+
+
+
+
+
+
+
+
+
+
+New Debug Menu
+==============
+< SD REMIX OPTIONS >
+GENERAL OPTIONS >
+	WIDESCREEN: [DISABLED, ENABLED]
+	STOCK PLATFORM COLORS: [DISABLED, ENABLED]
+	HOLD START TO EXIT RESULTS: [DISABLED, ENABLED]
+	CHANGE RUMBLE ON CHARACTER SCREEN: [DISABLED, ENABLED]
+	http://smashboards.com/threads/l-r-a-start-ends-match-with-pause-off.399278/
+TOGGLES: [DISABLED, ENABLED, MELEE+ ENABLED ONLY] (Selecting different ones will toggle the others on and off)
+MELEE+ TOGGLES > (If Melee+ Enabled Only is selected, it should say ~MELEE+ ENABLED, ascii 0x7E
+	HANDICAP: [DAMAGE RATIO, STOCK/CREW]
+	OVERTIME: [NORMAL, TOURNAMENT]
+	LEDGE INVINCIBILITY: [NORMAL, DYNAMIC]
+	WALL BRACING: [DISABLED, ENABLED]
+	CAPPED POINTS: [DISABLED, ENABLED]
+	Omega jungle japes: 04202b7c 60000000 && 04202c98 60000000 [DISABLED, ENABLED]
+	Mute city no cars: 041f0188 60000000 [DISABLED, Enabled]
+	No Birdo in MushKing2: 041fcfe8 60000000 [DISABLED, Enabled]
+OTHER TOGGLES >
+	SHIELDS: [NORMAL, INFINITE]
+	TAP JUMP: [ENABLED, DISABLED]
+	ALWAYS RAIN BOMBS: [DISABLED, ENABLED, POKEBALLS]
+	VENOM STAGE SELECT: [VENOM, SNAG THE TROPHIES]
+	RANDOM HITBOX ELEMENT: [DISABLED, ENABLED]
+CREDITS > (Opens up top level menu)
+DEBUG MENU > (Opens up top level menu)
+
+< CREDITS >
+blah blah blah
+
+< DEBUG MENU > (The old vs mode with two things added)
+MODE: DAIRANTOU >
+MODE: RULE >
+GLOBAL DATA EDIT >
+DBLEVEL: [MASTER (804D5890), NO-DEBUG-ROM, DEBUG-DEVELOP, DEVELOP (804D5898)]
+PUBLICITY: [OFF, ON] (804D5880)
+
+-----------
+- Strings -
+-----------
+803ea6c8	3E76C8	"< SD REMIX OPTIONS >"
+803FA5E0	3F75E0	"General Options >"
+803FA5F4	3f75f4	"Toggles: "
+803FA600	3f7600	"Melee+ Toggles >"
+803FA614	3f7614	"Other Toggles >"
+803FA624	3f7624	"Credits >"
+803FA630	3f7630	"Debug Menu >"
+803FA424	3f7424	"Time"
+803FA42C	3f742C	"Stock"
+803FA434	3f7434	"Coin"
+803FA43C	3f743C	"Endless"
+803FA46C	3f746C	"DBLevel"
+803FA478	3f7478	"Publicity"
+803FA484	3f7484	"No-debug-rom"
+803FA494	3f7494	"Debug-develop"
+803FA4B4	3f74b4	"Global Data Edit >"
+803FA4C8	3f74c8	"< GENERAL OPTIONS >"
+803FCB30	3f9B30	"Widescreen: "
+803FCB3C	3f9B3C	"Hold start exit result:"
+803FCB58	3f9B58	"End match w/ pause off: "
+803FCB70	3f9B70	"stock platform colors: "
+803FCB88	3f9B88	"Change Rumble on CSS: "
+803FCBA0	3f9ba0	"< Melee+ >"
+803FCBAC	3f9baC	Handicap
+803FCBB8	3f9bB8	Overtime
+803FCBC4	3f9bC4	Ledge invincibility
+803FCBDC	3f9bDC	Wall bracing
+803FCBEC	3f9bEC	Capped points
+803FCBFC	3f9bFC	Omega Jungle Japes
+803FCC10	3f9C10	** FREE 0x2C **
+803FC420	3F9420	< Others >
+803FC42C	3f942c	Shields
+803FC438	3f9438	Tap Jump
+803FC444	3f9444	Always rain bombs
+803FC458	3f9458	** FREE 0x14 **
+803FC46C	3f946c	Random Hit Element
+803FC484	3f9484	** FREE 0x1C **
+803FC4A0	3f94A0	Pokeballs
+803FA3E8	3F73E8	~MELEE+ ENABLED~
+803FA3F8	3f73f8	Disabled
+803FA3F0	3f73f0	Enabled
+803FA404	3f7404	Melee+ Enabled Only
+803FCACC	3F9ACC	Damage Ratio
+803FCADC	3F9ADC	Stock/Crew
+803FCAE8	3F9AE8	Normal
+803FCAF0	3F9AF0	Tournament
+803FCAFC	3F9AFC	Dynamic
+803FCB04	3F9B04	Infinite
+
+-----------------
+- String arrays -
+-----------------
+803FA418	3f7418	[Disabled, Enabled, Melee+ Enabled Only]
+803FCB28	3f9B28	[Enabled, Disabled]
+803FA444	3f7444	[Time, Stock, Coin, Endless]
+803FA454	3f7454	Rule item switch
+803FA4A4	3f74A4	[Master, no-debug-rom, debug-develop, develop]
+803FC4AC	3f94AC	[Disabled, Enabled, Pokeballs]
+803FC4B8	3f94b8	** FREE 0x8 **
+803FC4C0	3f94C0	[Normal, Infinite]
+803FCB10	3f9B10	[Damage Ratio, Stock/Crew]
+803FCB18	3f9B18	[Normal, Tournament]
+803FCB20	3f9B20	[Normal, Dynamic]
+
+---------------
+- Menu Tables -
+---------------
+803FA4E0	3F74E0	Main Menu
+803FC4CC	3F94CC	Credits
+803FA790	3F7790	Debug Menu
+803FCC40	3F9C40	General Options Menu Table
+803FCE00	3F9E00	Melee+ Menu Table
+803FD000	3FA000	Other Menu Table
+
+-----------
+- Toggles -
+-----------
+Master toggle: 803fa350
+
+Key
+---
+Name: [Options]
+	Toggle: Current Selected Option Address
+	CodeAddr,OrigCode,NewBranchCode
+
+WIDESCREEN: [DISABLED, ENABLED]
+	Toggle:	803fa3a0
+	80021ABC,38600006,4816F624
+	8036A4A8,c03f0034,4BE26C44
+STOCK PLATFORM COLORS: [DISABLED, ENABLED]
+	Toggle: 803fa3a4
+	800D5008,7c7e1b78,480BC11C
+HOLD START TO EXIT RESULTS: [DISABLED, ENABLED]
+	Toggle: 803fa3ac
+	80178054,3c808047,480191B0
+	80178224,80030008,48019028
+	801A4164,38000000,4BFED11C
+END MATCH W PAUSE OFF: [DISABLED, ENABLED}
+	Toggle: 803fa35c
+	8016BDF0,540004e6,480254A4
+	8016caa8,40820124,60000000
+	8016cc28,40820154,60000000
+
+
+OVERTIME: [NORMAL, TOURNAMENT] && ALWAYS RAIN BOMBS: [DISABLED, ENABLED, POKEBALLS]
+	Toggle: 803fa36c           && 803fa390
+	Overtime:
+	801A415C,3803ffff,4BFED328
+	8016DD38,881e0000,48023988
+	8016DDCC,901f0028,48023934
+	80067E78,d01b1830,481298A8
+	800343B4,7fdd032e,4815D394
+	80165dc4,38040001,38040000
+	80165e0c,38040001,38040000
+	80165e54,38040001,38040000
+	Bombs:
+	801C0EA8,418200a0,60000000
+	Pokeballs:
+	8026bec0,801e0014,3800001f
+	80294dcc,3800001f,38000022
+	Address: 801C0EB4
+	Original: 40810094
+	Overtime: 48000094
+	Bombs: 60000000
+	Toggle Disable: Original
+	Toggle Melee+: Overtime
+	Bomb On: Bomb
+	If Overtime On && Bomb Off: Overtime
+	If Overtime Off && Bomb Off: Original
+
+HANDICAP: [DAMAGE RATIO, STOCK/CREW]
+	Toggle: 803fa368
+	80036bb4,9803008e,60000000
+	80266678,3803ffff,4BF2AC4C
+	801A57DC,38befff8,4BFEBB8C
+	80230D54,88030005,4BF60638
+	8022F76C,881c0004,4BF61C50
+	8022F6BC,881c0004,4BF61D3C
+	80033CC4,98a3008e,4815D770
+LEDGE INVINCIBILITY: [NORMAL, DYNAMIC]
+	Toggle: 803fa370
+	8009A8AC,8084049c,480F6EBC
+	8006A414,807f1990,481273A0
+WALL BRACING: [DISABLED, ENABLED]
+	Toggle: 803fa3d0
+	8008DFAC,2c1c0003,48103838
+CAPPED POINTS: [DISABLED, ENABLED]
+	Toggle: 803fa378
+	8016CDAC,88030005,48024A70
+Mute city no cars: [DISABLED, Enabled]
+	Toggle: 803fa380
+	801f0188,480018ad,60000000
+No Birdo or Pidget in MushKing2: [DISABLED, Enabled]
+	Toggle: 803fa384
+	801fcfe8,480003e5,60000000
+	801fcff0,480007b9,60000000
+
+SHIELDS: [NORMAL, INFINITE]
+	Toggle: 803fa388
+	8006d2d4,d01e1998,60000000
+	80092630,d01f1998,60000000
+TAP JUMP: [ENABLED, DISABLED]
+	Toggle: 803fa38c
+	800CBBC0,7c0802a6,480C5D70
+	800CB4E0,7c0802a6,480C6468
+VENOM STAGE SELECT: [VENOM, SNAG THE TROPHIES]
+	Toggle: 803fa394
+	802199FC,480D8699,60000000
+	803F080C,020D1216,020D1253
+RANDOM HITBOX ELEMENT: [DISABLED, ENABLED]
+	Toggle: 803fa39c
+	800715B0,28000009,481203AC
+
+
+
+
+
+
+Apply all default DOL Mods:
+	[addr] >> [code orig] > [code new] means overwrite [code orig] in [addr] with [code new]
+	[addr] >> [code orig] -> [new code addr] means replace [code orig] in [addr] with a branch to [new code addr]
+	[addr] >>> means the first chunk should be overwritten with the second chunk (chunks separated by ----)
+	- Every player can control the debug menu:
+		> @ 0x300584 in DOL (0x3039a4 in RAM), paste:
+			39 40 00 00 39 00 00 00 38 e0 00 08 3c 80 80 4c
+			60 84 20 bc 1c aa 00 44 7d 24 2a 14 80 69 00 08
+			70 63 1f 10 7d 08 1b 78 80 69 00 00 70 60 00 20
+			41 82 00 08 38 e0 00 00 54 60 c8 c6 50 60 d8 84
+			50 60 f0 02 7d 08 03 78 54 60 60 06 7d 08 03 78
+			54 60 40 07 41 82 00 0c 38 e0 00 00 7d 08 03 78
+			39 4a 00 01 2c 0a 00 04 41 80 ff a4 75 00 f0 00
+			41 82 00 28 88 6d b7 ac 2c 03 00 00 41 82 00 14
+			38 63 ff ff 98 6d b7 ac 55 08 01 3e 48 00 00 14
+			98 ed b7 ac 48 00 00 0c 38 60 00 00 98 6d b7 ac
+			7d 03 43 78 4e 80 00 20
+	- Name Entry:
+		> 804d4cac >> 81400000 > 20000000
+		> 804d4d90 >>>
+			82690000 82730000 82580000 81440000
+			82680000 82720000 82570000 81900000
+			82670000 82710000 82560000 81950000
+			82660000 82700000 82550000 81930000
+			82650000 826f0000 82790000 82540000
+			81970000 82640000 826e0000 82780000
+			82530000 81480000 82630000 826d0000
+			82770000 82520000 81490000 82620000
+			826c0000 82760000 82510000 81810000
+			82610000 826b0000 82750000 82500000
+			817b0000 82600000 826a0000 82740000
+			824f0000 817c0000
+			----
+			4a000000 54000000 39000000 2e000000
+			49000000 53000000 38000000 81900000
+			48000000 52000000 37000000 81950000
+			47000000 51000000 36000000 81930000
+			46000000 50000000 5a000000 35000000
+			81970000 45000000 4f000000 59000000
+			34000000 81480000 44000000 4e000000
+			58000000 33000000 81490000 43000000
+			4d000000 57000000 32000000 81810000
+			42000000 4c000000 56000000 31000000
+			817b0000 41000000 4b000000 55000000
+			30000000 817c0000
+		> 8023C718 >> 38030001 -> DOL 408990, RAM 8040B990
+			1CC30003 7CC6F214 88060001 2C000000
+			7C601B78 41820008 38030001 00000000
+		> 8023C270 >> 98030000 -> DOL 4089B0, RAM 8040B9B0
+			88C30000 2C060000 41820008 38630001
+			98030000 00000000
+		> 8023C710 >> 28030003 -> DOL 4089C8, RAM 8040B9C8
+			28030003 4180001C 1CC30003 7CC6F214
+			88060001 2C000000 40820008 38600002
+			28030003 00000000
+		> 8023cdd4 >> 7c7e01ae > 7c7e032e
+		> 8023cdb0 >> 98040000 > b0040000
+		> 8023C5A0 >> 546005ad -> DOL 4089F0, RAM 8040B9F0
+			5460056B 41820068 88BC0050 28050002
+			4082005C 3CA0804D 60A54D90 38C00000
+			2C0600B4 41810038 7CE628AE 2C070041
+			41800024 2C07007A 4181001C 2C070061
+			4180000C 38E7FFE0 48000008 38E70020
+			7CE629AE 38C60004 4BFFFFC8 3D808023
+			618CC7EC 7D8903A6 4E800420 546005AD
+			60000000 00000000
+	- Disable name tag reset on port close and exit CSS:
+		> 80261B1C >> 98a4007a > 60000000
+		> 80261B30 >> 98a4001b > 60000000
+		> 801A55EC >> 7c0802a6 > 4E800020
+	- Hold A+B for salty runback:
+		> 801A4160 >> 981f0003 ->
+			39C00000 3DE08046 61EFB108 820F0000
+			5611018D 41820010 561101CF 41820008
+			38000002 39CE0001 2C0E0004 4080000C
+			39EF000C 4BFFFFD8 981F0003 00000000
+	- Unlock score display:
+		> 8017365C >> 4180000c > 60000000
+
+TOGGLES: [DISABLED, ENABLED, MELEE+ ENABLED ONLY]
+	If DISABLED, both MELEE+ TOGGLES and OTHER TOGGLES will be disabled, with "Melee+ >". The banner is yellow
+	If ENABLED, both MELEE+ Toggles and OTHER TOGGLES will be enabled, and "Melee+ >". The banner is green
+	If MELEE+, both MELEE+ Toggles and OTHER TOGGLES will be disabled, and "~Melee+". Banner is magenta
+mflr r0
+stw r0,0x4(sp)
+stwu sp,-0x8(sp)
+addi sp, sp, -0xC
+stw r29, 0(sp)
+stw r30, 4(sp)
+stw r31, 8(sp)
+
+# The master toggle var is in r10
+lis r3, 0x803f
+ori r3, r3, 0xa350
+lwz r3, 0(r3)
+cmpwi r3, 1
+beq ENABLED
+bgt MELEE_PLUS
+
+DISABLED:
+# Change the color of the banner
+lis r3, 0x8040
+ori r3, r3, 0xAAD4
+# First value
+li r4, 0xC
+stb r4, 3(r3)
+# second value
+li r4, 0xD
+stb r4, 0xB(r3)
+# Third value
+li r4, 0xE
+stb r4, 0x13(r3)
+# Disable the menu options
+lis r4, 0x803F
+ori r4, r4, 0xA4E0
+li r3, 0
+stw r3, 0x60(r4)
+stw r3, 0x80(r4)
+lis r3, 0x803F
+ori r3, r3, 0xA600
+stw r3, 0x68(r4)
+b RETURN
+
+ENABLED:
+# Change the color of the banner
+lis r3, 0x8040
+ori r3, r3, 0xAAD4
+# First value
+li r4, 0xD
+stb r4, 3(r3)
+# second value
+li r4, 0xD
+stb r4, 0xB(r3)
+# Third value
+li r4, 0xC
+stb r4, 0x13(r3)
+# Enable the menu options
+lis r4, 0x803F
+ori r4, r4, 0xA4E0
+li r3, 1
+stw r3, 0x60(r4)
+stw r3, 0x80(r4)
+lis r3, 0x803F
+ori r3, r3, 0xA600
+stw r3, 0x68(r4)
+b RETURN
+
+MELEE_PLUS:
+# Change the color of the banner
+lis r3, 0x8040
+ori r3, r3, 0xAAD4
+# First value
+li r4, 0xC
+stb r4, 3(r3)
+# second value
+li r4, 0xE
+stb r4, 0xB(r3)
+# Third value
+li r4, 0xD
+stb r4, 0x13(r3)
+# Disable the menu options, show Melee+
+lis r4, 0x803F
+ori r4, r4, 0xA4E0
+li r3, 0
+stw r3, 0x60(r4)
+stw r3, 0x80(r4)
+lis r3, 0x803F
+ori r3, r3, 0xA3E8
+stw r3, 0x68(r4)
+
+RETURN:
+# Run all of the save functions
+lis r30, 0x803F
+ori r30, r30, 0xCE00
+li r31, 0	# Loop var
+TRAVERSE_MENU_TABLE:
+mr r29, r30
+ANALYZE_MENU_ITEM:
+lwz r3, 0(r29)
+cmpwi r3, 0x9
+beq NEXT_TABLE
+lwz r3, 4(r29)
+cmpwi r3, 0
+beq NEXT_ITEM
+mtctr r3
+bctrl
+NEXT_ITEM:
+addi r29, r29, 0x20
+b ANALYZE_MENU_ITEM
+NEXT_TABLE:
+addi r30, r30, 0x200
+addi r31, r31, 1
+cmpwi r31, 2
+blt TRAVERSE_MENU_TABLE
+
+li r3,0
+lwz r29, 0(sp)
+lwz r30, 4(sp)
+lwz r31, 8(sp)
+lwz r0,0x18(sp)
+addi sp,sp,0x14
+mtlr r0
+blr
+
+0x164 bytes
+
+7C0802A6900100049421FFF83821FFF493A1000093C1000493E100083C60803F6063A350806300002C0300014182004C4181008C3C6080406063AAD43880000C988300033880000D9883000B3880000E988300133C80803F6084A4E03860000090640060906400803C60803F6063A60090640068480000883C6080406063AAD43880000D988300033880000D9883000B3880000C988300133C80803F6084A4E03860000190640060906400803C60803F6063A60090640068480000443C6080406063AAD43880000C988300033880000E9883000B3880000D988300133C80803F6084A4E03860000090640060906400803C60803F6063A3E8906400683FC0803F63DECE003BE000007FDDF378807D00002C03000941820020807D00042C0300004182000C7C6903A64E8004213BBD00204BFFFFDC3BDE02003BFF00012C1F00024180FFC83860000083A1000083C1000483E1000880010018382100147C0803A64E800020
+
+
+
+7C0802A6 90010004 9421FFF8 3821FFF4
+93A10000 93C10004 93E10008 3C60803F
+6063A350 80630000 2C030001 4182004C
+4181008C 3C608040 6063AAD4 3880000C
+
+98830003 3880000D 9883000B 3880000E
+98830013 3C80803F 6084A4E0 38600000
+90640060 90640080 3C60803F 6063A600
+90640068 48000088 3C608040 6063AAD4
+
+3880000D 98830003 3880000D 9883000B
+3880000C 98830013 3C80803F 6084A4E0
+38600001 90640060 90640080 3C60803F
+6063A600 90640068 48000044 3C608040
+
+6063AAD4 3880000C 98830003 3880000E
+9883000B 3880000D 98830013 3C80803F
+6084A4E0 38600000 90640060 90640080
+3C60803F 6063A3E8 90640068 3FC0803F
+
+63DECE00 3BE00000 7FDDF378 807D0000
+2C030009 41820020 807D0004 2C030000
+4182000C 7C6903A6 4E800421 3BBD0020
+4BFFFFDC 3BDE0200 3BFF0001 2C1F0002
+
+4180FFC8 38600000 83A10000 83C10004
+83E10008 80010018 38210014 7C0803A6
+4E800020
+
+
+
+Overtime and Always Bomb asm
+# r10 is set to master toggle
+lis r10, 0x803f
+ori r10, r10, 0xa350
+lwz r10, 0(r10)
+
+# Apply Overtime if it is enabled
+cmpwi r10, 1
+blt NORMAL_OVERTIME
+bgt TOURNAMENT_OVERTIME
+lis r3, 0x803f
+ori r3, r3, 0xa36c
+lwz r3, 0(r3)
+cmpwi r3, 0
+bne TOURNAMENT_OVERTIME
+
+# Apply Normal Overtime code
+NORMAL_OVERTIME:
+lis r4, 0x801A
+ori r4, r4, 0x415C
+lis r3, 0x3803
+ori r3, r3, 0xffff
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0xDD38
+lis r3, 0x881e
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0xDDCC
+lis r3, 0x901f
+ori r3, r3, 0x0028
+stw r3, 0(r4)
+lis r4, 0x8006
+ori r4, r4, 0x7E78
+lis r3, 0xd01b
+ori r3, r3, 0x1830
+stw r3, 0(r4)
+lis r4, 0x8003
+ori r4, r4, 0x43B4
+lis r3, 0x7fdd
+ori r3, r3, 0x032e
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0x5dc4
+lis r3, 0x3804
+ori r3, r3, 0x0001
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0x5e0c
+lis r3, 0x3804
+ori r3, r3, 0x0001
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0x5e54
+lis r3, 0x3804
+ori r3, r3, 0x0001
+stw r3, 0(r4)
+li r9, 0
+b BREAK_OVERTIME
+
+# Apply tournament overtime code
+TOURNAMENT_OVERTIME:
+lis r4, 0x801A
+ori r4, r4, 0x415C
+lis r3, 0x4BFE
+ori r3, r3, 0xD328
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0xDD38
+lis r3, 0x4802
+ori r3, r3, 0x3988
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0xDDCC
+lis r3, 0x4802
+ori r3, r3, 0x3934
+stw r3, 0(r4)
+lis r4, 0x8006
+ori r4, r4, 0x7E78
+lis r3, 0x4812
+ori r3, r3, 0x98A8
+stw r3, 0(r4)
+lis r4, 0x8003
+ori r4, r4, 0x43B4
+lis r3, 0x4815
+ori r3, r3, 0xD394
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0x5dc4
+lis r3, 0x3804
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0x5e0c
+lis r3, 0x3804
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+lis r4, 0x8016
+ori r4, r4, 0x5e54
+lis r3, 0x3804
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+li r9, 1
+BREAK_OVERTIME:
+
+# Now toggle the bombs
+cmpwi r10, 1
+blt BOMB_NORMAL
+bgt BOMB_OVERTIME
+# Check the Bomb toggle
+lis r3, 0x803f
+ori r3, r3, 0xa390
+lwz r3, 0(r3)
+cmpwi r3, 1
+beq BOMB_ALWAYS
+bgt BOMB_POKEBALLS
+# Check if we applied tournament overtime
+cmpwi r9, 0
+bne BOMB_OVERTIME
+
+BOMB_NORMAL:
+lis r4, 0x8026
+ori r4, r4, 0xbec0
+lis r3, 0x801e
+ori r3, r3, 0x0014
+stw r3, 0(r4)
+lis r4, 0x8029
+ori r4, r4, 0x4dcc
+lis r3, 0x3800
+ori r3, r3, 0x001f
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EB4
+lis r3, 0x4081
+ori r3, r3, 0x0094
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EA8
+lis r3, 0x4182
+ori r3, r3, 0x00a0
+stw r3, 0(r4)
+b RETURN
+
+BOMB_OVERTIME:
+lis r4, 0x8026
+ori r4, r4, 0xbec0
+lis r3, 0x801e
+ori r3, r3, 0x0014
+stw r3, 0(r4)
+lis r4, 0x8029
+ori r4, r4, 0x4dcc
+lis r3, 0x3800
+ori r3, r3, 0x001f
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EB4
+lis r3, 0x4800
+ori r3, r3, 0x0094
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EA8
+lis r3, 0x4182
+ori r3, r3, 0x00a0
+stw r3, 0(r4)
+b RETURN
+
+BOMB_ALWAYS:
+lis r4, 0x8026
+ori r4, r4, 0xbec0
+lis r3, 0x801e
+ori r3, r3, 0x0014
+stw r3, 0(r4)
+lis r4, 0x8029
+ori r4, r4, 0x4dcc
+lis r3, 0x3800
+ori r3, r3, 0x001f
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EB4
+lis r3, 0x6000
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EA8
+lis r3, 0x6000
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+b RETURN
+
+BOMB_POKEBALLS:
+lis r4, 0x8026
+ori r4, r4, 0xbec0
+lis r3, 0x3800
+ori r3, r3, 0x001f
+stw r3, 0(r4)
+lis r4, 0x8029
+ori r4, r4, 0x4dcc
+lis r3, 0x3800
+ori r3, r3, 0x0022
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EB4
+lis r3, 0x6000
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+lis r4, 0x801C
+ori r4, r4, 0x0EA8
+lis r3, 0x6000
+ori r3, r3, 0x0000
+stw r3, 0(r4)
+
+RETURN:
+li r3, 0
+blr

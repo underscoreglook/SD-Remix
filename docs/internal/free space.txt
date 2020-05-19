@@ -1,0 +1,282 @@
+Melee Free Space
+-------------------
+Start		End			Bytes
+80001800	80003fff	27FF	Free memory in all GCN Wii Games (gecko is approx 0xba8 in size)
+
+8022887c	8022892c	B0		Unused code function (nop 801a4f84 and 801a5070)
+8032c848	8032c880	38		Unused code function (nop 801a4f84 and 801a5070)
+8032dcb0	8032ddbc	10C		Unused code function (nop 801a4f84 and 801a5070)
+8032ed8c	8032ee90	104		Unused code function (nop 801a4f84 and 801a5070)
+80393a5c	80393c10	1B4		Unused code function (nop 801a4f84 and 801a5070)
+8040A950	8040B6C0	D70		The main section of free space
+801910e0	80192934	1854	Tournament Mode
+
+803fa3e8	803fc2ec	1F04	Debug menu tables/strings
+803fc420	803fdc1c	17FC	Debug menu tables/strings
+803001DC	80301E44	1C68	Debug menu functions
+
+===============================
+== SD Remix free space usage ==
+===============================
+
+Main Section, 0xD70 bytes, at 407950 to 408f4c
+----------------------------------------------
+407950: Salty Runback
+407990: X+Y Disables Start
+4079D8: Enhanced Name Tags
+407AAC: Change Ready To Fight Banner color
+407AF4: Stage changer table
+407BF4: utf8"Alpha Stages"
+407C13: utf8"Omega Stages"
+407C34: Omega Stages string table
+407D10: > Achilles Credits Debug Menu and Strings
+40822C: > Dan Salvato Credits Debug Menu and Strings
+408458: > Myougi Credits Debug Menu and Strings
+4085CC: > Jorgasms Credits Debug Menu and Strings
+4086C0: Dynamic Lagless FoD
+4088b0: FSM
+
+Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510
+--------------------------------------------------
+18DCC0: Widescreen Functions
+18DD04: Stock Dependent Revival Platform
+18DDE4: Hold start to force out of results screen
+18DE74: End game with Pause off
+18DEA4: Handicap is Stock/Crew
+18E064: Overtime
+18E348: Ledge invincibility
+18E3C4: Wall bracing
+18E3FC: Capped Points
+18E510: Tap Jump
+18E53C: Random Hitbox Element
+18E584: Flush cache on scene change
+18E5A0: Name tag box scales to name tag
+18E634: Toggling Alpha/Omega Stage pages
+18E6E0: Disable Trophies outside Classic
+18E708: Reset DOL and Go/Gr toggles at CSS
+18E7A8: Stage Loader
+18E824: Change Stage Filename
+18E850: Stage Mods
+18EB60: L Random Stage Menu Toggle
+18EBA8: Display Alpha/Omega text on random stage menu
+18EBE4: Col 1 alternate text set (random stage menu)
+18EC34: Col 2 alternate text set (random stage menu)
+18EC84: Load random stage menu
+18ECA8: Save random stage menu
+18ECD0: Alpha/Omega Random Stage select 1
+18ECF4: Alpha/Omega Random Stage select 2
+18ED18: Play sound when picking random stage for omega and alpha
+18ED44: ** FREE **
+18ED5C: Stage Striking
+18EEA0: Randomize omega toggle if press start on random
+18EF4C: ** FREE 5C4 **
+18F510: *** END ***
+
+==================================
+== Debug Menu Memory Allocation ==
+==================================
+
+*****************
+* Menus/Strings *
+*****************
+
+Fixed Menus/Strings
+-------------------
+Main menu table:		803FA4E0 to 803FA5E0
+"< Global Data Edit>":	803FA640 to 803FA658
+Global Data table:		803FA658 to 803FA758
+Debug Mode Strings:		803FA758 to 803FA790
+Debug menu table:		803FA790 to 803FA878
+Rules strings:			803FA878 to 803FA8E8
+Rumble strings:			803FAA08 to 803FAA44
+Rumble menu table:		803FAA44 to 803FAB04
+Stage Strings:			803FAB04 to 803FB064
+Melee Kind Strings:		803FB064 to 803FB080
+Dairantou Strings:		803FB080 to 803FB168
+Dairantou menu table:	803FB168 to 803FB368
+Character strings:		803FB368 to 803FB5C0
+CharSelect strings:		803FB5C0 to 803FB60C
+Charselect menu table:	803FB60C to 803FB6EC
+Scale strings:			803FB6EC to 803FB728
+Scale menu table:		803FB728 to 803FB7E8
+PKind stuff:			803FB7E8 to 803FB950
+Color stuff:			803FB950 to 803FBA4C
+Sub color stuff:		803FBA4C to 803FBB5C
+Damage stuff:			803FBB5C to 803FBC58
+Ratios:					803FBC58 to 803FBE80
+CPU Type stuff:			803FBE80 to 803FC0BC
+CPU Level stuff:		803FC0BC to 803FC1BC
+Team select stuff:		803FC1BC to 803FC2EC
+Credits table:			803FC4CC to 803FCACC
+
+Free Menu/String Space
+----------------------
+803FA3E8: > Strings and arrays
+803FA4E0: Main Menu Table
+803FA5E0: > Main menu strings
+803FA640: Global Data Title
+803FA658: Global Data table
+803FA758: Debug Menu 
+803FA790: Debug Menu Table
+803FA878: Rules strings
+803FA8E8: > Strings
+803FAA08: Rumble Strings
+803FAA44: Rumble menu Table
+803FAB04: Stage Strings
+803FB064: Meleekind Strings
+803FB080: Dairantou Strings
+803FB168: Dairantou Menu Table
+803FB368: Character Strings
+803FB5C0: CharSelect strings
+803FB60C: Charselect menu table
+803FB6EC: Scale strings
+803FB728: Scale menu table
+803FB7E8: PKind Stuff
+803FB950: Color stuff
+803FBA4C: Sub color stuff
+803FBB5C: Damage stuff
+803FBC58: Ratios
+803FBE80: CPU Type stuff
+803FC0BC: CPU Level stuff
+803FC1BC: Team Select Stuff
+803FC2EC: XX Unusable XX
+803FC420: > Strings
+803FC4CC: > Credits Menu Table and Strings
+803FC8A0: > Ripple menu and strings
+803FC990: > Standard_toaster menu and strings
+803FCA1C: > credits Name tag menu and strings
+803FCACC: > Strings and stuff
+803FCC40: > General Options Menu Table
+803FCE00: > Melee+ Menu Table
+803FD000: > Other Menu Table
+803FD200: > "< Credits >"
+803FD20C: > sdremix_troubleshooter strings and menu
+803FD34C: > _glook strings and menu
+803FD584: > Zauron strings and menu
+803FD774: > flieskiller strings and menu
+803FD8FC: > 6 more menus and strings
+803FDC1C: *** END ***
+
+
+
+
+*************
+* Functions *
+*************
+
+Fixed Functions
+---------------
+Load Debug:			803001DC to 80300218
+Save Publicity:		80300248 to 80300290
+GLOBAL DATA EDIT:	80300290 to 803002FC
+Load Credits:		803002FC to 80300338
+GDE ADDR:			80300338 to 80300378
+GDE ADDR2:			80300378 to 803003C4
+GDE ADDR4:			803003c4 to 80300410
+GDE U32:			80300410 to 80300480
+Load Dairantou:		80300480 to 803004B4
+Load Rules:			803004b4 to 803004E8
+Load Vibration:		803004E8 to 8030051C
+Load DaiRan Subs:	8030051C to 80300758
+Random Functions:	80301BA8 to 80301E44
+Functions always return 0
+
+Free Function Space
+-------------------
+803001DC: Load Debug
+80300218: ** FREE 30 **
+80300248: Save Publicity
+80300290: GLOBAL DATA EDIT
+803002FC: Load Credits
+80300338: Global Data Edit - ADDR
+80300378: Global Data Edit - ADDR2
+803003c4: Global Data Edit - ADDR4
+80300410: Global Data Edit - U32
+80300480: Load Dairantou
+803004B4: Load Rules
+803004E8: Load Vibration Select
+8030051C: Load DaiRanTou submenus
+80300758: > Custom Load Submenu
+80300790: PKIND FUNCTION (2FD370)
+803007C8: > Save Widescreen
+80300838: > Stock dependent revival platforms
+80300880: > Hold start to exit results
+80300918: > ** FREE **
+803009B0: > Handicap
+80300B00: > Overtime/bombs
+80300DF8: > Ledge invincibility
+80300E80: > Wall bracing
+80300EE0: > Capped Points
+80300F40: > Infinite Shields (0x 84)
+80300FC4: > Tap Jump (0x 84)
+80301048: > Random Hitbox Element
+803010A4: > Milun's Credits menu and strings
+803012D4: > novi, cell, felipe credits menu and strings
+
+80301448 (2FE028): ** FREE 5FC **
+
+80301A44: > Save Toggle Switch
+80301BA8: Random Functions
+80301E44: *** END ***
+
+*******************
+* Debug Variables *
+*******************
+Fixed Variables
+---------------
+803fa25c	PUBLICITY
+804d4a08	DBLEVEL
+
+Free Variables
+--------------
+803fa350	Toggles (disabled, enabled, melee+ only)
+803fa354	Alpha/Omega Toggle (default 1)
+803fa358	Alpha/Omega Random Select Option Screen Toggle (default 1)
+803fa35c	End match even with pause off
+803fa360	(default 1)
+803fa364	(default 1)
+803fa368	Handicap
+803fa36c	Overtime
+803fa370	Ledge Invincibility
+803fa374	(default 1)
+803fa378	Capped points
+803fa37c	Next Screen ID (from SSS)
+803fa380	Enabled DOL Toggles
+803fa384	Enabled Go change to Gr
+803fa388	Shields
+803fa38c	Tap Jump
+803fa390	Always Rain Bombs
+803fa394	
+803fa39c	Random Hit Element
+803fa3a0	Widescreen
+803fa3a4	Stock platform colors
+803fa3a8	Change rumble on character screen
+803fa3ac	Hold start to exit results
+803fa3b0	(default 1)
+803fa3b4	(default 1)
+803fa3b8	(default 1)
+803fa3bc	(default 3)
+803fa3c0	(default 1)
+803fa3c4	(default 2)
+803fa3c8	(default 3)
+803fa3cc	(default 3)
+803fa3d0	Wall Bracing
+803fa3d4
+803fa3d8
+803fa3e0
+804d5908
+804d590c
+804d5910
+804d6dc8
+804d6dcc
+804d6dd4
+804d6ddc
+804d6de0
+804d6de4
+804d6de8
+804d6dec
+804d6df0
+804d6df4
+804d6e0c
+804d6e10
+804d6e14

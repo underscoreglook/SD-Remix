@@ -98,13 +98,3 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 38600000 986DB7AC
 7D034378 4E800020
 60000000 48000000
-
-
-	-==-
-
-
-Debug Menu Title
-Replaces the string for the date that shows up at the top of the debug menu with the title for the Debug Menu "< SD REMIX OPTIONS >".
-[_glook]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3E76C8 ----- 44415445204665622031332032303032202054494D452032 -> 3C2053442052454D4958204F5054494F4E53203E00000000
