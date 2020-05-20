@@ -1073,7 +1073,7 @@ NTSC 1.02 ---- 0x3F74E0 -----
 # Entry 3: Submenu "Melee+ Toggles >"
     00000001                                        # Press-able
     80300758                                        # TODO Custom Debug Menu
-    803FA600                                        # TODO "Melee+ Toggles >"
+    .long <<strMeleePlusTogglesSub>>                # Label: "Melee+ Toggles >"
     00000000 00000000                               # n/a
     803FCE00
     00000000 00000000                               # n/a
@@ -1137,19 +1137,19 @@ li r4, 0xE
 stb r4, 0x13(r3)
 # Disable the menu options
 lis r4, 0x803F
-ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address
+ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
 li r3, 0
-stw r3, 0x60(r4)    # Set 4th item (Melee+ Toggles), to 0, or disabled
-stw r3, 0x80(r4)    # Set 5th item (Other toggles), to 0, or disabled
-lis r3, 0x803F
-ori r3, r3, 0xA600  # 803FA600  "Melee+ Toggles >"  (TODO: Change when made standalone)
-stw r3, 0x68(r4)    # Set the label of 4th item to this string
+stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 0, or disabled
+stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 0, or disabled
+lis r3, <<strMeleePlusTogglesSub>>@h
+ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
+stw r3, 0x68(r4)                            # Set the label of 4th item to this string
 b RETURN
 
 ENABLED:
 # Change the color of the banner
 lis r3, 0x8040
-ori r3, r3, 0xAAD4  # 8040AAD4 The banner color variable
+ori r3, r3, 0xAAD4                          # 8040AAD4 The banner color variable
 # First value
 li r4, 0xD
 stb r4, 3(r3)
@@ -1161,13 +1161,13 @@ li r4, 0xC
 stb r4, 0x13(r3)
 # Enable the menu options
 lis r4, 0x803F
-ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address
+ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
 li r3, 1
-stw r3, 0x60(r4)    # Set 4th item (Melee+ Toggles), to 1, or enabled
-stw r3, 0x80(r4)    # Set 5th item (Other toggles), to 1, or enabled
-lis r3, 0x803F
-ori r3, r3, 0xA600  # 803FA600  "Melee+ Toggles >"  (TODO: Change when made standalone)
-stw r3, 0x68(r4)    # Set the label of 4th item to this string
+stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 1, or enabled
+stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 1, or enabled
+lis r3, <<strMeleePlusTogglesSub>>@h
+ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
+stw r3, 0x68(r4)                            # Set the label of 4th item to this string
 b RETURN
 
 MELEE_PLUS:
@@ -1261,6 +1261,7 @@ STRINGS:
 strSdRemixOptions: "< SD REMIX OPTIONS >"
 strGeneralOptionsSub: "General Options >"
 strTogglesLabel: "Toggles:"
+strMeleePlusTogglesSub: "Melee+ Toggles >"
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strSdRemixOptions> ALL
@@ -1271,6 +1272,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
 <strTogglesLabel> ALL
 54 6F 67 67  6C 65 73 3A  00 00 00 00
+
+<strMeleePlusTogglesSub> ALL
+4D 65 6C 65  65 2B 20 54  6F 67 67 6C  65 73 20 3E  00 00 00 00
 
 NTSC 1.02 ---- 0x803EA6C8 ----- 804D5860 -> 00000000 # I put this here, otherwise MCM won't let this be applied
 
@@ -1308,13 +1312,11 @@ NTSC 1.02 ---- 0x3F73E8 -----    # 803FA3E8
 47 6C 6F 62 61 6C 20 44 61 74 61 20 45 64 69 74 20 3E 00 00    # 803FA4B4 "Global Data Edit >""
 3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00    # 803FA4C8 < General Options >""
 54 4F 50 00                                                    # 803FA4DC TOP
--------------- 0x3F7600 -----  # 803FA600 RAM
-00000001 803002FC 803FA4CC 00000000 00000000
+-------------- 0x3F7614 -----  # 803FA614 RAM
 00000000 00000000 00000000 00000009
 00000000 00000000 00000000
 00000000 00000000 00000000 00000000
 ->
-4D 65 6C 65  65 2B 20 54  6F 67 67 6C  65 73 20 3E  00 00 00 00             # 803FA600 "Melee+ Toggles >"
 4F 74 68 65  72 20 54 6F  67 67 6C 65  73 20 3E 00                         # 803FA614 "Other Toggles >"
 43 72 65 64  69 74 73 20  3E 00 00 00                                     # 803FA624 "Credits >"
 44 65 62 75  67 20 4D 65  6E 75 20 3E  00 00 00 00                         # 803FA630 "Debug Menu >"
