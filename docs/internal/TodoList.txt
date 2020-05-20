@@ -18,6 +18,7 @@ Once you have everything like this, create a new branch that is JUST the SDR 3.2
 
 End Goal, Netplay build:
 -----------------------
+There seems to be a bug when picking pika for P3 and P4 and having stock platform colors enabled
 Make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the
  SDR Stage List.
 SDR Stage List should have all Melee viable stages, certain stages being frozen. Maybe try and get other stages too.
@@ -73,6 +74,8 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 
 New Custom Debug Submenu Engine (old version code unknown)
 https://smashboards.com/threads/custom-debug-submenu-engine-for-devs-only.398050/#post-18927862
+
+Consider an easy way to get to Debug Menu from CSS (maybe Dpad button?)
 
 
 
