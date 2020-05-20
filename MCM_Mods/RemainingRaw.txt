@@ -614,12 +614,14 @@ The idea is that these changes should eventually either be figured out or we sho
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 ---- 0x3F77F0 ------ 00000009 00000000 00000000 -> 00000001 80300292 803FA4B4
--------------- 0x3F7810 ------
-54696D65 204D6F64 65200000 53746F63 6B204D6F 64650000 436F696E 204D6F64 65000000 456E646C 65737320 4D6F6465
-00000000 803FA810 803FA81C 803FA828 803FA834 56657279 68696768 00000000 804D58D0 804D58D8 804D58E0 804D58E4
+-------------- 0x3F7810 ------  # Seems to be a menu
+54696D65 204D6F64 65200000 53746F63 6B204D6F 64650000 436F696E 204D6F64
+65000000 456E646C 65737320 4D6F6465 00000000 803FA810 803FA81C 803FA828
+803FA834 56657279 68696768 00000000 804D58D0 804D58D8 804D58E0 804D58E4
 ->
-00000002 00000000 803FA46C 803FA4A4 804D4A08 00000000 40800000 00000000 00000002 80300248 803FA478 803FA418
-803FA25C 00000000 40000000 00000000 00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+00000002 00000000 803FA46C 803FA4A4 804D4A08 00000000 40800000 00000000
+00000002 80300248 803FA478 803FA418 803FA25C 00000000 40000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 -------------- 0x3F7914 ------ 803FA844 -> 803FA444
 -------------- 0x3F79D4 ------ 803FA860 -> 803FA454
 -------------- 0x3F9420 ------
@@ -1061,22 +1063,22 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000 00000000                               # n/a
     .long <<tblDbgMeleePlusTogglesSubMenu>>         # Melee+ Toggles Submenu Data
     00000000 00000000                               # n/a
-# Entry 4:
+# Entry 4: Submenu "Other Toggles >"
     00000001                                        # Press-able
     80300758                                        # TODO Custom Debug Menu
-    803FA614
+    .long <<strOtherTogglesSub>>                    # Label: "Other Toggles >"
     00000000 00000000                               # n/a
     803FD000
     00000000 00000000                               # n/a
-# Entry 5:
+# Entry 5: Menu "Credits >"
     00000001                                        # Press-able
-    803002FC
-    803FA624
+    803002FC                                        # TODO Probably an existing menu we replaced
+    .long <<strCreditsSub>>                         # Label: "Credits >"
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 6:
+# Entry 6: Menu "Debug Menu >"
     00000001                                        # Press-able
-    803001DC
-    803FA630
+    803001DC                                        # TODO Probably an existing menu we replaced
+    .long <<strDebugMenuSub>>                       # Label: "Debug Menu >"
     00000000 00000000 00000000 00000000 00000000    # n/a
 # END OF LIST (NOTE, there are actually 3 more entries in Melee's debug menu. Space for 3 more entries at least.
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -1265,10 +1267,19 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
 
 <strTogglesLabel> ALL
-54 6F 67 67  6C 65 73 3A  00 00 00 00
+54 6F 67 67 6C 65 73 3A 00 00 00 00
 
 <strMeleePlusTogglesSub> ALL
-4D 65 6C 65  65 2B 20 54  6F 67 67 6C  65 73 20 3E  00 00 00 00
+4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
+
+<strOtherTogglesSub> ALL
+4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
+
+<strCreditsSub> ALL
+43 72 65 64 69 74 73 20 3E 00 00 00
+
+<strDebugMenuSub> ALL
+44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
 
 NTSC 1.02 ---- 0x803EA6C8 ----- 804D5860 -> 00000000 # I put this here, otherwise MCM won't let this be applied
 
@@ -1302,15 +1313,7 @@ NTSC 1.02 ---- 0x3F73E8 -----    # 803FA3E8
 50 75 62 6C 69 63 69 74 79 3A 20 00                            # 803FA478 "Publicity: "
 4E 6F 2D 44 65 62 75 67 2D 52 6F 6D 00 00 00 00                # 803FA484 No-Debug-Rom
 44 65 62 75 67 2D 44 65 76 65 6C 6F 70 00 00 00                # 803FA494 Debug-Develop
-804D5890 803FA484 803FA494 804D5898                            # 803FA494 [NOT A STRING, maybe menu]
+804D5890 803FA484 803FA494 804D5898                            # 803FA4A4 [NOT A STRING, maybe menu]
 47 6C 6F 62 61 6C 20 44 61 74 61 20 45 64 69 74 20 3E 00 00    # 803FA4B4 "Global Data Edit >""
 3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00    # 803FA4C8 < General Options >""
 54 4F 50 00                                                    # 803FA4DC TOP
--------------- 0x3F7614 -----  # 803FA614 RAM
-00000000 00000000 00000000 00000009
-00000000 00000000 00000000
-00000000 00000000 00000000 00000000
-->
-4F 74 68 65  72 20 54 6F  67 67 6C 65  73 20 3E 00                         # 803FA614 "Other Toggles >"
-43 72 65 64  69 74 73 20  3E 00 00 00                                     # 803FA624 "Credits >"
-44 65 62 75  67 20 4D 65  6E 75 20 3E  00 00 00 00                         # 803FA630 "Debug Menu >"
