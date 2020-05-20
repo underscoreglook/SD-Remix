@@ -72,9 +72,6 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ----- 0x803031d4 --- 80010048 -> 3C000000
 1.02 ----- 0x80303244 --- 80010040 -> 3C000000
 
-New Custom Debug Submenu Engine (old version code unknown)
-https://smashboards.com/threads/custom-debug-submenu-engine-for-devs-only.398050/#post-18927862
-
 Consider an easy way to get to Debug Menu from CSS (maybe Dpad button?)
 
 

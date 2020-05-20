@@ -965,7 +965,7 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000 00000000 00000000 00000000 00000000    # n/a
 # Entry 1: Submenu "General Options >"
     00000001                                        # Press-able
-    80300758                                        # TODO Custom Debug Menu
+    .long <<funDebugSubmenu>>                       # Call submenu
     .long <<strGeneralOptionsSub>>                  # Label: "General Options >"
     00000000 00000000                               # n/a
     .long <<tblDbgGeneralOptsSubMenu>>              # General Options Submenu Data
@@ -981,14 +981,14 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000                                        # n/a
 # Entry 3: Submenu "Melee+ Toggles >"
     00000001                                        # Press-able
-    80300758                                        # TODO Custom Debug Menu
+    .long <<funDebugSubmenu>>                       # Call submenu
     .long <<strMeleePlusTogglesSub>>                # Label: "Melee+ Toggles >"
     00000000 00000000                               # n/a
     .long <<tblDbgMeleePlusTogglesSubMenu>>         # Melee+ Toggles Submenu Data
     00000000 00000000                               # n/a
 # Entry 4: Submenu "Other Toggles >"
     00000001                                        # Press-able
-    80300758                                        # TODO Custom Debug Menu
+    .long <<funDebugSubmenu>>                       # Call submenu
     .long <<strOtherTogglesSub>>                    # Label: "Other Toggles >"
     00000000 00000000                               # n/a
     .long <<tblDbgOtherTogglesSubMenu>>             # Other Toggles Submenu Data
@@ -1193,7 +1193,7 @@ The credits menu is significantly longer than the mode team test, but the data a
 0x803FC4CC is the RAM location of this menu
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3F94CC -----  # TODO Change all these references standalone references
+NTSC 1.02 ---- 0x3F94CC -----
 00000000 00000000 803FC420 00000000 00000000 00000000 00000000 00000000
 00000001 803007C8 803FC42C 00000000 00000000 00000000 00000000 00000000
 00000001 803007FC 803FC440 00000000 00000000 00000000 00000000 00000000
@@ -1217,88 +1217,95 @@ NTSC 1.02 ---- 0x3F94CC -----  # TODO Change all these references standalone ref
 00000003 00000000 803FC6DC 00000000 804D6DE4 00000000 49742400 3F800000
 00000003 00000000 803FC6E8 00000000 804D6DE8 00000000 49742400 3F800000
 00000003 00000000 803FC6F4 00000000 804D6DEC 00000000 49742400 3F800000
-->
-00000000 00000000 803FD200 00000000 00000000 00000000 00000000 00000000
-00000001 80300758 803FD20C 00000000 00000000 803FD28C 00000000 00000000
-00000001 80300758 803FC7AC 00000000 00000000 803FC8F0 00000000 00000000
-00000001 80300758 803FC7B8 00000000 00000000 803FC9BC 00000000 00000000
-00000001 80300758 803FC7CC 00000000 00000000 8040AF2C 00000000 00000000
-00000001 80300758 803FC7D8 00000000 00000000 8040B2F8 00000000 00000000
-00000001 80300758 803FC7E8 00000000 00000000 803FD424 00000000 00000000
-00000001 80300758 803FC7F4 00000000 00000000 8040B4CC 00000000 00000000
-00000001 80300758 803FC898 00000000 00000000 80301174 00000000 00000000
-00000001 80300758 803FC800 00000000 00000000 803FD634 00000000 00000000
-00000001 80300758 803FC80C 00000000 00000000 803FD7FC 00000000 00000000
-00000001 80300758 803FC81C 00000000 00000000 8040B620 00000000 00000000
-00000001 80300758 803FC828 00000000 00000000 80301328 00000000 00000000
-00000001 80300758 803FC830 00000000 00000000 803FD9DC 00000000 00000000
-00000001 80300758 803FC840 00000000 00000000 803FDA3C 00000000 00000000
-00000001 80300758 803FC848 00000000 00000000 803FDA9C 00000000 00000000
-00000001 80300758 803FC850 00000000 00000000 803FDAFC 00000000 00000000
-00000001 80300758 803FC85C 00000000 00000000 80301388 00000000 00000000
-00000001 80300758 803FC864 00000000 00000000 803FDB5C 00000000 00000000
-00000001 80300758 803FC870 00000000 00000000 803013E8 00000000 00000000
-00000001 80300758 803FC880 00000000 00000000 803FDBBC 00000000 00000000
-00000001 80300758 803FC88C 00000000 00000000 803FCA4C 00000000 00000000
-00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-
-
-	-==-
-
-
-Custom Debug Submenu Engine (TODO: TURN INTO STATIC FUNCTION, Currently in RAM 80300758)
-This allows for hackers to specify debug submenus, similar to submenus that exist.
-There has since been a new version release of this code.
-[Dan Salvato]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x2FD338 ------
-7C0802A6 2C030001 90010004 9421FFF8
-40820018 3C608040 3863A258 38830010
-38600004 4BFFF555 8001000C 38210008
-7C0803A6 4E800020
-->
-2C040000 4181002C 7C0802A6 90010004
-9421FFF8 80840014 3CA08030 60A51C80
-4BFFF61D 8001000C 38210008 7C0803A6
-38600000 4E800020
-
-
-	-==-
-
-
-Debug Menu Strings
-Standalone functions that contain strings for SD Remix functions.
-If you use the text ".long <<strSomeString>>" in other codes, it will replace that text with the dword containing the address of the location where the string is stored in memory (the RAM address).
-Remember to null terminate them and pad with 0s until you have dword aligned.
-STRINGS:
-strSdRemixOptions: "< SD REMIX OPTIONS >"
-strGeneralOptionsSub: "General Options >"
-strTogglesLabel: "Toggles:"
-strMeleePlusTogglesSub: "Melee+ Toggles >"
-[_glook]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-<strSdRemixOptions> ALL
-3C 20 53 44 20 52 45 4D 49 58 20 4F 50 54 49 4F 4E 53 20 3E 00 00 00 00
-
-<strGeneralOptionsSub> ALL
-47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
-
-<strTogglesLabel> ALL
-54 6F 67 67 6C 65 73 3A 00 00 00 00
-
-<strMeleePlusTogglesSub> ALL
-4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
-
-<strOtherTogglesSub> ALL
-4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
-
-<strCreditsSub> ALL
-43 72 65 64 69 74 73 20 3E 00 00 00
-
-<strDebugMenuSub> ALL
-44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
-
-NTSC 1.02 ---- 0x803EA6C8 ----- 804D5860 -> 00000000 # I put this here, otherwise MCM won't let this be applied
+->  # TODO Change all these references standalone references, and identify each line
+# Entry 0: Title of Credits menu
+    00000000 00000000 803FD200 00000000 00000000 00000000 00000000 00000000
+# Entry 1: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FD20C 00000000 00000000 803FD28C 00000000 00000000
+# Entry 2: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC7AC 00000000 00000000 803FC8F0 00000000 00000000
+# Entry 3: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC7B8 00000000 00000000 803FC9BC 00000000 00000000
+# Entry 4: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC7CC 00000000 00000000 8040AF2C 00000000 00000000
+# Entry 5: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC7D8 00000000 00000000 8040B2F8 00000000 00000000
+# Entry 6: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC7E8 00000000 00000000 803FD424 00000000 00000000
+# Entry 7: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC7F4 00000000 00000000 8040B4CC 00000000 00000000
+# Entry 8: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC898 00000000 00000000 80301174 00000000 00000000
+# Entry 9: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC800 00000000 00000000 803FD634 00000000 00000000
+# Entry 10: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC80C 00000000 00000000 803FD7FC 00000000 00000000
+# Entry 11: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC81C 00000000 00000000 8040B620 00000000 00000000
+# Entry 12: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC828 00000000 00000000 80301328 00000000 00000000
+# Entry 13: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC830 00000000 00000000 803FD9DC 00000000 00000000
+# Entry 14: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC840 00000000 00000000 803FDA3C 00000000 00000000
+# Entry 15: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC848 00000000 00000000 803FDA9C 00000000 00000000
+# Entry 16: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC850 00000000 00000000 803FDAFC 00000000 00000000
+# Entry 17: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC85C 00000000 00000000 80301388 00000000 00000000
+# Entry 18: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC864 00000000 00000000 803FDB5C 00000000 00000000
+# Entry 19: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC870 00000000 00000000 803013E8 00000000 00000000
+# Entry 20: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC880 00000000 00000000 803FDBBC 00000000 00000000
+# Entry 21: TODO
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    803FC88C 00000000 00000000 803FCA4C 00000000 00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 
 	-==-
