@@ -13,29 +13,24 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 	-==-
 
 
-Debug Menu Strings
-Standalone functions that contain strings for SD Remix functions.
+Debug Menu Strings/Tables
+Standalone functions that contain strings (and string tables) for SD Remix functions.
 If you use the text ".long <<strSomeString>>" in other codes, it will replace that text with the dword containing the address of the location where the string is stored in memory (the RAM address).
 Remember to null terminate them and pad with 0s until you have dword aligned.
-STRINGS:
-strSdRemixOptions: "< SD REMIX OPTIONS >"
-strGeneralOptionsSub: "General Options >"
-strTogglesLabel: "Toggles:"
-strMeleePlusTogglesSub: "Melee+ Toggles >"
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-<strSdRemixOptions> ALL
+<strSdRemixOptions> ALL         # "< SD REMIX OPTIONS >"
 3C 20 53 44 20 52 45 4D 49 58 20 4F 50 54 49 4F 4E 53 20 3E 00 00 00 00
 # TODO: Reorganize tables and strings to go where they're only used
 # TODO: If used in multiple modes, leave it in this mod
 
-<strGeneralOptionsSub> ALL
+<strGeneralOptionsSub> ALL      # "General Options >"
 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
 
-<strTogglesLabel> ALL
+<strTogglesLabel> ALL           # "Toggles:"
 54 6F 67 67 6C 65 73 3A 00 00 00 00
 
-<strMeleePlusTogglesSub> ALL
+<strMeleePlusTogglesSub> ALL    # "Melee+ Toggles >"
 4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
 
 <strOtherTogglesSub> ALL
@@ -48,3 +43,46 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
 
 NTSC 1.02 ---- 0x803EA6C8 ----- 804D5860 -> 00000000 # I put this here, otherwise MCM won't let this be applied
+
+
+	-==-
+
+
+Fix Melee's Debug Menu entries (that we still use)
+We still use some of Melee's debug menus (mostly for debug testing). Some of our menu changes clobber built in data that are still used by some of these things, so we need to re-implement them, and change the addresses.
+They're typically strings and string tobles.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strTop> ALL
+54 4F 50 00                 # "TOP"
+
+<strTime> ALL
+54 69 6D 65 00 00 00 00     # "Time"
+
+<strStock> ALL
+53 74 6F 63 6B 00 00 00     # "Stock"
+
+<strCoin> ALL
+43 6F 69 6E 00 00 00 00     # "Coin"
+
+<strEndless> ALL
+45 6E 64 6C 65 73 73 00     # "Endless"
+
+<arrRuleItems> NTSC 1.02    # [default melee rule items for first 5..., TOP string duplicated here]
+804D58D0 804D58D8 804D58E0 804D58E4 804D58EC
+.long <<strTop>>
+
+<arrGameModes> NTSC 1.02    # Game Modes
+.long <<strTime>>
+.long <<strStock>>
+.long <<strCoin>>
+.long <<strEndless>>
+
+NTSC 1.02 ---- 0x3F7914 ------      # Replace pointer to Game Mode string table (old one invalid)
+803FA844
+->
+.long <<arrGameModes>>
+-------------- 0x3F79D4 ------      # Point to new string table (old one is invalid)
+803FA860
+->
+.long <<arrRuleItems>>

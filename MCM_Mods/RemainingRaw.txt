@@ -613,10 +613,8 @@ These are yet undetermined Debug menu changes.
 The idea is that these changes should eventually either be figured out or we should just create a new debug menu.
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3F7914 ------ 803FA844 -> 803FA444 # 0x3F78E8 is where a menu seems to start, Label
--------------- 0x3F79D4 ------ 803FA860 -> 803FA454 # 0x3F79E8 is the last entry of this menu, Label
--------------- 0x3F9420 ------
- # 3F94CC Is the first item of mode team test menu, til 0x3f95EC, but strings afterwards, se we can extend
+NTSC 1.02 ---- 0x3F9420 ------
+# 3F94CC Is the first item of mode team test menu, til 0x3f95EC, but strings afterwards, se we can extend
 3C544553 54204D4F 44453E00 4D4F4445 203A2048 616E7975 20202020 3E000000 4D4F4445 203A204F 746F6775 726F2020
 3E000000 4D4F4445 203A2054 616E6967 75746920 3E000000 4D4F4445 203A204E 61676173 696D6120 3E000000 4D4F4445
 203A204B 696D2020 20202020 3E000000 4D4F4445 203A2053 616B6F64 61202020 3E000000 4D4F4445 203A2053 7567616E
@@ -1006,8 +1004,15 @@ NTSC 1.02 ---- 0x3F74E0 -----
 # END OF LIST (NOTE, there are actually 3 more entries in Melee's debug menu. Space for 3 more entries at least.
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
+<strGeneralOptionsTitle> ALL
+3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00     # "< General Options >"
+
 <tblDbgGeneralOptsSubMenu> NTSC 1.02   # TODO Change all these references standalone references
-00000000 00000000 803FA4C8 00000000 00000000 00000000 00000000 00000000
+# Entry 0: Menu Title
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strGeneralOptionsTitle>>                # Label/Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
 00000002 803007C8 803FCB30 803FA418 803FA3A0 00000000 40000000 00000000
 00000002 80300880 803FCB3C 803FA418 803FA3AC 00000000 40000000 00000000
 00000002 80300838 803FCB70 803FA418 803FA3A4 00000000 40000000 00000000
@@ -1166,6 +1171,27 @@ The altered menu is 3 entries longer than "Versus Mode" menu, so it clobbers som
 0x803FA790 is the RAM location of this menu
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strDbLevel>
+44 42 4C 65 76 65 6C 20 3A 20 00 00
+
+<strGlobalDataEditSub> ALL
+47 6C 6F 62 61 6C 20 44 61 74 61 20 45 64 69 74 20 3E 00 00
+
+<strDebugDevelop> ALL
+44 65 62 75 67 2D 44 65 76 65 6C 6F 70 00 00 00
+
+<strNoDebugRom> ALL
+4E 6F 2D 44 65 62 75 67 2D 52 6F 6D 00 00 00 00
+
+<arrDbLevel> NTSC 1.02
+804D5890                    # Built in string "MASTER"
+.long <<strNoDebugRom>>     # "No-Debug-Rom"
+.long <<strDebugDevelop>>   # "Debug-Develop"
+804D5898                    # Built in string "DEVELOP"
+
+<strPublicity> ALL
+50 75 62 6C 69 63 69 74 79 3A 20 00
+
 NTSC 1.02 ---- 0x3F7790 -----  # TODO Change all these references standalone references
 00000000 00000000 803FA758 00000000 00000000 00000000 00000000 00000000
 00000001 80300480 803FA768 00000000 00000000 00000000 00000000 00000000
@@ -1178,10 +1204,31 @@ NTSC 1.02 ---- 0x3F7790 -----  # TODO Change all these references standalone ref
 00000000 00000000 803FA758 00000000 00000000 00000000 00000000 00000000
 00000001 80300480 803FA768 00000000 00000000 00000000 00000000 00000000
 00000001 803004B4 803FA77C 00000000 00000000 00000000 00000000 00000000
-00000001 80300292 803FA4B4 00000000 00000000 00000000 00000000 00000000
-00000002 00000000 803FA46C 803FA4A4 804D4A08 00000000 40800000 00000000
-00000002 80300248 803FA478 803FA418 803FA25C 00000000 40000000 00000000
-00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+# Entry 3: Submenu "Global Data Edit >"
+    00000001                                        # Press-able
+    80300292                                        # Build in submenu function
+    .long <<strGlobalDataEditSub>>                  # Label: "Global Data Edit >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 4: DBLevel (string table)
+    00000002                                        # String Table
+    00000000                                        # n/a
+    .long <<strDbLevel>>                            # Label: "DBLevel : "
+    .long <<arrDbLevel>>                            # Ptr to string table
+    804D4A08                                        # Melee's variable DBLEVEL
+    00000000                                        # n/a
+    40800000                                        # Size of table: 4.f
+    00000000                                        # n/a
+# Entry 5: Publicity (on/off)
+    00000002                                        # String Table
+    80300248                                        # Melee's Publicity on/off function
+    .long <<strPublicity>>                          # Label "Publicity: "
+    803FA418                                        # TODO: [Disabled, Enabled]
+    803FA25C                                        # Melee's variable Publicity
+    00000000                                        # n/a
+    40000000                                        # Table Size: 2
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 
 	-==-
@@ -1316,28 +1363,12 @@ Replaces various strings in debug menu.
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 ---- 0x3F73E8 -----    # 803FA3E8
-804D5860 804D5868 804D5870 476D4C61 6E675479 70654A50 00000000 476D4C61 6E675479 70655553 00000000 4E6F2D44
-65627567 2D526F6D 00000000 44656275 672D4465 76656C6F 70000000 44656275 672D526F 6D000000 804D5890 803FA414
-803FA424 803FA434 804D5898 56657273 7573204D 6F646520 2020203E 00000000 52657375 6C742054 65737400 4C616E67
-75616765 203A2000 5075626C 69636974 793A2000 44624C65 76656C20 3A200000 496B2044 65627567 20466C61 67203A00
-4E657720 44656643 616C6320 3A000000 476C6F62 616C2044 61746120 45646974 203E0000 4D6F6465 20546561 6D205465
-7374203E 00000000
+804D5860 804D5868 804D5870 476D4C61
+6E675479 70654A50 00000000
+476D4C61 6E675479 70655553 00000000 4E6F2D44
+65627567 2D526F6D 00000000
 ->
 7E 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 00                # 803FA3E8 ~Melee+ Enabled
 44 69 73 61 62 6C 65 64 00 00 00 00                            # 803FA3F8 Disabled
 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 20 4F 6E 6C 79 00    # 803FA404 Melee+ Enabled Only
 803FA3F8 803FA3F0 803FA404                                     # 803FA418 [NOT A STRING, maybe menu]
-54 69 6D 65 00 00 00 00                                        # 803FA424 Time
-53 74 6F 63 6B 00 00 00                                        # 803FA42C Stock
-43 6F 69 6E 00 00 00 00                                        # 803FA434 Coin
-45 6E 64 6C 65 73 73 00                                        # 803FA43C Endless
-803FA424 803FA42C 803FA434 803FA43C 804D58D0                   # 803FA434 [NOT A STRING, maybe menu]
-804D58D8 804D58E0 804D58E4 804D58EC 803FA4DC
-44 42 4C 65 76 65 6C 20 3A 20 00 00                            # 803FA46C "DBLevel : "
-50 75 62 6C 69 63 69 74 79 3A 20 00                            # 803FA478 "Publicity: "
-4E 6F 2D 44 65 62 75 67 2D 52 6F 6D 00 00 00 00                # 803FA484 No-Debug-Rom
-44 65 62 75 67 2D 44 65 76 65 6C 6F 70 00 00 00                # 803FA494 Debug-Develop
-804D5890 803FA484 803FA494 804D5898                            # 803FA4A4 [NOT A STRING, maybe menu]
-47 6C 6F 62 61 6C 20 44 61 74 61 20 45 64 69 74 20 3E 00 00    # 803FA4B4 "Global Data Edit >""
-3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00    # 803FA4C8 < General Options >""
-54 4F 50 00                                                    # 803FA4DC TOP
