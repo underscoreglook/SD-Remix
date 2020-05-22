@@ -86,3 +86,979 @@ NTSC 1.02 ---- 0x3F7914 ------      # Replace pointer to Game Mode string table 
 803FA860
 ->
 .long <<arrRuleItems>>
+
+
+	-==-
+
+
+Credits Menu replaces Mode Team Test debug menu
+This replaces the entries in the debug menu for "Mode Team Test" with the credits of SD Remix.
+The credits menu is significantly longer than the mode team test, but the data after the mode team test is not particularly important, so we can overwrite it, making sure check for bugs in other Menus we're reusing.
+0x803FC4CC is the RAM location of this menu
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strCreditsTitle> ALL               # "< Credits >"
+3C 20 43 72 65 64 69 74 73 20 3E 00
+
+<strSdremixTroubleshooter> ALL      # "sdremix_troubleshooter >"
+73647265 6D69785F 74726F75 626C6573 686F6F74 6572203E 00000000
+
+<strRippleSub> ALL                  # "Ripple >"
+52697070 6C65203E 00000000
+
+<strStandardToasterSub> ALL         # "standard_toaster >"
+7374616E 64617264 5F746F61 73746572 203E0000
+
+<strAchillesSub> ALL                # "Achilles >"
+41636869 6C6C6573 203E0000
+
+<strDanSalvatoSub> ALL              # "Dan Salvato >"
+44616E20 53616C76 61746F20 3E000000
+
+<strGlookSub> ALL                   # "_glook >"
+5F676C6F 6F6B203E 00000000
+
+<strMyougiSub> ALL                  # "Myougi >"
+4D796F75 6769203E 00000000
+
+<strMilunSub> ALL                   # "Milun >"
+4D696C75 6E203E00
+
+<strZauronSub> ALL                  # "Zauron >"
+5A617572 6F6E203E 00000000
+
+<strFileskillerSub> ALL             # "flieskiller >"
+666C6965 736B696C 6C657220 3E000000
+
+<strJorgasmsSub> ALL                # "Jorgasms >"
+4A6F7267 61736D73 203E0000
+
+<strNoviSub> ALL                    # "_Novi >"
+5F4E6F76 69203E00
+
+<strRoyalSyrupSub> ALL              # "RoyalSyrup >"
+526F7961 6C537972 7570203E 00000000
+
+<strMagusSub> ALL                   # "Magus >"
+4D616775 73203E00
+
+<strDrgnSub> ALL                    # "DRGN >"
+4452474E 203E0000
+
+<strShamRockSub> ALL                # "ShamRock >"
+5368616D 526F636B 203E0000
+
+<strCellSub> ALL                    # "Cell >"
+43656C6C 203E0000
+
+<strSteeliaSub> ALL                 # "Steelia >"
+53746565 6C696120 3E000000
+
+<strFelipe9595Sub> ALL              # "felipe_9595 >"
+66656C69 70655F39 35393520 3E000000
+
+<strWparamSub> ALL                  # "wparam >"
+77706172 616D203E 00000000
+
+<strNameTagSub> ALL                 # "Name Tag >"
+4E616D65 20546167 203E0000
+
+<strVersionCodeConversions> ALL     # "1.00 to 1.02 Code Conversions"
+312E3030 20746F20 312E3032 20436F64 6520436F 6E766572 73696F6E 73000000
+
+<strLeadBattlePlanner> ALL          # "Lead Battle Planner"
+4C656164 20426174 746C6520 506C616E 6E657200
+
+<strFileHackingOrganizing> ALL      # "File Hacking/Organizing"
+46696C65 20486163 6B696E67 2F4F7267 616E697A 696E6700
+
+<strHackingSupport> ALL                                 # "Hacking Support"
+4861636B 696E6720 53757070 6F727400
+
+<strCustomStages> ALL               # "Custom Stages:"
+43757374 6F6D2053 74616765 733A0000
+
+<strSdrtsTitle> ALL                 # "< aka VietGeek >"
+3C20616B 61205669 65744765 656B203E 00000000
+
+<strProjectCreator> ALL             # "Project Creator"
+50726F6A 65637420 43726561 746F7200
+
+<strProjectDirector> ALL            # "Project Director"
+50726F6A 65637420 44697265 63746F72 00000000
+
+<tblDbgSdremixTroubleshooter> NTSC 1.02     # Entry 1
+00000000 00000000
+    .long <<strSdrtsTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strProjectCreator>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLeadBattlePlanner>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strProjectDirector>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strFileHackingOrganizing>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strRippleTitle> ALL                # "< Ripple >"
+3C205269 70706C65 203E0000
+
+<strRippleCred1> ALL                # "Prior Project Director"
+5072696F 72205072 6F6A6563 74204469 72656374 6F720000
+
+<tblDbgRipple> NTSC 1.02            # Entry 2
+00000000 00000000
+    .long <<strRippleTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strRippleCred1>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLeadBattlePlanner>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strFileHackingOrganizing>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strStandardToasterTitle> ALL       # "< standard_toaster >"
+3C 20 73 74 61 6E 64 61 72 64 5F 74 6F 61 73 74 65 72 20 3E 00 00 00 00
+
+<strStandardToasterCred> ALL        # "Lead ASM Programmer"
+4C 65 61 64 20 41 53 4D 20 50 72 6F 67 72 61 6D 6D 65 72 00
+
+<tblDbgStandardToaster> NTSC 1.02   # Entry 3
+00000000 00000000
+    .long <<strStandardToasterTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strStandardToasterCred>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strAchillesTitle> ALL              # "< aka Achilles1515 >"
+3C20616B 61204163 68696C6C 65733135 3135203E 00000000
+
+<strLuigiCycloneCode> ALL           # "Luigi Cyclone Code"
+4C756967 69204379 636C6F6E 6520436F 64650000
+
+<strLeavingDebugMenuLoadsCss> ALL   # "Leaving Debug Menu Loads CSS"
+4C656176 696E6720 44656275 67204D65 6E75204C 6F616473 20435353 00000000
+
+<strUnboundedPauseCamera> ALL       # "Unbounded Pause Camera"
+556E626F 756E6465 64205061 75736520 43616D65 72610000
+
+<strAllEventsUnlocked> ALL          # "All Events Unlocked"
+416C6C20 4576656E 74732055 6E6C6F63 6B656400
+
+<strEveryPlayerControlsDebugMenu> ALL   # "Every Player Controls Debug Menu"
+45766572 7920506C 61796572 20436F6E 74726F6C 73204465 62756720 4D656E75 00000000
+
+<strPlatformColors> ALL             # "Platform Colors"
+506C6174 666F726D 20436F6C 6F727300
+
+<strForceResultsScreenExit> ALL     # "Force Results Screen Exit"
+466F7263 65205265 73756C74 73205363 7265656E 20457869 74000000
+
+<strInfiniteShields> ALL            # "Infinite Shields"
+496E6669 6E697465 20536869 656C6473 00000000
+
+<strDisableTapJump> ALL             # "Disable Tap Jump"
+44697361 626C6520 54617020 4A756D70 00000000
+
+<strRandomHitboxElements> ALL       # "Random Hitbox Elements"
+52616E64 6F6D2048 6974626F 7820456C 656D656E 74730000
+
+<strPokeballRain> ALL               # "Pokeball Rain"
+506F6B65 62616C6C 20526169 6E000000
+
+<strLongNameBoxFix> ALL             # "Long Name Box Fix"
+4C6F6E67 204E616D 6520426F 78204669 78000000
+
+<strLRAStartOnStageLoadToCss> ALL   # "L+R+A+Start on Stage Load to CSS"
+4C2B522B 412B5374 61727420 6F6E2053 74616765 204C6F61 6420746F 20435353 00000000
+
+<strDisableStagePreview> ALL        # "Disable Stage Preview"
+44697361 626C6520 53746167 65205072 65766965 77000000
+
+<strOmegaMountOlympus> ALL          # "- Omega Mount Olympus"
+2D204F6D 65676120 4D6F756E 74204F6C 796D7075 73000000
+
+<strCrankysTreeHouse> ALL           # "- Cranky's Tree House"
+2D204372 616E6B79 27732054 72656520 486F7573 65000000
+
+<strStageMods> ALL                  # "Stage Mods:"
+53746167 65204D6F 64733A00
+
+<strFinalDestination> ALL           # "- Final Destination"
+2D204669 6E616C20 44657374 696E6174 696F6E00
+
+<strOmegaJungleJapesItem> ALL           # "- Omega Jungle Japes"
+2D204F6D 65676120 4A756E67 6C65204A 61706573 00000000
+
+<strWhispysBattleGrounds> ALL       # "- Whispy's Battle Grounds"
+2D205768 69737079 27732042 6174746C 65204772 6F756E64 73000000
+
+<tblDbgAchilles> NTSC 1.02          # Entry 4
+00000000 00000000
+    .long <<strAchillesTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strVersionCodeConversions>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLuigiCycloneCode>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLeavingDebugMenuLoadsCss>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strUnboundedPauseCamera>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strAllEventsUnlocked>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strEveryPlayerControlsDebugMenu>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strPlatformColors>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strForceResultsScreenExit>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strInfiniteShields>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strDisableTapJump>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strRandomHitboxElements>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strPokeballRain>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLongNameBoxFix>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLRAStartOnStageLoadToCss>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strDisableStagePreview>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strCustomStages>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaMountOlympus>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strCrankysTreeHouse>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strStageMods>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strFinalDestination>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaJungleJapesItem>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strWhispysBattleGrounds>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strDanSalvatoTitle> ALL            # "< aka Internet Explorer >"
+3C20616B 6120496E 7465726E 65742045 78706C6F 72657220 3E000000
+
+<strStageStriking> ALL              # "Stage Striking"
+53746167 65205374 72696B69 6E670000
+
+<strChangeBannerColor> ALL          # "Change Banner Color"
+4368616E 67652042 616E6E65 7220436F 6C6F7200
+
+<strABSaltyRunback> ALL             # "A+B Salty Runback"
+412B4220 53616C74 79205275 6E626163 6B000000
+
+<strXYDisablesStart> ALL            # "X+Y Disables Start"
+582B5920 44697361 626C6573 20537461 72740000
+
+<strLongerNametags> ALL             # "Longer Nametags"
+4C6F6E67 6572204E 616D6574 61677300
+
+<strLowercaseNames> ALL             # "Lowercase Names"
+4C6F7765 72636173 65204E61 6D657300
+
+<strCustomDebugSubmenus> ALL        # "Custom Debug Submenus"
+43757374 6F6D2044 65627567 20537562 6D656E75 73000000
+
+<strWidescreenSupport> ALL          # "Widescreen Support"
+57696465 73637265 656E2053 7570706F 72740000
+
+<strFinalDestinationMod> ALL        # "Final Destination Mod"
+46696E61 6C204465 7374696E 6174696F 6E204D6F 64000000
+
+<tblDbgDanSalvato> NTSC 1.02        # Entry 5
+00000000 00000000
+    .long <<strDanSalvatoTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strStageStriking>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strChangeBannerColor>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strABSaltyRunback>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strXYDisablesStart>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLongerNametags>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLowercaseNames>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strCustomDebugSubmenus>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strWidescreenSupport>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strFinalDestinationMod>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strGlookTitle> ALL                 # "< _glook >"
+3C205F67 6C6F6F6B 203E0000
+
+<strSdrProgrammer> ALL              # "SDR 3.2 Programmer"
+53445220 332E3220 50726F67 72616D6D 65720000
+
+<strSdrOptionsMenu> ALL             # "SDR Options Menu"
+53445220 4F707469 6F6E7320 4D656E75 00000000
+
+<strUnlockScoreDisplay> ALL         # "Unlock Score Display"
+556E6C6F 636B2053 636F7265 20446973 706C6179 00000000
+
+<strLedgeInvincibilityAttrition> ALL    # "Ledge Invincibility Attrition"
+4C656467 6520496E 76696E63 6962696C 69747920 41747472 6974696F 6E000000
+
+<strWallBracing> ALL                # "Wall Bracing"
+57616C6C 20427261 63696E67 00000000
+
+<strCappedPointsMode> ALL           # "Capped Points Mode"
+43617070 65642050 6F696E74 73204D6F 64650000
+
+<strBombRain> ALL                   # "Bomb Rain"
+426F6D62 20526169 6E000000
+
+<strAlphaOmegaStageToggle> ALL      # "Alpha/Omega Stage Toggle"
+416C7068 612F4F6D 65676120 53746167 6520546F 67676C65 00000000
+
+<tblDbgGlook> NTSC 1.02             # Entry 6
+00000000 00000000
+    .long <<strGlookTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strSdrProgrammer>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strVersionCodeConversions>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strSdrOptionsMenu>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strUnlockScoreDisplay>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLedgeInvincibilityAttrition>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strWallBracing>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strCappedPointsMode>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strBombRain>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strAlphaOmegaStageToggle>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strMyougiTitle> ALL                                    # "< Myougi >"
+3C204D79 6F756769 203E0000
+
+<strDevelopmentSupport> ALL                             # "Development Support"
+44657665 6C6F706D 656E7420 53757070 6F727400
+
+<strPeachsFlat> ALL                                     # "- Peach's Flat"
+2D205065 61636827 7320466C 61740000
+
+<strSkyrule> ALL                                        # "- Skyrule"
+2D20536B 7972756C 65000000
+
+<strFoursideSmashville> ALL                             # "- Fourside Smashville"
+2D20466F 75727369 64652053 6D617368 76696C6C 65000000
+
+<tblDbgMyougi> NTSC 1.02            # Entry 7
+00000000 00000000
+    .long <<strMyougiTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strDevelopmentSupport>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strHackingSupport>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strCustomStages>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strPeachsFlat>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strSkyrule>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strFoursideSmashville>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strMilunTitle> ALL                 # "< Milun's Custom Stages >"
+3C204D69 6C756E27 73204375 73746F6D 20537461 67657320 3E000000
+
+<strHighTideAtGreatBay> ALL         # "High Tide at Great Bay"
+48696768 20546964 65206174 20477265 61742042 61790000
+
+<strYoshisIslandN64> ALL            # "Yoshi's Island N64"
+596F7368 69277320 49736C61 6E64204E 36340000
+
+<strKongoJungle> ALL                # "Kongo Jungle"
+4B6F6E67 6F204A75 6E676C65 00000000
+
+<strYoshisIsland> ALL               # "Yoshi's Island"
+596F7368 69277320 49736C61 6E640000
+
+<strMushroomKingdom> ALL            # "Mushroom Kingdom"
+4D757368 726F6F6D 204B696E 67646F6D 00000000
+
+<strNoKraidBrinstarDepths> ALL      # "No Kraid Brinstar Depths"
+4E6F204B 72616964 20427269 6E737461 72204465 70746873 00000000
+
+<strBigBlue> ALL                    # "Big Blue"
+42696720 426C7565 00000000
+
+<strMushroomKingdom2> ALL           # "Mushroom Kingdom 2"
+4D757368 726F6F6D 204B696E 67646F6D 20320000
+
+<strWhispysBattleGround> ALL        # "Whispy's Battle Grounds"
+57686973 70792773 20426174 746C6520 47726F75 6E647300
+
+<tblDbgMilun> NTSC 1.02             # Entry 8
+00000000 00000000
+    .long <<strMilunTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strHighTideAtGreatBay>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strYoshisIslandN64>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strKongoJungle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strYoshisIsland>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strMushroomKingdom>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strNoKraidBrinstarDepths>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strBigBlue>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strMushroomKingdom2>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strWhispysBattleGround>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strZauronTitle> ALL                # "< Zauron's Stage Mods >"
+3C205A61 75726F6E 27732053 74616765 204D6F64 73203E00
+
+<strOmegaPeachsCastle> ALL          # "Omega Peach's Castle"
+4F6D6567 61205065 61636827 73204361 73746C65 00000000
+
+<strOmegaFod> ALL                   # "Omega FoD"
+4F6D6567 6120466F 44000000
+
+<strOmegaCorneria> ALL              # "Omega Corneria"
+4F6D6567 6120436F 726E6572 69610000
+
+<strOmegaGreenGreens> ALL           # "Omega Green Greens"
+4F6D6567 61204772 65656E20 47726565 6E730000
+
+<strOmegaBrinstar> ALL              # "Omega Brinstar"
+4F6D6567 61204272 696E7374 61720000
+
+<strOmegaDreamlandN64> ALL          # "Omega Dreamland N64"
+4F6D6567 61204472 65616D6C 616E6420 4E363400
+
+<strOmegaYoshisStory> ALL           # "Omega Yoshi's Story"
+4F6D6567 6120596F 73686927 73205374 6F727900
+
+<strOmegaPokemonStadium> ALL        # "Omega Pokemon Stadium"
+4F6D6567 6120506F 6B656D6F 6E205374 61646975 6D000000
+
+<tblDbgZauron> NTSC 1.02            # Entry 9
+00000000 00000000
+    .long <<strZauronTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaPeachsCastle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaFod>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaCorneria>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaGreenGreens>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaBrinstar>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaDreamlandN64>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaYoshisStory>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaPokemonStadium>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strFileskillerTitle> ALL
+3C20666C 6965736B 696C6C65 72277320 53746167 65204D6F 6473203E 00000000
+
+<strOmegaMuteCity> ALL              # "Omega Mute City"
+4F6D6567 61204D75 74652043 69747900
+
+<strOmegaGreenGreens> ALL           # "Omega Green Greens"
+4F6D6567 61204772 65656E20 47726565 6E730000
+
+<strOmegaOnett> ALL                 # "Omega Onett"
+4F6D6567 61204F6E 65747400
+
+<strOmegaDK64> ALL                  # "Omega DK64"
+4F6D6567 6120444B 36340000
+
+<strOmegaJungleJapes> ALL           # "Omega Jungle Japes"
+4F6D6567 61204A75 6E676C65 204A6170 65730000
+
+<strMK2NoBirdoOrPidgit> ALL         # "MK2: No Birdo or Pidgit"
+4D4B323A 204E6F20 42697264 6F206F72 20506964 67697400
+
+<tblDbgFileskiller> NTSC 1.02       # Entry 10
+00000000 00000000
+    .long <<strFileskillerTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaMuteCity>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaGreenGreens>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaOnett>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaDK64>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strOmegaJungleJapes>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strMK2NoBirdoOrPidgit>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strJorgasmsTitle> ALL                                  # "< Jorgasms >"
+3C204A6F 72676173 6D73203E 00000000
+
+<strHandicapStockControl> ALL                           # "Handicap Stock Control"
+48616E64 69636170 2053746F 636B2043 6F6E7472 6F6C0000
+
+<strCrewBattleMode> ALL                                 # "Crew Battle Mode"
+43726577 20426174 746C6520 4D6F6465 00000000
+
+<strGuidesOnMenuEditing> ALL                # "Guides on menu editing"
+47756964 6573206F 6E206D65 6E752065 64697469 6E670000
+
+<tblDbgJorgasms> NTSC 1.02                  # Entry 11
+00000000 00000000
+    .long <<strJorgasmsTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strHandicapStockControl>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strCrewBattleMode>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strGuidesOnMenuEditing>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strNoviTitle> ALL                          # "< aka LOVE >"
+3C20616B 61204C4F 5645203E 00000000
+
+<strPublicist> ALL                          # "Publicist"
+5075626C 69636973 74000000
+
+<tblDbgNovi> NTSC 1.02                      # Entry 12
+00000000 00000000
+    .long <<strNoviTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strPublicist>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strRoyalSyrupTitle> ALL                    # "< RoyalSyrup >"
+3C20526F 79616C53 79727570 203E0000
+
+<strDolphinSupport> ALL                     # "Dolphin Support"
+446F6C70 68696E20 53757070 6F727400
+
+<tblDbgRoyalSyrup> NTSC 1.02                # Entry 13
+00000000 00000000
+    .long <<strRoyalSyrupTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strDolphinSupport>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strMagusTitle> ALL                         # "< aka Magus420 >"
+3C20616B 61204D61 67757334 3230203E 00000000
+
+<strFrameSpeedModifier> ALL                 # "Frame Speed Modifier"
+4672616D 65205370 65656420 4D6F6469 66696572 00000000
+
+<tblDbgMagus> NTSC 1.02                     # Entry 14
+00000000 00000000
+    .long <<strMagusTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strFrameSpeedModifier>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strDrgnTitle> ALL                          # "< aka Durgan >"
+3C20616B 61204475 7267616E 203E0000
+
+<strHackingToolsAndGuides> ALL              # "Hacking Tools and Guides"
+4861636B 696E6720 546F6F6C 7320616E 64204775 69646573 00000000
+
+<tblDbgDrgn> NTSC 1.02                      # Entry 15
+00000000 00000000
+    .long <<strDrgnTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strHackingToolsAndGuides>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strShamRockTitle> ALL                      # "< ShamRock >"
+3C205368 616D526F 636B203E 00000000
+
+<strChangeSssColor> ALL                     # "Change color on SSS"
+4368616E 67652063 6F6C6F72 206F6E20 53535300
+
+<tblDbgShamrock> NTSC 1.02                  # Entry 16
+00000000 00000000
+    .long <<strShamRockTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strChangeSssColor>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strCellTitle> ALL                          # "< Cell >"
+3C204365 6C6C203E 00000000
+
+<tblDbgCell> NTSC 1.02                      # Entry 17
+00000000 00000000
+    .long <<strCellTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strHackingSupport>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strSteeliaTitle> ALL                       # "< Steelia >"
+3C205374 65656C69 61203E00
+
+<strStageIconOffsets> ALL                   # "Stage Icon Offsets"
+53746167 65204963 6F6E204F 66667365 74730000
+
+<tblDbgSteelia> NTSC 1.02                   # Entry 18
+00000000 00000000
+    .long <<strSteeliaTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strStageIconOffsets>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strFelipeTitle> ALL                        # "< felipe_9595 >"
+3C206665 6C697065 5F393539 35203E00
+
+<strLogoDesign> ALL                         # "Logo Design"
+4C6F676F 20446573 69676E00
+
+<tblDbgFelipe> NTSC 1.02                    # Entry 19
+00000000 00000000
+    .long <<strFelipeTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strLogoDesign>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strWparamTitle> ALL                        # "< wparam >"
+3C207770 6172616D 203E0000
+
+<strDisableTrophiesCode> ALL                # "Disable Trophies Code"
+44697361 626C6520 54726F70 68696573 20436F64 65000000
+
+<tblDbgWparam> NTSC 1.02                    # Entry 20
+00000000 00000000
+    .long <<strWparamTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strDisableTrophiesCode>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strNameTagTitle> ALL               # "< Disabling Name Tag Reset >"
+3C204469 7361626C 696E6720 4E616D65 20546167 20526573 6574203E 00000000
+
+<strAto> ALL                        # "Ato"
+41746F00
+
+<strToddBonney> ALL                 # "Todd Bonney"
+546F6464 20426F6E 6E657900
+
+<tblDbgNameTag> NTSC 1.02           # Entry 21
+00000000 00000000
+    .long <<strNameTagTitle>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strAto>>
+    00000000 00000000 00000000 00000000 00000000
+00000000 00000000
+    .long <<strToddBonney>>
+    00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+NTSC 1.02 ---- 0x3F94CC -----
+00000000 00000000 803FC420 00000000 00000000 00000000 00000000 00000000
+00000001 803007C8 803FC42C 00000000 00000000 00000000 00000000 00000000
+00000001 803007FC 803FC440 00000000 00000000 00000000 00000000 00000000
+00000001 80300830 803FC454 00000000 00000000 00000000 00000000 00000000
+00000001 80300864 803FC468 00000000 00000000 00000000 00000000 00000000
+00000001 80300898 803FC47C 00000000 00000000 00000000 00000000 00000000
+00000001 803008CC 803FC490 00000000 00000000 00000000 00000000 00000000
+00000001 80300900 803FC4A4 00000000 00000000 00000000 00000000 00000000
+00000001 80300934 803FC4B8 00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+3C204861 6E797520 54657374 203E0000 53656C65 63742043 68617220 203E0000
+53656C65 63742053 74616765 203E0000 00000000 00000000 803FC60C 00000000
+00000000 00000000 00000000 00000000 00000001 80300968 803FC61C 00000000
+00000000 00000000 00000000 00000000 00000001 803009A4 803FC62C 00000000
+00000000 00000000 00000000 00000000 00000009 00000000 00000000 00000000
+00000000 00000000 00000000 00000000 3C204D65 6C656520 436F756E 74205365
+74203E00 54696D65 20202020 203E0000 53746F63 6B202020 203E0000 436F696E
+20202020 203E0000 44656369 73696F6E 203E0000 44656661 756C7420 203E0000
+00000000 00000000 803FC6BC 00000000 00000000 00000000 00000000 00000000
+00000003 00000000 803FC6D0 00000000 804D6DE0 00000000 49742400 3F800000
+00000003 00000000 803FC6DC 00000000 804D6DE4 00000000 49742400 3F800000
+00000003 00000000 803FC6E8 00000000 804D6DE8 00000000 49742400 3F800000
+00000003 00000000 803FC6F4 00000000 804D6DEC 00000000 49742400 3F800000
+->
+# Entry 0: Title of Credits menu
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strCreditsTitle>>                       # Label Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: sdremix_troubleshooter
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strSdremixTroubleshooter>>
+    00000000 00000000
+    .long <<tblDbgSdremixTroubleshooter>>
+    00000000 00000000
+# Entry 2: Ripple
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strRippleSub>>          # Label
+    00000000 00000000
+    .long <<tblDbgRipple>>          # Submenu
+    00000000 00000000
+# Entry 3: standard_toaster
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strStandardToasterSub>> # Label
+    00000000 00000000
+    .long <<tblDbgStandardToaster>> # Submenu
+    00000000 00000000
+# Entry 4: Achilles
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strAchillesSub>>        # Label
+    00000000 00000000
+    .long <<tblDbgAchilles>>
+    00000000 00000000
+# Entry 5: Dan Salvato
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strDanSalvatoSub>>      # Label
+    00000000 00000000
+    .long <<tblDbgDanSalvato>>
+    00000000 00000000
+# Entry 6: _glook
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strGlookSub>>           # Label
+    00000000 00000000
+    .long <<tblDbgGlook>>
+    00000000 00000000
+# Entry 7: Myougi
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strMyougiSub>>          # Label
+    00000000 00000000
+    .long <<tblDbgMyougi>>
+    00000000 00000000
+# Entry 8: Milun
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strMilunSub>>           # Label
+    00000000 00000000
+    .long <<tblDbgMilun>>
+    00000000 00000000
+# Entry 9: Zauron
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strZauronSub>>          # Label
+    00000000 00000000
+    .long <<tblDbgZauron>>
+    00000000 00000000
+# Entry 10: fileskiller
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strFileskillerSub>>     # Label
+    00000000 00000000
+    .long <<tblDbgFileskiller>>
+    00000000 00000000
+# Entry 11: Jorgasms
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strJorgasmsSub>>        # Label
+    00000000 00000000
+    .long <<tblDbgJorgasms>>
+    00000000 00000000
+# Entry 12: _Novi
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strNoviSub>>            # Label
+    00000000 00000000
+    .long <<tblDbgNovi>>
+    00000000 00000000
+# Entry 13: Royal Syrup
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strRoyalSyrupSub>>      # Label
+    00000000 00000000
+    .long <<tblDbgRoyalSyrup>>      # Submenu
+    00000000 00000000
+# Entry 14: Magus
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strMagusSub>>           # Label
+    00000000 00000000
+    .long <<tblDbgMagus>>           # Submenu
+    00000000 00000000
+# Entry 15: DRGN
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strDrgnSub>>            # Label
+    00000000 00000000
+    .long <<tblDbgDrgn>>            # Submenu
+    00000000 00000000
+# Entry 16: ShamRock
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strShamRockSub>>        # Label
+    00000000 00000000
+    .long <<tblDbgShamrock>>        # Submenu
+    00000000 00000000
+# Entry 17: Cell
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strCellSub>>            # Label
+    00000000 00000000
+    .long <<tblDbgCell>>
+    00000000 00000000
+# Entry 18: Steelia
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strSteeliaSub>>         # Label
+    00000000 00000000
+    .long <<tblDbgSteelia>>         # Submenu
+    00000000 00000000
+# Entry 19: felipe_9595
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strFelipe9595Sub>>      # Label
+    00000000 00000000
+    .long <<tblDbgFelipe>>
+    00000000 00000000
+# Entry 20: wparam
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strWparamSub>>          # Label
+    00000000 00000000
+    .long <<tblDbgWparam>>          # Submenu
+    00000000 00000000
+# Entry 21: Name Tag code entry
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strNameTagSub>>         # Label
+    00000000 00000000
+    .long <<tblDbgNameTag>>         # Submenu
+    00000000 00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

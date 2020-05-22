@@ -74,6 +74,7 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 
 Consider an easy way to get to Debug Menu from CSS (maybe Dpad button?)
 
+Consider maybe having PM style control editing, tied to nametags.
 
 
 
