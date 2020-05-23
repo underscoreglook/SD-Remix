@@ -74,5 +74,10 @@ if %buildDelta%==yes (
 
 :: In case we've double clicked on the bat file, keep it around so we can read the output until keyboard input
 echo.
-echo Build Finished!
-pause
+if "%2"=="nopause" (
+    :: Don't pause
+    echo Build Finished!
+) else (
+    echo Build Finished!
+    pause
+)
