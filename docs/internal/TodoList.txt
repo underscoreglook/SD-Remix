@@ -91,3 +91,176 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.01 ------ 0x85C74 ---- 48000030 -> 41820030
 1.00 ------ 0x85B8C ---- 48000030 -> 41820030
 PAL ------- 0x864EC ---- 48000030 -> 41820030
+
+
+
+
+16:9 Widescreen Support (Variation A)
+Includes the fullscreen flashing effect fix.
+This variation also fixes the position of magnifier bubbles, but also stretches the HUD.
+
+If using with Dolphin, you'll also need to change the setting, "Force 16:9" for the aspect ratio and make sure "Widescreen Hack" is OFF.
+
+See the notes in the link below for adjustments based on your display device:
+https://docs.google.com/document/d/1o_KEmsbKg4_qIm607FfewzIvChQYxayN4r1j3Uy6yX0/edit
+<https://smashboards.com/threads/16-9-widescreen-w-options-for-tv-monitor-dolphin.397929/>
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80021ABC --- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+---------- 0x802F3980 --- 387F0000 -> Branch
+
+39C00001 387F0000
+60000000 48000000
+
+---------- 0x8036A4A8 --- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+1.01 ------ 0x1E69C ---- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+----------- 0x2EFAD8 --- 387F0000 -> Branch
+
+39C00001 387F0000
+60000000 48000000
+
+----------- 0x3663A8 ---- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+1.00 ------ 0x1E61C ---- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+----------- 0x2EEE8C --- 387F0000 -> Branch
+
+39C00001 387F0000
+60000000 48000000
+
+----------- 0x3651D4 ---- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+PAL ------- 0x1EA34 ---- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+----------- 0x2F0B54 --- 387F0000 -> Branch
+
+39C00001 387F0000
+60000000 48000000
+
+----------- 0x366F8C ---- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+
+	-==-
+
+
+16:9 Widescreen Support (Variation B)
+Includes the fullscreen flashing effect fix.
+This variation also fixes the position of magnifier bubbles, but also stretches the HUD.
+
+If using with Dolphin, you'll also need to change the setting, "Force 16:9" for the aspect ratio and make sure "Widescreen Hack" is OFF.
+
+See the notes in the link below for adjustments based on your display device:
+https://docs.google.com/document/d/1o_KEmsbKg4_qIm607FfewzIvChQYxayN4r1j3Uy6yX0/edit
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80021ABC --- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+1.02 ----- 0x802F3980 --- 387F0000 -> Branch
+
+39C00001 387F0000
+60000000 48000000
+
+1.02 ----- 0x8036A4A8 --- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+1.01 ------ 0x1E69C ---- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+----------- 0x3663A8 ---- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+1.00 ------ 0x1E61C ---- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+----------- 0x3651D4 ---- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000
+
+PAL ------- 0x1EA34 ---- 38600006 -> Branch
+
+39C00001 38600006
+60000000 48000000
+
+----------- 0x366F8C ---- C03F0034 -> Branch
+
+C03F0034 2C0E0001
+41820024 3C004080 # <- ____XXXX
+90010030 3C004040 # <- ____YYYY
+90010034 C0010030
+EC210032 C0010034
+EC210024 39C00000
+281E0000 48000000

@@ -109,7 +109,7 @@ CPU Level stuff:		803FC0BC to 803FC1BC
 Team select stuff:		803FC1BC to 803FC2EC
 Credits table:			803FC4CC to 803FCACC
 
-Free Menu/String Space
+Free Menu/String Space (in debug section)
 ----------------------
 803FA3E8: > Strings and arrays
 803FA4E0: Main Menu Table
@@ -181,7 +181,7 @@ Load DaiRan Subs:	8030051C to 80300758
 Random Functions:	80301BA8 to 80301E44
 Functions always return 0
 
-Free Function Space
+Free Function Space (in some debug menu section)
 -------------------
 803001DC: Load Debug
 80300218: ** FREE 30 **
