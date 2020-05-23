@@ -39,6 +39,118 @@ Type    ActionFn    Label   StringList || DefaultListItem    SubmenuFn    String
 
 
 
+
+Running list of free space in debug section (we don't let MCM overwrite it because we use Melee's default debug
+menus in some regards and also overwrites the menus directly so we don't have to store the new main menu data
+elsewhere)
+================================================================================================================
+Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, turn into mods or move to debug)
+----------------------------------------------
+407950: Salty Runback
+407990: X+Y Disables Start
+4079D8: Enhanced Name Tags
+407AAC: Change Ready To Fight Banner color
+407AF4: Stage changer table
+407BF4: utf8"Alpha Stages"
+407C13: utf8"Omega Stages"
+407C34: Omega Stages string table
+4086C0: Dynamic Lagless FoD
+
+Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug)
+--------------------------------------------------
+18DCC0: Widescreen Functions
+18DD04: Stock Dependent Revival Platform
+18DDE4: Hold start to force out of results screen
+18DE74: End game with Pause off
+18DEA4: Handicap is Stock/Crew
+18E064: Overtime
+18E348: Ledge invincibility
+18E3C4: Wall bracing
+18E3FC: Capped Points
+18E510: Tap Jump
+18E53C: Random Hitbox Element
+18E584: Flush cache on scene change
+18E5A0: Name tag box scales to name tag
+18E634: Toggling Alpha/Omega Stage pages
+18E6E0: Disable Trophies outside Classic
+18E708: Reset DOL and Go/Gr toggles at CSS
+18E7A8: Stage Loader
+18E824: Change Stage Filename
+18E850: Stage Mods
+18EB60: L Random Stage Menu Toggle
+18EBA8: Display Alpha/Omega text on random stage menu
+18EBE4: Col 1 alternate text set (random stage menu)
+18EC34: Col 2 alternate text set (random stage menu)
+18EC84: Load random stage menu
+18ECA8: Save random stage menu
+18ECD0: Alpha/Omega Random Stage select 1
+18ECF4: Alpha/Omega Random Stage select 2
+18ED18: Play sound when picking random stage for omega and alpha
+18ED44: ** FREE **
+18ED5C: Stage Striking
+18EEA0: Randomize omega toggle if press start on random
+
+
+Debug menu free space
+-------------------
+803001DC: XX Don't Use XX
+80300758: > ** FREE SPACE OMG**
+80300790: XX Don't Use XX
+803007C8: > ** FREE SPACE OMG**
+803012D4: > novi, cell, felipe credits menu and strings
+Part 2
+803FA3E8: > ** FREE SPACE OMG**
+803FA4E0: << Main Menu (already overwritten) >>
+803FA640: Global Data Title
+803FA658: Global Data table
+803FA758: Debug Menu
+803FA790: << Debug Menu Table (already overwriten) >>
+803FA878: Rules strings
+803FA8E8: Strings
+803FAA08: Rumble Strings
+803FAA44: Rumble menu Table
+803FAB04: Stage Strings
+803FB064: Meleekind Strings
+803FB080: Dairantou Strings
+803FB168: Dairantou Menu Table
+803FB368: Character Strings
+803FB5C0: CharSelect strings
+803FB60C: Charselect menu table
+803FB6EC: Scale strings
+803FB728: Scale menu table
+803FB7E8: PKind Stuff
+803FB950: Color stuff
+803FBA4C: Sub color stuff
+803FBB5C: Damage stuff
+803FBC58: Ratios
+803FBE80: CPU Type stuff
+803FC0BC: CPU Level stuff
+803FC1BC: Team Select Stuff
+803FC2EC: XX Unusable XX
+803FC420: > ** FREE SPACE OMG**
+803FC4CC: << Credits Menu Table (already Overwritten) >>
+803FC8A0: > ** FREE SPACE OMG **
+803FDC1C: *** END ***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+************************************************************
+** BELOW IS OFFICIALLY PUBLISHED 3.2.1's free space ********
+************************************************************
+
+
 These variables are free for us to use, with a couple that I want to use as well, along with what we use it for
 Fixed Variables
 ---------------

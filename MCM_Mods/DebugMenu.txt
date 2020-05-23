@@ -56,6 +56,1158 @@ NTSC 1.02 ---- 0x3F7914 ------      # Replace pointer to Game Mode string table 
 	-==-
 
 
+SDR Remix Debug Menu Entries
+This replaces the entries in the debug menu with SD Remix specific items.
+0x3F74E0 is the actual overwrite of debug menu items
+We also have standalone functions for any debug specific functions.
+We also have static overwrites for dwords that are our debug variables. This is here to firstly indicate default values but also as a way to track which ones we're using and  to put comments about what they're used for.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varTogglesState>
+0000 0000   # 0 for all disabled, 1 for allowed, 2 for Melee+ Preset
+
+<strSdRemixOptions> ALL         # "< SD REMIX OPTIONS >"
+3C 20 53 44 20 52 45 4D 49 58 20 4F 50 54 49 4F 4E 53 20 3E 00 00 00 00
+
+<strGeneralOptionsSub> ALL      # "General Options >"
+47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
+
+<strTogglesLabel> ALL           # "Toggles:"
+54 6F 67 67 6C 65 73 3A 00 00 00 00
+
+<strMeleePlusTogglesSub> ALL    # "Melee+ Toggles >"
+4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
+
+<strOtherTogglesSub> ALL        # "Other Toggles >"
+4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
+
+<strCreditsSub> ALL             # "Credits >"
+43 72 65 64 69 74 73 20 3E 00 00 00
+
+<strDebugMenuSub> ALL           # "Debug Menu >"
+44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
+
+<strMeleePlusEnabledOnly> ALL   # "Melee+ Enabled Only"
+4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 20 4F 6E 6C 79 00
+
+<strTildeMeleePlusEnabled> ALL  # "~Melee+ Enabled"
+7E 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 00
+
+<strEnabled> ALL                # "Enabled"
+456e6162 6c656400
+
+<strDisabled> ALL               # "Disabled"
+44 69 73 61 62 6C 65 64 00 00 00 00
+
+<strNormal> ALL                 # "Normal"
+4E6F726D 616C0000
+
+<arrEnableDisabledMelee>
+.long <<strDisabled>>
+.long <<strEnabled>>
+.long <<strMeleePlusEnabledOnly>>
+
+<funDbgChangeTogglesState> NTSC 1.02
+  mflr r0
+  stw r0,0x4(sp)
+  stwu sp,-0x8(sp)
+  addi sp, sp, -0xC
+  stw r29, 0(sp)
+  stw r30, 4(sp)
+  stw r31, 8(sp)
+  # The master toggle var is in r10
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 1
+  beq ENABLED
+  bgt MELEE_PLUS
+
+  DISABLED:
+  # Change the color of the banner
+  lis r3, 0x8040
+  ori r3, r3, 0xAAD4  # 8040AAD4 The banner color variable
+  # First value
+  li r4, 0xC
+  stb r4, 3(r3)
+  # second value
+  li r4, 0xD
+  stb r4, 0xB(r3)
+  # Third value
+  li r4, 0xE
+  stb r4, 0x13(r3)
+  # Disable the menu options
+  lis r4, 0x803F
+  ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
+  li r3, 0
+  stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 0, or disabled
+  stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 0, or disabled
+  lis r3, <<strMeleePlusTogglesSub>>@h
+  ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
+  stw r3, 0x68(r4)                            # Set the label of 4th item to this string
+  b RETURN
+
+  ENABLED:
+  # Change the color of the banner
+  lis r3, 0x8040
+  ori r3, r3, 0xAAD4                          # 8040AAD4 The banner color variable
+  # First value
+  li r4, 0xD
+  stb r4, 3(r3)
+  # second value
+  li r4, 0xD
+  stb r4, 0xB(r3)
+  # Third value
+  li r4, 0xC
+  stb r4, 0x13(r3)
+  # Enable the menu options
+  lis r4, 0x803F
+  ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
+  li r3, 1
+  stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 1, or enabled
+  stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 1, or enabled
+  lis r3, <<strMeleePlusTogglesSub>>@h
+  ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
+  stw r3, 0x68(r4)                            # Set the label of 4th item to this string
+  b RETURN
+
+  MELEE_PLUS:
+  # Change the color of the banner
+  lis r3, 0x8040
+  ori r3, r3, 0xAAD4  # 8040AAD4 The banner color variable
+  # First value
+  li r4, 0xC
+  stb r4, 3(r3)
+  # second value
+  li r4, 0xE
+  stb r4, 0xB(r3)
+  # Third value
+  li r4, 0xD
+  stb r4, 0x13(r3)
+  # Disable the menu options, show Melee+
+  lis r4, 0x803F
+  ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address
+  li r3, 0
+  stw r3, 0x60(r4)    # Set 4th item (Melee+ Toggles), to 0, or disabled
+  stw r3, 0x80(r4)    # Set 5th item (Other toggles), to 0, or disabled
+  lis r3, <<strTildeMeleePlusEnabled>>@h
+  ori r3, r3, <<strTildeMeleePlusEnabled>>@l
+  stw r3, 0x68(r4)    # Set the label of 4th item to this string
+
+  RETURN:
+  # Run all of the save functions
+  lis r30, <<tblDbgMeleePlusTogglesSubMenu>>@h
+  ori r30, r30, <<tblDbgMeleePlusTogglesSubMenu>>@l
+  li r31, 0	# Loop var
+  TRAVERSE_MENU_TABLE:
+  mr r29, r30
+  ANALYZE_MENU_ITEM:
+  lwz r3, 0(r29)
+  cmpwi r3, 0x9
+  beq NEXT_TABLE
+  lwz r3, 4(r29)
+  cmpwi r3, 0
+  beq NEXT_ITEM
+  mtctr r3
+  bctrl
+  NEXT_ITEM:
+  addi r29, r29, 0x20
+  b ANALYZE_MENU_ITEM
+  NEXT_TABLE:
+  lis r30, <<tblDbgOtherTogglesSubMenu>>@h
+  ori r30, r30, <<tblDbgOtherTogglesSubMenu>>@l
+  addi r31, r31, 1
+  cmpwi r31, 2            # We have two submenu tables to get through (set manually)
+  blt TRAVERSE_MENU_TABLE
+  # End loop
+  li r3,0
+  lwz r29, 0(sp)
+  lwz r30, 4(sp)
+  lwz r31, 8(sp)
+  lwz r0,0x18(sp)
+  addi sp,sp,0x14
+  mtlr r0
+  blr
+
+NTSC 1.02 ---- 0x3F74E0 -----
+00000000 00000000 803EA6C8 00000000 00000000 00000000 00000000 00000000
+00000001 803001DC 803FA454 00000000 00000000 00000000 00000000 00000000
+00000001 80301420 803FA468 00000000 00000000 00000000 00000000 00000000
+00000002 80300218 803FA474 804D5888 803FA258 00000000 40000000 00000000
+00000002 80300248 803FA480 804D5880 803FA25C 00000000 40000000 00000000
+00000002 00000000 803FA48C 803FA440 804D4A08 00000000 40A00000 00000000
+00000003 00000000 803FA498 00000000 804D4AF8 00000000 3F800000 3F800000
+00000003 00000000 803FA4A8 00000000 804D6B88 00000000 3F800000 3F800000
+ ->
+# Entry 0: Title
+    00000000                                        # Disabled Type
+    00000000                                        # n/a
+    .long <<strSdRemixOptions>>                     # Label: "< SD REMIX OPTIONS >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Submenu "General Options >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strGeneralOptionsSub>>                  # Label: "General Options >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgGeneralOptsSubMenu>>              # General Options Submenu Data
+    00000000 00000000                               # n/a
+# Entry 2: String table, "TOGGLES: " [DISABLED, ENABLED, MELEE+ ENABLED ONLY]
+    00000002                                        # String Table
+    .long <<funDbgChangeTogglesState>>              # When new string chosen, this extra code is run
+    .long <<strTogglesLabel>>                       # Label: "Toggles:"
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled, Melee+ Only]
+    .long <<varTogglesState>>                       # Variable
+    00000000                                        # n/a
+    40400000                                        # Num Items in table: 3.f
+    00000000                                        # n/a
+# Entry 3: Submenu "Melee+ Toggles >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strMeleePlusTogglesSub>>                # Label: "Melee+ Toggles >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgMeleePlusTogglesSubMenu>>         # Melee+ Toggles Submenu Data
+    00000000 00000000                               # n/a
+# Entry 4: Submenu "Other Toggles >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strOtherTogglesSub>>                    # Label: "Other Toggles >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgOtherTogglesSubMenu>>             # Other Toggles Submenu Data
+    00000000 00000000                               # n/a
+# Entry 5: Menu "Credits >"
+    00000001                                        # Press-able
+    803002FC                                        # Function to go to "Mode Team Test" full menu
+    .long <<strCreditsSub>>                         # Label: "Credits >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 6: Menu "Debug Menu >"
+    00000001                                        # Press-able
+    803001DC                                        # Function to go to "Versus Mode" full menu
+    .long <<strDebugMenuSub>>                       # Label: "Debug Menu >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# END OF LIST (NOTE, there are actually 3 more entries in Melee's debug menu. Space for 3 more entries at least.
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Debug Menu: General Options Submenu
+The functions, strings, and data for the submenu "General Options".
+TODO: All of these toggles rely on overwriting code on the fly. Not only does this require workarounds on Dolphin due to code caching, but MCM doesn't really support this with branching. We will want to convert the raw branched codes into "Converted Mods", which consist of a standalone variable which tells the mod to turn on or off and each branch to then enable itself based on that variable. Then, any debug menu or whatever should just change that variable value. Search for "BADHACK" for exact instances.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<varToggleWidescreend> ALL
+0000 0000
+
+<varToggleStartResultsScreen> ALL
+0000 0000
+
+<varTogglePlatformColors> ALL
+0000 0000
+
+<strGeneralOptionsTitle> ALL            # "< General Options >"
+3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00
+
+<strWidescreenOpt> ALL                  # "Widescreen:"
+57696465 73637265 656E3A00
+
+<strHoldStartExitResultsOpt> ALL        # "Hold start exit results: "
+486F6C64 20737461 72742065 78697420 72657375 6C74733A 20000000
+
+<strStockPlatformColorOpt> ALL          # "Stock platform colors: "
+53746F63 6B20706C 6174666F 726D2063 6F6C6F72 733A2000
+
+NTSC 1.02 ---- 0x18DCC0 -----
+7C0802A6 3C808048 90010004
+388499B8 9421FFE0 93E1001C 3BE4000C A004000C 80630028 28000320
+4081000C 38000000 B01F0000 A09F0000 3C004330 C822AD38 90810014
+->
+39C00001 38600006 4BE909D8  # Widescreen 1
+C03F0034 2C0E0001 41820024 3C004080 90010030 3C004040 90010034   # Widescreen 2
+C0010030 EC210032 C0010034 EC210024 39C00000 281E0000 481D938C
+
+<funDbgWidescreenOption> NTSC 1.02
+  lis r3, <<varToggleWidescreend>>@h
+  ori r3, r3, <<varToggleWidescreend>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- TURN_ON
+TURN_OFF:
+  lis r4, 0x8002
+  ori r4, r4, 0x1ABC        # 80021ABC     0x1E69C     38600006 Original
+  lis r3, 0x3860
+  ori r3, r3, 0x6
+  stw r3, 0(r4)
+  lis r4, 0x8036
+  ori r4, r4, 0xA4A8        # 8036A4A8     0x367088    C03F0034 Original
+  lis r3, 0xC03F
+  ori r3, r3, 0x34
+  stw r3, 0(r4)
+  b RETURN
+TURN_ON:
+  lis r4, 0x8002
+  ori r4, r4, 0x1ABC        # 80021ABC     0x1E69C     4816F624 Branch To?   b 0x16f624 (801910E0)
+  lis r3, 0x4816
+  ori r3, r3, 0xF624
+  stw r3, 0(r4)
+  lis r4, 0x8036
+  ori r4, r4, 0xA4A8        # 8036A4A8     0x367088    4BE26C44 Branch to?   b -0x1d93bc (801910EC)
+  lis r3, 0x4BE2
+  ori r3, r3, 0x6C44
+  stw r3, 0(r4)
+RETURN:
+  li r3, 0x0
+  blr
+
+<funDbgToggleHoldStartResultsScreen> NTSC 1.02
+loc_0x0:
+  lis r3, <<varToggleStartResultsScreen>>@h
+  ori r3, r3, <<varToggleStartResultsScreen>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- ENABLE
+DISABLE:
+  lis r4, 0x8017
+  ori r4, r4, 0x8054        # BADHACK 80178054     Default 3C808047
+  lis r3, 0x3C80
+  ori r3, r3, 0x8047
+  stw r3, 0(r4)
+  lis r4, 0x8017            # BADHACK 80178224     Default 80030008
+  ori r4, r4, 0x8224
+  lis r3, 0x8003
+  ori r3, r3, 0x8
+  stw r3, 0(r4)
+  lis r4, 0x801A            # BADHACK 801A4164     Default 41643800
+  ori r4, r4, 0x4164
+  lis r3, 0x3800
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  b RETURN
+ENABLE:
+  lis r4, 0x8017
+  ori r4, r4, 0x8054        # BADHACK 80178054     Enable branch
+  lis r3, 0x4801
+  ori r3, r3, 0x91B0
+  stw r3, 0(r4)
+  lis r4, 0x8017
+  ori r4, r4, 0x8224        # BADHACK 80178224     Enable branch
+  lis r3, 0x4801
+  ori r3, r3, 0x9028
+  stw r3, 0(r4)
+  lis r4, 0x801A
+  ori r4, r4, 0x4164        # BADHACK 801A4164     Enable branch
+  lis r3, 0x4BFE
+  ori r3, r3, 0xD11C
+  stw r3, 0(r4)
+RETURN:
+  li r3, 0x0
+  blr
+
+<funDbgToggleStockPlatformColor> NTSC 1.02
+  lis r3, <<varTogglePlatformColors>>@h
+  ori r3, r3, <<varTogglePlatformColors>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- ENABLE
+DISABLE:
+  lis r4, 0x800D
+  ori r4, r4, 0x5008        # BADHACK 800D5008     Default 7C7E1B78
+  lis r3, 0x7C7E
+  ori r3, r3, 0x1B78
+  stw r3, 0(r4)
+  b RETURN
+ENABLE:
+  lis r4, 0x800D
+  ori r4, r4, 0x5008        # BADHACK 800D5008     Branch
+  lis r3, 0x480B
+  ori r3, r3, 0xC11C
+  stw r3, 0(r4)
+RETURN:
+  li r3, 0x0
+  blr
+
+<tblDbgGeneralOptsSubMenu> NTSC 1.02
+# Entry 0: Menu Title
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strGeneralOptionsTitle>>                # Label/Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Widescreen Option
+    00000002                                        # String Table
+    .long <<funDbgWidescreenOption>>                # Called when value changes
+    .long <<strWidescreenOpt>>                      # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varToggleWidescreend>>                  # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 2: Hold start to exit results screen
+    00000002                                        # String Table
+    .long <<funDbgToggleHoldStartResultsScreen>>    # Toggle function
+    .long <<strHoldStartExitResultsOpt>>            # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varToggleStartResultsScreen>>           # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Stock Platform Colors
+    00000002                                        # String Table
+    .long <<funDbgToggleStockPlatformColor>>        # Toggle function
+    .long <<strStockPlatformColorOpt>>              # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varTogglePlatformColors>>               # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Overtime and Bomb Rain
+The functions, strings, and data for bomb rain, pokeball rain, and tournament overtime.
+These three items are very tightly knit, so they go together here. Places that toggle these various things should call on the standalone items created here.
+TODO: All of these toggles rely on overwriting code on the fly. Not only does this require workarounds on Dolphin due to code caching, but MCM doesn't really support this with branching. We will want to convert the raw branched codes into "Converted Mods", which consist of a standalone variable which tells the mod to turn on or off and each branch to then enable itself based on that variable. Then, any debug menu or whatever should just change that variable value. Search for "BADHACK" for exact instances.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<varToggleOvertime> ALL
+0000 0000
+
+<varToggleBombRain> ALL
+0000 0000
+
+<funDbgToggleOvertimeAndBombRain> NTSC 1.02
+# r10 is set to master toggle
+  lis r10, <<varTogglesState>>@h
+  ori r10, r10, <<varTogglesState>>@l
+  lwz r10, 0(r10)
+
+# Apply Overtime if it is enabled
+  cmpwi r10, 0x1
+  blt- NORMAL_OVERTIME
+  bgt- TOURNAMENT_OVERTIME
+  lis r3, <<varToggleOvertime>>@h
+  ori r3, r3, <<varToggleOvertime>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- TOURNAMENT_OVERTIME
+
+# Apply Normal Overtime code
+NORMAL_OVERTIME:
+  lis r4, 0x801A
+  ori r4, r4, 0x415C    # BADHACK 801A415C     Default 3803FFFF
+  lis r3, 0x3803
+  ori r3, r3, 0xFFFF
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 8016DD38     Default 881E0000
+  ori r4, r4, 0xDD38
+  lis r3, 0x881E
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 8016DDCC     Default 901F0028
+  ori r4, r4, 0xDDCC
+  lis r3, 0x901F
+  ori r3, r3, 0x28
+  stw r3, 0(r4)
+  lis r4, 0x8006        # BADHACK 80067E78     Default D01B1830
+  ori r4, r4, 0x7E78
+  lis r3, 0xD01B
+  ori r3, r3, 0x1830
+  stw r3, 0(r4)
+  lis r4, 0x8003        # BADHACK 800343B4     Default 7FDD032E
+  ori r4, r4, 0x43B4
+  lis r3, 0x7FDD
+  ori r3, r3, 0x32E
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 80165DC4     Default 38040001
+  ori r4, r4, 0x5DC4
+  lis r3, 0x3804
+  ori r3, r3, 0x1
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 80165E0C     Default 38040001
+  ori r4, r4, 0x5E0C
+  lis r3, 0x3804
+  ori r3, r3, 0x1
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 80165E54     Default 38040001
+  ori r4, r4, 0x5E54
+  lis r3, 0x3804
+  ori r3, r3, 0x1
+  stw r3, 0(r4)
+  li r9, 0x0
+  b BREAK_OVERTIME
+
+# Apply tournament overtime code
+TOURNAMENT_OVERTIME:
+  lis r4, 0x801A
+  ori r4, r4, 0x415C    # BADHACK 801A415C     Branch
+  lis r3, 0x4BFE
+  ori r3, r3, 0xD328
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 8016DD38     Branch
+  ori r4, r4, 0xDD38
+  lis r3, 0x4802
+  ori r3, r3, 0x3988
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 8016DDCC     Branch
+  ori r4, r4, 0xDDCC
+  lis r3, 0x4802
+  ori r3, r3, 0x3934
+  stw r3, 0(r4)
+  lis r4, 0x8006        # BADHACK 80067E78     Branch
+  ori r4, r4, 0x7E78
+  lis r3, 0x4812
+  ori r3, r3, 0x98A8
+  stw r3, 0(r4)
+  lis r4, 0x8003
+  ori r4, r4, 0x43B4    # BADHACK 800343B4     Branch
+  lis r3, 0x4815
+  ori r3, r3, 0xD394
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 80165DC4     38040000
+  ori r4, r4, 0x5DC4
+  lis r3, 0x3804
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 80165E0C     38040000
+  ori r4, r4, 0x5E0C
+  lis r3, 0x3804
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x8016        # BADHACK 80165E54     38040000
+  ori r4, r4, 0x5E54
+  lis r3, 0x3804
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  li r9, 0x1
+
+BREAK_OVERTIME:
+  # Now toggle the bombs
+  cmpwi r10, 0x1
+  blt- BOMB_NORMAL
+  bgt- BOMB_OVERTIME
+  # Check the Bomb toggle
+  lis r3, <<varToggleBombRain>>@h
+  ori r3, r3, <<varToggleBombRain>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  beq- BOMB_ALWAYS
+  bgt- BOMB_POKEBALLS
+  # Check if we applied tournament overtime
+  cmpwi r9, 0x0
+  bne- BOMB_OVERTIME
+
+BOMB_NORMAL:
+  lis r4, 0x8026
+  ori r4, r4, 0xBEC0    # BADHACK 8026BEC0     Default 801E0014
+  lis r3, 0x801E
+  ori r3, r3, 0x14
+  stw r3, 0(r4)
+  lis r4, 0x8029        # BADHACK 80294DCC     Default 3800001F
+  ori r4, r4, 0x4DCC
+  lis r3, 0x3800
+  ori r3, r3, 0x1F
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EB4     Default 40810094
+  ori r4, r4, 0xEB4
+  lis r3, 0x4081
+  ori r3, r3, 0x94
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EA8     Default 418200A0
+  ori r4, r4, 0xEA8
+  lis r3, 0x4182
+  ori r3, r3, 0xA0
+  stw r3, 0(r4)
+  b RETURN
+
+BOMB_OVERTIME:
+  lis r4, 0x8026
+  ori r4, r4, 0xBEC0    # BADHACK 8026BEC0     801E0014
+  lis r3, 0x801E
+  ori r3, r3, 0x14
+  stw r3, 0(r4)
+  lis r4, 0x8029        # BADHACK 80294DCC     3800001F
+  ori r4, r4, 0x4DCC
+  lis r3, 0x3800
+  ori r3, r3, 0x1F
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EB4     48000094
+  ori r4, r4, 0xEB4
+  lis r3, 0x4800
+  ori r3, r3, 0x94
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EA8     418200A0
+  ori r4, r4, 0xEA8
+  lis r3, 0x4182
+  ori r3, r3, 0xA0
+  stw r3, 0(r4)
+  b RETURN
+
+BOMB_ALWAYS:
+  lis r4, 0x8026
+  ori r4, r4, 0xBEC0    # BADHACK 8026BEC0     801E0014
+  lis r3, 0x801E
+  ori r3, r3, 0x14
+  stw r3, 0(r4)
+  lis r4, 0x8029        # BADHACK 80294DCC     3800001F
+  ori r4, r4, 0x4DCC
+  lis r3, 0x3800
+  ori r3, r3, 0x1F
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EB4     60000000
+  ori r4, r4, 0xEB4
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EA8     60000000
+  ori r4, r4, 0xEA8
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  b RETURN
+
+BOMB_POKEBALLS:
+  lis r4, 0x8026
+  ori r4, r4, 0xBEC0    # BADHACK 8026BEC0     3800001F
+  lis r3, 0x3800
+  ori r3, r3, 0x1F
+  stw r3, 0(r4)
+  lis r4, 0x8029        # BADHACK 80294DCC     38000022
+  ori r4, r4, 0x4DCC
+  lis r3, 0x3800
+  ori r3, r3, 0x22
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EB4     60000000
+  ori r4, r4, 0xEB4
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x801C        # BADHACK 801C0EA8     60000000
+  ori r4, r4, 0xEA8
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+
+RETURN:
+  li r3, 0x0
+  blr
+
+
+	-==-
+
+
+Debug Menu: Melee+ Options Submenu
+The functions, strings, and data for the submenu "Melee+ Options".
+TODO: All of these toggles rely on overwriting code on the fly. Not only does this require workarounds on Dolphin due to code caching, but MCM doesn't really support this with branching. We will want to convert the raw branched codes into "Converted Mods", which consist of a standalone variable which tells the mod to turn on or off and each branch to then enable itself based on that variable. Then, any debug menu or whatever should just change that variable value. Search for "BADHACK" for exact instances.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<varToggleHandicap> ALL
+0000 0000
+
+<varToggleLedgeAttrition> ALL
+0000 0000
+
+<varWallBracing> ALL
+0000 0000
+
+<varCappedPoints> ALL
+0000 0000
+
+<strMeleePlusTitle> ALL                 # "< Melee+ >"
+3C204D65 6C65652B 203E0000
+
+<strHandicapOpt> ALL                    # "Handicap: "
+48616E64 69636170 3A200000
+
+<strOvertimeOpt> ALL                    # "Overtime: "
+4F766572 74696D65 3A200000
+
+<strLedgeInvincibilityOpt> ALL          # "Ledge Invincibility: "
+4C656467 6520496E 76696E63 6962696C 6974793A 20000000
+
+<strWallBracingOpt> ALL                 # "Wall Bracing: "
+57616C6C 20427261 63696E67 3A200000
+
+<strCappedPointsOpt> ALL                # "Capped Points: "
+43617070 65642050 6F696E74 733A2000
+
+<strDamageRatio> ALL                    # "Damage Ratio"
+44616D61 67652052 6174696F 00000000
+
+<strStockCrew> ALL                      # "Stock/Crew"
+53746F63 6B2F4372 65770000
+
+<arrHandicapOpts> ALL
+.long <<strDamageRatio>>
+.long <<strStockCrew>>
+
+<strTournament> ALL                     # "Tournament"
+546F7572 6E616D65 6E740000
+
+<arrOvertimeOpts> ALL
+.long <<strNormal>>
+.long <<strTournament>>
+
+<strDynamic> ALL
+44796E61 6D696300
+
+<arrLedgeAttritionOpts> ALL
+.long <<strNormal>>
+.long <<strDynamic>>
+
+<funDbgToggleHandicapStock> NTSC 1.02
+loc_0x0:
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  blt- DISABLED
+  bgt- ENABLE
+  lis r3, <<varToggleHandicap>>@h
+  ori r3, r3, <<varToggleHandicap>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- ENABLE
+DISABLED:
+  lis r4, 0x8003
+  ori r4, r4, 0x6BB4    # BADHACK 80036BB4     Default 9803008E
+  lis r3, 0x9803
+  ori r3, r3, 0x8E
+  stw r3, 0(r4)
+  lis r4, 0x8026        # BADHACK 80266678     Default 3803FFFF
+  ori r4, r4, 0x6678
+  lis r3, 0x3803
+  ori r3, r3, 0xFFFF
+  stw r3, 0(r4)
+  lis r4, 0x801A        # BADHACK 801A57DC     Default 38BEFFF8
+  ori r4, r4, 0x57DC
+  lis r3, 0x38BE
+  ori r3, r3, 0xFFF8
+  stw r3, 0(r4)
+  lis r4, 0x8023        # BADHACK 80230D54     Default 88030005
+  ori r4, r4, 0xD54
+  lis r3, 0x8803
+  ori r3, r3, 0x5
+  stw r3, 0(r4)
+  lis r4, 0x8022        # BADHACK 8022F76C     Default 881C0004
+  ori r4, r4, 0xF76C
+  lis r3, 0x881C
+  ori r3, r3, 0x4
+  stw r3, 0(r4)
+  lis r4, 0x8022        # BADHACK 8022F6BC     Default 881C0004
+  ori r4, r4, 0xF6BC
+  lis r3, 0x881C
+  ori r3, r3, 0x4
+  stw r3, 0(r4)
+  lis r4, 0x8003        # BADHACK 80033CC4     Default 98A3008E
+  ori r4, r4, 0x3CC4
+  lis r3, 0x98A3
+  ori r3, r3, 0x8E
+  stw r3, 0(r4)
+  b loc_0x148
+ENABLE:
+  lis r4, 0x8003        # BADHACK 80036BB4     Noop 60000000
+  ori r4, r4, 0x6BB4
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x8026        # BADHACK 80266678     Branch
+  ori r4, r4, 0x6678
+  lis r3, 0x4BF2
+  ori r3, r3, 0xAC4C
+  stw r3, 0(r4)
+  lis r4, 0x801A        # BADHACK 801A57DC     Branch
+  ori r4, r4, 0x57DC
+  lis r3, 0x4BFE
+  ori r3, r3, 0xBB8C
+  stw r3, 0(r4)
+  lis r4, 0x8023        # BADHACK 80230D54     Branch
+  ori r4, r4, 0xD54
+  lis r3, 0x4BF6
+  ori r3, r3, 0x638
+  stw r3, 0(r4)
+  lis r4, 0x8022        # BADHACK 8022F76C     Branch
+  ori r4, r4, 0xF76C
+  lis r3, 0x4BF6
+  ori r3, r3, 0x1C50
+  stw r3, 0(r4)
+  lis r4, 0x8022        # BADHACK 8022F6BC     Branch
+  ori r4, r4, 0xF6BC
+  lis r3, 0x4BF6
+  ori r3, r3, 0x1D3C
+  stw r3, 0(r4)
+  lis r4, 0x8003        # BADHACK 80033CC4     Branch
+  ori r4, r4, 0x3CC4
+  lis r3, 0x4815
+  ori r3, r3, 0xD770
+  stw r3, 0(r4)
+loc_0x148:
+  li r3, 0x0
+  blr
+
+<funDbgToggleLedgeInvincibility> NTSC 1.02
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  blt- loc_0x2C
+  bgt- loc_0x58
+  lis r3, <<varToggleLedgeAttrition>>@h
+  ori r3, r3, <<varToggleLedgeAttrition>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- loc_0x58
+loc_0x2C:
+  lis r4, 0x8009
+  ori r4, r4, 0xA8AC    # BADHACK 8009A8AC     Default 8084049C
+  lis r3, 0x8084
+  ori r3, r3, 0x49C
+  stw r3, 0(r4)
+  lis r4, 0x8006
+  ori r4, r4, 0xA414    # BADHACK 8006A414     Default 807F1990
+  lis r3, 0x807F
+  ori r3, r3, 0x1990
+  stw r3, 0(r4)
+  b loc_0x80
+loc_0x58:
+  lis r4, 0x8009
+  ori r4, r4, 0xA8AC    # BADHACK 8009A8AC     480F6EBC
+  lis r3, 0x480F
+  ori r3, r3, 0x6EBC
+  stw r3, 0(r4)
+  lis r4, 0x8006        # BADHACK 8006A414     481273A0
+  ori r4, r4, 0xA414
+  lis r3, 0x4812
+  ori r3, r3, 0x73A0
+  stw r3, 0(r4)
+loc_0x80:
+  li r3, 0x0
+  blr
+
+<funDbgToggleWallBracing> NTSC 1.02
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  blt- loc_0x2C
+  bgt- loc_0x44
+  lis r3, <<varWallBracing>>@h
+  ori r3, r3, <<varWallBracing>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- loc_0x44
+loc_0x2C:
+  lis r4, 0x8008
+  ori r4, r4, 0xDFAC    # BADHACK 8008DFAC     Default 2C1C0003
+  lis r3, 0x2C1C
+  ori r3, r3, 0x3
+  stw r3, 0(r4)
+  b loc_0x58
+loc_0x44:
+  lis r4, 0x8008        # BADHACK 8008DFAC     Branch
+  ori r4, r4, 0xDFAC
+  lis r3, 0x4810
+  ori r3, r3, 0x3838
+  stw r3, 0(r4)
+loc_0x58:
+  li r3, 0x0
+  blr
+
+<funDbgToggleCappedPoints> NTSC 1.02
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  blt- loc_0x2C
+  bgt- loc_0x44
+  lis r3, <<varCappedPoints>>@h
+  ori r3, r3, <<varCappedPoints>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- loc_0x44
+loc_0x2C:
+  lis r4, 0x8016
+  ori r4, r4, 0xCDAC    # BADHACK 8016CDAC     Default 88030005
+  lis r3, 0x8803
+  ori r3, r3, 0x5
+  stw r3, 0(r4)
+  b loc_0x58
+loc_0x44:
+  lis r4, 0x8016
+  ori r4, r4, 0xCDAC    # BADHACK 8016CDAC     Branch
+  lis r3, 0x4802
+  ori r3, r3, 0x4A70
+  stw r3, 0(r4)
+loc_0x58:
+  li r3, 0x0
+  blr
+
+<tblDbgMeleePlusTogglesSubMenu> NTSC 1.02
+# Entry 0: Menu Title
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strMeleePlusTitle>>                     # Label
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Handicap is either stock or damage ratio
+    00000002                                        # String Table
+    .long <<funDbgToggleHandicapStock>>             # Toggle function
+    .long <<strHandicapOpt>>                        # Label
+    .long <<arrHandicapOpts>>                       # Options
+    .long <<varToggleHandicap>>                     # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 2: Tournament Overtime or normal overtime
+    00000002                                        # String Table
+    .long <<funDbgToggleOvertimeAndBombRain>>       # Toggle function
+    .long <<strOvertimeOpt>>                        # Label
+    .long <<arrOvertimeOpts>>                       # Options
+    .long <<varToggleOvertime>>                           # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Ledge invincibility attrition
+    00000002                                        # String Table
+    .long <<funDbgToggleLedgeInvincibility>>        # Toggle function
+    .long <<strLedgeInvincibilityOpt>>              # Label
+    .long <<arrLedgeAttritionOpts>>                 # [Normal, Dynamic]
+    .long <<varToggleLedgeAttrition>>                     # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: Wall bracing
+    00000002                                        # String Table
+    .long <<funDbgToggleWallBracing>>               # Toggle function
+    .long <<strWallBracingOpt>>                     # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varWallBracing>>                        # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 5: Capped Points/Tennis mode
+    00000002                                        # String Table
+    .long <<funDbgToggleCappedPoints>>              # Toggle function
+    .long <<strCappedPointsOpt>>                    # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varCappedPoints>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Debug Menu: Other Options Submenu
+The functions, strings, and data for the submenu "Other Options".
+TODO: All of these toggles rely on overwriting code on the fly. Not only does this require workarounds on Dolphin due to code caching, but MCM doesn't really support this with branching. We will want to convert the raw branched codes into "Converted Mods", which consist of a standalone variable which tells the mod to turn on or off and each branch to then enable itself based on that variable. Then, any debug menu or whatever should just change that variable value. Search for "BADHACK" for exact instances.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<varToggleShield> ALL
+0000 0000
+
+<varToggleTapJump> ALL
+0000 0000
+
+<varToggleRandomElement> ALL
+0000 0000
+
+<strOthersTitle> ALL                # "< Others >"
+3C204F74 68657273 203E0000
+
+<strShieldsOpt> ALL                 # "Shields: "
+53686965 6C64733A 20000000
+
+<strTapJumpOpt> ALL                 # "Tap Jump: "
+54617020 4A756D70 3A200000
+
+<strAlwaysRainBombsOpt> ALL         # "Always Rain Bombs: "
+416C7761 79732052 61696E20 426F6D62 733A2000
+
+<strRandomHitboxElementOpt> ALL     # "Random Hitbox Element: "
+52616E64 6F6D2048 6974626F 7820456C 656D656E 743A2000
+
+<strInfinite> ALL                   # "Infinite"
+496E6669 6E697465 00000000
+
+<arrShieldStrings> ALL
+.long <<strNormal>>
+.long <<strInfinite>>
+
+<arrTapJumpOpts> ALL
+.long <<strEnabled>>
+.long <<strDisabled>>
+
+<strPokeballs> ALL                  # "Pokeballs"
+506F6B65 62616C6C 73000000
+
+<arrBombRain> ALL
+.long <<strDisabled>>
+.long <<strEnabled>>
+.long <<strPokeballs>>
+
+<funDbgToggleInfiniteShields> NTSC 1.02
+loc_0x0:
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  bne- loc_0x28
+  lis r3, <<varToggleShield>>@h
+  ori r3, r3, <<varToggleShield>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- loc_0x54
+loc_0x28:
+  lis r4, 0x8006
+  ori r4, r4, 0xD2D4    # BADHACK 8006D2D4     Default D01E1998
+  lis r3, 0xD01E
+  ori r3, r3, 0x1998
+  stw r3, 0(r4)
+  lis r4, 0x8009        # BADHACK 80092630     Default D01F1998
+  ori r4, r4, 0x2630
+  lis r3, 0xD01F
+  ori r3, r3, 0x1998
+  stw r3, 0(r4)
+  b loc_0x7C
+loc_0x54:
+  lis r4, 0x8006
+  ori r4, r4, 0xD2D4    # BADHACK 8006D2D4     60000000
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+  lis r4, 0x8009        # BADHACK 80092630     60000000
+  ori r4, r4, 0x2630
+  lis r3, 0x6000
+  ori r3, r3, 0x0
+  stw r3, 0(r4)
+loc_0x7C:
+  li r3, 0x0
+  blr
+
+<funDbgToggleTapJump> NTSC 1.02
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  bne- loc_0x28
+  lis r3, <<varToggleTapJump>>@h
+  ori r3, r3, <<varToggleTapJump>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- loc_0x54
+loc_0x28:
+  lis r4, 0x800C
+  ori r4, r4, 0xBBC0    # BADHACK 800CBBC0     Default 7C0802A6
+  lis r3, 0x7C08
+  ori r3, r3, 0x2A6
+  stw r3, 0(r4)
+  lis r4, 0x800C        # BADHACK 800CB4E0     Default 7C0802A6
+  ori r4, r4, 0xB4E0
+  lis r3, 0x7C08
+  ori r3, r3, 0x2A6
+  stw r3, 0(r4)
+  b loc_0x7C
+loc_0x54:
+  lis r4, 0x800C
+  ori r4, r4, 0xBBC0    # BADHACK 800CBBC0     Branch
+  lis r3, 0x480C
+  ori r3, r3, 0x5D70
+  stw r3, 0(r4)
+  lis r4, 0x800C        # BADHACK 800CB4E0     Branch
+  ori r4, r4, 0xB4E0
+  lis r3, 0x480C
+  ori r3, r3, 0x6468
+  stw r3, 0(r4)
+loc_0x7C:
+  li r3, 0x0
+  blr
+
+<funDbgToggleHitboxElement> NTSC 1.02
+loc_0x0:
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x1
+  bne- loc_0x28
+  lis r3, <<varToggleRandomElement>>@h
+  ori r3, r3, <<varToggleRandomElement>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- loc_0x40
+loc_0x28:
+  lis r4, 0x8007
+  ori r4, r4, 0x15B0    # BADHACK 800715B0     default 28000009
+  lis r3, 0x2800
+  ori r3, r3, 0x9
+  stw r3, 0(r4)
+  b loc_0x54
+loc_0x40:
+  lis r4, 0x8007
+  ori r4, r4, 0x15B0    # BADHACK 800715B0     branch
+  lis r3, 0x4812
+  ori r3, r3, 0x3AC
+  stw r3, 0(r4)
+loc_0x54:
+  li r3, 0x0
+  blr
+
+<tblDbgOtherTogglesSubMenu> NTSC 1.02
+# Entry 0: Menu Title
+    00000000 00000000                               # Disabled
+    .long <<strOthersTitle>>                        # Label
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Infinite Shields
+    00000002                                        # String Table
+    .long <<funDbgToggleInfiniteShields>>           # Toggle function
+    .long <<strShieldsOpt>>                         # Label
+    .long <<arrShieldStrings>>                      # [Normal, Infinite]
+    .long <<varToggleShield>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 2: Tap Jump
+    00000002                                        # String Table
+    .long <<funDbgToggleTapJump>>                   # Toggle function
+    .long <<strTapJumpOpt>>                         # Label
+    .long <<arrTapJumpOpts>>                        # Options
+    .long <<varToggleTapJump>>                      # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Bomb Rain
+    00000002                                        # String Table
+    .long <<funDbgToggleOvertimeAndBombRain>>       # Toggle function
+    .long <<strAlwaysRainBombsOpt>>                 # Label
+    .long <<arrBombRain>>                           # [Normal, Bomb, Pokeballs]
+    .long <<varToggleBombRain>>                     # Variable
+    00000000                                        # n/a
+    40400000                                        # 3 item table
+    00000000                                        # n/a
+# Entry 4: Random Hitbox Element
+    00000002                                        # String Table
+    .long <<funDbgToggleHitboxElement>>             # Toggle function
+    .long <<strRandomHitboxElementOpt>>             # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varToggleRandomElement>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
 Credits Menu replaces Mode Team Test debug menu
 This replaces the entries in the debug menu for "Mode Team Test" with the credits of SD Remix.
 The credits menu is significantly longer than the mode team test, but the data after the mode team test is not particularly important, so we can overwrite it, making sure check for bugs in other Menus we're reusing.

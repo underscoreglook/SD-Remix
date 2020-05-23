@@ -4,21 +4,16 @@ Reverse engineer the debug menu so finding other codes will be easier
 Converting the raw changes to actual individual mods in the MCM (see if they match up to included mods, or if there are
  updates to the mods; if there are updates, put them in the End Goal section. Also, put any unused mods included in MCM
   into the End Goal section as well).
-Instructions in internal docs on how to create xdelta patches that are as small as they can be.
-Also, include docs on how to create other types of files, like DIOS MIOS and ISO bundles.
-Copy over SDRE32.ini file somewhere (maybe configs?)
 Try to figure out what all the changes to the menu files are, and fill in the assets folder based on that.
 Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
 Move over relevant notes from personal files to this repo, particularly the PK Thunder stuff
 Add SD Remix Lite to this repo
-At this point, tag the commit as 3.2.1, and create a release set from this, with xdelta, dios mios, and IOS set.
-Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
-Once you have everything like this, create a new branch that is JUST the SDR 3.2.1 stuff so we can move on to the next
- step below.
+At this point, tag the commit as 3.2.1+ base (not official as it's not binary compatible).
 
 End Goal, Netplay build:
 -----------------------
 There seems to be a bug when picking pika for P3 and P4 and having stock platform colors enabled
+Probably rework the debug screen.
 Make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the
  SDR Stage List.
 SDR Stage List should have all Melee viable stages, certain stages being frozen. Maybe try and get other stages too.
@@ -31,6 +26,12 @@ Look at todolist for other stuff.
 Probably talk with the SDR team to get approval from whole team before making any changes.
 (Maybe also make a tool for creating Debug screen changes?)
 Also, take what's in the SDRE32.ini and possibly build them in? Like UCF or something
+After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
+Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
+
+SD Remix Lite
+-------------
+Two options, convert everything to Melee Mod Loader, or create some sort of compiler, like MCM except for SDR Lite.
 
 
 
@@ -264,3 +265,96 @@ C03F0034 2C0E0001
 EC210032 C0010034
 EC210024 39C00000
 281E0000 48000000
+
+
+
+
+
+
+
+
+When rewriting Debug menu, here are some standard debug menu functions:
+
+Set debug menu publicity:
+mflr r0
+lis r4,-32704
+stw r0,4(r1)
+subi r4,r4,23976
+stwu r1,-8(r1)
+lwz r0,4(r4)
+cmpwi r0,0
+beq- 0x34
+cmpwi r3,1
+bne- 0x34
+li r3,1
+bl -0x2dc244
+bl -0x1a0710
+li r3,0
+lwz r0,12(r1)
+addi r1,r1,8
+mtlr r0
+blr
+
+Something else:
+mflr r0
+cmpwi r3,1
+stw r0,4(r1)
+stwu r1,-24(r1)
+stw r31,20(r1)
+bne- 0x9c
+bl 0x2b48
+addi r31,r3,0
+li r3,1
+bl -0x2dc284
+lis r3,-32704
+subi r4,r3,22952
+addi r3,r31,0
+li r5,0
+li r6,-60
+li r7,0
+bl 0x3f40
+bl 0x2b1c
+lis r4,-32720
+subi r4,r4,404
+bl 0x2b18
+lwz r0,28(r1)
+li r3,0
+lwz r31,20(r1)
+addi r1,r1,24
+mtlr r0
+blr
+
+Something else:
+mflr r0
+cmpwi r3,1
+stw r0,4(r1)
+stwu r1,-8(r1)
+bne- 0xdc
+li r3,1
+bl -0x2dc2e4
+li r3,2
+bl -0x15c07c
+bl -0x15b7c0
+li r3,0
+lwz r0,12(r1)
+addi r1,r1,8
+mtlr r0
+blr
+
+Something else:
+lis r3,-32704
+subi r4,r3,24280
+lis r3,-32698
+lhz r0,544(r4)
+subi r3,r3,22848
+add r5,r3,r0
+lbz r0,6248(r5)
+li r3,0
+stb r0,548(r4)
+lbz r0,6249(r5)
+stb r0,549(r4)
+lbz r0,6250(r5)
+stb r0,550(r4)
+lbz r0,6251(r5)
+stb r0,551(r4)
+blr
