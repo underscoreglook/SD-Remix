@@ -1,3 +1,5 @@
+** Deprecated, just use Melee Code Manager's tools **
+
 These are the DOL and RAM differences between different versions of Melee.
 
 This is useful for:

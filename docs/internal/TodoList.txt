@@ -56,7 +56,10 @@ Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v2 (v1.02) [Mag
 1.02	0x73DC0, 0x73E84, 0x74DB4, 0x73628, 0x7377C, 0x745FC, 0x74750, 0x7391C, 0x742DC
 PAL	0x74498, 0x7455C, 0x7548C, 0x73D00, 0x73E54, 0x74CD4, 0x74E28, 0x73FF4, 0x749B4
 
-Look for latest widescreen codes
+New version of revival platform colors
+https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
+
+Update to latest widescreen codes (at bottom of this file)
 
 Shy Guys drop food even if items are at off (1.02)[flieskiller]
 0428fb1c 4800000c
@@ -94,6 +97,70 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 PAL ------- 0x864EC ---- 48000030 -> 41820030
 
 
+	-==-
+
+
+Break the Targets Intangibility Glitch Fix
+Fixes glitch that causes player to not receive intangibility after quitting Adventure Mode while the stage was transformed
+<https://smashboards.com/threads/bug-fixes.471624/post-23834249>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x801B65AC ---- 9003000C -> Branch
+
+9003000C 3C608046
+6063B488 388001C0
+3D808000 618CC160
+7D8903A6 4E800421
+60000000 00000000
+
+
+	-==-
+
+
+Rainbow FD
+The stage's edges & highlights continually change colors.
+(From the 20XX Pack)
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ------ 0x16CDF4 ---- 38600000  -> Branch
+
+3DC08048 89CE0687
+2C0E0020 408200FC
+3A200000 3DC080C2
+61CEE244 8A4E0003
+2C120002 41820024
+2C120003 41820034
+3A400001 89EE0000
+2C0F00FF 41820064
+3A000001 480000AC
+3A400002 8DEE0001
+2C0F00FF 41820074
+3A000001 48000094
+3A400003 8DEE0002
+2C0F00FF 4182000C
+3A00FFFE 4800007C
+89EEFFFF 2C0F0000
+41820014 39EFFFFF
+99EEFFFF 99EE0FFF
+48000078 3A400001
+9A4E0001 4800006C
+89EE0002 2C0F0000
+41820014 39EFFFFF
+99EE0002 99EE1002
+48000050 3A400002
+9A4E0003 48000044
+89EEFFFF 2C0F0000
+41820014 39EFFFFF
+99EEFFFF 99EE0FFF
+48000028 3A400003
+9A4E0002 4800001C
+39EF0001 99EE0000
+99EE1000 7DCE8214
+9A2E0000 9A2E1000
+38030001 00000000
+
+
+	-==-
 
 
 16:9 Widescreen Support (Variation A)
@@ -265,6 +332,10 @@ C03F0034 2C0E0001
 EC210032 C0010034
 EC210024 39C00000
 281E0000 48000000
+
+
+
+
 
 
 
