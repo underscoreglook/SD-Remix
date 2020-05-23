@@ -485,6 +485,28 @@ C022AD68 4BFFE0F9 48000010 387E0000 38800010 481DFA39 BB410018
 	-==-
 
 
+Old Widescreen Code (SDR Staticly placed @ 803FC7F0 and 803FC7FC)
+Enables widescreen. Way out of date, much better ones available.
+[Dan Salvato]
+NTSC 1.02 ---- 0x803FC7F0 -----
+61796572 20436F75 6E742053
+->
+39C00001 38600006 4BC252C8  # Widescreen 1
+-------------- 0x803FC7FC -----
+6574203E 00000000 43686172 61202020
+3A000000 436F756E 74202020 3A000000
+44656661 756C7420 3A000000 00000000
+00000000 803FC7EC
+->
+C03F0034 2C0E0001 41820024 3C004080  # Widescreen 2
+90010030 3C004040 90010034 C0010030
+EC210032 C0010034 EC210024 39C00000
+281E0000 4BF6DC7C
+
+
+	-==-
+
+
 Stock Dependent Revival Platform Colors (SDR Staticly placed @ 803FA3E8)
 The coloring of the revival platform changes based on how many stocks a player has remaining.
 4 stocks left (via a minigame or something...) = purple

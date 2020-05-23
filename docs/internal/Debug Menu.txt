@@ -58,8 +58,7 @@ Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, tur
 
 Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug)
 --------------------------------------------------
-18DCC0: Widescreen Functions
-18DD04: * nothing here *
+18DCC0: * nothing here *
 18DDE4: Hold start to force out of results screen
 18DE74: End game with Pause off
 18DEA4: Handicap is Stock/Crew
@@ -103,7 +102,9 @@ Part 2
 803FA4E0: XX Don't Use XX
 803FC420: > ** FREE SPACE OMG**     0xAC
 803FC4CC: XX Don't Use XX
-803FC8A0: > ** FREE SPACE OMG **    0x137C
+803FC7F0: Old Widescreen Code 1
+803FC7FC: Old Widescreen Code 2
+803FC834: > ** FREE SPACE OMG **    0x13E8
 803FDC1C: *** END ***
 
 

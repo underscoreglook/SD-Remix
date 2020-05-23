@@ -318,15 +318,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strStockPlatformColorOpt> ALL          # "Stock platform colors: "
 53746F63 6B20706C 6174666F 726D2063 6F6C6F72 733A2000
 
-NTSC 1.02 ---- 0x18DCC0 -----
-7C0802A6 3C808048 90010004
-388499B8 9421FFE0 93E1001C 3BE4000C A004000C 80630028 28000320
-4081000C 38000000 B01F0000 A09F0000 3C004330 C822AD38 90810014
-->
-39C00001 38600006 4BE909D8  # Widescreen 1
-C03F0034 2C0E0001 41820024 3C004080 90010030 3C004040 90010034   # Widescreen 2
-C0010030 EC210032 C0010034 EC210024 39C00000 281E0000 481D938C
-
 <funDbgWidescreenOption> NTSC 1.02
   lis r3, <<varToggleWidescreend>>@h
   ori r3, r3, <<varToggleWidescreend>>@l
@@ -335,26 +326,26 @@ C0010030 EC210032 C0010034 EC210024 39C00000 281E0000 481D938C
   bne- TURN_ON
 TURN_OFF:
   lis r4, 0x8002
-  ori r4, r4, 0x1ABC        # 80021ABC     0x1E69C     38600006 Original
+  ori r4, r4, 0x1ABC        # BADHACK   80021ABC     38600006 Original
   lis r3, 0x3860
   ori r3, r3, 0x6
   stw r3, 0(r4)
   lis r4, 0x8036
-  ori r4, r4, 0xA4A8        # 8036A4A8     0x367088    C03F0034 Original
+  ori r4, r4, 0xA4A8        # BADHACK   8036A4A8     C03F0034 Original
   lis r3, 0xC03F
   ori r3, r3, 0x34
   stw r3, 0(r4)
   b RETURN
 TURN_ON:
   lis r4, 0x8002
-  ori r4, r4, 0x1ABC        # 80021ABC     0x1E69C     4816F624 Branch To?   b 0x16f624 (801910E0)
-  lis r3, 0x4816
-  ori r3, r3, 0xF624
+  ori r4, r4, 0x1ABC        # BADHACK   80021ABC     Branch
+  lis r3, 0x483D
+  ori r3, r3, 0xAD34
   stw r3, 0(r4)
   lis r4, 0x8036
-  ori r4, r4, 0xA4A8        # 8036A4A8     0x367088    4BE26C44 Branch to?   b -0x1d93bc (801910EC)
-  lis r3, 0x4BE2
-  ori r3, r3, 0x6C44
+  ori r4, r4, 0xA4A8        # BADHACK   8036A4A8     Branch
+  lis r3, 0x4809
+  ori r3, r3, 0x2354
   stw r3, 0(r4)
 RETURN:
   li r3, 0x0
