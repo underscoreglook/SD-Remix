@@ -42,7 +42,7 @@ Type    ActionFn    Label   StringList || DefaultListItem    SubmenuFn    String
 
 Running list of free space in debug section (we don't let MCM overwrite it because we use Melee's default debug
 menus in some regards and also overwrites the menus directly so we don't have to store the new main menu data
-elsewhere)
+elsewhere) ("+" Means it's stuck there for now, but we should move it out eventually)
 ================================================================================================================
 Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, turn into mods or move to debug)
 ----------------------------------------------
@@ -56,18 +56,18 @@ Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, tur
 407C34: Omega Stages string table
 4086C0: Dynamic Lagless FoD
 
-Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug)
+Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug region)
 --------------------------------------------------
 18DCC0: * nothing here *
 18DE74: End game with Pause off
-18DEA4: Handicap is Stock/Crew
-18E064: Overtime
-18E348: Ledge invincibility
-18E3C4: Wall bracing
-18E3FC: Capped Points
-18E510: Tap Jump
-18E53C: Random Hitbox Element
-18E584: Flush cache on scene change
+18DEA4: + Handicap is Stock/Crew (See BADHACKS: "Stock Control/Crew Battle Mode")
+18E064: + Overtime (See BADHACKS: "Tournament Overtime")
+18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
+18E3C4: + Wall bracing (See BADHACKS: "Wall Bracing")
+18E3FC: + Capped Points (See BADHACKS: "Capped (Tennis) Mode"
+18E510: + Tap Jump (SEE BADHACKS: "Disable Tap Jump")
+18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
+18E584: * nothing here *
 18E5A0: Name tag box scales to name tag
 18E634: Toggling Alpha/Omega Stage pages
 18E6E0: Disable Trophies outside Classic
@@ -84,7 +84,7 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here,
 18ECD0: Alpha/Omega Random Stage select 1
 18ECF4: Alpha/Omega Random Stage select 2
 18ED18: Play sound when picking random stage for omega and alpha
-18ED44: ** FREE **
+18ED44: * nothing here *
 18ED5C: Stage Striking
 18EEA0: Randomize omega toggle if press start on random
 
@@ -92,9 +92,9 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here,
 Debug menu free space
 -------------------
 803001DC: XX Don't Use XX
-80300758: > ** FREE SPACE OMG**     0x38
+80300758: > ** FREE SPACE OMG **    0x38
 80300790: XX Don't Use XX
-803007C8: > ** FREE SPACE OMG**     0x13E0
+803007C8: > ** FREE SPACE OMG **    0x13E0
 80301BA8: *** END ***
 Part 2
 803FA3E8: Stock Dependent Revival Platform Colors + 0x18 padding
@@ -107,22 +107,7 @@ Part 2
 803FC87C: Hold Start @ Results Screen 2
 803FC8B0: Hold Start @ Results Screen 3
 803FC8C4: > ** FREE SPACE OMG **
-803FDC1C: *** END ***
-
-Remaining debug codes to move over:
-===================================
-Group 1:
-- Tournament overtime
-- Bomb/Pokeball rain
-Group 2:
-- Handicap/Stock
-- Ledge Invincibility
-- Wall Bracing
-- Capped Points/Tennis
-Group 3:
-- Infinite Shields
-- Tap Jump
-- Random Hitbox Element
+803FDC20: *** END ***
 
 
 

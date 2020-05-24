@@ -110,6 +110,8 @@ We have custom needs for our code caves we use. For instance, we need some of th
 
 We've copied over the Melee Code Manager's settings.py here and overwrote the regions used. You can either symlink this from your MCM directory or copy it over each time it changes.
 
+Note: There's still some legacy code stuck in the AUX region 407950 to 408f4c and Tournament mode region 18DCC0 to 18F510. The eventual goal is for those to be moved out, but for now, we shouldn't use those sections. 
+
 ## Characters
 All characters should be stored in the "chars" directory. The main tool people use at the moment to change character
 files is Crazy Hand, which works directly with ISO files. As a result, when a change is made, the raw Pl*.dat files

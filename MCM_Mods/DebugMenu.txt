@@ -537,27 +537,27 @@ TOURNAMENT_OVERTIME:
   lis r4, 0x801A
   ori r4, r4, 0x415C    # BADHACK 801A415C     Branch
   lis r3, 0x4BFE
-  ori r3, r3, 0xD328
+  ori r3, r3, 0xD328    # 4BFED328
   stw r3, 0(r4)
   lis r4, 0x8016        # BADHACK 8016DD38     Branch
   ori r4, r4, 0xDD38
   lis r3, 0x4802
-  ori r3, r3, 0x3988
+  ori r3, r3, 0x3988    # 48023988
   stw r3, 0(r4)
   lis r4, 0x8016        # BADHACK 8016DDCC     Branch
   ori r4, r4, 0xDDCC
   lis r3, 0x4802
-  ori r3, r3, 0x3934
+  ori r3, r3, 0x3934    # 48023934
   stw r3, 0(r4)
   lis r4, 0x8006        # BADHACK 80067E78     Branch
   ori r4, r4, 0x7E78
   lis r3, 0x4812
-  ori r3, r3, 0x98A8
+  ori r3, r3, 0x98A8    # 481298A8
   stw r3, 0(r4)
   lis r4, 0x8003
   ori r4, r4, 0x43B4    # BADHACK 800343B4     Branch
   lis r3, 0x4815
-  ori r3, r3, 0xD394
+  ori r3, r3, 0xD394    # 4815D394
   stw r3, 0(r4)
   lis r4, 0x8016        # BADHACK 80165DC4     38040000
   ori r4, r4, 0x5DC4
