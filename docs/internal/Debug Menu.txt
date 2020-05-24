@@ -59,7 +59,6 @@ Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, tur
 Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug region)
 --------------------------------------------------
 18DCC0: * nothing here *
-18DE74: End game with Pause off
 18DEA4: + Handicap is Stock/Crew (See BADHACKS: "Stock Control/Crew Battle Mode")
 18E064: + Overtime (See BADHACKS: "Tournament Overtime")
 18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
