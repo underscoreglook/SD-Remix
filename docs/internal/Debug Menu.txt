@@ -59,7 +59,6 @@ Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, tur
 Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug)
 --------------------------------------------------
 18DCC0: * nothing here *
-18DDE4: Hold start to force out of results screen
 18DE74: End game with Pause off
 18DEA4: Handicap is Stock/Crew
 18E064: Overtime
@@ -110,10 +109,20 @@ Part 2
 803FC8C4: > ** FREE SPACE OMG **
 803FDC1C: *** END ***
 
-
-
-
-
+Remaining debug codes to move over:
+===================================
+Group 1:
+- Tournament overtime
+- Bomb/Pokeball rain
+Group 2:
+- Handicap/Stock
+- Ledge Invincibility
+- Wall Bracing
+- Capped Points/Tennis
+Group 3:
+- Infinite Shields
+- Tap Jump
+- Random Hitbox Element
 
 
 
