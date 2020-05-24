@@ -105,6 +105,11 @@ The SSBM ISO isn't very tightly packed, because there's actually a lot of space 
 some of the basic files (like the FST, DOL, and Debug stuff) are separated out by a huge amount. This section packs
 these items closer together. Read the comments in the config for more information.
 
+### settings.py
+We have custom needs for our code caves we use. For instance, we need some of the debug menu to remain intact, but there's still plenty of room in there to overwrite.
+
+We've copied over the Melee Code Manager's settings.py here and overwrote the regions used. You can either symlink this from your MCM directory or copy it over each time it changes.
+
 ## Characters
 All characters should be stored in the "chars" directory. The main tool people use at the moment to change character
 files is Crazy Hand, which works directly with ISO files. As a result, when a change is made, the raw Pl*.dat files
