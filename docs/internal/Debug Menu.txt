@@ -48,7 +48,6 @@ Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, tur
 ----------------------------------------------
 407950: Salty Runback
 407990: * nothing here *
-4079D8: Enhanced Name Tags
 407AAC: Change Ready To Fight Banner color
 407AF4: Stage changer table
 407BF4: utf8"Alpha Stages"
@@ -68,7 +67,6 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here,
 18E510: + Tap Jump (SEE BADHACKS: "Disable Tap Jump")
 18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
 18E584: * nothing here *
-18E5A0: Name tag box scales to name tag
 18E634: Toggling Alpha/Omega Stage pages
 18E6E0: Disable Trophies outside Classic
 18E708: Reset DOL and Go/Gr toggles at CSS
