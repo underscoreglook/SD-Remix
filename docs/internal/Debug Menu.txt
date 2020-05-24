@@ -54,7 +54,8 @@ Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, tur
 407BF4: utf8"Alpha Stages"
 407C13: utf8"Omega Stages"
 407C34: Omega Stages string table
-4086C0: Dynamic Lagless FoD
+4086C0: * nothing here *
+4086F0: Seems like unused stage striking code
 
 Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug region)
 --------------------------------------------------

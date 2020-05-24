@@ -1,0 +1,10 @@
+Dynamic Lagless Fountain of Dreams
+TODO: This doesn't actually work that well. There's a new code that does a better job and we'll need to integrate that into this code
+[Dan Salvato, _glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x25B56C ---- 981B0000 -> Branch
+981B0000 38800DE4 3C84803F 38C00E74 3CC6803F 38840024 8A640000 2D130003
+41AA0034 7D062000 40AAFFEC 3C80801C 6084B000 3E606000 92640bd4 92640f54
+92640f84 3E604800 3A730028 92640efc 4800003C 3C80801C 6084B000 3E604800
+3A730115 92640bd4 3E604182 3A730028 92640efc 3E604800 3A730BC5 92640f54
+3E604BFF 6273D775 92640f84 4BE530E4
