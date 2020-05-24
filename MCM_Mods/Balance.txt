@@ -97,10 +97,299 @@ v1.00 Hitlag Behavior
 Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v1
 - Prevents moves that deal less than 1% from having hitlag and being A/S/DIable. 
 - Allows many moves, such as Y.Link's Up-B and Zelda's Fsmash, to work properly.
-Note: Is isn't comprehensive, there's a V2 of this code that covers all cases
+TODO: Is isn't comprehensive, there's a V2 of this code that covers all cases
 (Notes on this: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-31#post-18650879)
 [Magus]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 ---- 0x73DC0 ------ 41820010 -> 60000000
 -------------- 0x73E84 ------ 41820010 -> 60000000
 -------------- 0x74DB4 ------ 41820010 -> 60000000
+
+
+	-==-
+
+
+Donkey Kong - Giant Punch cannot be lost during Up+B
+TODO: UnclePunch has a new version that makes this behave like in PAL, which is considered the "better" version, so consider replacing this
+[VietGeek]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.00 ------ 0x10C18C ---- 9004222C -> 60000000 ---- (stw r0,8748(r4) -> nop)
+1.01 ------ 0x10C470 ---- 9004222C -> 60000000 ---- (stw r0,8748(r4) -> nop)
+1.02 ------ 0x10C6E4 ---- 9004222C -> 60000000 ---- (stw r0,8748(r4) -> nop)
+PAL ------- 0x10CE98 ---- 9004222C -> 60000000 ---- (stw r0,8748(r4) -> nop)
+
+
+	-==-
+
+
+Ness - PK Thunder Does Not Disappear on Hit or Death
+This is an SSBM v1.00 game mechanic that was changed in v1.02.
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x802abcb0 --- 4BFFFC5D 38600001 -> 4bfc7481 60000000
+
+
+	-==-
+
+
+Ness - PK Flash jump
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x113D7C ----- 981E1968 -> 60000000
+-------------- 0x114018 ----- 981E1968 -> 60000000
+
+
+	-==-
+
+
+Ness - PSI Magnet
+0x118090 (11b4b0) - 38800172 -> 3880000E [Wait]
+0x1180c8 (11b4e8) - 38800177 -> 3880001D [Fall]
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x118090 ----- 38800172 -> 3880000E
+-------------- 0x1180C8 ----- 38800177 -> 3880001D
+
+
+	-==-
+
+
+Ness - Jump out of Magnet
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x3C9A60 ------ 8011A43C -> 800CB870
+-------------- 0x3C99C0 ------ 8011A438 -> 800CAF78
+
+
+	-==-
+
+
+Mr. Game & Watch - N/B/U-Aerials L-Cancelable, w/ U-Air Lag Bug Fix
+[Magus]
+
+# Attack -- DOL Offset ------ Hex to Replace ---------- ASM Code
+# N-Air
+1.00 ----- 0x147F98 ---- 3880015E -> 38800041 ---- (li r4,350 --> li r4,65)
+---------- 0x147FA4 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x147FA8 ---- C02501F8 -> C0230258 ---- (lfs f1,504(r5) --> lfs f1,600(r3))
+---------- 0x147FAC ---- 4BF42095 -> 4BF41F89 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# B-Air
+---------- 0x148028 ---- 3880015F -> 38800043 ---- (li r4,351 --> li r4,67)
+---------- 0x148034 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x148038 ---- C0250200 -> C0230260 ---- (lfs f1,512(r5) --> lfs f1,608(r3))
+---------- 0x14803C ---- 4BF42005 -> 4BF41EF9 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# U-Air
+---------- 0x1480B8 ---- 38800160 -> 38800044 ---- (li r4,352 --> li r4,68)
+---------- 0x1480C4 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1480C8 ---- C0250200 -> C0230264 ---- (lfs f1,512(r5) --> lfs f1,612(r3))
+---------- 0x1480CC ---- 4BF41F75 -> 4BF41E69 ---- (bl 0x8008d460 --> bl 0x8008D354)
+
+
+# Attack -- DOL Offset ------ Hex to Replace ---------- ASM Code
+# N-Air
+1.01 ----- 0x1483E8 ---- 3880015E -> 38800041 ---- (li r4,350 --> li r4,65)
+---------- 0x1483F4 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1483F8 ---- C02501F8 -> C0230258 ---- (lfs f1,504(r5) --> lfs f1,600(r3))
+---------- 0x1473FC ---- 4BF41D2D -> 4BF41C21 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# B-Air
+---------- 0x1484D0 ---- 3880015F -> 38800043 ---- (li r4,351 --> li r4,67)
+---------- 0x1484DC ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1484E0 ---- C0250200 -> C0230260 ---- (lfs f1,512(r5) --> lfs f1,608(r3))
+---------- 0x1484E4 ---- 4BF41C45 -> 4BF41B39 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# U-Air
+---------- 0x1485B8 ---- 38800160 -> 38800044 ---- (li r4,352 --> li r4,68)
+---------- 0x1485C4 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1485C8 ---- C0250200 -> C0230264 ---- (lfs f1,512(r5) --> lfs f1,612(r3))
+---------- 0x1485CC ---- 4BF41B5D -> 4BF41A51 ---- (bl 0x8008d460 --> bl 0x8008D354)
+
+
+# Attack -- DOL Offset ------ Hex to Replace ---------- ASM Code
+# N-Air
+1.02 ----- 0x1486DC ---- 3880015E -> 38800041 ---- (li r4,350 --> li r4,65)
+---------- 0x1486E8 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1486EC ---- C02501F8 -> C0230258 ---- (lfs f1,504(r5) --> lfs f1,600(r3))
+---------- 0x1486F0 ---- 4BF41BF9 -> 4BF41AED ---- (bl 0x8008d460 --> bl 0x8008D354)
+# B-Air
+---------- 0x1487C4 ---- 3880015F -> 38800043 ---- (li r4,351 --> li r4,67)
+---------- 0x1487D0 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1487D4 ---- C0250200 -> C0230260 ---- (lfs f1,512(r5) --> lfs f1,608(r3))
+---------- 0x1487D8 ---- 4BF41B11 -> 4BF41A05 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# U-Air
+---------- 0x1488AC ---- 38800160 -> 38800044 ---- (li r4,352 --> li r4,68)
+---------- 0x1488B8 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x1488BC ---- C0250200 -> C0230264 ---- (lfs f1,512(r5) --> lfs f1,612(r3))
+---------- 0x1488C0 ---- 4BF41A29 -> 4BF4191D ---- (bl 0x8008d460 --> bl 0x8008D354)
+
+
+# Attack -- DOL Offset ------ Hex to Replace ---------- ASM Code
+# N-Air
+PAL ------ 0x148E80 ---- 3880015E -> 38800041 ---- (li r4,350 --> li r4,65)
+---------- 0x148E8C ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x148E90 ---- C02501F8 -> C0230258 ---- (lfs f1,504(r5) --> lfs f1,600(r3))
+---------- 0x148E94 ---- 4BF41B0D -> 4BF41A01 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# B-Air
+---------- 0x148F68 ---- 3880015F -> 38800043 ---- (li r4,351 --> li r4,67)
+---------- 0x148F74 ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x148F78 ---- C0250200 -> C0230260 ---- (lfs f1,512(r5) --> lfs f1,608(r3))
+---------- 0x148F7C ---- 4BF41A25 -> 4BF41919 ---- (bl 0x8008d460 --> bl 0x8008D354)
+# U-Air
+---------- 0x149050 ---- 38800160 -> 38800044 ---- (li r4,352 --> li r4,68)
+---------- 0x14905C ---- 80A3002C -> 90830070 ---- (lwz r5,44(r3) --> stw r4,112(r3))
+---------- 0x149060 ---- C0250200 -> C0230264 ---- (lfs f1,512(r5) --> lfs f1,612(r3))
+---------- 0x149064 ---- 4BF4193D -> 4BF41831 ---- (bl 0x8008d460 --> bl 0x8008D354)
+
+
+	-==-
+
+
+Mr. Game & Watch - Bacon land cancel
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x14B6C8 ----- 38800161 -> 3880002A
+
+
+	-==-
+
+
+Mr. Game & Watch - Bacon doesn't change momentum
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x14B2C8 ----- D0250084 -> 60000000
+
+
+	-==-
+
+
+Captain Falcon/Ganondorf - Hitting with Side+B goes into normal air state
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0xE06CC ------ 4BFB2E15 -> 4BFE8C45  # call function
+
+
+	-==-
+
+
+Bowser - Flame Cancel
+Restores his Flame Cancel ability to as it was in v1.00.
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ------ 0x132264 ---- 38800155 -> 38800156
+
+
+	-==-
+
+
+Yoshi - Jump Out of Shield
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x3CB6E0 ------ 8012C114 -> 80092758
+
+
+	-==-
+
+
+Link/Young Link - Boomerang Hookshot cancel
+Restore super jump functionality from v1.00
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x3C507C ------ 00200000 -> 00000000
+-------------- 0x3C509C ------ 00C00000 -> 00000000
+-------------- 0x3CE204 ------ 00200000 -> 00000000
+-------------- 0x3CE224 ------ 00C00000 -> 00000000
+
+
+	-==-
+
+
+Zelda - Goes into normal fall after Din's Fire
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x13845C ----- 981E1968 -> 60000000
+-------------- 0x138768 ----- 981E1968 -> 60000000
+
+
+	-==-
+
+
+Mewtwo - Side+B puts foe into MissFoot State
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x8D3C8 ------ 38800026 -> Branch
+81DF0010 2C0E012F 41820010 2C0E0130
+41820008 4082000C 388000FB 48000008
+38800026 4BC85108
+
+
+	-==-
+
+
+Luigi - Cyclone acts like Mario's
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x3C4074 ------ 800D5BDC -> 800D5B9C
+
+
+	-==-
+
+
+Luigi - Fireball Land Cancel
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x13F504 ----- 38800155 -> 3880002A
+
+
+	-==-
+
+
+Kirby - Side throw mash timer
+nops the subtraction over time during the throw
+TODO: There is a "Cannot Escape Kirby Throws" code by UnclePunch, which we may consider using instead of this.
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0xDB20C ------ EC010028 -> 60000000
+
+
+	-==-
+
+
+Kirby - Luigi Hat: Fireball Land Cancel
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0xF649C ------ 388001AF -> 3880002A
+
+
+	-==-
+
+
+Kirby - Ness Hat: Pk Flash
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0xFBB18 ------ 981E1968 -> 60000000
+-------------- 0xFBDB4 ------ 981E1968 -> 60000000
+
+
+	-==-
+
+
+Kirby - DK Hat: Giant Punch cannot be lost during Up+B
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0xFD9D4 ------ 900422E8 -> 60000000
+
+
+	-==-
+
+
+Kirby - momentum doesn't reset on bacon gnw hat
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x109E0C ----- D0250084 -> 60000000
+
+
+	-==-
+
+
+Kirby - land cancel bacon gnw hat
+[StandardToaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x10A20C ----- 388001FE -> 3880002A
