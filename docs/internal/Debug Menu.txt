@@ -46,8 +46,6 @@ elsewhere) ("+" Means it's stuck there for now, but we should move it out eventu
 ================================================================================================================
 Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, turn into mods or move to debug)
 ----------------------------------------------
-407950: Salty Runback
-407990: * nothing here *
 407AAC: Change Ready To Fight Banner color
 407AF4: Stage changer table
 407BF4: utf8"Alpha Stages"
@@ -83,7 +81,6 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here,
 18ECF4: Alpha/Omega Random Stage select 2
 18ED18: Play sound when picking random stage for omega and alpha
 18ED44: * nothing here *
-18ED5C: Stage Striking
 18EEA0: Randomize omega toggle if press start on random
 
 

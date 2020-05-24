@@ -1,0 +1,457 @@
+Since we have alpha and omega toggles, we have to alter the stage striking code
+
+
+
+======================
+NEW VERSION NOTES
+======================
+This is based on comparing dan salvato's black out version (which the old SDR Remix code is based off of) and comparing to to what is different with the transparent version (from achilles).
+There are delineated sections for the differences. In general, we want to keep SDR's alpha/omega toggle reading, while using all of the transparency logic
+
+STAGE_STRIKING:
+  li r15, 0x1
+
+loc_0x4:
+  lis r16, 0x8046
+  ori r16, r16, 0xB0FC
+  mulli r17, r15, 0xC
+  lwzx r17, r17, r16
+  rlwinm. r16, r17, 0, 5, 5
+  beq- loc_0x24
+  li r17, 0x1
+  b loc_0x40
+
+loc_0x24:
+  rlwinm. r16, r17, 0, 4, 4
+  beq- loc_0x34
+  li r17, 0x2
+  b loc_0x40
+
+loc_0x34:
+  rlwinm. r16, r17, 0, 11, 11
+  beq- loc_last
+  li r17, 0x3
+
+loc_0x40:
+  lis r21, 0x803F
+  ori r21, r21, 0x6D0
+  lis r22, 0x804D
+  ori r22, r22, 0x6CAE
+  li r20, 0x0
+  li r19, 0x0
+  li r18, 0x0
+
+loc_0x5C:	# This isn't in the transparent version
+  cmpwi r17, 0x1
+  bne- loc_0x74
+  lbz r18, 0(r22)
+  cmpwi r18, 0x1C
+  bgt- loc_last
+  b loc_zeta
+
+loc_0x74:
+  cmpwi r17, 0x3
+  bne- loc_0x88
+  li r20, 0x3F
+  li r19, 0x2
+  b loc_zeta
+
+loc_0x88:
+  mulli r16, r18, 0x1C
+  add r16, r16, r21
+  lbz r23, 10(r16)
+
+GET_RANDOM_STAGES:
+<<<<<< UNIQUE TO SDR
+  lis r16, 0x803F
+  ori r16, r16, 0xA354	# Alpha/Omega toggle, use standalone instead
+  lwz r16, 0(r16)
+  cmpwi r16, 0x0
+  lis r16, 0x8045
+  beq- ALPHA
+OMEGA:
+  ori r16, r16, 0xC38C
+  b STRIKE_TO_RANDOM_STAGES
+ALPHA:
+  ori r16, r16, 0xC388
+======
+  lis r16, 0x8045
+  ori r16, r16, 0xC388
+>>>>>> TRANSPARENT & SALVATO'S
+
+STRIKE_TO_RANDOM_STAGES:
+  lwz r16, 0(r16)
+  srw r16, r16, r23
+  rlwinm. r16, r16, 0, 31, 31
+  beq- loc_jamma
+  li r19, 0x2
+  li r20, 0x3F
+  b loc_zeta
+
+loc_jamma:
+  li r19, 0x0
+  li r20, 0x0
+
+loc_zeta:
+  mulli r16, r18, 0x1C
+  lwzx r16, r16, r21
+
+<<<<<< TRANSPARENT
+  li r23, 0x0
+  cmpwi r19, 0x2
+  bne- loc_penul
+  lis r23, 0x8
+  ori r23, r23, 0x8
+  cmpwi r18, 0x16
+  blt- loc_penul
+  lis r23, 0x2000
+  ori r23, r23, 0x8
+======
+  cmpwi r18, 0x16
+  blt- loc_penul
+  lwz r16, 16(r16)
+>>>>>> SDR & SALVATO
+
+loc_penul:
+<<<<<< TRANSPARENT
+  stw r23, 20(r16)
+======
+  lwz r16, 24(r16)
+  lwz r16, 4(r16)
+  lwz r16, 8(r16)
+  lwz r16, 28(r16)
+  lwz r16, 8(r16)
+  stb r20, 36(r16)
+>>>>>> SDR & SALVATO
+  mulli r16, r18, 0x1C
+  addi r16, r16, 0x8
+  stbx r19, r16, r21
+  li r16, 0x1E
+  stb r16, 0(r22)
+  cmpwi r17, 0x1
+  beq- loc_last
+  addi r18, r18, 0x1
+  cmpwi r18, 0x1D
+<<<<<< TRANSPARENT
+  blt- loc_0x74
+======
+  blt- loc_0x5C
+>>>>>> SDR & SALVATO
+
+loc_last:
+  addi r15, r15, 0x1
+  cmpwi r15, 0x5
+  blt- loc_0x4
+  lfs f1, -13848(r2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=====================
+== Old 3.2.1 notes ==
+=====================
+I have no idea anymore what these notes mean
+I do know this was based on Dan Salvato's stage striking
+(white out, except with black out variant)
+
+C225A3BC 00000025
+39E00001 3E008046
+6210B0FC 1E2F000C
+7E31802E 5630014B
+4182000C 3A200001
+48000020 56300109
+4182000C 3A200002
+48000010 563002D7
+418200DC 3A200003
+3EA0803F 62B506D0
+3EC0804D 62D66CAE
+3A800000 3A600000
+3A400000 2C110001
+40820014 8A560000
+2C12001C 418100A8
+48000050 2C110003
+40820010 3A80003F
+3A600002 4800003C
+1E12001C 7E10AA14
+8AF0000A 3E008045
+6210C388 82100000
+7E10BC30 561007FF
+41820010 3A600002
+3A80003F 4800000C
+3A600000 3A800000
+1E12001C 7E10A82E
+2C120016 41800008
+82100010 82100018
+82100004 82100008
+8210001C 82100008
+9A900024 1E12001C
+3A100008 7E70A9AE
+3A00001E 9A160000
+2C110001 41820010
+3A520001 2C12001D
+41A0FF4C 39EF0001
+2C0F0005 41A0FEE8
+C022C9E8 00000000
+
+before: 0x25 lines, no nops
+after: 0x29 lines, 1 nop
+
+4A instructions (0x128 bytes)
+52 instructions (0x144 bytes)
+
+@ 8025A3BC:
+39E00001	li r15, 1
+	VERY_BEGINNING:
+3E008046	lis r16, 0x8046
+6210B0FC	ori r16,r16, 0xB0FC		# r16 = 8046B0FC
+1E2F000C	mulli r17,r15,12		# r17 = ?? * 12
+7E31802E	lwzx r17,r17,r16		# Get r16 + (?? * 12)
+5630014B	rlwinm. r16,r17,0,5,5	# If pressed X
+4182000C	beq- NOT_X
+3A200001	li r17, 1	# r17 = 1
+48000020	b HANDLE_STUFF
+	NOT_X:
+56300109	rlwinm. r16,r17,0,4,4	# If Y Pressed
+4182000C	beq- NOT_Y
+3A200002	li r17, 2	# r17 = 2
+48000010	b HANDLE_STUFF
+	NOT_Y:
+563002D7	rlwinm. r16,r17,0,11,11	# If Z Pressed
+418200DC	beq- CONTINUE
+3A200003	li r17, 3
+	HANDLE_STUFF:
+3EA0803F	lis r21, 0x803F
+62B506D0	ori r21,r21, 0x06D0		# 803F06D0
+3EC0804D	lis r22, 0x804D
+62D66CAE	ori r22,r22, 0x6CAE		# 804D6CAE
+3A800000	li r20, 0
+3A600000	li r19, 0
+3A400000	li r18, 0
+	LOOP:
+2C110001	cmpwi r17, 1		# Is it X (strike highlighted stage)
+40820014	bne- NOT_STRIKE
+8A560000	lbz r18, 0(r22)
+2C12001C	cmpwi r18, 0x1C
+418100A8	bgt- CONTINUE
+48000050	b STRIKE_STAGE
+	NOT_STRIKE:
+2C110003	cmpwi r17,3			# Is it Z (unstrike all stages)
+40820010	bne- STRIKE_TO_RANDOM
+3A80003F	li r20, 0x3F
+3A600002	li r19, 2
+4800003C	b STRIKE_STAGE
+	STRIKE_TO_RANDOM:
+1E12001C	mulli r16, r18, 0x1C
+7E10AA14	add r16, r16, r21
+8AF0000A	lbz r23, 0xA(r16)
+
+			lis r16, 0x803f
+			ori r16, r16, 0xa354	# Omega Toggle
+			lwz r16, 0(r16)
+			cmpwi r16, 0
+3E008045	lis r16, 0x8045
+			beq ALPHA_STAGES
+			ori r16, r16, 0xC38C	# 8045C38C (omega stages)
+			b LOAD_RANDOM_STAGES
+	ALPHA_STAGES:
+6210C388	ori r16, r16, 0xC388	# 8045C388 (alpha stages)
+	LOAD_RANDOM_STAGES:
+82100000	lwz r16,0(r16)
+7E10BC30	srw r16,r16,r23
+561007FF	rlwinm. r16,r16,0,31,31
+41820010	beq- CHECKPOINT_1
+3A600002	li r19,2
+3A80003F	li r20,63
+4800000C	b STRIKE_STAGE
+	CHECKPOINT_1:
+3A600000	li r19,0
+3A800000	li r20,0
+	STRIKE_STAGE:
+1E12001C	mulli r16,r18,28
+7E10A82E	lwzx r16,r16,r21
+2C120016	cmpwi r18,22
+41800008	blt- 0x08
+82100010	lwz r16,16(r16)
+82100018	lwz r16,24(r16)
+82100004	lwz r16,4(r16)
+82100008	lwz r16,8(r16)
+8210001C	lwz r16,28(r16)
+82100008	lwz r16,8(r16)
+9A900024	stb r20,36(r16)
+1E12001C	mulli r16,r18,28
+3A100008	addi r16,r16,8
+7E70A9AE	stbx r19,r16,r21
+3A00001E	li r16,30
+9A160000	stb r16,0(r22)
+2C110001	cmpwi r17,1
+41820010	beq- 0x10
+3A520001	addi r18,r18,1
+2C12001D	cmpwi r18,29
+41A0FF4C	blt- LOOP
+CONTINUE:
+39EF0001	addi r15,r15,1
+2C0F0005	cmpwi r15,5
+41A0FEE8	blt- VERY_BEGINNING
+C022C9E8	lfs f1,-13848(r2)
+
+
+li r15, 1
+VERY_BEGINNING:
+lis r16, 0x8046
+ori r16,r16, 0xB0FC		# r16 = 8046B0FC
+mulli r17,r15,12		# r17 = ?? * 12
+lwzx r17,r17,r16		# Get r16 + (?? * 12)
+rlwinm. r16,r17,0,5,5	# If pressed X
+beq- NOT_X
+li r17, 1	# r17 = 1
+b HANDLE_STUFF
+NOT_X:
+rlwinm. r16,r17,0,4,4	# If Y Pressed
+beq- NOT_Y
+li r17, 2	# r17 = 2
+b HANDLE_STUFF
+NOT_Y:
+rlwinm. r16,r17,0,11,11	# If Z Pressed
+beq- CONTINUE
+li r17, 3
+HANDLE_STUFF:
+lis r21, 0x803F
+ori r21,r21, 0x06D0		# 803F06D0
+lis r22, 0x804D
+ori r22,r22, 0x6CAE		# 804D6CAE
+li r20, 0
+li r19, 0
+li r18, 0
+LOOP:
+cmpwi r17, 1		# Is it X (strike highlighted stage)
+bne- NOT_STRIKE
+lbz r18, 0(r22)
+cmpwi r18, 0x1C
+bgt- CONTINUE
+b STRIKE_STAGE
+NOT_STRIKE:
+cmpwi r17,3			# Is it Z (unstrike all stages)
+bne- STRIKE_TO_RANDOM
+li r20, 0x3F
+li r19, 2
+b STRIKE_STAGE
+STRIKE_TO_RANDOM:
+mulli r16, r18, 0x1C
+add r16, r16, r21
+lbz r23, 0xA(r16)
+lis r16, 0x803f
+ori r16, r16, 0xa354	# Omega Toggle
+lwz r16, 0(r16)
+cmpwi r16, 0
+lis r16, 0x8045
+beq ALPHA_STAGES
+ori r16, r16, 0xC38C	# 8045C38C (omega stages)
+b LOAD_RANDOM_STAGES
+ALPHA_STAGES:
+ori r16, r16, 0xC388	# 8045C388 (alpha stages)
+LOAD_RANDOM_STAGES:
+lwz r16,0(r16)
+srw r16,r16,r23
+rlwinm. r16,r16,0,31,31
+beq- CHECKPOINT_1
+li r19,2
+li r20,63
+b STRIKE_STAGE
+CHECKPOINT_1:
+li r19,0
+li r20,0
+STRIKE_STAGE:
+mulli r16,r18,28
+lwzx r16,r16,r21
+cmpwi r18,22
+blt- 0x08
+lwz r16,16(r16)
+lwz r16,24(r16)
+lwz r16,4(r16)
+lwz r16,8(r16)
+lwz r16,28(r16)
+lwz r16,8(r16)
+stb r20,36(r16)
+mulli r16,r18,28
+addi r16,r16,8
+stbx r19,r16,r21
+li r16,30
+stb r16,0(r22)
+cmpwi r17,1
+beq- 0x10
+addi r18,r18,1
+cmpwi r18,29
+blt- LOOP
+CONTINUE:
+addi r15,r15,1
+cmpwi r15,5
+blt- VERY_BEGINNING
+lfs f1,-13848(r2)
+
+
+C225A3BC 00000029
+39E00001 3E008046
+6210B0FC 1E2F000C
+7E31802E 5630014B
+4182000C 3A200001
+48000020 56300109
+4182000C 3A200002
+48000010 563002D7
+418200F8 3A200003
+3EA0803F 62B506D0
+3EC0804D 62D66CAE
+3A800000 3A600000
+3A400000 2C110001
+40820014 8A560000
+2C12001C 418100C4
+4800006C 2C110003
+40820010 3A80003F
+3A600002 48000058
+1E12001C 7E10AA14
+8AF0000A 3E00803F
+6210A354 82100000
+2C100000 3E008045
+4182000C 6210C38C
+48000008 6210C388
+82100000 7E10BC30
+561007FF 41820010
+3A600002 3A80003F
+4800000C 3A600000
+3A800000 1E12001C
+7E10A82E 2C120016
+41800008 82100010
+82100018 82100004
+82100008 8210001C
+82100008 9A900024
+1E12001C 3A100008
+7E70A9AE 3A00001E
+9A160000 2C110001
+41820010 3A520001
+2C12001D 41A0FF30
+39EF0001 2C0F0005
+41A0FECC C022C9E8
+60000000 00000000

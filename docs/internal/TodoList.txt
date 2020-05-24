@@ -25,8 +25,9 @@ Include some netplay specific codes built in
 Maybe include Magus's updated 1.00 hitlag code
 Probably good to have UCF and other such stuff
 Probably should update to new versions of existing codes, like grab attrition and widescreen.
+Probably should get around to addressing the to do's in the codebase
 Other suggestions?
-Look at todolist for other stuff.
+Look at other todolists
 Probably talk with the SDR team to get approval from whole team before making any changes.
 (Maybe also make a tool for creating Debug screen changes?)
 After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
