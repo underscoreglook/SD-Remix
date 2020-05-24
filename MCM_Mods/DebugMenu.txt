@@ -378,18 +378,18 @@ DISABLE:
 ENABLE:
   lis r4, 0x8017
   ori r4, r4, 0x8054        # BADHACK 80178054     Enable branch
-  lis r3, 0x4801
-  ori r3, r3, 0x91B0
+  lis r3, 0x4828
+  ori r3, r3, 0x47E0
   stw r3, 0(r4)
   lis r4, 0x8017
   ori r4, r4, 0x8224        # BADHACK 80178224     Enable branch
-  lis r3, 0x4801
-  ori r3, r3, 0x9028
+  lis r3, 0x4828
+  ori r3, r3, 0x4658
   stw r3, 0(r4)
   lis r4, 0x801A
   ori r4, r4, 0x4164        # BADHACK 801A4164     Enable branch
-  lis r3, 0x4BFE
-  ori r3, r3, 0xD11C
+  lis r3, 0x4825
+  ori r3, r3, 0x874C
   stw r3, 0(r4)
 RETURN:
   li r3, 0x0

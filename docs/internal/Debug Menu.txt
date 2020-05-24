@@ -104,7 +104,10 @@ Part 2
 803FC4CC: XX Don't Use XX
 803FC7F0: Old Widescreen Code 1
 803FC7FC: Old Widescreen Code 2
-803FC834: > ** FREE SPACE OMG **    0x13E8
+803FC834: Hold Start @ Results Screen 1
+803FC87C: Hold Start @ Results Screen 2
+803FC8B0: Hold Start @ Results Screen 3
+803FC8C4: > ** FREE SPACE OMG **
 803FDC1C: *** END ***
 
 
