@@ -84,3 +84,24 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 
 PAL ------- 0x0C7850 ---- 40820034 -> 40820058 ---- ()
 ----------- 0x0DC204 ---- 4BFA515D -> 4BFA52D9 ---- ()
+
+
+	-==-
+
+
+X + Y Disables Start
+Holding X + Y + Start on a Gamecube controller for two seconds forces the controller to reset itself, as if it were unplugged and plugged back in. This code will disable the Start button when X + Y is held. It is a game polish that allows the player to reset his/her controller without the game registering Start being pressed.
+<https://smashboards.com/threads/x-y-disables-start.399375/>
+[Dan Salvato]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x80376BB4 ---- 80010030 -> Branch
+
+38A00000 38C1002C
+1CE50008 7D07302E
+55090109 4182001C
+5509014B 41820014
+3D20EFFF 6129FFFF
+7D084838 7D07312E
+38A50001 2C050003
+4081FFD0 8081002C
+80010030 00000000
