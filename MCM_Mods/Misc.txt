@@ -1,19 +1,35 @@
-SDR Default random omega stages
-Melee Code Manager doesn't have any settings for this, so it won't complain
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A7C ------ 00000000 -> FF7B79BE
+Hold L+R+A+Start During Stage Load to Return to the CSS
+In vanilla Melee, this button combination loads the Main Menu.
+[Jorgasms]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8025b8bc --- 38600001 -> 38600002
 
 
 	-==-
 
 
-All 51 Event Matches Open but Not Complete
-(Completed event matches are read from the memory card, or from the current boot as normal.)
-[achilles]
-Version -- DOL Offset ----- Hex to Replace ----------
-1.02 ------ 0x249AA4 ------ 2C1F0005 -> 48000058
------------ 0x15FAC8 ------ 4182000C -> 60000000
+Disable Name Tag Reset After Exiting Character Select Screen
+Also prevents KO counts from resetting.
+[Todd Bonney]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x801A55EC --- 7C0802A6 -> 4E800020
+
+
+	-==-
+
+
+Disable Name Tag Reset After Closing Character Port (v2)
+On the CSS, name tags normally switch back to the default character name after closing and reopening a port, and KO stars would also disappear. This mod prevents that.
+[Ato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80261B1C --- 98A4007A -> 60000000
+1.02 ----- 0x80261B30 --- 98A4001B -> 60000000
+1.01 ----- 0x80261380 --- 98A4007A -> 60000000
+1.01 ----- 0x80261394 --- 98A4001B -> 60000000
+1.00 ----- 0x80260810 --- 98A4007A -> 60000000
+1.00 ----- 0x80260824 --- 98A4001B -> 60000000
+PAL ------ 0x802622C8 --- 98A4007A -> 60000000
+PAL ------ 0x802622DC --- 98A4001B -> 60000000
 
 
 	-==-
@@ -68,84 +84,3 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 
 PAL ------- 0x0C7850 ---- 40820034 -> 40820058 ---- ()
 ----------- 0x0DC204 ---- 4BFA515D -> 4BFA52D9 ---- ()
-
-
-	-==-
-
-
-SDR Default random alpha stages
-While this conflicts with the settings selector in Melee Code Manager partly,
-the stage list is incorrect. Note, enabling this will make MCM complain.
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A78 ----- FFFFFFFF -> FF000020
-
-
-	-==-
-
-
-Set default game mode to stocks
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A4A ----- 00 -> 01
-
-
-	-==-
-
-
-Set default stocks to 4
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A4C ----- 03 -> 04
-
-
-	-==-
-
-
-Set default stock time limit to 8 mins
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A50 ----- 00 -> 08
-
-
-	-==-
-
-
-Set default friendly fire to ON
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A51 ----- 00 -> 01
-
-
-	-==-
-
-
-Set default score display to ON
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A53 ----- 00 -> 01
-
-
-	-==-
-
-
-Set default Item Frequency to NONE
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A60 ----- 02 -> FF
-
-
-	-==-
-
-
-Set all default controller rumble settings to OFF
-Conflicts with Melee Code Manager's Custom Rules section, so set there instead
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A70 ----- 01010101 -> 00000000
