@@ -46,7 +46,6 @@ elsewhere) ("+" Means it's stuck there for now, but we should move it out eventu
 ================================================================================================================
 Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, turn into mods or move to debug)
 ----------------------------------------------
-407AAC: Change Ready To Fight Banner color
 407AF4: Stage changer table
 407BF4: utf8"Alpha Stages"
 407C13: utf8"Omega Stages"
@@ -101,7 +100,8 @@ Part 2
 803FC834: Hold Start @ Results Screen 1
 803FC87C: Hold Start @ Results Screen 2
 803FC8B0: Hold Start @ Results Screen 3
-803FC8C4: > ** FREE SPACE OMG **
+803FC8C4: Change banner Color at CSS
+803FC90C: > ** FREE SPACE OMG **
 803FDC20: *** END ***
 
 

@@ -125,17 +125,17 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
   DISABLED:
   # Change the color of the banner
-  lis r3, 0x8040
-  ori r3, r3, 0xAAD4  # 8040AAD4 The banner color variable
+  lis r3, 0x803F
+  ori r3, r3, 0xC8C4  # BADHACK: 803FC8C4 banner color code location
   # First value
   li r4, 0xC
-  stb r4, 3(r3)
+  stb r4, 0x2B(r3)
   # second value
   li r4, 0xD
-  stb r4, 0xB(r3)
+  stb r4, 0x33(r3)
   # Third value
   li r4, 0xE
-  stb r4, 0x13(r3)
+  stb r4, 0x3B(r3)
   # Disable the menu options
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
@@ -149,17 +149,17 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
   ENABLED:
   # Change the color of the banner
-  lis r3, 0x8040
-  ori r3, r3, 0xAAD4                          # 8040AAD4 The banner color variable
+  lis r3, 0x803F
+  ori r3, r3, 0xC8C4  # BADHACK: 803FC8C4 banner color code location
   # First value
   li r4, 0xD
-  stb r4, 3(r3)
+  stb r4, 0x2B(r3)
   # second value
   li r4, 0xD
-  stb r4, 0xB(r3)
+  stb r4, 0x33(r3)
   # Third value
   li r4, 0xC
-  stb r4, 0x13(r3)
+  stb r4, 0x3B(r3)
   # Enable the menu options
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
@@ -173,17 +173,17 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
   MELEE_PLUS:
   # Change the color of the banner
-  lis r3, 0x8040
-  ori r3, r3, 0xAAD4  # 8040AAD4 The banner color variable
+  lis r3, 0x803F
+  ori r3, r3, 0xC8C4  # BADHACK: 803FC8C4 banner color code location
   # First value
   li r4, 0xC
-  stb r4, 3(r3)
+  stb r4, 0x2B(r3)
   # second value
   li r4, 0xE
-  stb r4, 0xB(r3)
+  stb r4, 0x33(r3)
   # Third value
   li r4, 0xD
-  stb r4, 0x13(r3)
+  stb r4, 0x3B(r3)
   # Disable the menu options, show Melee+
   lis r4, 0x803F
   ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address

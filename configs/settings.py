@@ -101,7 +101,7 @@ customCodeRegions = OrderedDict([
 		# (0x3F73E8, 0x3F74E0),	# Currently used for stock dependent revival Platform Colors, BADHACK
 		(0x3F9420, 0x3F94CC),	# 0xAC
 		# (0x3F97F0, 0x3FAC20),	# We're currently using parts of this for BADHACKS so use the one below instead
-		(0x3F98C4, 0x3FAC20),	# Above commented out item except without badhacks
+		(0x3F990C, 0x3FAC20),	# Above commented out item except without badhacks
 	]),  # Total space: 0x???? (Changes based on what we do
 
 	# These are unused areas containing text likely used for debugging the game, and have been tested to be safe for overwriting.
