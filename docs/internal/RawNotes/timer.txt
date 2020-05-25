@@ -1,0 +1,805 @@
+
+addr     no timer   timer
+4d2534 - 80e61b60   80BB0BA4
+dd3fd0 - 0          3F800000
+
+@ 80390d78:
+r3 = 80bda940
+     80bda940
+     80bda940
+80bda940 is the place where the blrl functions are stored
+     These are altered depending on what is happening
+	 
+At 80BDA940, there are 25 values, which may be the triggers
+RAM	Addr	At here		+14 from here
+80bda940	80bdca60	80bdca60
+80bda944	80c6aba0	80c6aba0
+80bda948	80cd6fe0	80cd6fe0
+80bda94C	80cd7020	80cd7020
+80bda950	80c2b900	80c2b900
+80bda954	00000000	00000000
+80bda958	80cd70a0
+80bda95c	80cd70e0
+80bda960	80cd7120
+80bda964	80cd7160
+
+80bda968	80c461e0
+80bda96c	00000000
+80bda970	80cd71a0
+80bda974	80cd71e0
+80bda978	80cd7220
+80bda97c	80c12240
+80bda980	80cd7260
+80bda984	80d2f180
+80bda988	80cd72a0
+80bda98c	80d11fc0
+
+80bda990	80d30ba0	
+80bda990	00000000
+80bda998	80cd72e0
+80bda99c	00000000
+80bda9a0	00000000
+
+80D34AB4
+
+r27 at the function call is the place where our function addr is read from
+It is different every game. There are some places that hold r27, which are:
+BDBB20
+
+Seconds: 0x0046b6C8 (8046b6C8)
+Frame count: 0x0056b6cc or maybe 8046b6CC
+003b0000 is max frame
+8046db68 byte: 30 means timer off, 32 means timer on
+
+   - Figure out getting timer visibly to show (memory breakpoint on the 30 thing and make it 32)
+   - Set time to 3 minutes and set frames to 0
+   - Turn off bomb rain
+   - When you tie during sudden death, go into another sudden death (memory breakpoint on player results)
+   - Set the starting percentage to 0% (another memory breakpoint)
+   
+
+
+
+
+This is for changing the time and ending game and stuff
+CHK 8016ce08 ( --- ) Read16 0009 at 8046b6cc ( --- )
+CHK 8016ce14 ( --- ) Write16 000a at 8046b6cc ( --- )
+Function is 8016CD98
+-> 8016D308
+-> 8016D858
+-> 801A4E84 (in runScene)
+
+This is likely for displaying the timer
+CHK 8016af28 ( --- ) Read16 000a at 8046b6cc ( --- )
+Function is 8016AF0C
+-> 802f42bc (in 802F428C)
+-> 80390dfc (where all the sub functions get called)
+RAM 80E1D2D4 has VAL 802F428C
+
+8046db68 byte, 30 means no timer, 32 means yes timer
+
+
+
+Next step is to disable removing the timer display. Trace back from 8016AF0C above and figure out where this function is being removed during sudden death. Disable that removal, and we're golden times.
+
+
+
+
+Place where 8046db68 is being written to (Timer enabled var):
+CHK 8016dd2c ( --- ) Write32 3001024c at 8046db68 ( --- )
+8016dd2c is where the timer value is written to, both sudden death and on normal match start
+After this section, which is line 8016DD38, try and check if we're in sudden death. If we are, write 32 to the byte 8046db68.
+We know if we are in sudden death if byte 8046DB6E isn't 0.
+While we're here, might as well set frames to 0 and seconds to 180 decimal.
+
+We might want to set the sudden death byte to 0 as well, it'll get rid of bomb rain, and it might make it so sudden death happens AGAIN instead of going straight to the results screen with P1 as winner. This might also take care of the 0% thing.
+
+
+This enables the timer for sudden death
+Gecko branch from 8016DD38 (we can use r0 and r3, r5 we can use too)
+lis r5, 0x8046
+ori r5, r5, 0xDB6E
+lbz r3, 0(r5)
+cmpwi r3, 0
+beq+ RETURN
+# Set the next scene to try and break ties
+li r3, 0x4
+lis r5, 0x8047
+ori r5, r5, 0x9D35
+stb r3, 0(r5)
+# Enable the timer
+li r3, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xdb68
+stb r3, 0(r5)
+RETURN:
+addi r5, r31, 0x24C0
+lbz r0, 0(r30)
+
+Without infinite sudden death
+C216DD38 00000006
+3CA08046 60A5DB6E
+88650000 2C030000
+41A20014 38600032
+3CA08046 60A5DB68
+98650000 38BF24C0
+881E0000 00000000
+
+With infinite sudden death
+C216DD38 00000008
+3CA08046 60A5DB6E
+88650000 2C030000
+41A20024 38600004
+3CA08047 60A59D35
+98650000 38600032
+3CA08046 60A5DB68
+98650000 38BF24C0
+881E0000 00000000
+
+
+
+
+
+Seconds value is written at CHK 8016ddcc ( --- ) Write32 000001e0 at 8046b6c8 ( --- )
+Gecko branch from 8016ddcc (we can use r3, r4)
+lis r3, 0x8046
+ori r3, r3, 0xDB6E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_SECS
+li r0, 180
+STORE_SECS:
+stw r0,40(r31)  # Store actual value
+
+C216DDCC 00000004
+3C608046 6063DB6E
+88630000 2C030000
+41A20008 380000B4
+901F0028 00000000
+
+
+
+
+
+The place where we want to always branch to avoid bomb rain:
+801C0EB4 ble       loc_801C0F48
+Change this to
+041C0EB4 48000094
+
+
+
+For always going to overtime:
+Going into overtime:
+CHK 8000c190 ( --- ) Write8 00 at 80479ea9 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 80479eaa ( --- )
+CHK 80165d84 ( --- ) Write8 00 at 80479eaa ( --- )
+CHK 80165dc8 ( --- ) Write8 01 at 80479eaa ( --- )
+After Overtime:
+CHK 80166fd4 ( --- ) Write8 01 at 80479ea9 ( --- )
+CHK 80166fdc ( --- ) Write8 01 at 80479eaa ( --- )
+
+
+Going into overtime
+8000c190 & 8000c194 are in 8000C160
+80165d84 & 80165dc8 are in 80165D60
+After Overtime
+80166fd4 & 80166fdc are in 80166CCC
+r8 = 80479da4 & r9 = 8047e2b0
+
+
+8047e3b4 is where player 1's stuff is written
+
+On Tie
+CHK 8000c190 ( --- ) Write8 00 at 8047e3b5 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 8047e3b6 ( --- )
+CHK 80165d84 ( --- ) Write8 00 at 8047e3b6 ( --- )
+CHK 80165dc8 ( --- ) Write8 01 at 8047e3b6 ( --- )
+CHK 80166d34 ( --- ) Write8 01 at 8047e3b5 ( --- )
+On P2s loss
+CHK 8000c190 ( --- ) Write8 00 at 8047e3b5 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 8047e3b6 ( --- )
+CHK 80165b10 ( --- ) Write8 01 at 8047e3b5 ( --- )
+CHK 80165d84 ( --- ) Write8 01 at 8047e3b6 ( --- )
+
+On 4 player tie
+CHK 8000c190 ( --- ) Write8 00 at 8047e3b5 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 8047e3b6 ( --- )
+CHK 8000c190 ( --- ) Write8 00 at 8047e45d ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 8047e45e ( --- )
+CHK 8000c190 ( --- ) Write8 00 at 8047e505 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 8047e506 ( --- )
+
+CHK 80165d84 ( --- ) Write8 00 at 8047e3b6 ( --- )
+CHK 80165dc8 ( --- ) Write8 01 at 8047e3b6 ( --- )
+CHK 80165d84 ( --- ) Write8 00 at 8047e45e ( --- )
+CHK 80165dc8 ( --- ) Write8 01 at 8047e45e ( --- )
+CHK 80165e10 ( --- ) Write8 02 at 8047e45e ( --- )
+CHK 80165d84 ( --- ) Write8 00 at 8047e506 ( --- )
+CHK 80165dc8 ( --- ) Write8 01 at 8047e506 ( --- )
+CHK 80165e10 ( --- ) Write8 02 at 8047e506 ( --- )
+CHK 80165e58 ( --- ) Write8 03 at 8047e506 ( --- )
+
+CHK 80166d34 ( --- ) Write8 01 at 8047e3b5 ( --- )
+CHK 80166d58 ( --- ) Write8 02 at 8047e45d ( --- )
+CHK 80166d7c ( --- ) Write8 03 at 8047e505 ( --- )
+
+Putting blr at 80165D60 seems to work, kinda
+04165D60 4E800020
+
+CHK 80165dc8 ( --- ) Write8 01 at 8047e506 ( --- )
+CHK 80165e10 ( --- ) Write8 02 at 8047e506 ( --- )
+CHK 80165e58 ( --- ) Write8 03 at 8047e506 ( --- )
+
+Setting the following to not increment seems to work:
+$Don't determine sudden death winner by port priority
+04165dc4 38040000
+04165e0c 38040000
+04165e54 38040000
+
+
+
+At suddon death, percentage is written at:
+CHK 80067e78 ( --- ) Write32 43960000 at 80c6d190 ( --- )
+Gecko code at 80067e78 (can use r3)
+lis r3, 0x8046
+ori r3, r3, 0xDB6E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ NORMAL
+li r3, 0
+stw r3, 0x1830(r27)
+b RETURN
+NORMAL:
+stfs f0, 0x1830(r27)
+RETURN:
+
+C2067E78 00000005
+3C608046 6063DB6E
+88630000 2C030000
+41A20010 38600000
+907B1830 48000008
+D01B1830 00000000
+
+
+
+CHK 80036b5c ( --- ) Write16 0000 at 804530e0 ( --- )
+CHK 800343b4 ( --- ) Write16 0000 at 804530e0 ( --- )
+At sudden death, percentage displayed is written at:
+CHK 80036b5c ( --- ) Write16 0000 at 804530e0 ( --- )
+CHK 800343b4 ( --- ) Write16 012c at 804530e0 ( --- )
+Gecko code at 800343b4 (can use r3)
+lis r3, 0x8046
+ori r3, r3, 0xDB6E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_HEALTH
+li r30, 0
+STORE_HEALTH:
+sthx r30, r29, r0
+
+C20343B4 00000004
+3C608046 6063DB6E
+88630000 2C030000
+41A20008 3BC00000
+7FDD032E 00000000
+
+
+
+
+
+
+
+Scene change regulation win:
+CHK 801a42ac ( --- ) Write8 05 at 80479d35 ( --- )
+CHK 801a4168 ( --- ) Write8 00 at 80479d35 ( --- )
+
+Scene change to sudden death:
+CHK 801a42ac ( --- ) Write8 04 at 80479d35 ( --- )
+CHK 801a4168 ( --- ) Write8 00 at 80479d35 ( --- )
+
+Scene change sudden death scene change:
+CHK 801a4168 ( --- ) Write8 00 at 80479d35 ( --- )
+
+Scene change regulation win:
+801a42ac (801A42A0)
+-> 801a5c18 (801A5AF0)
+-> 801b15e8 (801B15C8)
+-> 801a4144 (
+
+
+
+
+
+
+Total so far:
+C216DD38 00000008
+3CA08046 60A5DB6E
+88650000 2C030000
+41A20024 38600004
+3CA08047 60A59D35
+98650000 38600032
+3CA08046 60A5DB68
+98650000 38BF24C0
+881E0000 00000000
+C216DDCC 00000004
+3C608046 6063DB6E
+88630000 2C030000
+41A20008 380000B4
+901F0028 00000000
+C2067E78 00000005
+3C608046 6063DB6E
+88630000 2C030000
+41A20010 38600000
+907B1830 48000008
+D01B1830 00000000
+C20343B4 00000004
+3C608046 6063DB6E
+88630000 2C030000
+41A20008 3BC00000
+7FDD032E 00000000
+041C0EB4 48000094
+04165dc4 38040000
+04165e0c 38040000
+04165e54 38040000
+
+
+
+
+
+
+
+
+
+
+4 secs
+Tournament Overtime Mod
+(Link in the description)
+
+7 secs
+When the 8 minutes in a standard tournament match are done, the winner is decided by the following process:
+
+5 secs
+Whoever has the most stocks left wins (SSBM already does this)
+
+5 secs
+If stock count is the same, whoever has the lowest displayed percentage wins
+
+9 secs
+If percentage is equal, a 3 minute 1 stock match is played with same stage and characters, using the same rules as before
+
+9 secs
+If still tied, the rules may differ between tournaments, but usually the 3 minute 1 stock match is done again, until a winner emerges
+
+3 secs
+This mod makes it so:
+
+8 secs
+1. If point/stock/coin count is equal, the player/team with the lowest percentage is declared the winner
+
+[two player match, P1 has more damage, show P2 wins]
+
+[teams match with CPUs on Hyrule temple to 1 minute, shows it working]
+"It even works in teams matches"
+
+6 secs
+2. If the percentage is also tied, it goes into a 3 minute, 1 stock overtime match
+
+[two player match, no damage, go into overtime]
+
+9 secs
+3. If still tied after the overtime match, it shows all remaining players as the winners instead of determining winner by port priority
+
+5 secs
+(Limitation: The overtime match does not break ties by percent)
+
+[Show overtime match and have both take damage]
+
+4 secs
+Hopefully this makes your matches run smoother!
+
+5 secs
+Thanks for watching!
+Music: Retro Soul by Bensound
+
+
+
+
+------------------------------
+-------- v1.00 stuff ---------
+------------------------------
+# In v1.00, also set the stock count to the correct one
+# (For P1: 8045114E, P2: 80451FDE, E90 apart)
+lis r12, 0x8045
+stb r3, 0x114E(r12)
+stb r3, 0x1FDE(r12)
+stb r3, 0x2E6E(r12)
+stb r3, 0x3CFE(r12)
+
+@ 8016D330:
+lis r5, 0x8046
+ori r5, r5, 0xBBA6 # r5 = 8046BBA6
+lbz r3, 0(r5)
+cmpwi r3, 0
+beq+ RETURN
+# Set the next scene to try and break ties
+li r3, 0x4
+lis r5, 0x8047
+ori r5, r5, 0x7D6D # r5 = 80477D6D
+stb r3, 0(r5)
+# Enable the timer
+li r3, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xBBA0 # r5 = 8046BBA0
+stb r3, 0(r5)
+RETURN:
+addi r5, r31, 0x24C0
+lbz r0, 0(r30)
+
+C216D330 00000008
+3CA08046 60A5BBA6
+88650000 2C030000
+41A20024 38600004
+3CA08047 60A57D6D
+98650000 38600032
+3CA08046 60A5BBA0
+98650000 38BF24C0
+881E0000 00000000
+
+
+@ 8016D3C4:
+lis r3, 0x8046
+ori r3, r3, 0xBBA6 # r3 = 8046BBA6
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_SECS
+li r0, 180
+STORE_SECS:
+stw r0,0x28(r31)  # Store actual value
+
+C216D3C4 00000004
+3C608046 6063BBA6
+88630000 2C030000
+41A20008 380000B4
+901F0028 00000000
+
+@ 80067D54:
+lis r3, 0x8046
+ori r3, r3, 0xBBA6 # r3 = 8046BBA6
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ NORMAL
+li r3, 0
+stw r3, 0x1830(r27)
+b RETURN
+NORMAL:
+stfs f0, 0x1830(r27)
+RETURN:
+
+C2067D54 00000005
+3C608046 6063BBA6
+88630000 2C030000
+41A20010 38600000
+907B1830 48000008
+D01B1830 00000000
+
+
+@ 80034334:
+lis r3, 0x8046
+ori r3, r3, 0xBBA6 # r3 = 8046BBA6
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_HEALTH
+li r3, 1
+addi r30, r29, r0
+stb r3, 0x8E(r30)
+li r30, 0
+STORE_HEALTH:
+sthx r30, r29, r0
+
+C2034334 00000006
+3C608046 6063BBA6
+88630000 2C030000
+41A20014 38600001
+3BDD0000 987E008E
+3BC00000 7FDD032E
+60000000 00000000
+
+801BFEF8 48000094
+
+801655BC 38040000
+80165604 38040000
+8016564C 38040000
+
+
+
+
+------------------------------
+-------- v1.01 stuff ---------
+------------------------------
+@ 8016DA24:
+lis r5, 0x8046
+ori r5, r5, 0xCE8E # r5 = 8046CE8E
+lbz r3, 0(r5)
+cmpwi r3, 0
+beq+ RETURN
+# Set the next scene to try and break ties
+li r3, 0x4
+lis r5, 0x8047
+ori r5, r5, 0x9055 # r5 = 80479055
+stb r3, 0(r5)
+# Enable the timer
+li r3, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xCE88 # r5 = 8046CE88
+stb r3, 0(r5)
+RETURN:
+addi r5, r31, 0x24C0
+lbz r0, 0(r30)
+
+C216DA24 00000008
+3CA08046 60A5CE8E
+88650000 2C030000
+41A20024 38600004
+3CA08047 60A59055
+98650000 38600032
+3CA08046 60A5CE88
+98650000 38BF24C0
+881E0000 00000000
+
+@ 8016DAB8:
+lis r3, 0x8046
+ori r3, r3, 0xCE8E # 8046CE8E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_SECS
+li r0, 180
+STORE_SECS:
+stw r0,40(r31)  # Store actual value
+
+C216DAB8 00000004
+3C608046 6063CE8E
+88630000 2C030000
+41A20008 380000B4
+901F0028 00000000
+
+@ 80067E64:
+lis r3, 0x8046
+ori r3, r3, 0xCE8E # r3 = 8046CE8E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ NORMAL
+li r3, 0
+stw r3, 0x1830(r27)
+b RETURN
+NORMAL:
+stfs f0, 0x1830(r27)
+RETURN:
+
+C2067E64 00000005
+3C608046 6063CE8E
+88630000 2C030000
+41A20010 38600000
+907B1830 48000008
+D01B1830 00000000
+
+@ 800343b4:
+lis r3, 0x8046
+ori r3, r3, 0xCE8E # 8046CE8E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_HEALTH
+li r3, 1
+addi r30, r29, r0
+stb r3, 0x8E(r30)
+li r30, 0
+STORE_HEALTH:
+sthx r30, r29, r0
+
+C20343B4 00000006
+3C608046 6063CE8E
+88630000 2C030000
+41A20014 38600001
+3BDD0000 987E008E
+3BC00000 7FDD032E
+60000000 00000000
+
+801C085C 48000094
+
+80165B9C 38040000
+80165BE4 38040000
+80165C2C 38040000
+
+
+------------------------------
+-------- v1.02 stuff ---------
+------------------------------
+@ 8016DD38:
+lis r5, 0x8046
+ori r5, r5, 0xDB6E # r5 = 8046DB6E
+lbz r3, 0(r5)
+cmpwi r3, 0
+beq+ RETURN
+# Set the next scene to try and break ties
+li r3, 0x4
+lis r5, 0x8047
+ori r5, r5, 0x9D35 # r5 = 80479D35
+stb r3, 0(r5)
+# Enable the timer
+li r3, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xdb68 # r5 = 8046db68
+stb r3, 0(r5)
+RETURN:
+addi r5, r31, 0x24C0
+lbz r0, 0(r30)
+
+C216DD38 00000008
+3CA08046 60A5DB6E
+88650000 2C030000
+41A20024 38600004
+3CA08047 60A59D35
+98650000 38600032
+3CA08046 60A5DB68
+98650000 38BF24C0
+881E0000 00000000
+
+@ 8016ddcc:
+lis r3, 0x8046
+ori r3, r3, 0xDB6E # 8046DB6E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_SECS
+li r0, 180
+STORE_SECS:
+stw r0,40(r31)  # Store actual value
+
+C216DDCC 00000004
+3C608046 6063DB6E
+88630000 2C030000
+41A20008 380000B4
+901F0028 00000000
+
+@ 80067e78:
+lis r3, 0x8046
+ori r3, r3, 0xDB6E # r3 = 8046DB6E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ NORMAL
+li r3, 0
+stw r3, 0x1830(r27)
+b RETURN
+NORMAL:
+stfs f0, 0x1830(r27)
+RETURN:
+
+C2067E78 00000005
+3C608046 6063DB6E
+88630000 2C030000
+41A20010 38600000
+907B1830 48000008
+D01B1830 00000000
+
+@ 800343b4:
+lis r3, 0x8046
+ori r3, r3, 0xDB6E
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_HEALTH
+li r3, 1
+addi r30, r29, r0
+stb r3, 0x8E(r30)
+li r30, 0
+STORE_HEALTH:
+sthx r30, r29, r0
+
+C20343B4 00000006
+3C608046 6063DB6E
+88630000 2C030000
+41A20014 38600001
+3BDD0000 987E008E
+3BC00000 7FDD032E
+60000000 00000000
+
+801C0EB4 48000094
+
+80165dc4 38040000
+80165e0c 38040000
+80165e54 38040000
+
+
+
+----------------------------
+-------- PAL stuff ---------
+----------------------------
+@ 8016E70C:
+lis r5, 0x8045
+ori r5, r5, 0xE976 # r5 = 8045E976
+lbz r3, 0(r5)
+cmpwi r3, 0
+beq+ RETURN
+# Set the next scene to try and break ties
+li r3, 0x4
+lis r5, 0x8046
+ori r5, r5, 0xAB3D # r5 = 8046AB3D
+stb r3, 0(r5)
+# Enable the timer
+li r3, 0x32
+lis r5, 0x8045
+ori r5, r5, 0xE970 # r5 = 8045E970
+stb r3, 0(r5)
+RETURN:
+addi r5, r31, 0x24C0
+lbz r0, 0(r30)
+
+C216E70C 00000008
+3CA08045 60A5E976
+88650000 2C030000
+41A20024 38600004
+3CA08046 60A5AB3D
+98650000 38600032
+3CA08045 60A5E970
+98650000 38BF24C0
+881E0000 00000000
+
+@ 8016E7A0:
+lis r3, 0x8045
+ori r3, r3, 0xE976 # 8045E976
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_SECS
+li r0, 180
+STORE_SECS:
+stw r0,40(r31)  # Store actual value
+
+C216E7A0 00000004
+3C608045 6063E976
+88630000 2C030000
+41A20008 380000B4
+901F0028 00000000
+
+@ 8006853C:
+lis r3, 0x8045
+ori r3, r3, 0xE976 # r3 = 8045E976
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ NORMAL
+li r3, 0
+stw r3, 0x1830(r27)
+b RETURN
+NORMAL:
+stfs f0, 0x1830(r27)
+RETURN:
+
+C206853C 00000005
+3C608045 6063E976
+88630000 2C030000
+41A20010 38600000
+907B1830 48000008
+D01B1830 00000000
+
+@ 800349A8:
+lis r3, 0x8045
+ori r3, r3, 0xE976 # r3 = 8045E976
+lbz r3, 0(r3)
+cmpwi r3, 0
+beq+ STORE_HEALTH
+li r3, 1
+addi r30, r29, r0
+stb r3, 0x8E(r30)
+li r30, 0
+STORE_HEALTH:
+sthx r30, r29, r0
+
+C20349A8 00000006
+3C608045 6063E976
+88630000 2C030000
+41A20014 38600001
+3BDD0000 987E008E
+3BC00000 7FDD032E
+60000000 00000000
+
+801C2AD8 48000094
+
+80166794 38040000
+801667DC 38040000
+80166824 38040000

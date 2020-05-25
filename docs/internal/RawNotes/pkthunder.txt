@@ -1,0 +1,541 @@
+PK Thunder addresses
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PK Thunder xpos and ypos read/write addresses
+80f591ec - xpos
+80f591f0 - ypos
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 802abfcc ( --- ) Read32 c1cca90a at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 802abfd0 ( --- ) Read32 426811ca at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d54 ( --- ) Read32 c1cca90a at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d54 ( --- ) Read32 426811ca at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d54 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d54 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d54 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d54 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 8027623c ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80276240 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 8026da3c ( --- ) Write32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 8026da40 ( --- ) Write32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80269a04 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80269a08 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 8026bb90 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 8026bbb0 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80274d74 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80274d8c ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:704 BreakPoints.cpp:197 I[MI]: CHK 80274d98 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:707 BreakPoints.cpp:197 I[MI]: CHK 80269b00 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:707 BreakPoints.cpp:197 I[MI]: CHK 80269b04 ( --- ) Read32 42602394 at 80f591f0 ( --- )
+55:42:707 BreakPoints.cpp:197 I[MI]: CHK 80269b18 ( --- ) Read32 c1ca8e5b at 80f591ec ( --- )
+55:42:707 BreakPoints.cpp:197 I[MI]: CHK 80269b1c ( --- ) Read32 42602394 at 80f591f0 ( --- )
+
+
+The Super Thunder Struct is read at:
+Normal operation:
+18:53:887 BreakPoints.cpp:197 I[MI]: CHK 801187d8 ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+18:53:887 BreakPoints.cpp:197 I[MI]: CHK 801187f8 ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+18:53:887 BreakPoints.cpp:197 I[MI]: CHK 80117bd8 ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+18:53:887 BreakPoints.cpp:197 I[MI]: CHK 80117c3c ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+
+Disappear into ground operation
+20:45:365 BreakPoints.cpp:197 I[MI]: CHK 801187d8 ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+20:45:365 BreakPoints.cpp:197 I[MI]: CHK 801187f8 ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+20:45:365 BreakPoints.cpp:197 I[MI]: CHK 80117bd8 ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+20:45:365 BreakPoints.cpp:197 I[MI]: CHK 80117c3c ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+20:45:369 BreakPoints.cpp:197 I[MI]: CHK 80117dec ( --- ) Read32 80f5f500 at 80d07804 ( --- )
+20:45:369 BreakPoints.cpp:197 I[MI]: CHK 80117e00 ( --- ) Write32 00000000 at 80d07804 ( --- )
+
+After disappear operation
+21:25:382 BreakPoints.cpp:197 I[MI]: CHK 801187d8 ( --- ) Read32 00000000 at 80d07804 ( --- )
+21:25:382 BreakPoints.cpp:197 I[MI]: CHK 801187f8 ( --- ) Read32 00000000 at 80d07804 ( --- )
+
+
+
+
+Normal operation:
+26:48:671 BreakPoints.cpp:197 I[MI]: CHK 801187d8 ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+26:48:671 BreakPoints.cpp:197 I[MI]: CHK 801187f8 ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+26:48:671 BreakPoints.cpp:197 I[MI]: CHK 80117bd8 ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+26:48:671 BreakPoints.cpp:197 I[MI]: CHK 80117d0c ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+
+
+When Ness is hit:
+28:20:349 BreakPoints.cpp:197 I[MI]: CHK 801187d8 ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+28:20:349 BreakPoints.cpp:197 I[MI]: CHK 801187f8 ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+28:20:349 BreakPoints.cpp:197 I[MI]: CHK 80117bd8 ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+28:20:349 BreakPoints.cpp:197 I[MI]: CHK 80117c3c ( --- ) Read32 80f60d40 at 80d07804 ( --- )
+28:20:358 BreakPoints.cpp:197 I[MI]: CHK 80117e80 ( --- ) Read32 80f60d40 at 80d07804 ( --- ) * Unique to hit
+28:20:358 BreakPoints.cpp:197 I[MI]: CHK 80117e98 ( --- ) Write32 00000000 at 80d07804 ( --- )
+
+
+Understanding the structure
+80f60da0 is the start location for Thunder struct
+Reference is found at offset 0x2C of 0x80f5f500 (Super Thunder Struct)
+Reference is found at offset 0x22A4 of 0x80d05560 (0x80D07804), which is the player_t struct for Ness
+
+
+
+80117e98 (in function 80117E60) * Zeros out the PK Thunder struct in player_t (doesn't stop despawning)
+-> 8011491C (in function 801148F8) ???
+-> 8007DB98 (in function 8007DB58) * Only called when knocked out of PK Thunder
+-> 8008F6AC (in function 8008EC90) * Every time Ness is hit, this runs
+-> 8006D3F8 (in function 8006D1EC) * Every time Ness is hit, this runs (Function runs every frame)
+-> 80390DFC (Back to this BS again)
+
+
+What it does is it probably adds an observer for getting hit, find where the observers are getting set
+8007DB58 is where the observers are called
+
+r3 is 80d05560 (0x2C is the place where the observer is stored)
+The value in here: 80d055c0
+
+Actual function to call is offset 0x21DC of whatever is in 80d05560
+Which is 80d055c0 + 0x21DC = 80D0779C
+
+At 80D0779C:
+When PK Thunder: 801148F8
+When PK Thunder is gone: 00000000
+Not PK Thunder: 00000000
+PK Thunder start: 00000000
+PK Thunder appears: 801148F8
+
+
+When hit while PK Thunder:
+37:55:162 BreakPoints.cpp:197 I[MI]: CHK 8007db84 ( --- ) Read32 801148f8 at 80d0779c ( --- )
+37:55:162 BreakPoints.cpp:197 I[MI]: CHK 80116f7c ( --- ) Write32 00000000 at 80d0779c ( --- ) *
+37:55:163 BreakPoints.cpp:197 I[MI]: CHK 80117ed8 ( --- ) Write32 00000000 at 80d0779c ( --- ) *
+37:55:170 BreakPoints.cpp:197 I[MI]: CHK 8006a188 ( --- ) Write32 00000000 at 80d0779c ( --- )
+
+Starting PK Thunder:
+41:32:094 BreakPoints.cpp:197 I[MI]: CHK 8006a188 ( --- ) Write32 00000000 at 80d0779c ( --- )
+41:33:156 BreakPoints.cpp:197 I[MI]: CHK 8006a188 ( --- ) Write32 00000000 at 80d0779c ( --- )
+41:33:156 BreakPoints.cpp:197 I[MI]: CHK 801181bc ( --- ) Write32 00000000 at 80d0779c ( --- )
+
+PK Thunder appears:
+42:04:972 BreakPoints.cpp:197 I[MI]: CHK 8006a188 ( --- ) Write32 00000000 at 80d0779c ( --- )
+42:04:978 BreakPoints.cpp:197 I[MI]: CHK 80118750 ( --- ) Write32 801148f8 at 80d0779c ( --- )
+
+Natural gone:
+42:42:388 BreakPoints.cpp:197 I[MI]: CHK 80117e3c ( --- ) Write32 00000000 at 80d0779c ( --- )
+
+
+
+
+
+
+
+Start 80116f7c (80116F38):
+-> 80114914 (801148F8)
+Start 80117ed8 (80117E60):
+-> 8011491C (801148F8)
+
+Both in 801148F8:
+-> 8007DB98 (8007DB58)
+
+
+
+
+
+PK Thunder disappearance doesn't occur because of the hit observers. It seems that it checks to see if PK Thunder is still controlled and deletes it if it isn't
+
+Theory: Every frame, it checks if Player is still in control, and deletes it otherwise
+Check the write every frame code. This seems to be the case, because it disappears the frame after you get hit.
+
+
+X and Y pos for PK Thunder:
+
+
+Start 802abfcc (802ABCDC):
+-> 80269810 (802697D4) [reads 0xD18(r31) for function]
+-> 80390DFC (Here again)
+
+Start 80342d54 & 80342d60 (80342d54) [This is hit three times]
+-> 80269838/8026986C/802698E8/8026994C (802697D4)
+-> 80390DFC (Here again)
+
+
+
+Start 8027623c (80276214)
+-> 8026DA24 [Start 8026da3c] (8026DA08)
+-> 802AB4E0 (802AB4B8)
+-> 802AC01C (802AC000)
+-> 802699AC [Start 80269a04, 8026bb90] (80269978)
+-> 80390dfc (Here Again)
+
+
+Start 8026bb90 (8026BB88)
+-> 80274D24 (80274D04)
+-> 80275768 [Start 80274d74 && 80274d8c] (8027574C)
+-> 80269a74 (80269978) [Go back to Start 8027623c, 4th arrow]
+
+Start 80274d74 && 80274d8c (80274D6C)
+-> 80275770 (8027574C) [Go back to Start 8026bb90, 2nd arrow]
+
+Start 80269a04 [x2] (80269978)
+-> 8026bb90 (8026BB88)
+-> 80274d24 (80274D04)
+-> 80275768 (8027574C)
+-> 80269a74 (80269978)
+-> 80390DFC (Here again)
+
+
+
+Start 80269b00 && 80269b18 (80269A9C)
+-> 80390dfc (here again)
+
+function 802697D4 is first main function
+function 80269978 is another, and more likely
+function 80269A9C is last one
+
+
+
+When 80269A9C is called:
+r12 = 80269A9C (actual function addr)
+r27 = 80f5a360 (r12 is 0x14(r27))
+r29 = 0x24
+r13 = 804db6a0 (r27 is -0x3E60(r13) + r29; or r27 is 4(r27))
+
+Other values:
+r27 = 80f5b5c0, 80f5c8a0, 80f5db80, 80f5f300, 80f60a80, 80f62740
+
+To search and get function structure, start at r13 or 0x804db6a0, minus 0x3E60.
+You've got 804D7840. Get the value from here. Save as "initial".
+Add r29 to initial, which is 0x24. Save as "val_1", and current.
+while (current = 4(current)) {
+	val_[loopvar] = current;
+}
+
+While PK Thunder is active:
+initial: 80bda940
+val_1: 80e0e680 (0x14: 8006c80c)
+val_2: 80f03ce0 (0x14: 8006c80c)
+val_3: 80f5a360 (0x14: 80269a9c)
+val_4: 80f5b5c0 (0x14: 80269a9c)
+val_5: 80f5c8a0 (0x14: 80269a9c)
+val_6: 80f5db80 (0x14: 80269a9c)
+val_7: 80f5f300 (0x14: 80269a9c)
+val_8: 80f60a80 (0x14: 80269a9c)
+val_9: 80f62740 (0x14: 80269a9c)
+val_A: 00000000
+
+While inactive:
+initial: 80bda940
+val_1: 80e0e680 (0x14: 8006c80c)
+val_2: 80f03ce0 (0x14: 8006c80c)
+val_3: 8006c80c
+
+This is what writes the function value to enable PK Thunder function:
+49:41:350 BreakPoints.cpp:197 I[MI]: CHK 8038fbb0 ( --- ) Write32 80f62280 at 80f03ce4 ( --- )
+
+This is what deletes it back to 0:
+50:30:272 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 80f60a80 at 80f03ce4 ( --- )
+50:30:272 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 80f5f300 at 80f03ce4 ( --- )
+50:30:272 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 80f5db80 at 80f03ce4 ( --- )
+50:30:272 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 80f5c8a0 at 80f03ce4 ( --- )
+50:30:272 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 80f5b5c0 at 80f03ce4 ( --- )
+50:30:273 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 80f5a360 at 80f03ce4 ( --- )
+50:30:273 BreakPoints.cpp:197 I[MI]: CHK 8038fcb4 ( --- ) Write32 00000000 at 80f03ce4 ( --- )
+
+Start 8038FCB4 (8038FC18):
+-> 8038fd00 (8038FCE4)
+-> 8038ff2c (8038FED4) [This function loops]
+-> 80390298 (80390228)
+-> 80390e34 (in the same function as 80390DFC)
+
+Basically, something happens in one of the functions that sets some value and the main scene function is the one that actually removes the function values.
+
+
+
+804CE3E4 is the RAM where it checks if it should delete or not. If it isn't 0 and then if it is also not a bunch of other stuff, then we can delete it.
+
+
+
+Next step: try this with function 80269978
+
+
+
+80269978 is function moveProjectile()
+Log the breakpoints. In addition, every time you get to 8026999C, record register values.
+Main values for main PK Thunder orb: r31 = 80F58BA0, r3 = 80f307a0
+
+
+PK Thunder Frame Breakpoints
+----------------------------
+r3 = 80f307a0
+r31 = 80f58ba0
+r12 = 802ac000
+802699a4
+802699cc
+802699e8
+80269a04
+80269a28
+80269a30
+80269a44
+80269a54
+80269a60
+80269a68
+80269a70
+80269a80
+
+r3 = 80f59e20	80f5b1c0	80f5c4a0	80f5d780	80f5ef00	80f62280
+r31 = 80f59e80	80f5b220	80f5c500	80f5d7e0	80f5ef60	80f607a0
+r12 = 802ac8a0	Same		Same		Same		Same		Same
+802699a4
+802699cc
+802699e8
+80269a04
+80269a28
+80269a30
+80269a44
+80269a54
+80269a5c
+80269a60
+80269a70
+80269a80
+
+After the hit, it isn't called at all
+
+
+That means that some other function is destroying this variable. We need to figure out what is actually deleting stuff.
+Fortunately, we can break on 80390E14 to see what the register values are when a hit happens and when a hit happens with PK Thunder. This will tell us the differences
+Arg is 0x10(r27)  (The argument to the function)
+Fun is 0x14(r27)  (The address of the function)
+
+r0  = 40000000
+r12 = 802ab90c
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f61e80
+Arg = 80f62280
+Fun = 80269528
+
+r0  = 00000040
+r12 = 00000000
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f60440
+Arg = 80f5ef00
+Fun = 80269528
+
+r0  = 00000040
+r12 = 00000000
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f5ecc0
+Arg = 80f5d780
+Fun = 80269528
+
+r0  = 00000040
+r12 = 00000000
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f5d540
+Arg = 80f5c4a0
+Fun = 80269528
+
+r0  = 00000040
+r12 = 00000000
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f5c260
+Arg = 80f5b1c0
+Fun = 80269528
+
+r0  = 00000040
+r12 = 00000000
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f5aec0
+Arg = 80f59e20
+Fun = 80269528
+
+r0  = 00000040
+r12 = 00000000
+r13 = 804db6a0
+r25 = 804ce3e4
+r27 = 80f59da0
+Arg = 80f58b40
+Fun = 80269528
+
+
+r0  = 
+r12 = 
+r13 = 
+r25 = 
+r27 = 
+Arg = 
+Fun = 
+
+
+
+
+04269528 4E800020
+
+
+
+Function 80269528 is definitely the thing controlling PK Thunder dying on hit. The question is where in this function is that particular code happening? Just zero out that part and we're golden. 
+
+
+Thunder Startup:
+80269698
+
+On hit:
+80269594
+
+
+If r3 != 0 on the blrl, then it gets deleted
+The blrl is at 80269588
+
+All the functions called from there:
+r12 is function, r3 is argument
+
+PK Thunder:
+802abbb0(80d4ad40);
+802ac62c(80d48740);
+802ac62c(80d47460);
+802ac62c(80d46180);
+802ac62c(80d44ea0);
+802ac62c(80d0e5e0);
+802ac62c(80d42140);
+
+PK Flash:
+802aab70(80d48740);
+
+38600000 4E800020
+
+
+
+
+Narrowed down to function 802abbb0. When return is 0, don't delete PK Thunder.
+
+There are multiple ways to delete PK thunder:
+Hitting ground - This isn't handled by this function
+Hitting opponent - This isn't handled here
+
+Groundplant  - 802abca4
+Groundblast  - 802abca4
+Air Blast    - 802abca4
+
+Timeout      - 80273158
+
+Getting hit  - 802abcb4
+Death        - 802abcb4
+
+Break on the last three to see where this value is coming from:
+Hitting self
+Hitting opponent
+Hitting ground
+Timeout
+Getting hit
+
+
+@ 802abcb4, write 38600000
+That only takes care of the first part
+
+802ac62c still needs to be taken care of
+There are two forks here that might matter.
+
+Start with second fork:
+802AC664 or 802AC670
+Groundplant  - 802AC670
+Groundblast  - 802AC670
+Air Blast    - 802AC670
+
+Timeout      - 802AC664
+Getting hit  - 802AC664
+Death        - 802AC664
+
+80371D9C is called on timeout and the one we want to disable
+
+
+
+DD4 from r31 is the key here. It is being overwritten. Find the code that overwrites it. Write the address of the code that overwrites here:
+Hit ground   - 802ac5b0
+Hit opponent - 
+Groundplant  - 
+Groundblast  - 
+Air Blast    - 
+Timeout      - 
+Getting hit  - 802ac5b0
+Death        - 
+
+Break at 802AC684. Get r31, Add DD4. MC write on that memory.
+
+Function 802AC58C is where it is being written to. Function 802ab90c is the one that is using that function. There are 5 functions using it, and it is likely that we can nop it in these functions. Break on 802AB9AC and step out and write down the location of where it is here
+Hit ground   - 8026aa1c
+Hit opponent - 802ac05c, 8026aa1c
+Groundplant  - 8026aa1c
+Groundblast  - 8026aa1c
+Air Blast    - 8026aa1c
+Timeout      - 8026aa1c
+Getting hit  - 802abcb0
+Death        - 802abcb0
+
+
+The 802ABCAC branch is somehow important
+802ABCB0 should be nopped? Not quite.
+
+
+802ABC94 should be nopped
+
+
+802ABCB0 &&
+
+802ABCC0 = 4bfc7471
+
+
+
+Try this:
+At 802ABCB0, bl to 80273130
+4bfc7475
+
+
+802abcb0 is 4bfc7481
+802abcb4 is 60000000
+
+
+Which translates to the DOL:
+2A8890 is 4bfc748160000000
+2A8894 is 60000000
+
+
+
+
+
+
+
+
+
+So I got PK Thunder working. Essentially, these are the new RAM addresses:
+802abcb0 is 4bfc7481
+802abcb4 is 60000000
+
+This translates to at DOL 2A8890, overwrite with 4bfc748160000000.
+
+I also applied the falcon/gdorf side+B buffs:
+E05B0 = 4BFE8D61
+E06CC = 4BFE8C45
+E08B0 = 4BFE8A61
+

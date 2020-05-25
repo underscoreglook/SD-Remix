@@ -1,0 +1,852 @@
+Files Touched:
+MnMaAll.usd (replace Random Stage texture)
+MnExtAll.usd (replace Random Stage texture)
+SdMenu.usd (Alpha stage names)
+SdSlChr.usd (Alpha stage names again)
+Start.dol (Omega stage names and random stage hack)
+
+
+What do I want
+--------------
+Random Stage in Additional Rules should have all the correct text in the SSS
+You should be able to switch from Alpha stages and Omega stages with L and R
+It should show either "Alpha" or "Omega" on the screen somewhere, or control the display somehow.
+Omega should save to the memory card separately.
+Pressing "A" on random select should load a random stage from the current selection.
+Pressing "Start" on random select should load a random stage from either toggle.
+
+SdMenu.usd starts at 55DFF800 and it is 15605 big
+SdToy.usd  starts at 55E15000 and it is  268A big
+
+6215 is SdMenu.usd in Game.toc, 38D0 is audio and start of string table
+SdMenu.usd starts at 55d1036c, according to the Game.toc, which is EF494 difference (entry at 0x2664)
+62C1 is SdToy.usd in string table
+SdToy.usd starts at 55D25974 in game.toc, which is EF68C different (entry at 0x2718)
+
+8045c388 is the word where it is all stored. The first three bits are always 1
+8045c38C is the word right after. It doesn't seem to be changed and it doesn't seem to affect anything
+
+On Random Select:
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643a0 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+33:21:041 BreakPoints.cpp:197 I[MI]: CHK 801643f4 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+
+Saving the memory card [probably doesn't matter]:
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38f ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38e ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38d ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38c ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 b0 at 8045c38b ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38a ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c389 ( --- )
+03:30:003 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 e7 at 8045c388 ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38f ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38e ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38d ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38c ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 b0 at 8045c38b ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c38a ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045c389 ( --- )
+03:30:055 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 e7 at 8045c388 ( --- )
+
+On Random Stage Select Open:
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:704 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:705 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:705 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+04:31:705 BreakPoints.cpp:197 I[MI]: CHK 8016426c ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+
+On Random Stage Select Close:
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+06:12:550 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+
+On Random Stage Select Change:
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164208 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164218 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164228 ( --- ) Read32 e70000b0 at 8045c388 ( --- )
+07:20:653 BreakPoints.cpp:197 I[MI]: CHK 80164238 ( --- ) Write32 e70000b0 at 8045c388 ( --- )
+
+Along with what Jorgasms wrote, the first byte is the font size.
+
+
+81308f5b is where Princess Peach's Castle seems to be read on the main menu
+810d0ae7 is where it is at at the CSS
+
+The pointer to Peach's Castle text:
+SdSlChr.usd: 810d0300, 0x7E7 behind Peach's actual stuff
+SdSlMenu.usd: 81306fc0
+They're not in order. In the following, (Offset in file - Column controlled in file)
+SdMenu.usd AND SdSlChr.usd:
+38 - Col One, Slot 6	Fountain of Dreams
+3C - Col One, Slot 8	Pokemon Stadium
+40 - Col One, Slot 1	Princess Peach's Castle
+44 - Col One, Slot 2	Kongo Jungle
+48 - Col One, Slot 4	Brinstar
+4C - Col One, Slot 7	Corneria
+50 - Col One, Slot 5	Yoshi's Story
+54 - Col One, Slot 10	Onett
+58 - Col One, Slot 9	Mute City
+5C - Col Two, Slot 1	Rainbow Cruise
+60 - Col Two, Slot 2	Jungle Japes
+64 - Col One, Slot 3	Great Bay
+68 - Col Two, Slot 3	Temple
+6C - Col Two, Slot 4	Brinstar Depths
+70 - Col Two, Slot 5	Yoshi's Island
+74 - Col Two, Slot 6	Green Greens
+78 - Col Two, Slot 10	Fourside
+7C - Col One, Slot 11	Mushroom Kingdom
+80 - Col Two, Slot 11	Mushroom Kingdom II
+84 - NOT A STAGE
+88 - Col Two, Slot 7	Venom
+8C - Col Two, Slot 8	PokeFloats
+90 - Col Two, Slot 9	Big Blue
+94 - Col One, Slot 12	Icicle Mountain
+98 - NOT A STAGE
+9C - Col Two, Slot 12	Flatzone
+A0 - Col One, Slot 13	Battlefield
+A4 - Col Two, Slot 13	Final Destination
+A8 - Col One, Slot 14	Dream Land N64
+AC - Col Two, Slot 14	Yoshi's Island N64
+B0 - Col One, Slot 15	Kongo Jungle N64
+
+
+0x827 is Princess Peach's Castle in SdSlChr.usd
+0x1FDB is what it is in SdMenu.usd
+
+810d0b1b - Kongo Jungle Start at the CSS
+20192035202c203120262028203620361a = "Princess "
+
+80bd5d00 is where Princess Peach's Castle on CSS is read from.
+58:53:094 BreakPoints.cpp:197 I[MI]: CHK 803a8554 ( --- ) Read32 810d0b1b at 80bd5d00 ( --- )
+
+
+Text format:
+Starts with 16. What is this?
+Then goes 0E. This means the next two half words adjusts the width and height.
+Then it's the text width, as a half word.
+Then it's the text height, as a half word.
+Then starts the string proper.
+The text seems to end with 0F00
+
+
+Being read:
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 0e at 810d0ae8 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8db8 ( --- ) Read16 008a at 810d0ae9 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8ddc ( --- ) Read16 008a at 810d0aeb ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0aed ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0aed ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2019 at 810d0aed ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0aef ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2035 at 810d0aef ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0af1 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 202c at 810d0af1 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0af3 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2031 at 810d0af3 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0af5 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2026 at 810d0af5 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0af7 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2028 at 810d0af7 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0af9 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2036 at 810d0af9 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0afb ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2036 at 810d0afb ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 1a at 810d0afd ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0afe ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2019 at 810d0afe ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b00 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2028 at 810d0b00 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b02 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2024 at 810d0b02 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b04 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2026 at 810d0b04 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b06 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 202b at 810d0b06 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b08 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 20f3 at 810d0b08 ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b0a ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2036 at 810d0b0a ( --- )
+09:12:821 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 1a at 810d0b0c ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b0d ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 200c at 810d0b0d ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b0f ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2024 at 810d0b0f ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b11 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2036 at 810d0b11 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b13 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2037 at 810d0b13 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b15 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 202f at 810d0b15 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 20 at 810d0b17 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8390 ( --- ) Read16 2028 at 810d0b17 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 0f at 810d0b19 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a81e8 ( --- ) Read8 00 at 810d0b1a ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2019 at 810d0aed ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0aef ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2035 at 810d0aef ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0af1 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 202c at 810d0af1 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0af3 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2031 at 810d0af3 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0af5 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2026 at 810d0af5 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0af7 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2028 at 810d0af7 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0af9 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2036 at 810d0af9 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0afb ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2036 at 810d0afb ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 1a at 810d0afd ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0afe ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2019 at 810d0afe ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b00 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2028 at 810d0b00 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b02 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2024 at 810d0b02 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b04 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2026 at 810d0b04 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b06 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 202b at 810d0b06 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b08 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 20f3 at 810d0b08 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b0a ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2036 at 810d0b0a ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 1a at 810d0b0c ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b0d ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 200c at 810d0b0d ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b0f ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2024 at 810d0b0f ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b11 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2036 at 810d0b11 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b13 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2037 at 810d0b13 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b15 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 202f at 810d0b15 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 20 at 810d0b17 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a9034 ( --- ) Read16 2028 at 810d0b17 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 0f at 810d0b19 ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 00 at 810d0b1a ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 16 at 810d0b1b ( --- )
+09:12:822 BreakPoints.cpp:197 I[MI]: CHK 803a8a3c ( --- ) Read8 0e at 810d0b1c ( --- )
+
+
+In the general "Display Text" function (803A84BC), here's the trace when writing Random Stage Select stuff:
+
+80390f58
+	r3 = Some Data structure holding the word to write
+	803A84BC
+
+803A84BC - displayGameText
+arg (r3) = some structure.
+r15 = arg (r3)
+0x2C(r15) = Text data (r31)
+0x0 and 0x4 of Text Data (r31) is the x and y position of the text
+0x5C is the location of the actual text
+
+
+	
+From Main Menu, the texture for Random Stage is at 8111e0c0
+Pointer to that texture is at 81116478
+
+
+Data structure for Peach's Castle Text data is:
+CHK 803a5bfc ( --- ) Write32 c1533334 at 80bd5ca4 ( --- )
+Stack trace:
+80236b40 - If nop'd, doesn't show any of the random stages on main menu, in both places
+	80235ad0 - First column
+		803A5ACC
+	80235BB8 - Second column
+	
+	
+What writes the 5C value?
+CHK 803a5c38 ( --- ) Write32 00000000 at 80bd5d00 ( --- ) <-- initialization from above
+CHK 803a63a4 ( --- ) Write32 81308f5b at 80bd5d00 ( --- ) <-- new stuff
+
+New stuff
+	80235b20 <-- in the same random stage init as above
+		803a63a4
+
+		
+80236AB4 is only hit on enter and exit from the random stage select, check for the press of "B".
+		
+		8114dec0
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 80390c3c ( --- ) Write8 ff at 8114dec7 ( --- )
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 80390c44 ( --- ) Write32 00000000 at 8114deec ( --- )
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 803908e0 ( --- ) Write8 ff at 8114dec3 ( --- )
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 803908e8 ( --- ) Write8 00 at 8114dec5 ( --- )
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 803908ec ( --- ) Write32 00000000 at 8114ded4 ( --- )
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 803908f0 ( --- ) Write32 00000000 at 8114ded0 ( --- )
+23:16:706 BreakPoints.cpp:197 I[MI]: CHK 8037ad24 ( --- ) Write32 8111d660 at 8114dec0 ( --- )
+
+
+
+
+Reverse engineering the B press:
+13:16:962 BreakPoints.cpp:197 I[MI]: CHK 801a36b4 ( --- ) Read32 00000002 at 80479cf8 ( --- )
+13:16:962 BreakPoints.cpp:197 I[MI]: CHK 801a36b4 ( --- ) Read32 00000002 at 80479cf8 ( --- )
+
+80266bb8
+	8022f228 - probably checking for START
+		sub 801A36A0
+		
+	8022965c - checking for everything else
+		sub 801A36A0
+80229624 getMenuActions
+
+80235fa0
+	getMenuActions
+
+	
+	
+tex1_152x16_e9c4e34ed7259da5_0	
+MnMaAll.usd at offset: 10AD80
+MnExtAll.usd at offset: 1067C0
+
+SdMenu.usd stage names: 1F8C (1F6C offset value) to 235D inclusive (3D2 bytes)
+0x84 is 0E 00 8A 00 8A 20 90 20 99 20 BB 20 92 20 90 40 03 40 04 0F 00
+0x98 is 0E 00 8A 00 8A 40 05 40 06 20 F5 20 90 20 92 20 A5 20 9D 20 D9 20 CC 20 94 20 DF 20 B4 20 DF 20 F6 0F 00
+
+SdSlChr.usd: 7D8 to BA9 inclusive (3D2 bytes)
+0x84 is 0E 00 8A 00 8A 20 90 20 99 20 BB 20 92 20 90 40 03 40 04 0F 00
+0x98 is 0E 00 8A 00 8A 40 05 40 06 20 F5 20 90 20 92 20 A5 20 9D 20 D9 20 CC 20 94 20 DF 20 B4 20 DF 20 F6 0F 00
+
+What to write:
+160E008A008A200f20322038203120372024202c20311a203220291a200d203520282024203020360F00 (0x 2A)
+160E008A008A201420322031202a20321a201320382031202a202f20281a2017200620040F00 (0x 26)
+160E008A008A2019202820242026202b20f320361a200c202420362037202f20280F00 (0x 23)
+160E008A008A201420322031202a20321a201320382031202a202f20280F00 (0x 1F)
+160E008A008A200b2035202c203120362037202420350F00 (0x 18)
+160E008A008A200c20322035203120282035202c20240F00 (0x 18)
+160E008A008A202220322036202b202c1a2017200620040F00 (0x 19)
+160E008A008A201820312028203720370F00 (0x 12)
+160E008A008A20162038203720281a200c202c2037203c0F00 (0x 19)
+160E008A008A201b2024202c203120252032203a1a200c20352038202c203620280F00 (0x 23)
+160E008A008A201320382031202a202f20281a201320242033202820360F00 (0x 1F)
+160E008A008A201020352028202420371a200b2024203c0F00 (0x 19)
+160E008A008A201d202820302033202f20280F00 (0x 14)
+160E008A008A200b2035202c203120362037202420351a200d202820332037202b20360F00 (0x 25)
+160E008A008A202220322036202b202c20f320361a20122036202f2024203120270F00 (0x 23)
+160E008A008A201020352028202820311a2010203520282028203120360F00 (0x 1F)
+160E008A008A200f2032203820352036202c202720280F00 (0x 18)
+160E008A008A201620382036202b20352032203220301a2014202c2031202a2027203220300F00 (0x 27)
+160E008A008A201620382036202b20352032203220301a2014202c2031202a2027203220301a201220120F00 (0x 2C)
+160E008A008A0E008A008A2090209920BB20922090400340040F000F00 (0x 1D)
+160E008A008A201f20282031203220300F00 (0x 12)
+160E008A008A20192032202e40001a200f202f20322024203720360F00 (0x 1D)
+160E008A008A200b202c202a1a200b202f203820280F00 (0x 17)
+160E008A008A20122026202c2026202f20281a201620322038203120372024202c20310F00 (0x 25)
+160E008A008A0E008A008A4005400620F52090209220A5209D20D920CC209420DF20B420DF20F60F000F00 (0x 2B)
+160E008A008A201620322038203120371a2018202f203c20302033203820360F00 (0x 21)
+160E008A008A200b202420372037202f20282029202c2028202f20270F00 (0x 1E)
+160E008A008A200b202420372037202f20281a20102035203220382031202720360F00000000000000 (0x 29)
+160E008A008A200d20352028202420301a20152024203120271a2017200620040F00 (0x 22)
+160E008A008A202220322036202b202c20f320361a201c203720322035203c0F00 (0x 21)
+160E008A008A20192032202e40002030203220311a201c203720242027202c203820300F00 (0x 25)
+
+
+160E008A008A200f20322038203120372024202c20311a203220291a200d203520282024203020360F00160E008A008A201420322031202a20321a201320382031202a202f20281a2017200620040F00160E008A008A2019202820242026202b20f320361a200c202420362037202f20280F00160E008A008A201420322031202a20321a201320382031202a202f20280F00160E008A008A200b2035202c203120362037202420350F00160E008A008A200c20322035203120282035202c20240F00160E008A008A202220322036202b202c1a2017200620040F00160E008A008A201820312028203720370F00160E008A008A20162038203720281a200c202c2037203c0F00160E008A008A201b2024202c203120252032203a1a200c20352038202c203620280F00160E008A008A201320382031202a202f20281a201320242033202820360F00160E008A008A201020352028202420371a200b2024203c0F00160E008A008A201d202820302033202f20280F00160E008A008A200b2035202c203120362037202420351a200d202820332037202b20360F00160E008A008A202220322036202b202c20f320361a20122036202f2024203120270F00160E008A008A201020352028202820311a2010203520282028203120360F00160E008A008A200f2032203820352036202c202720280F00160E008A008A201620382036202b20352032203220301a2014202c2031202a2027203220300F00160E008A008A201620382036202b20352032203220301a2014202c2031202a2027203220301a201220120F00160E008A008A0E008A008A2090209920BB20922090400340040F000F00160E008A008A201f20282031203220300F00160E008A008A20192032202e40001a200f202f20322024203720360F00160E008A008A200b202c202a1a200b202f203820280F00160E008A008A20122026202c2026202f20281a201620322038203120372024202c20310F00160E008A008A0E008A008A4005400620F52090209220A5209D20D920CC209420DF20B420DF20F60F000F00160E008A008A201620322038203120371a2018202f203c20302033203820360F00160E008A008A200b202420372037202f20282029202c2028202f20270F00160E008A008A201d203520322033202b203c1a201d203820362036202f20280F000000000000000000160E008A008A200d20352028202420301a20152024203120271a2017200620040F00160E008A008A202220322036202b202c20f320361a201c203720322035203c0F00160E008A008A20192032202e40002030203220311a201c203720242027202c203820300F00
+
+Differences to Omega version:
+94 -> Flat Zone (Col 1, Slot 12)
+5C -> Peach's Flat (Col 2, slot 1)
+88 -> Warzone Corneria (Col 2, Slot 7)
+8C -> Cranky's Treehouse (Col 2, Slot 8)
+A4 -> Final Destination (Col Two, Slot 13)
+6 items:
+0B000018
+0F00002D
+15000059
+1600007C
+1B0000A3
+00000000
+160E008A008A200f202f202420371a20232032203120280F00 (0x 19)
+160E008A008A20192035202c203120262028203620361a2019202820242026202b20f320361a200f202f202420370F00 (0x 30)
+160E008A008A202020242035203d2032203120281a200c20322035203120282035202c20240F00 (0x 27)
+160E008A008A200c203520242031202e203c20f320361a201d203520282028202b20322038203620280F00 (0x 2B)
+160E008A008A200f202c20312024202f1a200d202820362037202c203120242037202c203220310F00 (0x29)
+
+0B0000180F00002D150000591600007C1B0000A300000000160E008A008A200f202f202420371a20232032203120280F00160E008A008A20192035202c203120262028203620361a2019202820242026202b20f320361a200f202f202420370F00160E008A008A202020242035203d2032203120281a200c20322035203120282035202c20240F00160E008A008A200c203520242031202e203c20f320361a201d203520282028202b20322038203620280F00160E008A008A200f202c20312024202f1a200d202820362037202c203120242037202c203220310F00
+
+Alpha Stages: 160E008A008A200a202f2033202b20241a201c20372024202a202820360F00 (8040ABF4)
+Omega Stages: 160E008A008A201820302028202a20241a201c20372024202a202820360F00 (8040AC13)
+
+160E008A008A		0F00
+
+Toggle var: 803fa358 (1 means Omega)
+
+Plan to get "Omega" and "Alpha" to show up on Random Stage Select option:
+80235C20 - Make this 1E instead of 1D. This will write another text section at the bottom of Col 2.
+80236BD4 - Make this 1E instead of 1D. This will clean it up properly on exiting the screen.
+At 80235C20, If EQ (to the new 1E), take r26, which is the text data structure. The only thing we need to change is the 0x5C part to point to something that says ALPHA STAGES or OMEGA STAGES.
+@ 80235C20:
+nop # 2C19001E
+bne RETURN
+lis r5, 0x803f
+ori r5, r5, 0xa358
+lwz r5, 0(r5)
+cmpwi r5, 0
+bne OMEGA
+lis r4, 0x8040
+ori r4, r4, 0xABF4
+b SET_TEXT
+OMEGA:
+lis r4, 0x8040
+ori r4, r4, 0xAC13
+SET_TEXT:
+stw r4, 0x5C(r26)
+RETURN:
+nop # 2C19001E
+C2235C20 00000008
+2C19001E 40820030
+3CA0803F 60A5A358
+80A50000 2C050000
+40820010 3C808040
+6084ABF4 4800000C
+3C808040 6084AC13
+909A005C 2C19001E
+60000000 00000000
+> 04236BD4 2C19001E
+
+Plan to get it to load alternate text set:
+@ 80235B34: addi r24, r24, 1
+r25 is text structure with 0x5C as the text. r24 is the current slot number.
+-----------
+lis r5, 0x803f
+ori r5, r5, 0xa358
+lwz r5, 0(r5)
+cmpwi r5, 0
+beq END
+lis r5, 0x8040
+ori r5, r5, 0xAC34
+LOOP_CHECK:
+lwz r4, 0(r5)
+cmpwi r4, 0
+beq END
+lbz r4, 0(r5)
+cmpw r4, r24
+beq MATCH_FOUND
+addi r5, r5, 4
+b LOOP_CHECK
+MATCH_FOUND:
+lhz r4, 2(r5)
+add r5, r5, r4
+stw r5, 0x5C(r25)
+END:
+addi r24, r24, 1
+C2235B34 0000000A
+3CA0803F 60A5A358
+80A50000 2C050000
+41820038 3CA08040
+60A5AC34 80850000
+2C040000 41820024
+88850000 7C04C000
+4182000C 38A50004
+4BFFFFE4 A0850002
+7CA52214 90B9005C
+3B180001 00000000
+-----------
+@ 80235C1C: addi r25, r25, 1
+r26 is the text structure with 0x5C as the text. r25 is current slot number.
+-----------
+lis r5, 0x803f
+ori r5, r5, 0xa358
+lwz r5, 0(r5)
+cmpwi r5, 0
+beq END
+lis r5, 0x8040
+ori r5, r5, 0xAC34
+LOOP_CHECK:
+lwz r4, 0(r5)
+cmpwi r4, 0
+beq END
+lbz r4, 0(r5)
+cmpw r4, r25
+beq MATCH_FOUND
+addi r5, r5, 4
+b LOOP_CHECK
+MATCH_FOUND:
+lhz r4, 2(r5)
+add r5, r5, r4
+stw r5, 0x5C(r26)
+END:
+addi r25, r25, 1
+C2235C1C 0000000A
+3CA0803F 60A5A358
+80A50000 2C050000
+41820038 3CA08040
+60A5AC34 80850000
+2C040000 41820024
+88850000 7C04C800
+4182000C 38A50004
+4BFFFFE4 A0850002
+7CA52214 90BA005C
+3B390001 00000000
+
+Plan to Switch L and R:
+At 80236CE8, li r3, 6
+We can use r3 - 5, as long as we do the original thing LAST.
+lis r5, 0x804C
+ori r5, r5, 0x20BC
+li r3, 0
+CHECK_CONTROLLERS:
+lwz r4, 0(r5)
+rlwinm. r4, r4, 0, 25, 25
+bne SET_TO_ALPHA
+addi r5, r5, 0x44
+addi r3, r3, 1
+cmpwi r3, 0x4
+blt CHECK_CONTROLLERS
+li r3, 1
+b END
+SET_TO_ALPHA:
+lis r3, 0
+END:
+lis r5, 0x803f
+ori r5, r5, 0xa358
+stw r3, 0(r5)
+li r3, 6
+C2236CE8 00000009
+3CA0804C 60A520BC
+38600000 80850000
+54840673 4082001C
+38A50044 38630001
+2C030004 4180FFE8
+38600001 48000008
+3C600000 3CA0803F
+60A5A358 90650000
+38600006 00000000
+
+
+Plan to load from the proper Omega/Alpha data from memory card:
+8016426c - If we're in Omega, load from +4
+lis r12, 0x803f
+ori r12, r12, 0xa358
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne OMEGA
+lwz r4, 0x18(r3)
+b END
+OMEGA:
+lwz r4, 0x1C(r3)
+END:
+C216426C 00000005
+3D80803F 618CA358
+818C0000 2C0C0000
+4082000C 80830018
+48000008 8083001C
+60000000 00000000
+
+Plan to save to correct one:
+@ 801641EC:
+lis r12, 0x803f
+ori r12, r12, 0xa358
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne OMEGA
+li r12, 0x18
+b END
+OMEGA:
+li r12, 0x1C
+END:
+clrlwi. r0, r4, 24
+C21641EC 00000005
+3D80803F 618CA358
+818C0000 2C0C0000
+4082000C 39800018
+48000008 3980001C
+5480063F 00000000
+> 80164228 lwzx r5, r3, r12		04164228 7CA3602E
+> 80164238 stwx r0, r3, r12		04164238 7C03612E
+> 80164208 lwzx r5, r3, r12		04164208 7CA3602E
+> 80164218 stwx r0, r3, r12		04164218 7C03612E
+
+Plan to load correct one on random select:
+801643a0 and 801643f4: Have it +4 depending on Omega toggle
+@ 801643A0:
+lis r4, 0x803f
+ori r4, r4, 0xa354
+lwz r4, 0(r4)
+cmpwi r4, 0
+bne OMEGA
+lwz r3, 0x18(r3)
+b END
+OMEGA:
+lwz r3, 0x1C(r3)
+END:
+C21643A0 00000005
+3C80803F 6084A354
+80840000 2C040000
+4082000C 80630018
+48000008 8063001C
+60000000 00000000
+----
+@ 801643f4:
+lis r4, 0x803f
+ori r4, r4, 0xa354
+lwz r4, 0(r4)
+cmpwi r4, 0
+bne OMEGA
+lwz r4, 0x18(r3)
+b END
+OMEGA:
+lwz r4, 0x1C(r3)
+END:
+C21643F4 00000005
+3C80803F 6084A354
+80840000 2C040000
+4082000C 80830018
+48000008 8083001C
+60000000 00000000
+
+Plan randomize omega/alpha when pressing start:
+In the place we check for B, see if there's a check for "Start". If there is, and it goes to random, we should randomly switch the omega toggle to 0 or 1.
+
+The function 802599ec is the random stage selector.
+80259cc0
+	80259C24
+@ 80259CC0:
+rlwinm. r0, r0, 0,23,23
+beq END
+# If start pressed, randomize omega
+mr r11, r3			# Store r3 for safekeeping
+
+# First get how many stages are in alpha
+lis r12, 0x8045
+ori r12, r12, 0xc388
+lwz r9, 0(r12)		# r9 is alpha stages
+lis r7, 0x2000		# Initial mask, shifted left for the loop
+li r10, 0			# r10 = Number of alpha stages
+COUNT_ALPHA_STAGES:
+srwi r7, r7, 1
+cmpwi r7, 0
+beq DONE_COUNTING_ALPHA
+and. r3, r9, r7		# Is this stage enabled?
+beq COUNT_ALPHA_STAGES	# If and is zero, go to next one
+addi r10, r10, 1		# One more alpha stage
+b COUNT_ALPHA_STAGES
+
+# Count the rest of stages, the omegas
+DONE_COUNTING_ALPHA:
+addi r12, r12, 4
+lwz r12, 0(r12)		# r12 is omega stages
+lis r7, 0x2000		# Initial mask, shifted left for the loop
+mr r3, r10			# r3 = total number of stages
+COUNT_OMEGA_STAGES:
+srwi r7, r7, 1
+cmpwi r7, 0
+beq DONE_COUNTING_OMEGA
+and. r9, r12, r7	# Is this stage enabled?
+beq COUNT_OMEGA_STAGES	# If and is zero, go to next stage
+addi r3, r3, 1		# One more stage
+b COUNT_OMEGA_STAGES
+
+# Get a random number, less than total num stages in r3
+DONE_COUNTING_OMEGA:
+lis r12, 0x8038
+ori r12, r12, 0x0580
+mtctr r12
+bctrl
+
+# If random number is less than number of alpha stages,
+# then we want to switch to alpha. Otherwise, omega.
+cmpw r3, r10
+li r3, 0
+blt STORE_TOGGLE
+li r3, 1
+
+# Store either alpha or omega back into toggle
+STORE_TOGGLE:
+lis r12, 0x803f
+ori r12, r12, 0xa354
+stw r3, 0(r12)
+
+mr r3, r11			# Restore r3 from safekeeping
+END:
+lis r12, 0x8025
+ori r12, r12, 0x99EC
+mtctr r12
+bctrl
+C2259CC0 00000016
+540005EF 41820094
+7C6B1B78 3D808045
+618CC388 812C0000
+3CE02000 39400000
+54E7F87E 2C070000
+41820014 7D233839
+4182FFF0 394A0001
+4BFFFFE8 398C0004
+818C0000 3CE02000
+7D435378 54E7F87E
+2C070000 41820014
+7D893839 4182FFF0
+38630001 4BFFFFE8
+3D808038 618C0580
+7D8903A6 4E800421
+7C035000 38600000
+41800008 38600001
+3D80803F 618CA354
+906C0000 7D635B78
+3D808025 618C99EC
+7D8903A6 4E800421
+60000000 00000000
+
+
+Plan to play a sound to indicate whether we're at alpha or omega:
+@ 80259CC4:  stb r3, -0x49F2(r13)
+stb r3, -0x49F2(r13)
+lis r3, 0x803f
+ori r3, r3, 0xa354
+lwz r3, 0(r3)
+mulli r3, r3, 3
+addi r3, r3, 4
+lis r4, 0x8002
+ori r4, r4, 0x4030
+mtctr r4
+bctrl
+C2259CC4 00000006
+986DB60E 3C60803F
+6063A354 80630000
+1C630003 38630004
+3C808002 60844030
+7C8903A6 4E800421
+60000000 00000000

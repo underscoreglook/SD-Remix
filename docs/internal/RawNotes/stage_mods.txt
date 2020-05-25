@@ -1,0 +1,481 @@
+Stage Mods
+----------
+
+# Stage DOL mod checker general template
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne OMEGA
+ALPHA:
+
+b RETURN
+OMEGA:
+
+RETURN:
+------------------------------
+# Only Alpha does something
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+
+BLANK_OMEGA:
+------------------------------
+# Only Omega does something
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+beq BLANK_ALPHA:
+
+BLANK_ALPHA:
+------------------------------
+# Call function
+lis r12, 0x
+ori r12, r12, 0x
+mtctr r12
+bctrl
+
+
+DOL OVERVIEWS:
+1ECD68 4BFA1AE8
+1CA488 4BFC43EC
+1C948C 4BFC5404
+1C9494 4BFC541C
+1DA628 4BFB42B4
+1DDF70 4BFB0990
+1FF7AC 4BF8F188
+1FF97C 4BF8EFE0
+1FF75C 4BF8F21C
+2107F0 4BF7E1AC
+2112CC 4BF7D6EC
+21369C 4BF7B340
+1D65C0 4BFB8440
+1E037C 4BFAE6A0
+1E0374 4BFAE6CC
+20C0A0 4BF829C4
+1F9BD0 4BF94EB8
+1F9BC8 4BF94EE4
+2176C4 4BF7740C
+20E024 4BF80AD0
+1DFF28 4BFAEBF0
+1CE128 4BFC0A14
+
+
+# Mute City, Disable cars (1.02)[flieskiller]
+@ 801F0188:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801F
+ori r12, r12, 0x1A34
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Mute City flieskiller
+C21F0188 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801F 618C1A34
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Peach's Castle, No Bullet Bill or Switches (1.02) [Zauron]
+@ 801CD8A8:
+mflr r0
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+beq BLANK_ALPHA
+blr
+BLANK_ALPHA:
+
+$Peach's Castle Zauron
+C21CD8A8 00000004
+7C0802A6 3D808040
+818CA380 2C0C0000
+41820008 4E800020
+60000000 00000000
+--------------------------------
+# Fountain of Dreams, No side platforms (1.02) [Zauron]
+@ 801CC8AC:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne OMEGA
+ALPHA:
+fmadds f0, f0, f31, f0
+b RETURN
+OMEGA:
+fsub f0,f0,f0
+RETURN:
+
+@ 801CC8B4:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne OMEGA
+ALPHA:
+lwz r0, 0x14(r27)
+b RETURN
+OMEGA:
+lis r12, 0x801C
+ori r12, r12, 0xC9F0
+mtctr r12
+bctr
+RETURN:
+
+$Fountain of Dreams Zauron
+C21CC8AC 00000004
+3D808040 818CA380
+2C0C0000 4082000C
+EC0007FA 48000008
+FC000028 00000000
+C21CC8B4 00000006
+3D808040 818CA380
+2C0C0000 4082000C
+801B0014 48000014
+3D80801C 618CC9F0
+7D8903A6 4E800420
+60000000 00000000
+--------------------------------
+# Corneria No Ships or Great Fox Gun (1.02) [Zauron]
+@ 801DDA48:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801D
+ori r12, r12, 0xCE1C
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+@ 801E1390:
+blt RETURN
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne OMEGA
+ALPHA:
+lis r12, 0x801E
+ori r12, r12, 0x13A8
+b DoJump
+OMEGA:
+lis r12, 0x801E
+ori r12, r12, 0x17C0
+DoJump:
+mtctr r12
+bctr
+RETURN:
+
+$Corneria
+C21DDA48 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801D 618CCE1C
+7D8903A6 4E800421
+60000000 00000000
+C21E1390 00000007
+41800030 3D808040
+818CA380 2C0C0000
+40820010 3D80801E
+618C13A8 4800000C
+3D80801E 618C17C0
+7D8903A6 4E800420
+60000000 00000000
+--------------------------------
+# Jungle Japes No water or klaptraps [Achilles]
+@ 80202bcc: (Only if loaded the alternate stage)
+lis r12, 0x803f
+ori r12, r12, 0xa384
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x8020
+ori r12, r12, 0x2C78
+mtctr r12
+bctrl
+BLANK_OMEGA:
+ 
+@ 80202D9C:
+mflr r0
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+beq BLANK_ALPHA
+blr
+BLANK_ALPHA:
+
+@ 80202b7c:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801C
+ori r12, r12, 0x49F8
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Jungle Japes
+C2202BCC 00000005
+3D80803F 618CA384
+818C0000 2C0C0000
+40820014 3D808020
+618C2C78 7D8903A6
+4E800421 00000000
+C2202D9C 00000004
+7C0802A6 3D808040
+818CA380 2C0C0000
+41820008 4E800020
+60000000 00000000
+C2202B7C 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801C 618C49F8
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Green Greens
+@ 80213C10:
+mflr r0
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+beq BLANK_ALPHA
+blr
+BLANK_ALPHA:
+
+@ 802146EC:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x8021
+ori r12, r12, 0x4B58
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+@ 80216ABC:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x8021
+ori r12, r12, 0x5358
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Green Greens
+C2213C10 00000004
+7C0802A6 3D808040
+818CA380 2C0C0000
+41820008 4E800020
+60000000 00000000
+C22146EC 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D808021 618C4B58
+7D8903A6 4E800421
+60000000 00000000
+C2216ABC 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D808021 618C5358
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Brinstar - no rising lava (1.02) [Zauron]
+@ 801D99E0:
+mflr r0
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+beq BLANK_ALPHA
+blr
+BLANK_ALPHA:
+
+$Brinstar
+C21D99E0 00000004
+7C0802A6 3D808040
+818CA380 2C0C0000
+41820008 4E800020
+60000000 00000000
+--------------------------------
+# Onett no platforms or cars flieskiller's
+@ 801e379c:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801E
+ori r12, r12, 0x37F4
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+@ 801e3794:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801E
+ori r12, r12, 0x37F4
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Onett
+C21E379C 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801E 618C37F4
+7D8903A6 4E800421
+60000000 00000000
+C21E3794 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801E 618C37F4
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Kongo Jungle 64 - Remove Barrel (1.02) [flieskiller]
+@ 8020f4c0:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x8020
+ori r12, r12, 0xF52C
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Kongo Jungle 64
+C220F4C0 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D808020 618CF52C
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Mushroom Kingdom 2 Disable Pidgit/Birdo (1.02) [flieskiller]
+@ 801fcff0:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801F
+ori r12, r12, 0xD7A8
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+@ 801fcfe8:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801F
+ori r12, r12, 0xD3CC
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Mushroom Kingdom 2
+C21FCFF0 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801F 618CD7A8
+7D8903A6 4E800421
+60000000 00000000
+C21FCFE8 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801F 618CD3CC
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Final Destination no transitions (1.02) [Achilles, Dan Salvato]
+@ 8021AAE4:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x8021
+ori r12, r12, 0xB2E8
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Final Destination
+C221AAE4 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D808021 618CB2E8
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Dreamland 64 no wind (1.02) [Zauron]
+@ 80211444
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x8021
+ori r12, r12, 0x19E0
+mtctr r12
+bctr
+BLANK_OMEGA:
+
+$Dreamland 64
+C2211444 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D808021 618C19E0
+7D8903A6 4E800420
+60000000 00000000
+--------------------------------
+# Yoshi's Story no flyguys (1.02) [Zauron]
+@ 801E3348:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801E
+ori r12, r12, 0x3418
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Yoshi's Story
+C21E3348 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801E 618C3418
+7D8903A6 4E800421
+60000000 00000000
+--------------------------------
+# Pokemon Stadium no transformations (1.02) [Zauron]
+@ 801D1548:
+lis r12, 0x8040
+lwz r12, -0x5C80(r12)
+cmpwi r12, 0
+bne BLANK_OMEGA
+lis r12, 0x801D
+ori r12, r12, 0x4548
+mtctr r12
+bctrl
+BLANK_OMEGA:
+
+$Pokemon Stadium
+C21D1548 00000005
+3D808040 818CA380
+2C0C0000 40820014
+3D80801D 618C4548
+7D8903A6 4E800421
+60000000 00000000

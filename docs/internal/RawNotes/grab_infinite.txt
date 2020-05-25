@@ -1,0 +1,157 @@
+Grip amount: 80dfc44c - Mario vs Mario
+
+45976000 before hit
+45975800 on hit
+Then goes into CaptureDamageLw
+
+Grip amount: Ice Climbers vs Mario
+80E5A1CC
+
+When grabbed:
+80E5A1D8 = 80D05560
+80E5A1DC = 80D05560 <-- These are probably pointers to grabbed player
+80E5A1E8 = 000001FF
+80E4CEC4 = 00
+
+When not grabbed:
+80E5A1D8 = 00000000
+80E5A1DC = 00000000
+80E5A1E8 = 00000000
+80E4CEC4 = 0x80
+
+
+When hit out of a grab:
+36:40:802 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+36:40:802 BreakPoints.cpp:197 I[MI]: CHK 80069784 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+
+When grabbed:
+40:14:543 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+40:14:543 BreakPoints.cpp:197 I[MI]: CHK 80069784 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+40:14:550 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 01ff at 80e5a1ea ( --- )
+--- then later:
+40:15:136 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+40:15:136 BreakPoints.cpp:197 I[MI]: CHK 80069784 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+40:15:146 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 01ff at 80e5a1ea ( --- )
+
+When hit during a grab and stay in grab:
+40:51:746 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+40:51:746 BreakPoints.cpp:197 I[MI]: CHK 80069784 ( --- ) Write16 0000 at 80e5a1ea ( --- )
+40:51:752 BreakPoints.cpp:197 I[MI]: CHK 8007e2f4 ( --- ) Write16 01ff at 80e5a1ea ( --- )
+
+
+Stack trace on that second 8007e2f4 call that writes 0x01ff to stay in the grab:
+8008f0c4 (sub_8008EC90, massive function)
+	800dc3e8 (sub_800DC3A4, stay in grab?)
+		800db6a4 (sub_800DB5D8, stay in grab?)
+			8007e2f4
+			
+sub_800DC3A4 seems to only be hit when getting hit in a grab that doesn't knock you out of grab
+
+Within sub_8008EC90:
+loc_8008EE50: is only reached if we're hit, but we stay in grab
+loc_8008EE48 is reached regardless of the type of hit
+
+
+8008EE48 loc_8008EE48:
+8008EE48 cmpwi     r0, 0			# If r0 = 0
+8008EE4C beq       loc_8008F140		# Then attack will escape the grab
+
+CHK 8007dbcc ( --- ) Write32 42d90ea8 at 80e5a1cc ( --- )
+	stfs      f1, 0x1A4C(r3)
+CHK 800db938 ( --- ) Read32 42d90ea8 at 80e5a1cc ( --- )
+	stfs      f0, 0x2340(r31)
+CHK 800db94c ( --- ) Write32 42d70ea8 at 80e5a1cc ( --- )
+	stfs      f0, 0x1A4C(r31)
+CHK 800db95c ( --- ) Read32 42d70ea8 at 80e5a1cc ( --- )
+	stw       r3, 0x2348(r31)
+
+ICs vs Mario on FD in Debug mode:
+---------------------------------
+Struct with grip value: 0x80e58780
+Offset of grip amount: 0x1A4C
+
+80d05560 = Popo player_t
+80db7240 = Nana player_t
+80e58720 = Mario player_t
+
+at 8008EE48, struct with grip value is at r29
+
+
+800DB970 - Branches when still grabbing, doesn't when we should let go
+
+
+
+
+Young Link vs people:
+80e0c36c - Grip amount
+80E0A920 - start of data struct
+		   In Grab	In Throw
+	80E0A9D8 - Float	0x00000000
+	80E0AEB4 - 0x40000000	0x80000021
+	80E0BAB8 - 0x00000000	0x80D05560
+	80E0CAD0 - 0x00000000	0x800DE508
+	80E0CB44 - 0x01200001	0x01202001 <-- jackpot?, 0x2224 (2226, bit 3 from left, 0010 0000)
+80E0D920 - Potential end of data struct
+
+
+
+Grip code:
+@ 8008EE48
+lbz r3, 0x2226(r29)	# Load throw state
+andi. r3, r3, 0x20	# Is the "isThrowing" bit set?
+bne NORMAL		# If it is set, proceed as normal
+lfs f0, 0x1A4C(r29)	# Load grip amount into f0
+lfs f1, -0x6910(r2)	# Load 0 into f1
+fcmpo cr0,f0,f1
+cror 2,0,2
+bne NORMAL	# 40820008
+li r0, 0
+NORMAL:
+cmpwi r0, 0		# The code that's already there
+
+C208EE48 00000006
+887D2226 70630020
+4082001C C01D1A4C
+C02296F0 FC000840
+4C401382 40820008
+38000000 2C000000
+60000000 00000000
+
+
+
+
+
+
+Standing up+B reduction:
+Air: 352, 306 -> 355, 309 -> 356, 310 -> Special Fall
+Ground: 347, 301 -> 350, 304 -> 351, 305
+
+
+
+Video:
+> Show DK infinite on Ganondorf
+- Ever wish you could turn off grab infinites in Super Smash Brothers Melee?  --- 4 secs
+* Music starts, Spaceport: Introducing Ulala!! - Naofumi Hataya
+- "Grab Infinite Removal Code\nFor SSBM v1.02"   --- 5 secs
+> Show same clip with grip reduction turned on
+- This code combines two of Melee's mechanics to get rid of grab infinites. ---- 5 secs
+- First, strong attacks will knock opponents out of a grab, like smash attacks. ---- 6 secs
+- Second, over time, the grabber's grip on their victim reduces.  --- 4 secs
+- When the victim is not being attacked and the grip is depleted, they are let go. --- 5 secs
+- This code makes it so that when the grip is depleted, even the weakest attack will knock opponents out of a grab. --- 8
+> Link attacking Bowser with flurry with Fox grabbing.
+- One of the nice things is that opponents with higher percent still stay grabbed for a longer time, as normal. --- 8
+- The reason for this code is that grab infinites are, for most people, frustrating and not fun, especially for the victim. 8
+- It also balances the massive reward for relatively little risk of attempting a grab. --- 6
+- It isn't a big change at the top level gameplay, but it significantly improves life at the mid level. --- 7
+- It also makes the end game for doubles not as broken (it's already skewed enough as it is). --- 6
+> Bowser at 50% with Ice Climbers doing an infinite that's broken.
+- Enjoy! Music: "Spaceport: Introducing Ulala!!" by Naofumi Hataya --- 5
+
+Grab Infinite Removal Code
+
+Compatible with SSBM v1.02
+Code:
+The latest code
+
+This removes grab infinites by making any attack knock opponents out of a grab when the grip has run out. This keeps everything else about grabs the same except for the ability to extend grabs into infinity.

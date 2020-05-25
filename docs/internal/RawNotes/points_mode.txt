@@ -1,0 +1,521 @@
+@ 8016CDAC
+
+Gecko code:
+C216CDAC 00000023
+88030005 3C808045
+6084BF18 88840000
+2C040000 418200FC
+3CA08045 60A5BF12
+88A50000 2C050002
+40A2000C 1C840064
+48000018 2C050000
+40A200D8 3CE08045
+60E7BF1C 88E70000
+38A00000 3CC08045
+60C63080 81060008
+2C080003 41820070
+2C040064 41A00014
+81060090 7C082000
+40800070 48000058
+39000000 81260070
+7D084A14 81260074
+7D084A14 81260078
+7D084A14 8126007C
+7D084A14 81260068
+7D094050 A126008C
+2C070001 4182000C
+41810010 48000010
+7D084A14 48000008
+7D094050 7C082000
+40800018 38A50001
+38C60E90 2C050004
+4082FF7C 48000034
+38800032 3CA08046
+60A5DB68 98850000
+38800000 3CA08046
+60A5B6C8 90850000
+3880003A 3CA08046
+60A5B6CC B0850000
+60000000 00000000
+
+
+
+Video:
+
+Capped Mode Gecko Code
+(code in description)
+
+What this does is it ends the match during time and coin mode when one player has gotten a certain number of points or coins within the time limit.
+
+So instead of trying to just hold a lead for the duration of the match, this changes the dynamic so you actively try to reach the score cap to secure a victory.
+
+It's particularly good for free-for-all matches, but in two player matches, it can bring a sort of tennis-like feel to it.
+
+You can set the number of points or coins to play until using the "Stock Time Limit" option (points are the minutes, coins are minutes times 100).
+
+0 . 5 12 . 4 7
+0 . 5  5 . 4 1
+       7 . 0 6
+
+
+
+SD Amount (Byte): 8045BF1C
+0x00 is -1
+0x01 is  0
+0x02 is -2
+
+
+Seconds: 0x0046b6C8 (8046b6C8)
+Frame count: 0x0056b6cc or maybe 8046b6CC
+003b0000 is max frame
+8046db68 byte: 30 means timer off, 32 means timer on
+
+
+
+Stock Match Limit
+
+
+
+
+positive point count (separated by 0x170):
+player 1: 00bd5EF0
+Player 2: 00BD6060
+Playre 3: 00BD61D0
+player 4: 00BD6340
+
+Player block is 80453080, each size is E90
+Coins are stored at offset 90 as a word
+
+453080 start
+4530f4 to c int, num KOs per player
+4530E8 int, num deaths
+4539ff, 453513, 4531bb
+45310c short, num SDs
+
+
+
+453080
+70 to 7C are the 4 KO amounts (int)
+
+
+
+8045BF18, byte: stock time limit
+Byte Game Mode: 0x8045bf12
+
+
+
+
+Pseudocode:
+Branch from function that holds the time update code, like 8016CDAC
+r4, r5, r6 all okay to use
+If the stock time limit is none, GOTO End # Find this by changing stock time limit and searching value
+FOR EACH character slot:
+  - If NONE, continue
+  - If Time mode && Character's Points >= Stock time limit, GOTO ZeroTime
+  - If Coin mode && Character's Coins >= Stock time limit * 100, GOTO ZeroTime
+  - If any other mode, GOTO End
+GOTO End
+-> ZeroTime
+Enable the Timer (set that thing to 32)
+Set Seconds to 0
+Set Frame count to 003a0000
+-> End
+Go back to the original location in code+1
+
+
+void doPointsMode() {
+	var r4, r5, r6;
+	
+	int limit = getStockTimeLimit();
+	if (limit == 0)
+		return;
+
+	int sdAmount;
+	if (getGameMode() == 0) { // Time
+		sdAmount = getSdAmount();
+	} else if (getGameMode() == 2) // Coin
+		limit = limit * 100;
+	} else {
+		return;
+	}
+	
+	for (int playerNum=0; playerNum<4; playerNum++) {
+		if (isNone(playerNum))
+			continue;
+		if (limit >= 100) { // we're in coin mode
+			if (getCoins(playerNum) >= limit) {
+				GOTO EndMatch;
+			}
+		} else {
+			for each other player, get num kos for other playes
+			subtract num falls
+			if SDAmount is 0x00, do nothing
+			if SDAmount is 0x01, add sds to score
+			if SDAmount is 0x02, subtract sds from score
+			int points = getKOs(playerNum) - getFalls(playerNum);
+			int sds = getSDs(playerNum);
+			if (sdAmount 
+			if (points >= limit) {
+				GOTO EndMatch;
+			}
+		}
+	}
+	
+	return;
+	EndMatch:
+	enableTimer();
+	globals.seconds = 0;
+	globals.frames = 60;
+}
+
+
+From 8016CDAC to here:
+lbz r0, 5(r3)
+lis r4, 0x8045
+ori r4, r4, 0xBF18
+lbz r4, 0(r4)        # r4 is limit
+cmpwi r4, 0
+beq- END
+lis r5, 0x8045
+ori r5, r5, 0xbf12
+lbz r5, 0(r5)        # r5 is game mode
+cmpwi r5, 2
+bne+ NotCoin
+mulli r4, r4, 100    # limit *= 100
+b CheckPlayers
+NotCoin:
+cmpwi r5, 0
+bne+ END
+lis r7, 0x8045
+ori r7, r7, 0xBF1C
+lbz r7, 0(r7)       # r7 is SD Amount, but only for points
+CheckPlayers:
+li r5, 0            # r5 is playerNum
+lis r6, 0x8045
+ori r6, r6, 0x3080  # r6 is current player block
+LOOP:
+lwz r8, 0x8(r6)
+cmpwi r8, 0x03
+beq- Continue    # If none, continue
+cmpwi r4, 100
+blt+ CheckPoints
+lwz r8, 0x90(r6)
+cmpw r8, r4      # currentCoins ? limit
+bge- EndMatch
+b Continue
+CheckPoints:
+li r8, 0         # r8 is score
+lwz r9, 0x70(r6) # P1 KOs
+add r8, r8, r9
+lwz r9, 0x74(r6) # P2 KOs
+add r8, r8, r9
+lwz r9, 0x78(r6) # P3 KOs
+add r8, r8, r9
+lwz r9, 0x7C(r6) # P4 KOs
+add r8, r8, r9
+lwz r9, 0x68(r6) # Falls
+sub r8, r8, r9
+lhz r9, 0x8C(r6) # SDs
+cmpwi r7, 1
+beq- AddSDs
+bgt- SubSDs
+b EvaluatePoints
+AddSDs:
+add r8, r8, r9
+b EvaluatePoints
+SubSDs:
+sub r8, r8, r9
+EvaluatePoints:
+cmpw r8, r4
+bge- EndMatch
+Continue:
+addi r5, r5, 1
+addi r6, r6, 0xE90
+cmpwi r5, 4
+bne+ LOOP
+b END
+EndMatch:
+li r4, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xdb68
+stb r4, 0(r5)     # Enable Timer
+li r4, 0
+lis r5, 0x8046
+ori r5, r5, 0xb6C8
+stw r4, 0(r5)     # set seconds to 0
+li r4, 0x3a
+lis r5, 0x8046
+ori r5, r5, 0xb6CC
+sth r4, 0(r5)     # Set frames to last frame
+END:
+
+
+
+
+
+
+v1.01:
+@ 8016CA98:
+lbz r0, 5(r3)
+lis r4, 0x8045
+ori r4, r4, 0xB238
+lbz r4, 0(r4)        # r4 is limit
+cmpwi r4, 0
+beq- END
+lis r5, 0x8045
+ori r5, r5, 0xB232
+lbz r5, 0(r5)        # r5 is game mode
+cmpwi r5, 2
+bne+ NotCoin
+mulli r4, r4, 100    # limit *= 100
+b CheckPlayers
+NotCoin:
+cmpwi r5, 0
+bne+ END
+lis r7, 0x8045
+ori r7, r7, 0xB23C
+lbz r7, 0(r7)       # r7 is SD Amount, but only for points
+CheckPlayers:
+li r5, 0            # r5 is playerNum
+lis r6, 0x8045
+ori r6, r6, 0x23A0  # r6 is current player block
+LOOP:
+lwz r8, 0x8(r6)
+cmpwi r8, 0x03
+beq- Continue    # If none, continue
+cmpwi r4, 100
+blt+ CheckPoints
+lwz r8, 0x90(r6)
+cmpw r8, r4      # currentCoins ? limit
+bge- EndMatch
+b Continue
+CheckPoints:
+li r8, 0         # r8 is score
+lwz r9, 0x70(r6) # P1 KOs
+add r8, r8, r9
+lwz r9, 0x74(r6) # P2 KOs
+add r8, r8, r9
+lwz r9, 0x78(r6) # P3 KOs
+add r8, r8, r9
+lwz r9, 0x7C(r6) # P4 KOs
+add r8, r8, r9
+lwz r9, 0x68(r6) # Falls
+sub r8, r8, r9
+lhz r9, 0x8C(r6) # SDs
+cmpwi r7, 1
+beq- AddSDs
+bgt- SubSDs
+b EvaluatePoints
+AddSDs:
+add r8, r8, r9
+b EvaluatePoints
+SubSDs:
+sub r8, r8, r9
+EvaluatePoints:
+cmpw r8, r4
+bge- EndMatch
+Continue:
+addi r5, r5, 1
+addi r6, r6, 0xE90
+cmpwi r5, 4
+bne+ LOOP
+b END
+EndMatch:
+li r4, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xCE88
+stb r4, 0(r5)     # Enable Timer
+li r4, 0
+lis r5, 0x8046
+ori r5, r5, 0xA9E8
+stw r4, 0(r5)     # set seconds to 0
+li r4, 0x3a
+lis r5, 0x8046
+ori r5, r5, 0xA9EC
+sth r4, 0(r5)     # Set frames to last frame
+END:
+
+
+
+
+
+
+
+
+
+v1.00:
+@ 8016C3A8:
+lbz r0, 5(r3)
+lis r4, 0x8045
+ori r4, r4, 0x9F50
+lbz r4, 0(r4)        # r4 is limit
+cmpwi r4, 0
+beq- END
+lis r5, 0x8045
+ori r5, r5, 0x9F4A
+lbz r5, 0(r5)        # r5 is game mode
+cmpwi r5, 2
+bne+ NotCoin
+mulli r4, r4, 100    # limit *= 100
+b CheckPlayers
+NotCoin:
+cmpwi r5, 0
+bne+ END
+lis r7, 0x8045
+ori r7, r7, 0x9F54
+lbz r7, 0(r7)       # r7 is SD Amount, but only for points
+CheckPlayers:
+li r5, 0            # r5 is playerNum
+lis r6, 0x8045
+ori r6, r6, 0x10C0  # r6 is current player block
+LOOP:
+lwz r8, 0x8(r6)
+cmpwi r8, 0x03
+beq- Continue    # If none, continue
+cmpwi r4, 100
+blt+ CheckPoints
+lwz r8, 0x90(r6)
+cmpw r8, r4      # currentCoins ? limit
+bge- EndMatch
+b Continue
+CheckPoints:
+li r8, 0         # r8 is score
+lwz r9, 0x70(r6) # P1 KOs
+add r8, r8, r9
+lwz r9, 0x74(r6) # P2 KOs
+add r8, r8, r9
+lwz r9, 0x78(r6) # P3 KOs
+add r8, r8, r9
+lwz r9, 0x7C(r6) # P4 KOs
+add r8, r8, r9
+lwz r9, 0x68(r6) # Falls
+sub r8, r8, r9
+lhz r9, 0x8C(r6) # SDs
+cmpwi r7, 1
+beq- AddSDs
+bgt- SubSDs
+b EvaluatePoints
+AddSDs:
+add r8, r8, r9
+b EvaluatePoints
+SubSDs:
+sub r8, r8, r9
+EvaluatePoints:
+cmpw r8, r4
+bge- EndMatch
+Continue:
+addi r5, r5, 1
+addi r6, r6, 0xE90
+cmpwi r5, 4
+bne+ LOOP
+b END
+EndMatch:
+li r4, 0x32
+lis r5, 0x8046
+ori r5, r5, 0xBBA0
+stb r4, 0(r5)     # Enable Timer
+li r4, 0
+lis r5, 0x8046
+ori r5, r5, 0x9700
+stw r4, 0(r5)     # set seconds to 0
+li r4, 0x3a
+lis r5, 0x8046
+ori r5, r5, 0x9704
+sth r4, 0(r5)     # Set frames to last frame
+END:
+
+
+
+PAL Character id
+80422E2C
+80422E80
+80443E24
+
+PAL Slot type
+80443E28
+80CE38F4
+80D4F6D8
+
+
+
+
+PAL:
+From 8016D77C to here:
+lbz r0, 5(r3)
+lis r4, 0x8044		# Was 8045BF18
+ori r4, r4, 0xCD20	# Now 8044CD20
+lbz r4, 0(r4)       # r4 is limit
+cmpwi r4, 0
+beq- END
+lis r5, 0x8044		# Was 8045bf12
+ori r5, r5, 0xCD1A	# Now 8044CD1A
+lbz r5, 0(r5)        # r5 is game mode
+cmpwi r5, 2
+bne+ NotCoin
+mulli r4, r4, 100    # limit *= 100
+b CheckPlayers
+NotCoin:
+cmpwi r5, 0
+bne+ END
+lis r7, 0x8044		# Was 8045BF1C
+ori r7, r7, 0xCD24	# Now 8044CD24
+lbz r7, 0(r7)       # r7 is SD Amount, but only for points
+CheckPlayers:
+li r5, 0            # r5 is playerNum
+lis r6, 0x8044
+ori r6, r6, 0x3E20  # r6 is current player block (80453080 1.02, now 80443E20)
+LOOP:
+lwz r8, 0x8(r6)
+cmpwi r8, 0x03
+beq- Continue    # If none, continue
+cmpwi r4, 100
+blt+ CheckPoints
+lwz r8, 0x90(r6)
+cmpw r8, r4      # currentCoins ? limit
+bge- EndMatch
+b Continue
+CheckPoints:
+li r8, 0         # r8 is score
+lwz r9, 0x70(r6) # P1 KOs
+add r8, r8, r9
+lwz r9, 0x74(r6) # P2 KOs
+add r8, r8, r9
+lwz r9, 0x78(r6) # P3 KOs
+add r8, r8, r9
+lwz r9, 0x7C(r6) # P4 KOs
+add r8, r8, r9
+lwz r9, 0x68(r6) # Falls
+sub r8, r8, r9
+lhz r9, 0x8C(r6) # SDs
+cmpwi r7, 1
+beq- AddSDs
+bgt- SubSDs
+b EvaluatePoints
+AddSDs:
+add r8, r8, r9
+b EvaluatePoints
+SubSDs:
+sub r8, r8, r9
+EvaluatePoints:
+cmpw r8, r4
+bge- EndMatch
+Continue:
+addi r5, r5, 1
+addi r6, r6, 0xEA0
+cmpwi r5, 4
+bne+ LOOP
+b END
+EndMatch:
+li r4, 0x32
+lis r5, 0x8045		# Was 8046db68
+ori r5, r5, 0xE970	# Now 8045E970
+stb r4, 0(r5)     # Enable Timer
+li r4, 0
+lis r5, 0x8045		# Was 8046b6C8
+ori r5, r5, 0xC4D0	# Now 8045C4D0
+stw r4, 0(r5)     # set seconds to 0
+li r4, 0x3a
+lis r5, 0x8045		# Was 8046b6CC
+ori r5, r5, 0xC4D4	# Now 8045C4D4
+sth r4, 0(r5)     # Set frames to last frame
+END:

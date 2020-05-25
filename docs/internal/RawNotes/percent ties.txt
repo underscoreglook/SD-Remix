@@ -1,0 +1,1259 @@
+C21A415C 00000048
+3803FFFF 2C000003
+40820230 2C0B0020
+41820228 3821FFEC
+3C80FFFF 6084FFFF
+90810000 90810004
+90810008 9081000C
+90810010 3A800000
+3AA00000 3E208045
+62313080 3E408047
+62529E00 3E00803F
+62100E06 3C808048
+608407C8 88840000
+2C040001 4182004C
+80910008 2C040003
+41820028 88920001
+5484801E A0B10060
+7C842B78 56A5103A
+7CA50A14 90850004
+7EB409AE 3A940001
+3A310E90 3A5200A8
+3AB50001 2C150004
+4082FFC0 4800005C
+80910008 2C040003
+41820038 88D00000
+54C5103A 7CA50A14
+80850004 2C040000
+40800014 7CD409AE
+3A940001 88920001
+5484801E A0D10060
+7C843214 90850004
+3A100024 3A310E90
+3A5200A8 3AB50001
+2C150004 4082FFAC
+3AA00000 7E41AA14
+8A520000 2C1200FF
+4182005C 7EB4AB78
+2C140000 4182003C
+7E21A214 8A31FFFF
+5646103A 5625103A
+7CC60A14 7CA50A14
+80C60004 80A50004
+7C062800 40A00014
+7E01A214 9A300000
+3A94FFFF 4BFFFFC4
+7E81A214 9A540000
+3AB50001 2C150004
+4082FF9C 38600005
+38000004 3A400000
+3E20FFFF 6231FFFF
+3A000000 7CC18214
+88C60000 2C0600FF
+41820088 54C5103A
+7CA50A14 80A50004
+7C112800 40A20018
+2C120000 40A20018
+38600004 38000003
+4800000C 7CB12B78
+7E128378 3E808048
+629407C8 8A940000
+2C140000 41A20020
+3CA08047 60A59DC8
+1CC6000C 7CC62A14
+9A460000 9A460001
+4800001C 3CA08047
+60A59E00 1CC600A8
+7CC62A14 9A460001
+9A460002 3A100001
+2C100004 4082FF70
+38210014 3A000000
+3A200000 3A400000
+3A800000 3AA00000
+60000000 00000000
+
+
+
+
+
+
+
+Three issues:
+1. Clean up code, make it more maintainable
+2. Handle teams properly
+3. Make sure logo and victory music is correct
+
+********************************
+*** Breaking ties by percent ***
+********************************
+801A415C - Call breakTie()
+void breakTie(r3 = sceneNum) {
+    var r4 to r6, r16 to r18, r20 to r21; // This doesn't have cooresponding ASM code
+	addi r0, r3, -1 [3803ffff] // Do the old code
+	if (r3 != 4) return; // If we aren't tied, don't try and break tie
+	if (r11 == 0x20) return; // This is in Jorgasm's code. Leave it here just in case
+	
+	// Put on stack for tie breaking values
+	array<word> tiebreaker[4]; // Old placement in top half, percent in bottom half
+	// Create the array for storing player placing order (sorted by insertion sort later)
+	array<byte> placementOrder[4]; // Each element is a bit mask of the players. Set to 0 for empty
+	fill(placementOrder, 0xFF);
+	fill(tiebreaker, 0xFFFFFFFF);
+
+	// Set up tie breaking values
+	int placementIndex = 0;
+	if (isTeamsBattle()) {
+		for (int playerNUm = 0; playerNum < 4; playerNum++) {
+			if (!isPlaying[playerNum]) continue; // If not playing, move on
+			int teamNum = getTeamNum(playerNum);
+			if (tieBreaker[teamNum] < 0) { // This means it's a new team to be added
+				tieBreaker[teamNum] = (getlacement(playerNum) << 16) | getPercentage(playerNum);
+				placementOrder[placementIndex] = teamNum;
+				placementIndex++;
+			} else { // Just add the percentage to the current team
+				tieBreaker[teamNum] += getPercentage(playerNum);
+			}
+		}
+	} else {
+		for (int playerNUm = 0; playerNum < 4; playerNum++) {
+			if (!isPlaying[playerNum]) continue; // If not playing, move on
+			tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+			placementOrder[placementIndex] = playerNum;
+			placementIndex++;
+		}
+	}
+
+	// Do the insertion sort
+	for (int i = 0; i < 4; i++) {
+		int currPlayer = placementOrder[i];
+		if (currPlayer < 0) break;
+		j = i;
+		loop {
+			if (j == 0) break;
+			int prevPlayer = placementOrder[j-1];
+			if (tiebreaker[currPlayer] >= tiebreaker[prevPlayer]) break;
+			placementOrder[j] = prevPlayer;
+			j--;
+		}
+		placementOrder[j] = currPlayer;
+	}
+	
+	// By default, go straight to the results screen
+	r3 = 0x5; // Next screen is results screen
+	r0 = 0x4; // r0 also needs to be set to go to results screen
+
+	// Go through and set the placements
+	int currPlacing=0, lastTieBreaker = -1;
+	for (int i=0; i<4; i++) {
+		int playerNum = placementOrder[i];
+		if (playerNum < 0) break;
+
+		if (lastTieBreaker == tieBreaker[playerNum]) {
+			if (currPlacing == 0) {
+				r3 = 0x4; // Then go to sudden death
+				r0 = 0x3; // r0 also needs to be set to go to sudden death
+			}
+		} else {
+			lastTieBreaker = tieBreaker[playerNum];
+			currPlacing = i;
+		}
+
+		if (isTeamsBattle()) {
+			// That means playerNum is actually teamNum, so update the team placement var
+			setTeamPlacementVars(team, currPlacing);
+		} else {
+			setPlacementVars(playerNum, currPlacing);
+		}
+	}
+
+	// Free the arrays we put on the stack
+	free all arrays;
+}
+pointer getPlacementAddress(playerNum) {
+	return 0x80479E00 + (0xA8 * playerNum);
+}
+byte getIsPlaying(playerNum) {
+	return *(getPlacementAddress(playerNum));
+}
+byte getPlacement(playerNum) {
+	return *(getPlacementAddress(playerNum) + 1);
+}
+byte setPlacementVars(playerNum, newPlacement) {
+	*(getPlacementAddress(playerNum) + 1) = newPlacement;
+	*(getPlacementAddress(playerNum) + 2) = newPlacement;
+}
+byte getGameMode() {
+	return *(0x8045bf12);
+}
+pointer getPlayerAddress(playerNum) {
+	return 0x80453080 + (0xE90 * playerNum);
+}
+int getNumKills(playerNum) {
+	return *(getPlayerAddress(playerNum) + 0x97C);
+}
+int getNumDeaths(playerNum) {
+	return *(getPlayerAddress(playerNum) + 0x68); // or BD0
+}
+byte getStocksLeft(playerNum) {
+	return *(getPlayerAddress(playerNum) + 0x8E);
+}
+int getNumCoins(playerNum) {
+	return *(getPlayerAddress(playerNum) + 0x90);
+}
+int getNumPoints(playerNum) {
+	return *(getPlacementAddress(playerNum) + 28);
+}
+short getPercentage(playerNum) {
+	return return *(getPlayerAddress(playerNum) + 0x60);
+}
+0x804807C8 - Teams battle flag (Byte), 0x01 for team battle, 0x00 for free for all
+80479DC8 is team base value. First two bytes is placement, 3rd byte is 01 if playing (0 if not)
+
+Important registers:
+r3 - holds scene data: 5 if going to results screen, 4 if going to sudden death, 1 if going from results to CSS
+r11 - ??
+0x80479d58 (r20) - This is read. It's the placing data. It has two bytes, 0 and 1.
+                   First byte: if 0x78 then player in game, 00 if not. Use 4e as separater.
+				   Byte two and three contains the actual placing, starting at 0 for 1st place.
+                   Each player's placing is separated by 0xA8.
+				   The first player's data is at this addr + 0xA8
+r11: 0x6 if time out in 4p 1-stock battle, P1 Link and P3 Peach still alive. 0x20 is bad apparently.
+
+
+Change the rules for sudden death:
+- Make it 1 stock each
+- Make it 1 minute
+- No bombs
+- Start at 0%
+
+
+801A415C branch to here
+
+addi r0, r3, -1
+cmpwi r0,3
+bne- RETURN
+cmpwi r11,32
+beq- RETURN
+
+addi sp, sp, -0x14 	# This will hold stack data
+# First word (@ sp) is the placementOrder array, which is 4 bytes
+# Next four words are the tiebreakers, which is (oldPlacement << 16) | percent
+lis r4, 0xFFFF
+ori r4, r4, 0xFFFF
+stw r4, 0(sp)
+stw r4, 4(sp)
+stw r4, 8(sp)
+stw r4, 0xC(sp)
+stw r4, 0x10(sp)
+
+# Do the init loops
+li r20, 0	# placementIndex
+li r21, 0	# playerNum
+lis r17, 0x8045  # This is player block
+ori r17, r17, 0x3080  # Separated by E90 per player
+lis r18, 0x8047  # This is results screen data
+ori r18, r18, 0x9E00  # Separated by 0xA8
+lis r16, 0x803F  # This is team colors
+ori r16, r16, 0x0E06  # Separated by 0x24
+lis r4, 0x8048
+ori r4, r4, 0x07C8
+lbz r4, 0(r4)	# r4 is whether it is teams battle
+cmpwi r4, 0x01  # Is this a team battle?
+beq TEAM_LOOP
+
+FFA_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq FFA_CONTINUE	# If None, go to next item
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+lhz r5, 0x60(r17)	# Get percentage
+or r4, r4, r5		# Place in lower half of word
+slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
+add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes
+stw r4, 4(r5)       # tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+stbx r21, r20, sp	# placementOrder[placementIndex] = playerNum
+addi r20, r20, 1	# placementIndex++
+FFA_CONTINUE:
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ FFA_LOOP
+b INIT_LOOP_END
+
+TEAM_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq TEAM_CONTINUE	# If NONE, go to next item
+lbz r6, 0(r16)		# r6 = teamNum
+slwi r5, r6, 2		# get addr of tieBreaker[teamNum]
+add r5, r5, sp
+lwz r4, 4(r5)		# r4 = tieBreaker[teamNum]
+cmpwi r4, 0
+bge- TEAM_EXISTING  # if tieBreaker[teamNum] >= 0, it exists. If -1, it doesn't exist, and we must create it
+stbx r6, r20, sp	# placementOrder[placementIndex] = teamNum
+addi r20, r20, 1	# placementIndex++
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+TEAM_EXISTING:
+lhz r6, 0x60(r17)	# Get percentage of player
+add r4, r4, r6      # tieBreaker[teamNum] += getPercentage(playerNum)
+stw r4, 4(r5)       # Store it back into tieBreaker array
+TEAM_CONTINUE:
+addi r16, r16, 0x24
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ TEAM_LOOP
+
+INIT_LOOP_END:
+
+# Insertion sort time!
+li r21, 0			# r21 is i
+INSERTSTART:
+add r18, sp, r21
+lbz r18, 0(r18)		# r18 is currPlayer
+cmpwi r18, 0x00FF
+beq- END_INSERT		# if currPlayer == -1, stop insertion sort
+mr r20, r21			# r20 is j
+SORTLOOP:
+cmpwi r20, 0
+beq- BREAKSORTLOOP	# if (j==0) break
+add r17, sp, r20	# r17 = *(placementOrder[j])
+lbz r17, -1(r17)	# r17 is prevPlayer
+# Compare tieBreaker[currPlayer] with tieBreaker[prevPlayer]
+slwi r6, r18, 2
+slwi r5, r17, 2
+add r6, r6, sp		# r6 is *(tieBreaker[currPlayer]) - 4
+add r5, r5, sp		# r5 is *(tieBreaker[prevPlayer]) - 4
+lwz r6, 4(r6)		# r6 is tieBreaker[currPlayer]
+lwz r5, 4(r5)		# r5 is tieBreaker[prevPlayer]
+cmpw r6, r5
+bge+ BREAKSORTLOOP
+add r16, sp, r20     # r16 = *(placementOrder[j])
+stb r17, 0(r16)      # placementOrder[j] = prevPlayer
+addi r20, r20, -1    # j--
+b SORTLOOP
+BREAKSORTLOOP:
+add r20, sp, r20
+stb r18, 0(r20)       # placementOrder[j] = currPlayer
+addi r21, r21, 1
+cmpwi r21, 4
+bne+ INSERTSTART
+END_INSERT:
+
+li r3, 0x5	# Next screen is results screen
+li r0, 0x4	# r0 also needs to be set to go to results screen
+
+# Go through and set the placements
+li r18, 0		# r18 = currPlacing
+lis r17, 0xFFFF		# r17 = lastTieBreaker
+ori r17, r17, 0xFFFF		# r17 = lastTieBreaker
+li r16, 0		# r16 is i
+PLACING_START:
+add r6, sp, r16	# r6 = *(placementOrder[i])
+lbz r6, 0(r6)	# r6 = playerNum
+cmpwi r6, 0x00FF
+beq- PLACING_END
+slwi r5, r6, 2
+add r5, r5, sp	# r5 = *(tieBreaker[playerNum]) - 4
+lwz r5, 4(r5)	# r5 = tieBreaker[playerNum]
+cmpw r17, r5
+bne+ UPDATE_PLACING
+cmpwi r18, 0
+bne+ SET_PLACEMENT
+li r3, 0x4            # Next screen is sudden death
+li r0, 0x3            # r0 also needs to be set
+b SET_PLACEMENT
+UPDATE_PLACING:
+mr r17, r5
+mr r18, r16		# currPlacing = i
+SET_PLACEMENT:
+lis r20, 0x8048
+ori r20, r20, 0x07C8
+lbz r20, 0(r20)	# r20 is whether it is teams battle
+cmpwi r20, 0	# is it a teams battle?
+beq+ PLACING_NOT_TEAMS
+lis r5, 0x8047
+ori r5, r5, 0x9DC8
+mulli r6, r6, 0xC
+add r6, r6, r5
+stb r18, 0(r6)
+stb r18, 1(r6)
+b PLACING_CONT
+PLACING_NOT_TEAMS:
+lis r5, 0x8047
+ori r5, r5, 0x9E00	# r5 is the base placement address
+mulli r6, r6, 0xA8	# playerNum *= 0xA8
+add r6, r6, r5		# r6 = getPlacementAddress(playerNum)
+stb r18, 1(r6)
+stb r18, 2(r6)
+PLACING_CONT:
+addi r16, r16, 1
+cmpwi r16, 4
+bne+ PLACING_START
+PLACING_END:
+
+addi sp, sp, 0x14 # Clear the stack
+# Clear some used registers
+li r16, 0
+li r17, 0
+li r18, 0
+li r20, 0
+li r21, 0
+RETURN:
+b 801A4160  # Don't use this with Gecko
+
+
+
+
+
+
+
+
+Team colors:
+803F0E06, other players are 0x24 higher
+
+Possible Player 1 Team color:
+803F0E06 - Green = 0x02 -- This is the best one to use because it matches up to other values
+80480823 - Green = 0x03(probably not)
+80480829 - Green = 0x02
+
+Player 2 Team Color:
+803F0E2A - Red = 0x00
+8048084D - Red = 0x00
+
+Player 3 Team Color:
+803F0E4E - Blue = 0x01
+80480871 - Blue = 0x01
+
+
+Possible values for holding current winner:
+0x01 if player 2:
+8046DBEC, 8046DBEE, 8046E3E4, 80479DB4, 8047C038, 804D65A8
+0xFF if player 2:
+8046E458, 80479E28, 8047C0AC
+0x00 if player 2:
+8046E4DA, 80479EAA, 8047C12E
+
+0x02 if  player 3:
+8046DBEC, 8046DBEE, 8046E3E4, 8046E4DA,
+80479DB4, 80479EAA, 8047C038, 8047C12E
+
+Again: 0x02:
+8046DBEC, 8046DBEE
+
+These two are written at:
+34:06:913 BreakPoints.cpp:197 I[MI]: CHK 8000c18c ( --- ) Write8 00 at 8046dbec ( --- )
+34:06:913 BreakPoints.cpp:197 I[MI]: CHK 8000c194 ( --- ) Write8 00 at 8046dbee ( --- )
+34:06:914 BreakPoints.cpp:197 I[MI]: CHK 801771e4 ( --- ) Write8 01 at 8046dbec ( --- ) --
+34:06:914 BreakPoints.cpp:197 I[MI]: CHK 8017734c ( --- ) Write8 01 at 8046dbee ( --- ) --
+
+8046dbec holds the value of the player to display the logo of and play music of, which writes other places
+0x00 for p1, 0x01 for p2, etc
+Might need to write the same thing to 8046dbee, though.
+
+Our code cave is executed to first (801A415C)
+Then 801771e4, then 8017734c
+
+Figure out the code path or figure out what r3 is when it is being written to.
+
+Alternatively, just overwrite function 80165418 so that it reads from the current winner and returns the player number of the winner instead of whatever it is doing.
+
+
+
+
+
+
+
+Test plan
+---------
+
+Pick P1 and P2. Go to FD. This is all in a row.
+  - No damage, zero time: Will go to sudden death
+  - No damage, zero time: Will go back to sudden death
+  - Equal integer damage: Will go back to sudden death
+  - Have P1 have higher damage and zero time: P2 will win
+
+For each, pick P1 and P2. Go to FD.a
+  - P1 has more damage, zero time: P2 wins
+  - P2 has more damage, zero time: P1 wins
+  - Go to sudden death, P2 has higher damage and zero time: P1 will win
+
+For each, pick P1 and P2, 1 stock. Go to Battlefield
+  - Suicide with P1: P2 wins
+  - Suicide with P2: P1 wins
+
+For each, pick P2 and P3 and P4. Go to Battlefield
+  - Zero time: All three go into overtime
+  - One has higher percent: Other two go into overtime
+
+Pick P1, P2, and P4, go to hyrule temple:
+  - P1 has highest damage, P2 has second highest: P3 wins, with P2 in second.
+  - P1 suicides at no damage, P2 has highest damage with P3 at lowest damage: P3 wins
+  - P1 suicides and both at equal percent: P2 and P3 go into overtime
+
+Teams: P1 & P2 vs P3 & P4
+  - All equal: Go to overtime
+  - P1 & P2 higher damage: Team 2 wins
+  - Team 2 has higher damage: Team 1 wins
+  - Team 1 has lower damage but less stocks: Team 2 wins
+  0xA8
+  
+  
+Red Team:
+8046E3F8 & 9
+80479DC8 & 9 - Probably?
+8047C04C & D
+
+Blue team:
+8046E404 & 5
+80479DD4 & 5
+8047C058 & 9
+  
+Limitations:
+If you hack it so that sudden death times out, the game automatically places the first player as the winner. The code that does that will need to be hacked separately. (You can do a memory breakpoint on the results variable)
+
+
+
+Regulation Win:
+CHK 8000c190 ( --- ) Write8 00 at 80479e01 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 80479e02 ( --- )
+CHK 8000c190 ( --- ) Write8 00 at 80479ea9 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 80479eaa ( --- )
+CHK 8000c190 ( --- ) Write8 00 at 80479f51 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 80479f52 ( --- )
+CHK 8000c190 ( --- ) Write8 00 at 80479ff9 ( --- )
+CHK 8000c194 ( --- ) Write8 00 at 80479ffa ( --- )
+CHK 80165b10 ( --- ) Write8 01 at 80479ea9 ( --- )
+CHK 80165b80 ( --- ) Write8 02 at 80479ea9 ( --- )
+CHK 80165bb8 ( --- ) Write8 03 at 80479ea9 ( --- )
+CHK 80165b10 ( --- ) Write8 01 at 80479f51 ( --- )
+CHK 80165bb8 ( --- ) Write8 02 at 80479f51 ( --- )
+CHK 80165b10 ( --- ) Write8 01 at 80479ff9 ( --- )
+CHK 80165d84 ( --- ) Write8 00 at 80479e02 ( --- )
+CHK 80165d84 ( --- ) Write8 03 at 80479eaa ( --- )
+CHK 80165d84 ( --- ) Write8 02 at 80479f52 ( --- )
+CHK 80165d84 ( --- ) Write8 01 at 80479ffa ( --- )
+
+Going into overtime:
+
+Finished overtime:
+
+
+
+
+
+
+
+
+
+
+v1.00
+@ 801A3414:
+addi r0, r3, -1
+cmpwi r0,3
+bne- RETURN
+cmpwi r11,32
+beq- RETURN
+
+addi sp, sp, -0x14 	# This will hold stack data
+# First word (@ sp) is the placementOrder array, which is 4 bytes
+# Next four words are the tiebreakers, which is (oldPlacement << 16) | percent
+lis r4, 0xFFFF
+ori r4, r4, 0xFFFF
+stw r4, 0(sp)
+stw r4, 4(sp)
+stw r4, 8(sp)
+stw r4, 0xC(sp)
+stw r4, 0x10(sp)
+
+# Do the init loops
+li r20, 0	# placementIndex
+li r21, 0	# playerNum
+lis r17, 0x8045
+ori r17, r17, 0x10C0  # Player block: 804510C0
+lis r18, 0x8047
+ori r18, r18, 0x7E38  # Results Screen data: 80477E38
+lis r16, 0x803E
+ori r16, r16, 0xEF76  # Team Colors: 803EEF76
+lis r4, 0x8047
+ori r4, r4, 0xE800    # 8047E800
+lbz r4, 0(r4)	# r4 is whether it is teams battle
+cmpwi r4, 0x01  # Is this a team battle?
+beq TEAM_LOOP
+
+FFA_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq FFA_CONTINUE	# If None, go to next item
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+lhz r5, 0x60(r17)	# Get percentage
+or r4, r4, r5		# Place in lower half of word
+slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
+add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes
+stw r4, 4(r5)       # tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+stbx r21, r20, sp	# placementOrder[placementIndex] = playerNum
+addi r20, r20, 1	# placementIndex++
+FFA_CONTINUE:
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ FFA_LOOP
+b INIT_LOOP_END
+
+TEAM_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq TEAM_CONTINUE	# If NONE, go to next item
+lbz r6, 0(r16)		# r6 = teamNum
+slwi r5, r6, 2		# get addr of tieBreaker[teamNum]
+add r5, r5, sp
+lwz r4, 4(r5)		# r4 = tieBreaker[teamNum]
+cmpwi r4, 0
+bge- TEAM_EXISTING  # if tieBreaker[teamNum] >= 0, it exists. If -1, it doesn't exist, and we must create it
+stbx r6, r20, sp	# placementOrder[placementIndex] = teamNum
+addi r20, r20, 1	# placementIndex++
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+TEAM_EXISTING:
+lhz r6, 0x60(r17)	# Get percentage of player
+add r4, r4, r6      # tieBreaker[teamNum] += getPercentage(playerNum)
+stw r4, 4(r5)       # Store it back into tieBreaker array
+TEAM_CONTINUE:
+addi r16, r16, 0x24
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ TEAM_LOOP
+
+INIT_LOOP_END:
+
+# Insertion sort time!
+li r21, 0			# r21 is i
+INSERTSTART:
+add r18, sp, r21
+lbz r18, 0(r18)		# r18 is currPlayer
+cmpwi r18, 0x00FF
+beq- END_INSERT		# if currPlayer == -1, stop insertion sort
+mr r20, r21			# r20 is j
+SORTLOOP:
+cmpwi r20, 0
+beq- BREAKSORTLOOP	# if (j==0) break
+add r17, sp, r20	# r17 = *(placementOrder[j])
+lbz r17, -1(r17)	# r17 is prevPlayer
+# Compare tieBreaker[currPlayer] with tieBreaker[prevPlayer]
+slwi r6, r18, 2
+slwi r5, r17, 2
+add r6, r6, sp		# r6 is *(tieBreaker[currPlayer]) - 4
+add r5, r5, sp		# r5 is *(tieBreaker[prevPlayer]) - 4
+lwz r6, 4(r6)		# r6 is tieBreaker[currPlayer]
+lwz r5, 4(r5)		# r5 is tieBreaker[prevPlayer]
+cmpw r6, r5
+bge+ BREAKSORTLOOP
+add r16, sp, r20     # r16 = *(placementOrder[j])
+stb r17, 0(r16)      # placementOrder[j] = prevPlayer
+addi r20, r20, -1    # j--
+b SORTLOOP
+BREAKSORTLOOP:
+add r20, sp, r20
+stb r18, 0(r20)       # placementOrder[j] = currPlayer
+addi r21, r21, 1
+cmpwi r21, 4
+bne+ INSERTSTART
+END_INSERT:
+
+li r3, 0x5	# Next screen is results screen
+li r0, 0x4	# r0 also needs to be set to go to results screen
+
+# Go through and set the placements
+li r18, 0		# r18 = currPlacing
+lis r17, 0xFFFF		# r17 = lastTieBreaker
+ori r17, r17, 0xFFFF		# r17 = lastTieBreaker
+li r16, 0		# r16 is i
+PLACING_START:
+add r6, sp, r16	# r6 = *(placementOrder[i])
+lbz r6, 0(r6)	# r6 = playerNum
+cmpwi r6, 0x00FF
+beq- PLACING_END
+slwi r5, r6, 2
+add r5, r5, sp	# r5 = *(tieBreaker[playerNum]) - 4
+lwz r5, 4(r5)	# r5 = tieBreaker[playerNum]
+cmpw r17, r5
+bne+ UPDATE_PLACING
+cmpwi r18, 0
+bne+ SET_PLACEMENT
+li r3, 0x4            # Next screen is sudden death
+li r0, 0x3            # r0 also needs to be set
+b SET_PLACEMENT
+UPDATE_PLACING:
+mr r17, r5
+mr r18, r16		# currPlacing = i
+SET_PLACEMENT:
+lis r20, 0x8047
+ori r20, r20, 0xE800 # 8047E800
+lbz r20, 0(r20)	# r20 is whether it is teams battle
+cmpwi r20, 0	# is it a teams battle?
+beq+ PLACING_NOT_TEAMS
+lis r5, 0x8047
+ori r5, r5, 0x7E00  # 80477E00
+mulli r6, r6, 0xC
+add r6, r6, r5
+stb r18, 0(r6)
+stb r18, 1(r6)
+b PLACING_CONT
+PLACING_NOT_TEAMS:
+lis r5, 0x8047      # r5 is the base placement address
+ori r5, r5, 0x7E38	# 80477E38
+mulli r6, r6, 0xA8	# playerNum *= 0xA8
+add r6, r6, r5		# r6 = getPlacementAddress(playerNum)
+stb r18, 1(r6)
+stb r18, 2(r6)
+PLACING_CONT:
+addi r16, r16, 1
+cmpwi r16, 4
+bne+ PLACING_START
+PLACING_END:
+
+addi sp, sp, 0x14 # Clear the stack
+# Clear some used registers
+li r16, 0
+li r17, 0
+li r18, 0
+li r20, 0
+li r21, 0
+RETURN:
+
+C21A3414 00000048
+3803FFFF 2C000003
+40820230 2C0B0020
+41820228 3821FFEC
+3C80FFFF 6084FFFF
+90810000 90810004
+90810008 9081000C
+90810010 3A800000
+3AA00000 3E208045
+623110C0 3E408047
+62527E38 3E00803E
+6210EF76 3C808047
+6084E800 88840000
+2C040001 4182004C
+80910008 2C040003
+41820028 88920001
+5484801E A0B10060
+7C842B78 56A5103A
+7CA50A14 90850004
+7EB409AE 3A940001
+3A310E90 3A5200A8
+3AB50001 2C150004
+4082FFC0 4800005C
+80910008 2C040003
+41820038 88D00000
+54C5103A 7CA50A14
+80850004 2C040000
+40800014 7CD409AE
+3A940001 88920001
+5484801E A0D10060
+7C843214 90850004
+3A100024 3A310E90
+3A5200A8 3AB50001
+2C150004 4082FFAC
+3AA00000 7E41AA14
+8A520000 2C1200FF
+4182005C 7EB4AB78
+2C140000 4182003C
+7E21A214 8A31FFFF
+5646103A 5625103A
+7CC60A14 7CA50A14
+80C60004 80A50004
+7C062800 40A00014
+7E01A214 9A300000
+3A94FFFF 4BFFFFC4
+7E81A214 9A540000
+3AB50001 2C150004
+4082FF9C 38600005
+38000004 3A400000
+3E20FFFF 6231FFFF
+3A000000 7CC18214
+88C60000 2C0600FF
+41820088 54C5103A
+7CA50A14 80A50004
+7C112800 40A20018
+2C120000 40A20018
+38600004 38000003
+4800000C 7CB12B78
+7E128378 3E808047
+6294E800 8A940000
+2C140000 41A20020
+3CA08047 60A57E00
+1CC6000C 7CC62A14
+9A460000 9A460001
+4800001C 3CA08047
+60A57E38 1CC600A8
+7CC62A14 9A460001
+9A460002 3A100001
+2C100004 4082FF70
+38210014 3A000000
+3A200000 3A400000
+3A800000 3AA00000
+60000000 00000000
+
+
+
+
+
+
+
+
+
+
+
+v1.01
+@ 801A3B14 branch to here
+addi r0, r3, -1
+cmpwi r0,3
+bne- RETURN
+cmpwi r11,32
+beq- RETURN
+
+addi sp, sp, -0x14 	# This will hold stack data
+# First word (@ sp) is the placementOrder array, which is 4 bytes
+# Next four words are the tiebreakers, which is (oldPlacement << 16) | percent
+lis r4, 0xFFFF
+ori r4, r4, 0xFFFF
+stw r4, 0(sp)
+stw r4, 4(sp)
+stw r4, 8(sp)
+stw r4, 0xC(sp)
+stw r4, 0x10(sp)
+
+# Do the init loops
+li r20, 0	# placementIndex
+li r21, 0	# playerNum
+lis r17, 0x8045
+ori r17, r17, 0x23A0  # Player block: 804523A0
+lis r18, 0x8047
+ori r18, r18, 0x9120  # Results screen data: 80479120
+lis r16, 0x803F
+ori r16, r16, 0x0126  # Team Colors: 803F0126
+lis r4, 0x8047
+ori r4, r4, 0xFAE8	  # 8047FAE8
+lbz r4, 0(r4)	# r4 is whether it is teams battle
+cmpwi r4, 0x01  # Is this a team battle?
+beq TEAM_LOOP
+
+FFA_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq FFA_CONTINUE	# If None, go to next item
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+lhz r5, 0x60(r17)	# Get percentage
+or r4, r4, r5		# Place in lower half of word
+slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
+add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes
+stw r4, 4(r5)       # tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+stbx r21, r20, sp	# placementOrder[placementIndex] = playerNum
+addi r20, r20, 1	# placementIndex++
+FFA_CONTINUE:
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ FFA_LOOP
+b INIT_LOOP_END
+
+TEAM_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq TEAM_CONTINUE	# If NONE, go to next item
+lbz r6, 0(r16)		# r6 = teamNum
+slwi r5, r6, 2		# get addr of tieBreaker[teamNum]
+add r5, r5, sp
+lwz r4, 4(r5)		# r4 = tieBreaker[teamNum]
+cmpwi r4, 0
+bge- TEAM_EXISTING  # if tieBreaker[teamNum] >= 0, it exists. If -1, it doesn't exist, and we must create it
+stbx r6, r20, sp	# placementOrder[placementIndex] = teamNum
+addi r20, r20, 1	# placementIndex++
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+TEAM_EXISTING:
+lhz r6, 0x60(r17)	# Get percentage of player
+add r4, r4, r6      # tieBreaker[teamNum] += getPercentage(playerNum)
+stw r4, 4(r5)       # Store it back into tieBreaker array
+TEAM_CONTINUE:
+addi r16, r16, 0x24
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ TEAM_LOOP
+
+INIT_LOOP_END:
+
+# Insertion sort time!
+li r21, 0			# r21 is i
+INSERTSTART:
+add r18, sp, r21
+lbz r18, 0(r18)		# r18 is currPlayer
+cmpwi r18, 0x00FF
+beq- END_INSERT		# if currPlayer == -1, stop insertion sort
+mr r20, r21			# r20 is j
+SORTLOOP:
+cmpwi r20, 0
+beq- BREAKSORTLOOP	# if (j==0) break
+add r17, sp, r20	# r17 = *(placementOrder[j])
+lbz r17, -1(r17)	# r17 is prevPlayer
+# Compare tieBreaker[currPlayer] with tieBreaker[prevPlayer]
+slwi r6, r18, 2
+slwi r5, r17, 2
+add r6, r6, sp		# r6 is *(tieBreaker[currPlayer]) - 4
+add r5, r5, sp		# r5 is *(tieBreaker[prevPlayer]) - 4
+lwz r6, 4(r6)		# r6 is tieBreaker[currPlayer]
+lwz r5, 4(r5)		# r5 is tieBreaker[prevPlayer]
+cmpw r6, r5
+bge+ BREAKSORTLOOP
+add r16, sp, r20     # r16 = *(placementOrder[j])
+stb r17, 0(r16)      # placementOrder[j] = prevPlayer
+addi r20, r20, -1    # j--
+b SORTLOOP
+BREAKSORTLOOP:
+add r20, sp, r20
+stb r18, 0(r20)       # placementOrder[j] = currPlayer
+addi r21, r21, 1
+cmpwi r21, 4
+bne+ INSERTSTART
+END_INSERT:
+
+li r3, 0x5	# Next screen is results screen
+li r0, 0x4	# r0 also needs to be set to go to results screen
+
+# Go through and set the placements
+li r18, 0		# r18 = currPlacing
+lis r17, 0xFFFF		# r17 = lastTieBreaker
+ori r17, r17, 0xFFFF		# r17 = lastTieBreaker
+li r16, 0		# r16 is i
+PLACING_START:
+add r6, sp, r16	# r6 = *(placementOrder[i])
+lbz r6, 0(r6)	# r6 = playerNum
+cmpwi r6, 0x00FF
+beq- PLACING_END
+slwi r5, r6, 2
+add r5, r5, sp	# r5 = *(tieBreaker[playerNum]) - 4
+lwz r5, 4(r5)	# r5 = tieBreaker[playerNum]
+cmpw r17, r5
+bne+ UPDATE_PLACING
+cmpwi r18, 0
+bne+ SET_PLACEMENT
+li r3, 0x4            # Next screen is sudden death
+li r0, 0x3            # r0 also needs to be set
+b SET_PLACEMENT
+UPDATE_PLACING:
+mr r17, r5
+mr r18, r16		# currPlacing = i
+SET_PLACEMENT:
+lis r20, 0x8047
+ori r20, r20, 0xFAE8 # 8047FAE8
+lbz r20, 0(r20)	# r20 is whether it is teams battle
+cmpwi r20, 0	# is it a teams battle?
+beq+ PLACING_NOT_TEAMS
+lis r5, 0x8047
+ori r5, r5, 0x90E8	# 804790E8
+mulli r6, r6, 0xC
+add r6, r6, r5
+stb r18, 0(r6)
+stb r18, 1(r6)
+b PLACING_CONT
+PLACING_NOT_TEAMS:
+lis r5, 0x8047      # r5 is the base placement address
+ori r5, r5, 0x9120	# 80479120
+mulli r6, r6, 0xA8	# playerNum *= 0xA8
+add r6, r6, r5		# r6 = getPlacementAddress(playerNum)
+stb r18, 1(r6)
+stb r18, 2(r6)
+PLACING_CONT:
+addi r16, r16, 1
+cmpwi r16, 4
+bne+ PLACING_START
+PLACING_END:
+
+addi sp, sp, 0x14 # Clear the stack
+# Clear some used registers
+li r16, 0
+li r17, 0
+li r18, 0
+li r20, 0
+li r21, 0
+RETURN:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PAL
+@ 801A4CE0:
+addi r0, r3, -1
+cmpwi r0,3
+bne- RETURN
+cmpwi r11,32
+beq- RETURN
+
+addi sp, sp, -0x14 	# This will hold stack data
+# First word (@ sp) is the placementOrder array, which is 4 bytes
+# Next four words are the tiebreakers, which is (oldPlacement << 16) | percent
+lis r4, 0xFFFF
+ori r4, r4, 0xFFFF
+stw r4, 0(sp)
+stw r4, 4(sp)
+stw r4, 8(sp)
+stw r4, 0xC(sp)
+stw r4, 0x10(sp)
+
+# Do the init loops
+li r20, 0	# placementIndex
+li r21, 0	# playerNum
+lis r17, 0x8044  	  # This is player block
+ori r17, r17, 0x3E20  # Separated by EA0 per player	80443E20
+lis r18, 0x8046 	  # This is results screen data
+ori r18, r18, 0xAC08  # Separated by 0xA8	8046AC08
+lis r16, 0x803F  	  # This is team colors
+ori r16, r16, 0x1C72  # Separated by 0x24	803F1C72
+lis r4, 0x8047
+ori r4, r4, 0x15D0	  # 804715D0
+lbz r4, 0(r4)	# r4 is whether it is teams battle
+cmpwi r4, 0x01  # Is this a team battle?
+beq TEAM_LOOP
+
+FFA_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq FFA_CONTINUE	# If None, go to next item
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+lhz r5, 0x60(r17)	# Get percentage
+or r4, r4, r5		# Place in lower half of word
+slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
+add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes
+stw r4, 4(r5)       # tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+stbx r21, r20, sp	# placementOrder[placementIndex] = playerNum
+addi r20, r20, 1	# placementIndex++
+FFA_CONTINUE:
+addi r17, r17, 0xEA0
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ FFA_LOOP
+b INIT_LOOP_END
+
+TEAM_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq TEAM_CONTINUE	# If NONE, go to next item
+lbz r6, 0(r16)		# r6 = teamNum
+slwi r5, r6, 2		# get addr of tieBreaker[teamNum]
+add r5, r5, sp
+lwz r4, 4(r5)		# r4 = tieBreaker[teamNum]
+cmpwi r4, 0
+bge- TEAM_EXISTING  # if tieBreaker[teamNum] >= 0, it exists. If -1, it doesn't exist, and we must create it
+stbx r6, r20, sp	# placementOrder[placementIndex] = teamNum
+addi r20, r20, 1	# placementIndex++
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+TEAM_EXISTING:
+lhz r6, 0x60(r17)	# Get percentage of player
+add r4, r4, r6      # tieBreaker[teamNum] += getPercentage(playerNum)
+stw r4, 4(r5)       # Store it back into tieBreaker array
+TEAM_CONTINUE:
+addi r16, r16, 0x24
+addi r17, r17, 0xEA0
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ TEAM_LOOP
+
+INIT_LOOP_END:
+
+# Insertion sort time!
+li r21, 0			# r21 is i
+INSERTSTART:
+add r18, sp, r21
+lbz r18, 0(r18)		# r18 is currPlayer
+cmpwi r18, 0x00FF
+beq- END_INSERT		# if currPlayer == -1, stop insertion sort
+mr r20, r21			# r20 is j
+SORTLOOP:
+cmpwi r20, 0
+beq- BREAKSORTLOOP	# if (j==0) break
+add r17, sp, r20	# r17 = *(placementOrder[j])
+lbz r17, -1(r17)	# r17 is prevPlayer
+# Compare tieBreaker[currPlayer] with tieBreaker[prevPlayer]
+slwi r6, r18, 2
+slwi r5, r17, 2
+add r6, r6, sp		# r6 is *(tieBreaker[currPlayer]) - 4
+add r5, r5, sp		# r5 is *(tieBreaker[prevPlayer]) - 4
+lwz r6, 4(r6)		# r6 is tieBreaker[currPlayer]
+lwz r5, 4(r5)		# r5 is tieBreaker[prevPlayer]
+cmpw r6, r5
+bge+ BREAKSORTLOOP
+add r16, sp, r20     # r16 = *(placementOrder[j])
+stb r17, 0(r16)      # placementOrder[j] = prevPlayer
+addi r20, r20, -1    # j--
+b SORTLOOP
+BREAKSORTLOOP:
+add r20, sp, r20
+stb r18, 0(r20)       # placementOrder[j] = currPlayer
+addi r21, r21, 1
+cmpwi r21, 4
+bne+ INSERTSTART
+END_INSERT:
+
+li r3, 0x5	# Next screen is results screen
+li r0, 0x4	# r0 also needs to be set to go to results screen
+
+# Go through and set the placements
+li r18, 0		# r18 = currPlacing
+lis r17, 0xFFFF		# r17 = lastTieBreaker
+ori r17, r17, 0xFFFF		# r17 = lastTieBreaker
+li r16, 0		# r16 is i
+PLACING_START:
+add r6, sp, r16	# r6 = *(placementOrder[i])
+lbz r6, 0(r6)	# r6 = playerNum
+cmpwi r6, 0x00FF
+beq- PLACING_END
+slwi r5, r6, 2
+add r5, r5, sp	# r5 = *(tieBreaker[playerNum]) - 4
+lwz r5, 4(r5)	# r5 = tieBreaker[playerNum]
+cmpw r17, r5
+bne+ UPDATE_PLACING
+cmpwi r18, 0
+bne+ SET_PLACEMENT
+li r3, 0x4            # Next screen is sudden death
+li r0, 0x3            # r0 also needs to be set
+b SET_PLACEMENT
+UPDATE_PLACING:
+mr r17, r5
+mr r18, r16		# currPlacing = i
+SET_PLACEMENT:
+lis r20, 0x8047
+ori r20, r20, 0x15D0	# 804715D0
+lbz r20, 0(r20)	# r20 is whether it is teams battle
+cmpwi r20, 0	# is it a teams battle?
+beq+ PLACING_NOT_TEAMS
+lis r5, 0x8046
+ori r5, r5, 0xABD0		# 8046ABD0
+mulli r6, r6, 0xC
+add r6, r6, r5
+stb r18, 0(r6)
+stb r18, 1(r6)
+b PLACING_CONT
+PLACING_NOT_TEAMS:
+lis r5, 0x8046
+ori r5, r5, 0xAC08	# r5 is the base placement address	8046AC08
+mulli r6, r6, 0xA8	# playerNum *= 0xA8
+add r6, r6, r5		# r6 = getPlacementAddress(playerNum)
+stb r18, 1(r6)
+stb r18, 2(r6)
+PLACING_CONT:
+addi r16, r16, 1
+cmpwi r16, 4
+bne+ PLACING_START
+PLACING_END:
+
+addi sp, sp, 0x14 # Clear the stack
+# Clear some used registers
+li r16, 0
+li r17, 0
+li r18, 0
+li r20, 0
+li r21, 0
+RETURN:
+
+C21A4CE0 00000048
+3803FFFF 2C000003
+40820230 2C0B0020
+41820228 3821FFEC
+3C80FFFF 6084FFFF
+90810000 90810004
+90810008 9081000C
+90810010 3A800000
+3AA00000 3E208044
+62313E20 3E408046
+6252AC08 3E00803F
+62101C72 3C808047
+608415D0 88840000
+2C040001 4182004C
+80910008 2C040003
+41820028 88920001
+5484801E A0B10060
+7C842B78 56A5103A
+7CA50A14 90850004
+7EB409AE 3A940001
+3A310EA0 3A5200A8
+3AB50001 2C150004
+4082FFC0 4800005C
+80910008 2C040003
+41820038 88D00000
+54C5103A 7CA50A14
+80850004 2C040000
+40800014 7CD409AE
+3A940001 88920001
+5484801E A0D10060
+7C843214 90850004
+3A100024 3A310EA0
+3A5200A8 3AB50001
+2C150004 4082FFAC
+3AA00000 7E41AA14
+8A520000 2C1200FF
+4182005C 7EB4AB78
+2C140000 4182003C
+7E21A214 8A31FFFF
+5646103A 5625103A
+7CC60A14 7CA50A14
+80C60004 80A50004
+7C062800 40A00014
+7E01A214 9A300000
+3A94FFFF 4BFFFFC4
+7E81A214 9A540000
+3AB50001 2C150004
+4082FF9C 38600005
+38000004 3A400000
+3E20FFFF 6231FFFF
+3A000000 7CC18214
+88C60000 2C0600FF
+41820088 54C5103A
+7CA50A14 80A50004
+7C112800 40A20018
+2C120000 40A20018
+38600004 38000003
+4800000C 7CB12B78
+7E128378 3E808047
+629415D0 8A940000
+2C140000 41A20020
+3CA08046 60A5ABD0
+1CC6000C 7CC62A14
+9A460000 9A460001
+4800001C 3CA08046
+60A5AC08 1CC600A8
+7CC62A14 9A460001
+9A460002 3A100001
+2C100004 4082FF70
+38210014 3A000000
+3A200000 3A400000
+3A800000 3AA00000
+60000000 00000000

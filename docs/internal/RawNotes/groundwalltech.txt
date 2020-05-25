@@ -1,0 +1,739 @@
+Get hit:
+59:07:140 BreakPoints.cpp:197 I[MI]: CHK 8008dc84 ( --- ) Write32 4002be0a at 80cafc0c ( --- )
+59:07:140 BreakPoints.cpp:197 I[MI]: CHK 8008dcd8 ( --- ) Write32 3ffc834a at 80cafc10 ( --- )
+Apply friction
+59:07:410 BreakPoints.cpp:197 I[MI]: CHK 8006b9d0 ( --- ) Write32 400064f8 at 80cafc0c ( --- )
+59:07:410 BreakPoints.cpp:197 I[MI]: CHK 8006b9e8 ( --- ) Write32 3ff7fa66 at 80cafc10 ( --- )
+59:07:445 BreakPoints.cpp:197 I[MI]: CHK 8006b9d0 ( --- ) Write32 3ffc17cd at 80cafc0c ( --- )
+59:07:445 BreakPoints.cpp:197 I[MI]: CHK 8006b9e8 ( --- ) Write32 3ff37182 at 80cafc10 ( --- )
+Probably teching
+59:07:588 BreakPoints.cpp:197 I[MI]: CHK 8007e330 ( --- ) Write32 00000000 at 80cafc10 ( --- )
+59:07:588 BreakPoints.cpp:197 I[MI]: CHK 8007e334 ( --- ) Write32 00000000 at 80cafc0c ( --- )
+
+Get hit:
+00:35:569 BreakPoints.cpp:197 I[MI]: CHK 8008dc84 ( --- ) Write32 401b89ce at 80cafc0c ( --- )
+00:35:569 BreakPoints.cpp:197 I[MI]: CHK 8008dcd8 ( --- ) Write32 4016339c at 80cafc10 ( --- )
+Apply friction
+00:35:810 BreakPoints.cpp:197 I[MI]: CHK 8006b9d0 ( --- ) Write32 401930bc at 80cafc0c ( --- )
+00:35:810 BreakPoints.cpp:197 I[MI]: CHK 8006b9e8 ( --- ) Write32 4013ef2a at 80cafc10 ( --- )
+00:35:844 BreakPoints.cpp:197 I[MI]: CHK 8006b9d0 ( --- ) Write32 4016d7aa at 80cafc0c ( --- )
+00:35:844 BreakPoints.cpp:197 I[MI]: CHK 8006b9e8 ( --- ) Write32 4011aab8 at 80cafc10 ( --- )
+Hit wall
+00:36:061 BreakPoints.cpp:197 I[MI]: CHK 800c199c ( --- ) Write32 bfa8612f at 80cafc0c ( --- )
+00:36:061 BreakPoints.cpp:197 I[MI]: CHK 800c19a0 ( --- ) Write32 3fc9ebf5 at 80cafc10 ( --- )
+Apply friction
+00:36:100 BreakPoints.cpp:197 I[MI]: CHK 8006b9d0 ( --- ) Write32 bfa432e9 at 80cafc0c ( --- )
+00:36:100 BreakPoints.cpp:197 I[MI]: CHK 8006b9e8 ( --- ) Write32 3fc4e87b at 80cafc10 ( --- )
+00:36:135 BreakPoints.cpp:197 I[MI]: CHK 8006b9d0 ( --- ) Write32 bfa004a3 at 80cafc0c ( --- )
+00:36:135 BreakPoints.cpp:197 I[MI]: CHK 8006b9e8 ( --- ) Write32 3fbfe501 at 80cafc10 ( --- )
+Hit Floor
+00:37:554 BreakPoints.cpp:197 I[MI]: CHK 8006b9a8 ( --- ) Write32 00000000 at 80cafc10 ( --- )
+00:37:554 BreakPoints.cpp:197 I[MI]: CHK 8006b9ac ( --- ) Write32 00000000 at 80cafc0c ( --- )
+00:37:702 BreakPoints.cpp:197 I[MI]: CHK 8007cd50 ( --- ) Write32 00000000 at 80cafc0c ( --- )
+00:37:702 BreakPoints.cpp:197 I[MI]: CHK 8007cd64 ( --- ) Write32 00000000 at 80cafc10 ( --- )
+
+When teching happens:
+Function 8007E2FC
+-> 800c1ea0 (800C1E64) [always runs in function] <function only runs on tech>
+-> 800c1de0 (800C1D38) [in a branch] <function only runs when hit wall>
+-> 80090144 (800900EC) [in a branch] <function runs every frame>
+-> 8006c3a4 (8006C27C) [blrl]
+-> 80390dfc (oh happy day)
+
+800C1D84 is the point where we know if we're going to tech.
+800986B0 somehow determines if we're going to tech or not
+
+800C1E64 is probably the tech function
+r3 = holds pointer. at 0x2C holds the pointer to player_t + 0x60
+r4 = 0xCA or 0xCB
+r5 = -0x514C(r13)
+r6 = 0
+---
+r13 = 804db6a0 (-0x514c(r13) = 0x80c4f640)
+r29 = 80cafb20 (gets written to r3)
+
+
+80CAFB20 is P2 struct
+80CAFB80
+
+Standing:
+53:51:990 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+53:51:990 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+53:51:990 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+53:51:990 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+53:51:990 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+53:51:990 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+53:51:993 BreakPoints.cpp:197 I[MI]: CHK 800843a0 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+
+Get hit first frame:
+54:22:382 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:22:382 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:22:382 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:22:382 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:22:382 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:22:382 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:22:386 BreakPoints.cpp:197 I[MI]: CHK 800843a0 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+
+Get hit 2nd to 6th frame:
+54:44:993 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:44:993 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+54:44:996 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+
+Get hit 7th to 10th frame (with different values, carrying over from last frame):
+56:33:412 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+56:33:412 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe8faa at 80cafc30 ( --- )
+56:33:412 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c3018881 at 80cafc30 ( --- )
+56:33:412 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3018881 at 80cafc30 ( --- )
+56:33:412 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3018881 at 80cafc30 ( --- )
+56:33:412 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c3018881 at 80cafc30 ( --- )
+56:33:415 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c3018881 at 80cafc30 ( --- )
+
+Get hit 11th frame (when near the wall):
+58:59:681 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c307b0ed at 80cafc30 ( --- )
+58:59:681 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c307b0ed at 80cafc30 ( --- )
+58:59:681 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c3098b33 at 80cafc30 ( --- )
+58:59:681 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3098b33 at 80cafc30 ( --- )
+58:59:681 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3098b33 at 80cafc30 ( --- )
+58:59:681 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c3098b33 at 80cafc30 ( --- )
+58:59:685 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c3093ac0 at 80cafc30 ( --- )
+
+Again, with different values:
+59:44:688 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c3093ac0 at 80cafc30 ( --- )
+59:44:688 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3093ac0 at 80cafc30 ( --- )
+59:44:688 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c30afb6c at 80cafc30 ( --- )
+59:44:688 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30afb6c at 80cafc30 ( --- )
+59:44:688 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30afb6c at 80cafc30 ( --- )
+59:44:688 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c30afb6c at 80cafc30 ( --- )
+59:44:691 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c3093ac1 at 80cafc30 ( --- )
+
+Between 8006be5c and 8008494c, there's a check for a wall, and the register is being given the value.
+
+At 8008494c, r28 is the char data start, which is player_t + 0x60 offset. B0 from there is the horizontal position.
+r29 is another location in player_t, which is r28 + 0x6F0 (overall 0x750). 0x754 is previous x position, 0x758 is previous y position.
+The suspicion is function 8004B108 is what does the wall management and prev x/y setting.
+
+
+Sliding into a wall with the prev x data:
+55:33:745 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c3093ac1 at 80cafc30 ( --- )
+55:33:745 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3093ac1 at 80cafc30 ( --- )
+55:33:745 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c30ae1d4 at 80cafc30 ( --- )
+55:33:745 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30ae1d4 at 80cafc30 ( --- )
+55:33:745 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30ae1d4 at 80cafc30 ( --- )
+55:33:745 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c30ae1d4 at 80cafc30 ( --- )
+55:33:746 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c30ae1d4 at 80cb0274 ( --- )---
+55:33:747 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c3093ac1 at 80cb0274 ( --- )
+55:33:747 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c30ae1d4 at 80cb0274 ( --- )
+55:33:747 BreakPoints.cpp:197 I[MI]: CHK 8004971c ( --- ) Write32 c3093ac4 at 80cb0274 ( --- )
+55:33:748 BreakPoints.cpp:197 I[MI]: CHK 80044060 ( --- ) Write32 c3093ac4 at 80cb0274 ( --- )---
+55:33:748 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c3093ac4 at 80cafc30 ( --- )
+
+
+
+Trying it again not on a wall:
+02:58:670 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c2f9e3b9 at 80cafc30 ( --- )
+02:58:670 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2f9e3b9 at 80cafc30 ( --- )
+02:58:670 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c2fe31df at 80cafc30 ( --- )
+02:58:670 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe31df at 80cafc30 ( --- )
+02:58:670 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2fe31df at 80cafc30 ( --- )
+02:58:670 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c2fe31df at 80cafc30 ( --- )
+02:58:672 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c2fe31df at 80cb0274 ( --- )
+02:58:672 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c2f9e3b9 at 80cb0274 ( --- )
+02:58:672 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c2fe31df at 80cb0274 ( --- )
+02:58:673 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c2fe31df at 80cafc30 ( --- )
+
+Again at the wall:
+03:34:381 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c3093ac7 at 80cafc30 ( --- )
+03:34:381 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3093ac7 at 80cafc30 ( --- )
+03:34:381 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c30aaea7 at 80cafc30 ( --- )
+03:34:381 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30aaea7 at 80cafc30 ( --- )
+03:34:381 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30aaea7 at 80cafc30 ( --- )
+03:34:381 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c30aaea7 at 80cafc30 ( --- )
+03:34:383 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c30aaea7 at 80cb0274 ( --- )
+03:34:384 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c3093ac7 at 80cb0274 ( --- )
+03:34:384 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c30aaea7 at 80cb0274 ( --- )
+03:34:384 BreakPoints.cpp:197 I[MI]: CHK 8004971c ( --- ) Write32 c3093aca at 80cb0274 ( --- ) Different
+03:34:385 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c3093aca at 80cafc30 ( --- )
+
+04:34:150 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c3093aca at 80cafc30 ( --- )
+04:34:150 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c3093aca at 80cafc30 ( --- )
+04:34:150 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c30a9510 at 80cafc30 ( --- )
+04:34:150 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30a9510 at 80cafc30 ( --- )
+04:34:150 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c30a9510 at 80cafc30 ( --- )
+04:34:150 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c30a9510 at 80cafc30 ( --- )
+04:34:152 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c30a9510 at 80cb0274 ( --- )
+04:34:152 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c3093aca at 80cb0274 ( --- )
+04:34:152 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c30a9510 at 80cb0274 ( --- )
+04:34:153 BreakPoints.cpp:197 I[MI]: CHK 8004971c ( --- ) Write32 c3093acc at 80cb0274 ( --- ) Same as last
+04:34:153 BreakPoints.cpp:197 I[MI]: CHK 80044060 ( --- ) Write32 c3093acc at 80cb0274 ( --- ) Different than last
+04:34:153 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c3093acc at 80cafc30 ( --- )
+
+80453FC0 get value then add 0x60 and search for it
+
+8004971c always runs when you're running into a wall
+Try and figure out where it is in relation to 8008494c, because we have player_t at this point (function 800848DC)
+
+Start 8004971c (800491C8)
+-> 8004ad84 (8004ACE4)
+-> 800439b0 (80043754)
+-> 8004b1e0 (8004B108)
+-> 8008493c (800848DC) -> this function is right before the current position is written to
+
+At 8004971C, r27 is the offset of 0x750
+r13 is the same as in teching place, so we can do r5 fine
+r27 is r3 into the function
+set r3 with 0(804ee214)
+
+r3 = holds pointer. at 0x2C holds the pointer to player_t + 0x60
+r4 = 0xCA or 0xCB
+r5 = -0x514C(r13)
+r6 = 0
+---
+r13 = 804db6a0 (-0x514c(r13) = 0x80c4f640)
+r29 = 80cb8120 (gets written to r3)
+
+call tech function: 800C1E64
+
+C2049744 00000005
+901B0184 3C60804E
+6063E214 80630000
+388000CA 80ADAEB4
+38C00000 48000005
+38600001 00000000
+
+
+
+r31 is player_t + 0x60 (which is now r3)
+r30 is player_t + 0x750
+
+Gecko @ 80049744:
+stw r0, 0x154(r27)
+fneg f0, f1
+stwu r1, -0x60(r1)
+lwz r5, -0x514C(r13)
+stfd      f31, 0x58(r1)
+li r4, 1
+addi r3, r27, -0x6F0
+stw r4, 0x2200(r3)
+stfs      f0, 0x2C(r3)
+lfs       f0, -0x76B0(r2)
+stfs      f0, 0xE4(r3)
+stfs      f0, 0xE8(r3)
+stfs      f0, 0x7C(r3)
+stfs      f0, 0x78(r3)
+stfs      f0, 0x74(r3)
+stfs      f0, 0xEC(r3)
+stfs      f0, 0x88(r3)
+stfs      f0, 0x84(r3)
+stfs      f0, 0x80(r3)
+stfs      f0, 0xF0(r3)
+stfs      f0, 0x94(r3)
+stfs      f0, 0x90(r3)
+stfs      f0, 0x8C(r3)
+stfs      f0, 0xF4(r3)
+stfs      f0, 0xA0(r3)
+stfs      f0, 0x9C(r3)
+stfs      f0, 0x98(r3)
+stfs      f0, 0xDC(r3)
+stfs      f0, 0xD8(r3)
+stfs      f0, 0xD4(r3)
+lwz       r4, 0x824(r3)
+rlwinm.   r4, r4, 0,20,20
+beq       loc_800C1ECC
+lfs       f1, 0x7AC(r3)
+lfs       f0, -0x6D70(r2)
+stfs      f1, 0x30(r1)
+lfs       f1, 0x7B0(r3)
+stfs      f1, 0x34(r1)
+stfs      f0, 0x38(r1)
+b         loc_800C1EE4
+loc_800C1ECC:
+lfs       f1, 0x7A4(r3)
+lfs       f0, -0x6D70(r2)
+stfs      f1, 0x30(r1)
+lfs       f1, 0x7A8(r3)
+stfs      f1, 0x34(r1)
+stfs      f0, 0x38(r1)
+loc_800C1EE4:
+li        r4, 0xFE
+crclr     4*cr1+eq
+stb       r4, 0x670(r3)
+stb       r4, 0x671(r3)
+stw       r28, 0x2340(r3)
+stw       r0, 0x2344(r3)
+stw       r0, 0x2348(r3)
+stw       r29, 0x234C(r3)
+lfs       f2, 0xB0(r3)
+lfs       f1, 0x30(r1)
+lfs       f0, 0x34(r1)
+fadds     f31, f2, f1
+stfs      f31, 0x24(r1)
+lfs       f1, 0xB4(r3)
+fadds     f0, f1, f0
+stfs      f0, 0x28(r1)
+lfs       f0, 0xB8(r3)
+stfs      f0, 0x2C(r1)
+lfs       f0, 0x2C(r3)
+lfs       f1, 0x694(r3)
+fneg      f0, f0
+fnmsubs   f0, f1, f0, f31
+stfs      f0, 0xB0(r3)
+lwz       r4, -0x514C(r13)
+lwz       r4, 0x764(r4)
+lwz       r0, 0x1990(r3)
+cmpw      r4, r0
+ble       loc_8007B780
+stw       r4, 0x1990(r3)
+loc_8007B780:
+li        r0, 2
+stw       r0, 0x198C(r3)
+lfd       f31, 0x58(r1)
+addi      r1, r1, 0x60
+li r3, 1
+
+Instead of teching, you can try and do the "run into wall" animation.
+
+Either that or figure out the code that is flinging characters into the air. Fox, Marth and Kirby on Shrine with infinite time. Memory breakpoint on attack velocity change or ground/air state change. See if we can get the ground/air state to change when a tech happens.
+
+
+
+
+
+Marth: 80e99ec0
+---------------
+On hit (from left):
+8008dc84 ( --- ) Write32 40186df5 at 80e99fac ( --- )
+Hitstun:
+  Nothing
+Sliding:
+8006ba44 ( --- ) Write32 401496eb at 80e99fac ( --- )
+
+Kirby: 80fac6e0
+---------------
+On hit (from left):
+8007d5d8 ( --- ) Write32 00000001 at 80fac820 ( --- )
+8008dc84 ( --- ) Write32 40213c60 at 80fac7cc ( --- )
+Hitstun:
+  Nothing
+Air:
+8006b9d0 ( --- ) Write32 401df8ca at 80fac7cc ( --- )
+Hit ground:
+8007d8ac ( --- ) Write32 00000000 at 80fac820 ( --- )
+8007cd50 ( --- ) Write32 401df8c3 at 80fac7cc ( --- )
+
+
+Marth Stack trace:
+80390dfc
+	8006D1EC
+	8006d3f8
+		8008EC90
+		8008f718
+			8008DCE0 - Whenever a hit occurs
+			8008e0a4
+				8008DC0C
+				8008dc84 - Set the attack horizontal velocity, if hit from left
+Kirby Stack Trace:
+80390dfc
+	8006D1EC
+	8006d3f8
+		8008EC90
+		8008f718
+			8008DCE0 - Whenever a hit occurs
+			8008dfb8
+				8007D5D4
+				8007d5d8 - When Kirby goes airborne
+			8008e05c
+				8008dc0c
+				8008dc84 - Set the attack horizontal velocity, if hit from left
+				
+				
+8008DCE0 is the "hit function". The path that is taken on each branch until end of function:
+Side by side:
+Marth		Kirby
+8008DCE0	8008DCE0
+8008ddac	8008ddac
+8008ddc4	8008ddc4
+8008ddd8	8008ddd8	f0=32.0		f30 => Marth 31.76 / Kirby 33.59
+8008dde4 -- 8008ddec
+8008de00	8008de00
+8008de30	8008de30
+8008de9c	8008de9c
+8008df38	8008df38
+8008dfac	8008dfac
+8008e06c -- 8008dfb4
+			8008e050
+8008E0A8	8008E0A8
+			8008e0c4
+			8008e0d0
+			8008e0f4
+8008e13c	8008e13c
+8008e148	8008e148
+8008e150	8008e150
+8008e158	8008e158
+8008e168	8008e168
+8008e194	8008e194
+8008e1ac	8008e1ac
+8008e1b4	8008e1b4
+8008e1b8	8008e1b8
+8008e1ec	8008e1ec
+8008e284	8008e284
+8008e29c	8008e29c
+8008e338	8008e338
+8008e35c	8008e35c
+			8008e364
+8008e384	8008e384
+8008e38c	8008e38c
+8008e3bc	8008e3bc
+8008e3e4	8008e3e4
+8008e438 -- 8008e3ec
+			8008e3f8
+			8008e414
+			8008e42c
+8008e44c	8008e44c
+8008e454	8008e454
+8008e468	8008e468
+
+
+
+
+
+
+8008DFB0: If this branches, character stays on ground
+So, at 8008DFAC, branch out. We can use r3 and r4
+Check byte 0x784 of player_t. If that AND 0x04 is not 0, then we're sliding into a wall and we should not branch
+r29 contains base addr of player_t + 0x60
+Also, it should only happen if they're pressing into the wall. Horizontal current analog stick data is at 0x680. Positive is right, negative is left
+
+cmpwi r28, 3
+beq- END
+lbz r3, 0x724(r29)
+andi. r3, r3, 0x04
+cmpwi r3, 0x04
+bne+ END
+lwz r3, 0x620(r29)
+cmpwi r3, 0
+bne- Airborne
+li r3, 1
+b Compare
+Airborne:
+li r3, 0
+Compare:
+cmpwi r3, 0
+END:
+# if the last comparison is EQ, we will be airborne
+
+
+Two frames of gap between jump and shine for a reshine
+
+36 frames from shine to shield for Peach
+
+0 -> 14
+
+0 shine
+6 fox jump
+7 hold right with Peach
+9 shine again
+10 hold shield with Peach
+(at 14, can jump but still in the air, so can't jump after that; also in the air, good for drill shine)
+17 fox jump (it's +1 frames each cycle)
+20 shine again (it's +1 frames each cycle)
+
+
+
+Gecko code:
+
+C208DFAC 00000007
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 00000000
+
+Video:
+
+5 secs
+In Melee, wall infinites are such a problem that many stages are banned because of them.
+
+[Open with Fox wave shining on Falcon]
+
+7 secs
+What if there was a way to get rid of wall infinites and let wall stages be played without being ridiculous for certain characters?
+
+4 secs, start music
+Wall Bracing/Cancelling Mod
+(Gecko Codes for v1.2 in description)
+
+10 secs
+If you're on the ground and you're already moving into a wall (by being hit or walking), if you press towards or away from the wall, you will brace against the wall such that your feet will leave the ground.
+
+[Split clip of Fox shining Peach walking into a wall, but the second one shields quicker]
+
+6 secs
+The input is similar to crouch cancelling, but you can have the stick away from the wall so you can DI better.
+
+8 secs
+This only works against moves that didn't already make you leave the ground, as those already make you leave the ground, making this pointless.
+
+4 secs
+Benefits to wall bracing include:
+
+10 secs
+1. If you don't DI (or DI into the ground, you will land after the hit, which means you have normal landing lag instead of hitstun, which will allow you to act quicker.
+
+[Split clip of Marth getting waveshined into a wall, but the second one rolls out of the infinite]
+Pause: "That doesn't mean you can get lazy with your DI!"
+
+5 secs
+2. It bypasses forbidden DI, allowing you to Smash DI up and away from the infinite
+
+[Multishining Luigi SDIing up and away]
+Pause: "Keep your guard up!"
+
+[Drill shining Zelda SDIing up and away]
+Pause: "Smash DI away from drill shine infinites"
+
+5 secs
+3. Keeps the gave active and alive around the walls, especially at mid level tech skill.
+
+[Split clip of Link getting drillshined into a wall, but roll away]
+Pause: "Keeps the game more engaging and fun, in my opinion"
+
+4 secs
+Let me know if you find any bugs!
+
+5 secs
+Hope you enjoy!
+Music by:
+
+
+
+
+Here's a new code, which I call Wall Cancelling, aka Wall Bracing:
+[code]
+C208DFAC 00000007
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 00000000
+[/code]
+It's main purpose is to get rid of wall infinites.
+If you are on the ground and you're moving into a wall (either by purposely walking/running into it or, more likely, if you're being shined into the wall), if you get hit by a non-launching attack, you can press the analog stick left or right to brace against the wall, which will make your feet leave the ground. The direction you press doesn't matter, and this was purposefully done to help with Smash DI (which is actually just a justification for my laziness). For more detailed explanation of why this combats wall infinites, here's a video explaining it:
+
+http://youtu.be/pFbPOTBDKgY
+
+
+
+
+
+
+
+
+
+
+Marth, Peach's castle, bottom, shined into wall from left:
+----------------------------------------------------------
+Hitstun
+28:08:393 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c2054f91 at 80ee3c10 ( --- )
+28:08:393 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c2054f91 at 80ee3c10 ( --- )
+28:08:394 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c2054f91 at 80ee4254 ( --- )
+28:08:395 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c2054f91 at 80ee4254 ( --- )
+28:08:395 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c2054f91 at 80ee4254 ( --- )
+28:08:395 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c2054f91 at 80ee3c10 ( --- )
+Normal
+30:08:310 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c1f80c45 at 80ee3c10 ( --- )
+30:08:310 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1f80c45 at 80ee3c10 ( --- )
+30:08:310 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c1e5f449 at 80ee3c10 ( --- )
+30:08:310 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1e5f449 at 80ee3c10 ( --- )
+30:08:310 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1e5f449 at 80ee3c10 ( --- )
+30:08:310 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c1e5f449 at 80ee3c10 ( --- )
+30:08:311 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c1e5f449 at 80ee4254 ( --- )
+30:08:311 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c1f80c45 at 80ee4254 ( --- )
+30:08:311 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c1e5f449 at 80ee4254 ( --- )
+30:08:312 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c1e5f449 at 80ee3c10 ( --- )
+First and 3rd 7th 9th wall touch
+31:27:866 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c1c334f4 at 80ee3c10 ( --- )
+31:27:866 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1c334f4 at 80ee3c10 ( --- )
+31:27:866 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c1b28d9c at 80ee3c10 ( --- )
+31:27:866 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1b28d9c at 80ee3c10 ( --- )
+31:27:866 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1b28d9c at 80ee3c10 ( --- )
+31:27:866 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c1b28d9c at 80ee3c10 ( --- )
+31:27:867 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c1b28d9c at 80ee4254 ( --- )
+31:27:867 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c1c334f4 at 80ee4254 ( --- )
+31:27:867 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c1b28d9c at 80ee4254 ( --- )
+31:27:867 BreakPoints.cpp:197 I[MI]: CHK 8004a400 ( --- ) Write32 c1bbe152 at 80ee4254 ( --- )
+31:27:868 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c1bbe152 at 80ee3c10 ( --- )
+2nd and 4th 6th 8th wall touch
+31:54:166 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c1bbe152 at 80ee3c10 ( --- )
+31:54:166 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1bbe152 at 80ee3c10 ( --- )
+31:54:166 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c1abb4db at 80ee3c10 ( --- )
+31:54:166 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1abb4db at 80ee3c10 ( --- )
+31:54:166 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1abb4db at 80ee3c10 ( --- )
+31:54:166 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c1abb4db at 80ee3c10 ( --- )
+31:54:167 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c1abb4db at 80ee4254 ( --- )
+31:54:168 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c1bbe152 at 80ee4254 ( --- )
+31:54:168 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c1abb4db at 80ee4254 ( --- )
+31:54:168 BreakPoints.cpp:197 I[MI]: CHK 8004a400 ( --- ) Write32 c1bafe62 at 80ee4254 ( --- )
+31:54:169 BreakPoints.cpp:197 I[MI]: CHK 80043d8c ( --- ) Write32 c1bafe62 at 80ee4254 ( --- )
+31:54:169 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c1bafe62 at 80ee3c10 ( --- )
+5th 10th 11th wall touch
+34:07:324 BreakPoints.cpp:197 I[MI]: CHK 8006bcc4 ( --- ) Write32 c1b9a626 at 80ee3c10 ( --- )
+34:07:324 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1b9a626 at 80ee3c10 ( --- )
+34:07:324 BreakPoints.cpp:197 I[MI]: CHK 8006bdc0 ( --- ) Write32 c1aaea53 at 80ee3c10 ( --- )
+34:07:324 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1aaea53 at 80ee3c10 ( --- )
+34:07:324 BreakPoints.cpp:197 I[MI]: CHK 80342d60 ( --- ) Write32 c1aaea53 at 80ee3c10 ( --- )
+34:07:324 BreakPoints.cpp:197 I[MI]: CHK 8006be5c ( --- ) Write32 c1aaea53 at 80ee3c10 ( --- )
+34:07:326 BreakPoints.cpp:197 I[MI]: CHK 8008492c ( --- ) Write32 c1aaea53 at 80ee4254 ( --- )
+34:07:326 BreakPoints.cpp:197 I[MI]: CHK 80043924 ( --- ) Write32 c1b9a626 at 80ee4254 ( --- )
+34:07:326 BreakPoints.cpp:197 I[MI]: CHK 8000d478 ( --- ) Write32 c1aaea53 at 80ee4254 ( --- )
+34:07:326 BreakPoints.cpp:197 I[MI]: CHK 8004a400 ( --- ) Write32 c1b8d542 at 80ee4254 ( --- )
+34:07:326 BreakPoints.cpp:197 I[MI]: CHK 8004a400 ( --- ) Write32 c1b8d543 at 80ee4254 ( --- )
+34:07:327 BreakPoints.cpp:197 I[MI]: CHK 8008494c ( --- ) Write32 c1b8d543 at 80ee3c10 ( --- )
+8004a400 runs when touching a wall
+
+Marth, Peach's castle, bottom, shined into wall from right:
+-----------------------------------------------------------
+8004971c is the one run instead
+
+Marth, Peach's castle, mid, shined into wall from left:
+-------------------------------------------------------
+8004a400 is also run when touching a wall
+
+Marth, Peach's castle, bottom, ftilted into wall from left:
+-----------------------------------------------------------
+8004a400 is also run when touching a wall
+
+
+
+From left:
+80390dfc (KING BING)
+	8006C27C
+	8006c3a4
+		8008FB64
+		8008fb9c
+			800848DC
+			8008493c
+				8004B108
+				8004b1e0
+					80043754
+					800439b0
+						8004ACE4 - Runs every frame, even when not hit, likely once per player
+						8004ad3c
+							80049EAC
+							8004a400 - Where position is being set, can be run multiple times
+
+From right:
+80390dfc
+	8006C27C
+	8006c3a4
+		8008FB64
+		8008fb9c
+			800848DC
+			8008493c
+				8004B108
+				8004b1e0
+					80043754
+					800439b0
+						8004ACE4 - Runs every frame, even when not hit, likely once per player
+						8004ad84 - Only runs when running into a wall
+							800491C8
+							8004971c
+
+
+
+8004a400: r27 is player_t location + 0x750 offset
+r3 is 1 when hit a wall (I think) and 0 when not.
+
+8004ADB8 runs every frame, and also r25 and r26 will be 0 if not running into a wall. One will be 1 if it is.
+
+
+8004AE28 : r28 is 0, 1 or 2
+Usually it is 0.
+It's 2 when touching the wall from right.
+
+
+80EE3B00 base of player_t
+80ee3c10 is horizontal position
+80ee4254 is previous x position
+80ee4284 is possible touching wall value (0x784)
+80ee4388 is possible touching wall value, this changes while in the air as well, so don't use it.
+
+Normal on right side (marth facing right):
+80ee4284 - 08800001
+80ee4388 - 00008000
+
+From right normal:
+80ee4284 - 0c800001
+80ee4388 - 00008840
+
+From right change:
+80ee4284 - 0c800001
+80ee4388 - 00008040
+next:
+80ee4284 - 08800001
+80ee4388 - 00008040
+next: 
+80ee4284 - 0c800001
+80ee4388 - 00008000
+then loop back to first until set to "normal"
+
+From Left (marth facing left):
+80ee4284 - 0880ffff
+80ee4388 - 00008000
+
+From left normal:
+80ee4284 - 0C80ffff
+80ee4388 - 00008000
+Then:
+80ee4284 - 0C80ffff
+80ee4388 - 00008021
+
+First byte of 0x784: if not running into wall, 0x08. If it is, 0x0C.
+The difference is in the 4s bit, so do an and with 0x04. This only occurs on the ground.
+
+
+
+
+PAL
+C208E664 00000007
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 00000000
+
+v1.02
+C208DFAC 00000007
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 00000000
+
+v1.01
+C208DDEC 00000007
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 00000000
+
+v1.00
+@ 8008DD04:
+C208DD04 00000007
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 00000000

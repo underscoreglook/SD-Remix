@@ -1,0 +1,135 @@
+Here's how you swap stages and their icons in the dol (not MnSlMap.usd):
+
+========
+Name
+Offset in dol (they're all 0x1c apart)
+AABBCCDD
+
+What the letters correspond to....
+AA - ? (usally 02)
+BB - icon/model/text preview id (needs some exploring)
+CC - random id
+DD - stage to load id
+========
+
+Peach's Castle 
+3ed6d8
+02000004
+
+Rainbow Cruise
+3ed6f4
+02010C0B
+
+Kongo Jungle
+3ED710
+02020105
+
+Jungle Japes
+3ED72C
+02030D0C
+
+Great Bay
+3ED748
+0204020D
+
+Hyrule Temple
+3ED764
+02050E0E
+
+Yoshi's Story
+3ED780
+02080408
+
+Yoshi's Island Melee
+3ED79C
+02091010
+
+FoD
+3ED7B8
+020A0502
+
+Green Greens
+3ED7D4
+020B1111
+
+Corneria
+3ED7F0
+020C0607
+
+Venom
+3ED80C
+020D1216
+
+Brinstar
+3ED828
+02060306
+
+Brinstar Depths
+3ED844
+02070F0F
+
+Onett
+3ED860
+02120909
+
+Fourside
+3ED87C
+02131512
+
+Mute City
+3ED898
+0210080A
+
+Big Blue
+3ED8B4
+02111418
+
+Pokemon Stadium
+3ED8D0
+020E0703
+
+Poke Floats
+3ED8EC
+020F1317
+
+Mushroom Kingdom I
+3ED908
+02140B13
+
+Mushroom Kingdom II
+3ED924
+02151614
+
+Icicle Mountain
+3ED940
+02160A19
+
+Flatzone
+3ED95C
+0217171B
+
+Battlefield
+3ED978
+0218181F
+
+Final Destination
+3ED994
+02191920
+
+Dream Land
+3ED9B0
+021A1A1C
+
+Yoshi's Island 64
+3ED9CC
+021B1B1D
+
+Kongo Jungle 64
+3ED9E8
+021C1C1E
+
+Random?
+3EDA04
+021D0000
+
+

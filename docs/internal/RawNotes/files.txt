@@ -1,0 +1,143 @@
+xList of changed files:
+&&SystemData/Game.toc
+&&SystemData/Start.dol
+&&SystemData/ISO.hdr
+PlCo.dat
+MnMaAll.usd
+SdMenu.usd
+MnSlMap.usd
+SdSlChr.usd
+
+00003C59	0045E000	0009B78B	MnSlMop.usd
+
+00003C65	004F9800	0006C9BB	GoNFg.dat	Achilles Snag the Trophy
+00003C6F	00566800	00171C48	GoCs.dat	Myougi's Peach's Castle
+00003C78	006D8800	000D3C4C	GoGb.dat	Milun's High Tide at Great Bay
+00003C81	007AC800	0003C4FA	GoOy.dat	Milun's Yoshi's Story 64
+00003C8A	007E9000	0007474F	GoKg.dat	Milun's Kongo Jungle
+00003C93	0085D800	0012BD55	GoSh.dat	Myougi Skyrule
+00003C9C	00989800	0008AF4C	GoYt.dat	Milun Yoshi's Island
+00003CA5	00A14800	0003F95F	GoI1.dat	Milun's Mushroom Kingdom
+00003CAE	00A54800	00115859	GoKr.dat	Milun's No Kraid Brinstar Depth
+00003CB7	00B6A800	000DB2B6	GoFs.dat	Myougi's Improved Smashville
+00003CC0	00C46000	0022DA77	GoBb.dat	Milun's Big Blue
+00003CC9	00E74000	0002DF77	GoI2.dat	Milun's Mushroom Kingdom 2
+00003CD2	00EA2000	000916F3	GoGd.dat	Achilles's Jungle Japes
+00003CDB	00F33800	0006E64B	GoNBa.dat	Flipped Battlfield
+00003CE5	00FA2000	000D5F91	GoGr.dat	Whispy's Battlegrounds
+
+Reverted files:
+GrFs.dat
+GrOy.dat
+GrGr.dat
+
+
+
+
+
+01 - 0000e2c0  ~Princess Peach's Castle
+02 - 0000f2e0  ~Rainbow Cruise
+03 - 00010300  ~Kongo Jungle
+04 - 00011320  ~Jungle Japes
+05 - 00012340  ~Termina Bay
+06 - 00013360  ~Hyrule Temple
+07 - 00014380  ~Brinstar
+08 - 000153a0  ~Brinstar Depths
+09 - 000163c0  ~Yoshi's Story
+10 - 000173e0  ~Yoshi's Island
+11 - 00018400  ~Fountain of Dreams
+12 - 00019420  ~Green Greens
+13 - 0001a440  ~Corneria
+14 - 0001b460  ~Venom
+15 - 0001c480  ~Pokemon Stadium
+16 - 0001d4a0  ~Pokefloats
+17 - 0001e4c0  ~Mute City
+18 - 0001f4e0  ~Big Blue
+19 - 00020500  ~Onett
+20 - 00021520  ~Fourside
+21 - 00022540  ~Mushroom Kingdom I
+22 - 00023560  ~Mushroom Kingdom II (Subcon)
+23 - 00024580  ~Icicle Mountain
+24 - 000255a0  ~Flat Zone
+25 - 000265c0  ~Battlefield
+26 - 000275e0  ~Final Destination
+27 - 00028600  ~Past Stages: Dream Land
+28 - 00029120  ~Past Stages: Yoshi's Island
+29 - 00029c40  ~Past Stages: Kongo Jungle
+
+Stage Select Text offset: 6a740
+Stage Select Circle offset: 38840
+
+Peach's Castle		3C840
+Rainbow Cruise		3E0C0
+Kongo Jungle		3F940
+Jungle Japes		411C0
+Great Bay			42A40
+Hyrule Temple		442C0
+Brinstar			45B40
+Brinstar Depths		473C0
+Yoshi's Story		48C40
+Yoshi's Island		4A4C0
+Fountain of Dreams	4BD40
+Green Greens		4D5C0
+Corneria			4EE40
+Venom				506C0
+Pokemon Stadium		51F40
+PokeFloats			537C0
+Mute City			55040
+Big Blue			568C0
+Onett				58140
+Fourside			599C0
+Kingdom				5B240
+Kingdom II			5CAC0
+Icicle Mnt.			5E340
+Flatzone text		5FBC0
+Battlefield			61440
+Final Destination	62CC0
+Dreamland 64		64540
+Yoshi's 64			65DC0
+DK64				67640
+
+Either Times New Roman or Garamond for "Press L For Omega"
+Times new roman For supertext
+Times New Roman for Omega and Alpha symbols (12 size)
+Arial for Stage names (32 size)
+
+Alpha:
+Change Battlefield to "Low Gravity: Battlefield" with icon of battlefield with a blue arrow on left
+Change Final Destination to "Mirror world: Battlefield" with icon of flipped battlefield
+Swap Pokemon Stadium with DK64 and vice versa
+Swap Yoshi's Story to Yoshi's Story 64 and vice versa
+Change Flatzone to "Special Stages: Mount Olympus"
+Superimpose an image of a greek "Alpha" letter here.
+Change STAGE SELECT to "R FOR OMEGA" in royalty free font.
+
+Omega:
+Icicle -> Flatzone
+Flatzone -> Achilles' 3 Platforms
+Omega Peach's Castle
+Milun's Kongo Jungle
+High Tide at Great Bay
+Milun's Yoshi's Story 64
+Omega Fountain of Dreams
+Omega Corneria
+Rainbow Cruise -> Myougi's Peach's Castle
+Omega Jungle Japes
+Hyrule Temple -> Myougi's Skyrule
+Milun's Yoshi's Island
+Omega Green Greens
+Venom -> Corneria Extreme
+Omega Brinstar
+Omega Onett
+Omega Mute City
+Omega Kongo Jungle 64
+Omega Mushroom Kingdom
+No Kraid Brinstar Depths
+Smashville Fourside
+Time Trial Big Blue
+Cranky's Treehouse
+Omega Mushroom Kingdom II
+
+No Wind Dreamland 64
+No Flyguys Yoshi's Story
+No Transformation Pokemon Stadium

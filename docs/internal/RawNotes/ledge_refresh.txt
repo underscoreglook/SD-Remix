@@ -1,0 +1,769 @@
+lwz r5, 0x1984(r3)
+mr r6, r5
+addi r5, r5, 32
+cmpwi r5, 320
+ble+ STOREBACK
+li r5, 320
+STOREBACK:
+stw r5, 0x1984(r3)
+mullw r6, r6, r6
+srwi r6, r6, 12
+cmpw r6, r4
+blt+ SUBTRACT
+li r4, 0
+b SAVE
+SUBTRACT:
+sub r4, r4, r6
+SAVE:
+stw r4, 0x1990(r3)
+@ 8007B77C
+
+
+
+
+
+
+
+C209A8AC 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A5XXXX
+2C05YYYY 40A10008
+38A0YYYY 90A31068
+7CC631D6 54C6ZZZE
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+XXXX should be how much to add to the countdown each ledge grab
+YYYY should be the maximum value the countdown can have
+ZZZ controls how much of an effect the countdown has on the ledge grab. This a special coded value, so refer to the chart for the code to replace the ZZZ with. The greater values will diminish the reduction on invincibility; in other words, the greater the value, the longer people will be able to ledgestall.
+
+Amount	ZZZ Code
+1       F87
+2       F0B
+3       E8F
+4       E13
+5       D97
+6       D1B
+7       C9F
+8       C23
+9       BA7
+10      B2B
+11      AAF
+12      A33
+13      9B7
+14      93B
+15      8BF
+16      843
+17      7C7
+18      74B
+19      6CF
+20      653
+21      5D7
+22      55B
+23      4DF
+24      463
+25      3E7
+26      36B
+27      2EF
+28      273
+29      1F7
+30      17B
+31      0FF
+
+
+54C6C23E 7C062000  54C6A33E 7C062000
+
+srwi rA, rS, n     is      rlwinm rA, rS, 32 - n, n, 31
+
+21   S     A     SH    MB    ME    RC (0)
+0-5  6-10  11-15 16-20 21-26 26-30 31
+
+SH & MB are different
+[hhhhh] [iiiii] 11 1110
+11101 00011 11
+
+
+
+@ 8009A8AC
+mr r7, r3
+lwz r3, 0x2C(r3)
+lwz r4, 0x49C(r4)   # Get the time
+lwz r5, 0x1068(r3)  # Get the timer
+mr r6, r5           # r6 is the original value
+addi r5, r5, 32     # add 32 to timer
+cmpwi r5, 320       # Maximum timer value is 320
+ble+ STOREBACK
+li r5, 320          # If we exceed the maximum, set it to 320
+STOREBACK:
+stw r5, 0x1068(r3)  # set it back to RAM
+mullw r6, r6, r6    # Square the original timer value
+srwi r6, r6, 12     # Divide by 4096
+cmpw r6, r4         # subtr ? max (ledge refresh time)
+blt+ SUBTRACT       # if subtr < max, subtract max by subtr
+li r4, 0            # Otherwise, just set ledge refresh to 0
+b SAVE
+SUBTRACT:
+sub r4, r4, r6      # Make sure r4 won't be less than 0
+SAVE:
+mr r3, r7
+
+
+@ 8006a414
+lwz r3, 0x198C(r31)  # Invincibility state
+lwz r4, 0x1988(r31)  # Animation invincibility state
+or r3, r3, r4        # Get the combination of both
+cmpwi r3, 0
+bne- END
+lwz r3, 0x1068(r31)  # Get the invincibility timer
+cmpwi r3, 0
+beq+ END
+subi r3, r3, 1
+stw r3, 0x1068(r31)  # invincibilityTimer--;
+END:
+lwz r3, 0x1990(r31)  # Return current ledge invincibility time
+
+
+
+
+Accidentally, I found out that player_t + 0x1984 seems to be ledge regrab time. Fun!
+
+
+
+
+*******************************************************
+***Trying to reduce invincibility time on ledge grab***
+*******************************************************
+Ledge Grab: [MI]: CHK 80081444 ( --- ) Write32 0000000d to RAM 80d9d560
+8009A8AC - Command for ledge invincibility time []
+Try and find a blank spot in memory, within the r3 data structure.
+We'll call this invincibilityTimer.
+From ledge invincibility time command (8009A8AC), call dynamicLedgeInvincibility.
+void dynamicLedgeInvincibility(r3 (player_t), r4 (default invincibility time address)) {
+	var r5 through r10; // We can do whatever we want here
+	mr r7, r3
+	lwz r3, 0x2C(r3)
+	lwz r4, 0x49C(r4)   # Get the time from before
+	lwz r5, invincibilityTimerOffset(r3)
+	mr r6, r5
+	addi r5, r5, 4
+	stw r5, invincibilityTimerOffset(r3)
+	srwi r6, r6, 3      # Divide r6 by 8
+	sub r4, r4, r6
+	stw r4, 0x1990(r3); # [90831990]
+	mr r3, r7
+	return r3;
+}
+80453130 (B0 in player_block_t) -> 80D05560 (head of player_t)
+D06F50 & D07624 which minus 0x1990 is 80D055C0 & 80D05C94
+The first one has a pointer at 80D0558C, which is 2C offset within the player_t
+So to get the invincibility time:
+0xB0(player_block_t) to get player_t
+0x2C(player_t) to get some_player_struct_t
+0x1990(some_player_struct_t) to get ledge refresh
+
+offset 0x198C (word): if 0, then no invincibility, if 2 then blue invincible, if 1 then green invincible
+offset 0x1988 (word) has the same thing, but only for the duration of the animation
+80D06F44 might be good for the "invincibility count" variable, which is 0x1984
+
+Next steps:
+Do a memory read and write breakpoint on r3(0x1990)
+Step out until you find a place that runs every frame but still has a reference to that value.
+If invincibility isn't active and an up+B isn't being performed, go to the invincibilityTimer and reduce the one that it active, unless it is 0.
+
+While invincible:
+22:14:657 BreakPoints.cpp:197 I[MI]: CHK 8006a414 ( --- ) Read32 0000001e at 80c6d2f0 ( --- )
+22:14:657 BreakPoints.cpp:197 I[MI]: CHK 8006a424 ( --- ) Write32 0000001d at 80c6d2f0 ( --- )
+22:14:917 BreakPoints.cpp:197 I[MI]: CHK 8006a410 ( --- ) Read32 00000019 at 80c6d2f0 ( --- )
+24:15:946 BreakPoints.cpp:197 I[MI]: CHK 800c031c ( --- ) Read32 00000000 at 80c6d2f0 ( --- )
+
+While not invincible
+25:56:187 BreakPoints.cpp:197 I[MI]: CHK 8006a414 ( --- ) Read32 00000000 at 80c6d2f0 ( --- )
+
+Right after up+B with Sheik:
+30:28:561 BreakPoints.cpp:197 I[MI]: CHK 800c04e8 ( --- ) Read32 00000000 at 80cbb6b0 ( --- )
+
+
+At 8006a414, we have: lwz r3, 0x1990(r31)
+Here we should also subtract the timer, if we aren't invincible.
+int subtractTimer(r31 = some_player_struct_t) {
+	var r3, r4;
+	lwz r3, 0x198C  // Invincibility state
+	lwz r4, 0x1988  // Animation invincibility state
+	ori r3, r3, r4  // Get the combination of both
+	if (r3 == 0) {  // If we are not invincible...
+		lwz r3, invincibilityTimerOffset(r31)  // Get the invincibility timer
+		if (r3 > 0) {
+			subi r3, r3, 1
+			stw r3, invincibilityTimerOffset(r31)  // invincibilityTimer--;
+		}
+	}
+	lwz r3, 0x1990(r31) // Return current ledge invincibility time
+}
+
+
+
+
+
+
+
+
+
+
+
+$Ledge Invincibility Attrition
+C209A8AC 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+C206A414 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000
+
+
+
+
+Gecko Codes
+C209A8AC 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+&&
+
+C206A414 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000
+
+
+
+
+
+
+
+Teching:
+8007B760
+-> 800c200c (800C1E64)
+-> 800c1dc4 (800C1D38)
+-> 80090538 (800904C0)
+-> 8006c3a4 (8006C27C)
+-> 80390dfc
+
+Ledge grab:
+8007B760
+-> 8009a8b0 (
+
+
+
+To get the hook to set value to 0 on death, hook into place where old invincibility timer is set to 0 (0x1984)
+
+
+
+
+
+Plan as Fox:
+Grab ledge for 7 frames
+Press down for 5 frames
+Jump for 5 frames
+Up+B for 20 frames
+Repeat from grab ledge
+
+Plan as Sheik:
+Grab ledge for 7 frames
+Press down for 1 frame
+Press up+B for 1 frame
+Press down for 35 frames
+Do nothing for 8 frames
+Repeat from grab ledge
+
+
+
+
+Honeycomb Highway - Tomoya Ohtani
+Spaceport: Introducing Ulala!! - Naofumi Hataya
+Sensei's Theme - Taishi Senda
+
+
+
+Video, every frame is 6 seconds:
+
+5 seconds:
+Ledge Invincibility Attrition
+A Smash Hack/Mod
+(Gecko Codes in description)
+
+8 seconds:
+While a shield is out and each time it is attacked, shields are reduced in effectiveness, which contributes to the offensive and fast paced nature of Melee, as you can't just hide in your shield.
+
+6 seconds:
+However, ledge invincibility protects the player too, and most characters can be invincible indefinitely.
+
+7 seconds:
+While there are legitimate offensive uses for this, it is also extremely good defensively so that the defender always has the advantage.
+
+5 seconds:
+In addition, a huge problem is that this can be used to stall out a match indefinitely.
+
+7 seconds:
+This hack/mod makes ledge invincibility behave more like shields, where it recovers over time but is reduced each time it is used.
+
+6 seconds:
+In the following examples, yellow bubbles means the character is vulnerable and blue means they're invincible.
+
+Show Fox doing it at slow speed:
+* The first few times behave as normal
+* This maintains the offensive capabilities of ledge stalling
+* For instance, ledgeguarding is one offensive tactic
+* But eventually, ledge invincibility begins to reduce
+* The more ledges in quick succession, the more invincibility reduces
+* Invincibility is never totally lost, but it can get pretty small
+* The invincibility recovers over time, just like shields
+* So it can still be used for what it was meant for
+
+Show Shinostall, normal speed:
+* Shinostall is still really effective...
+* ...but even it weakens eventually
+
+
+4 seconds:
+If you find any bugs, please let me know in the comments :)
+
+5 seconds:
+Thanks for watching, and hope you enjoy!
+Music by blah
+
+
+
+
+
+
+
+
+
+
+
+Offsets set to 0 on death not used for anything
+1068 - 106B
+10D8 - 10DB
+10E0 - 10E3
+10E8 - 10EB
+10F0 - 10F3
+10F8 - 10FB
+1100 - 1103
+1108 - 110B
+1110 - 1113
+1118 - 111B
+1120 - 1123
+1128 - 112B
+1130 - 1133
+1138 - 113B
+1140 - 1143
+1148 - 114B
+1150 - 1153
+1158 - 115B
+1160 - 1163
+1168 - 116B
+1170 - 1173
+1178 - 117B
+1180 - 1183
+1188 - 118B
+1190 - 1193
+1630 - 1633
+165C - 165F
+1E5C - 1E5F
+1E68 - 1E73
+1E78 - 1E7B
+1E84 - 1E8F
+1E94 - 1E97
+1EA0 - 1EAB
+1EB0 - 1EB3
+1EBC - 1EC7
+
+
+
+
+
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1638 ( --- ) Write8 00 at 80d02842 ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a163c ( --- ) Write8 00 at 80d02843 ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1640 ( --- ) Write8 00 at 80d02840 ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1644 ( --- ) Write8 00 at 80d02841 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800084d8 ( --- ) Write8 00 at 80d01a89 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 8000848c ( --- ) Write8 00 at 80d01a88 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a16a4 ( --- ) Write8 00 at 80d02896 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a16a8 ( --- ) Write8 00 at 80d02897 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a16ac ( --- ) Write8 00 at 80d02894 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a16b0 ( --- ) Write8 00 at 80d02895 ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1680 ( --- ) Write8 00 at 80d0287a ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a1684 ( --- ) Write8 00 at 80d0287b ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a1688 ( --- ) Write8 00 at 80d02878 ( --- )
+24:59:536 BreakPoints.cpp:197 I[MI]: CHK 800a168c ( --- ) Write8 00 at 80d02879 ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a165c ( --- ) Write8 00 at 80d0285e ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1660 ( --- ) Write8 00 at 80d0285f ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1664 ( --- ) Write8 00 at 80d0285c ( --- )
+24:59:535 BreakPoints.cpp:197 I[MI]: CHK 800a1668 ( --- ) Write8 00 at 80d0285d ( --- )
+
+
+Unused character data:
+
+
+player_block_t is at 80453080, 0xE90 in size
+B0 is player_t
+2C is player_invincibility_t
+The first item of player_invincibility_t is a pointer back to player_t
+
+player_ts:
+80453130
+80453FC0
+80454E50
+80455CE0
+
+80c79e20,80cba1c0,80cfe5a0,80d49300
+
+
+player_invincibility_t free spots?
+4 - 2400
+
+
+Free spots:
+44 - 73
+A4 - AF
+104 - 107
+140 - 143
+1A4 - 1A7
+1AC - 1AF
+1B4 - 1F3
+1FC - 20B
+210 - 26F
+274 - 27F
+290 - 293
+2A4 - 2C3
+2CC - 2D3
+2D8 - 2DB
+2F8 - 2FB
+300 - 307
+310 - 313
+318 - 31F
+328 - 32B
+330 - 337
+340 - 343
+348 - 34F
+358 - 35B
+360 - 367
+370 - 373
+378 - 37F
+388 - 38B
+390 - 397
+3A0 - 3A3
+3A8 - 3AF
+3B8 - 3BB
+3C0 - 3DF
+3FC - 407
+42C - 42F
+458 - 47B
+498 - 4AF
+505 - 50B
+514 - 583
+5B4 - 5B7
+5D0 - 5D3
+5DC - 5E7
+602 - 60B
+610 - 617
+630 - 637
+648 - 64F
+658 - 65B
+664 - 667
+6C0 - 6F3
+730 - 733
+754 - 773
+7F8 - 7FB
+82C - 82F
+8B0 - 8BF
+8C2 - 8D3
+8D6 - 8E7
+8EA - 8EF
+8FE - 903
+D20 - D2F
+DF1 - 1063
+1068 - 1073
+1084 - 10A6
+10A8 - 10AB
+10C8 - 1197
+119C - 119D
+11E8 - 11EB
+1234 - 1237
+1280 - 1283
+12C8 - 12CF
+1314 - 131B
+1364 - 1367
+13AC - 13B3
+13F8 - 13FF
+1444 - 144B
+1494 - 1497
+14DC - 14E3
+1528 - 152F
+1578 - 157B
+15C0 - 15C7
+1608 - 1613
+1630 - 163F
+165C - 166B
+1684 - 1687
+1694 - 1827
+1834 - 1837
+1870 - 187B
+1880 - 189B
+1920 - 1923
+192C - 192F
+194C - 194F
+19AC - 19B3
+19BC - 19BF
+19E9 - 19F7
+1A08 - 1A2B
+1A4C - 1A53
+1A60 - 1A69
+1A6C - 1A87
+1A9C - 1A9F
+1AAC - 1AB3
+1AC8 - 1ACB
+1AEC - 1AF3
+1B18 - 1B1B
+1B20 - 1B2B
+1B30 - 1B4F
+1B60 - 1B73
+1B83 - 1E57
+1E5C - 1E73
+1E78 - 1E8F
+1E94 - 1EAB
+1EB0 - 1EC7
+1ECC - 1ED3
+1EF8 - 1FDB
+2008 - 200B
+2022 - 2027
+202C - 2033
+2038 - 2063
+20B0 - 20FF
+210D - 2113
+2118 - 2134
+216C - 217F
+2184 - 2187
+2190 - 219B
+222A - 23FF
+
+
+
+
+v1.00
+C209A600 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+C206A2BC 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000
+
+v1.01
+C209A6E8 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+C206A3CC 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000
+
+v1.02
+C209A8AC 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+C206a414 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000
+
+
+
+
+
+
+
+
+v1.00
+
+@ 8009A600
+mr r7, r3
+lwz r3, 0x2C(r3)
+lwz r4, 0x49C(r4)   # Get the time
+lwz r5, 0x1068(r3)  # Get the timer
+mr r6, r5           # r6 is the original value
+addi r5, r5, 32     # add 32 to timer
+cmpwi r5, 320       # Maximum timer value is 320
+ble+ STOREBACK
+li r5, 320          # If we exceed the maximum, set it to 320
+STOREBACK:
+stw r5, 0x1068(r3)  # set it back to RAM
+mullw r6, r6, r6    # Square the original timer value
+srwi r6, r6, 12     # Divide by 4096
+cmpw r6, r4         # subtr ? max (ledge refresh time)
+blt+ SUBTRACT       # if subtr < max, subtract max by subtr
+li r4, 0            # Otherwise, just set ledge refresh to 0
+b SAVE
+SUBTRACT:
+sub r4, r4, r6      # Make sure r4 won't be less than 0
+SAVE:
+mr r3, r7
+
+@ 8006A2BC
+lwz r3, 0x198C(r31)  # Invincibility state
+lwz r4, 0x1988(r31)  # Animation invincibility state
+or r3, r3, r4        # Get the combination of both
+cmpwi r3, 0
+bne- END
+lwz r3, 0x1068(r31)  # Get the invincibility timer
+cmpwi r3, 0
+beq+ END
+subi r3, r3, 1
+stw r3, 0x1068(r31)  # invincibilityTimer--;
+END:
+lwz r3, 0x1990(r31)  # Return current ledge invincibility time
+
+C209A600 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+C206A2BC 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000
+
+
+
+
+
+
+
+PAL:
+@ 8009AF64
+mr r7, r3
+lwz r3, 0x2C(r3)
+lwz r4, 0x49C(r4)   # Get the time
+lwz r5, 0x1068(r3)  # Get the timer
+mr r6, r5           # r6 is the original value
+addi r5, r5, 32     # add 32 to timer
+cmpwi r5, 320       # Maximum timer value is 320
+ble+ STOREBACK
+li r5, 320          # If we exceed the maximum, set it to 320
+STOREBACK:
+stw r5, 0x1068(r3)  # set it back to RAM
+mullw r6, r6, r6    # Square the original timer value
+srwi r6, r6, 12     # Divide by 4096
+cmpw r6, r4         # subtr ? max (ledge refresh time)
+blt+ SUBTRACT       # if subtr < max, subtract max by subtr
+li r4, 0            # Otherwise, just set ledge refresh to 0
+b SAVE
+SUBTRACT:
+sub r4, r4, r6      # Make sure r4 won't be less than 0
+SAVE:
+mr r3, r7
+
+@ 8006AAF8
+lwz r3, 0x198C(r31)  # Invincibility state
+lwz r4, 0x1988(r31)  # Animation invincibility state
+or r3, r3, r4        # Get the combination of both
+cmpwi r3, 0
+bne- END
+lwz r3, 0x1068(r31)  # Get the invincibility timer
+cmpwi r3, 0
+beq+ END
+subi r3, r3, 1
+stw r3, 0x1068(r31)  # invincibilityTimer--;
+END:
+lwz r3, 0x1990(r31)  # Return current ledge invincibility time
+
+C209AF64 0000000A
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 00000000
+
+C206AAF8 00000006
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 00000000

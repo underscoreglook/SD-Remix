@@ -1,0 +1,470 @@
+Alpha/Omega
+-----------
+For versions where it's the original version with gameplay changes, just put an "Omega" symbol at the bottom right of the icon.
+
+Left side: Icicle Mountain/Flatzone
+Right side: Normal Snag the Trophies/Achilles' 3 Platforms STT
+
+Normal Peach's Castle/Zauron's no Bullet Bill or Switches
+Normal Kongo Jungle/Milun's Kongo Jungle
+Normal Great Bay/Milun's High Tide at Great Bay
+Normal Yoshi's Story 64/Milun's Yoshi's Story 64
+Normal Fountain of Dreams/Zauron's no side platforms overwrite
+Normal Corneria/Zauron's No Ships or Great Fox Gun mod overwrite
+
+Normal Rainbow Cruise/Myougi's Peach's Castle
+Normal Jungle Japes/No water or klaptraps (Myougi's posted vers)
+Normal Hyrule Temple/Myougi's Skyrule
+Normal Yoshi's Island/Milun's Yoshi's Island
+Normal Green Greens/Flieskiller's no bombs and no falling blocks
+Normal Venom/Corneria Extreme (tons of lazers, outer glow lasers in photoshop on icon)
+
+Normal Brinstar/Zauron's no rising lava
+Normal Onett/flieskiller's no platforms or cars
+Normal Mute City/flieskiller's no cars
+Normal Kongo Jungle 64/flieskiller's no barrel
+Normal Mushroom Kingdom/Milun's Mushroom Kingdom (SDR Lite vers)
+
+Normal Brinstar Depths/Milun's No Kraid
+Normal Fourside/Myougi's Improved Smashville Fourside
+Normal Big Blue/Milun's Big Blue (SDR Lite vers)
+PokeFloats/Achilles' Jungle Japes w/ One Platform
+Normal Mushroom Kingdom 2/Milun's Mushroom Kingdom 2 with no pidgit or birdo
+
+Low Gravity Battlefield (two blue arrows in icon)/Normal Battlefield
+Flipped Battlefield/Final Destination with Dan's no transitions
+Normal Dreamland 64/Zauron's no wind
+Normal Yoshi's Story/Zauron's no flyguys
+Normal Pokemon Stadium/Zauron's no transformations
+
+
+
+
+
+
+
+Pressing B loads the CSS from the SSS; we want to inject that point to check if we've pressed L or R as well. Instead of injecting our Alpha/Omega toggle where it was previously, we'll just inject it here. We'll have it call our code and set our own variables instead of the ones that are being called here.
+
+804C20BC possible values:
+DPad U, D, L, R
+L: 00000001
+R: 00000002
+D: 00000004
+U: 00000008
+Z: 00000010
+R: 00000020
+L: 00000040
+A: 00000100
+B: 00000200
+X: 00000400
+Y: 00000800
+S: 00001000
+Analog Stick U, D, L, R
+U: 00010000
+D: 00020000
+L: 00040000
+R: 00080000
+
+804C20BC contains controller data. It seems each item is separated by 0x44, probably for each player. The first word of each struct is probably being read for controller data.
+This data structure has the following controller data values:
+0x0		Current controller data
+0x4		Previous controller data
+0x8		Changed controller data
+
+Normal, SSS:
+16:59:860 BreakPoints.cpp:197 I[MI]: CHK 803779dc ( --- ) Read32 00000000 at 804c20bc ( --- )
+16:59:860 BreakPoints.cpp:197 I[MI]: CHK 803779fc ( --- ) Write32 00000000 at 804c20bc ( --- )
+16:59:860 BreakPoints.cpp:197 I[MI]: CHK 80377acc ( --- ) Read32 00000000 at 804c20bc ( --- )
+16:59:860 BreakPoints.cpp:197 I[MI]: CHK 80377ae4 ( --- ) Read32 00000000 at 804c20bc ( --- )
+16:59:860 BreakPoints.cpp:197 I[MI]: CHK 80377af8 ( --- ) Read32 00000000 at 804c20bc ( --- )
+16:59:860 BreakPoints.cpp:197 I[MI]: CHK 801a3ab8 ( --- ) Read32 00000000 at 804c20bc ( --- )
+
+Press B, SSS:
+17:23:453 BreakPoints.cpp:197 I[MI]: CHK 803779dc ( --- ) Read32 00000000 at 804c20bc ( --- )
+17:23:453 BreakPoints.cpp:197 I[MI]: CHK 803779fc ( --- ) Write32 00000200 at 804c20bc ( --- )
+17:23:453 BreakPoints.cpp:197 I[MI]: CHK 80377acc ( --- ) Read32 00000200 at 804c20bc ( --- ) cand 1 yes?
+17:23:453 BreakPoints.cpp:197 I[MI]: CHK 80377ae4 ( --- ) Read32 00000200 at 804c20bc ( --- ) cand 2 NOPE
+17:23:453 BreakPoints.cpp:197 I[MI]: CHK 80377af8 ( --- ) Read32 00000200 at 804c20bc ( --- ) cand 3 NOPE
+17:23:453 BreakPoints.cpp:197 I[MI]: CHK 801a3ab8 ( --- ) Read32 00000200 at 804c20bc ( --- ) cand 4 NOPE
+
+80377acc: This is where the previous controller data is compared to the current controller data and then figured out if any of the controls have changeD or not. It is then stored into changed controller data.
+
+This is where the changed controller data is read on the SSS:
+35:54:966 BreakPoints.cpp:197 I[MI]: CHK 801a3adc ( --- ) Read32 00000000 at 804c20c4 ( --- )
+35:54:966 BreakPoints.cpp:197 I[MI]: CHK 8025b8f0 ( --- ) Read32 00000000 at 804c20c4 ( --- )
+
+8025b8f0 only runs on the SSS (it looks like) and if you nop it, it won't exit the SSS, but only for player 1.
+
+This is where the data is read. Previous only applied to P1, but this applies to all players
+When P1 presses:
+48:13:748 BreakPoints.cpp:197 I[MI]: CHK 8025b8e8 ( --- ) Read32 00000000 at 804d6ca0 ( --- )
+48:13:748 BreakPoints.cpp:197 I[MI]: CHK 8025b900 ( --- ) Read32 00000040 at 804d6ca0 ( --- )
+48:13:748 BreakPoints.cpp:197 I[MI]: CHK 8025b910 ( --- ) Read32 00000040 at 804d6ca0 ( --- )
+48:13:748 BreakPoints.cpp:197 I[MI]: CHK 8025b920 ( --- ) Read32 00000040 at 804d6ca0 ( --- )
+48:13:748 BreakPoints.cpp:197 I[MI]: CHK 8025baf8 ( --- ) Read32 00000040 at 804d6ca0 ( --- )
+48:13:748 BreakPoints.cpp:197 I[MI]: CHK 80259c64 ( --- ) Read32 00000040 at 804d6ca0 ( --- )
+When P2 presses:
+47:11:895 BreakPoints.cpp:197 I[MI]: CHK 8025b8e8 ( --- ) Read32 00000000 at 804d6ca0 ( --- )
+47:11:895 BreakPoints.cpp:197 I[MI]: CHK 8025b900 ( --- ) Read32 00000000 at 804d6ca0 ( --- )
+47:11:895 BreakPoints.cpp:197 I[MI]: CHK 8025b910 ( --- ) Read32 00000100 at 804d6ca0 ( --- )
+47:11:895 BreakPoints.cpp:197 I[MI]: CHK 8025b920 ( --- ) Read32 00000100 at 804d6ca0 ( --- )
+47:11:895 BreakPoints.cpp:197 I[MI]: CHK 8025baf8 ( --- ) Read32 00000100 at 804d6ca0 ( --- )
+47:11:895 BreakPoints.cpp:197 I[MI]: CHK 80259c64 ( --- ) Read32 00000100 at 804d6ca0 ( --- )
+
+First 4 are probably read for each player. The last two are the meat of the issue.
+The place that actually checks to see if B is pressed is:
+
+8025BAFC rlwinm.   r0, r0, 0,22,22
+If this is NOT zero, that means we pressed B after this function is run and we go backwards. We play the back sound effect and we run 801A4B60, which likely goes back to the CSS.
+
+sub 801A4B60 contains the following to change scenes (both to and from the CSS):
+lis r3, 0x8048
+subi r3, r3, 0x62A8 (80479D58)
+li r0, 1
+stw r0, 0xC(r3)
+We can run this just regular. We probably want to change the r3 value, though.
+
+80479d64 is read to go back and forth. We want to try and reload the CSS instead, though.
+
+Normal reads (SSS)
+06:56:031 BreakPoints.cpp:197 I[MI]: CHK 801a500c ( --- ) Read32 00000000 at 80479d64 ( --- )
+06:56:031 BreakPoints.cpp:197 I[MI]: CHK 801a5024 ( --- ) Read32 00000000 at 80479d64 ( --- )
+06:56:046 BreakPoints.cpp:197 I[MI]: CHK 801a507c ( --- ) Read32 00000000 at 80479d64 ( --- )
+
+On change (SSS)
+07:24:607 BreakPoints.cpp:197 I[MI]: CHK 801a500c ( --- ) Read32 00000002 at 80479d64 ( --- )
+07:24:607 BreakPoints.cpp:197 I[MI]: CHK 801a5024 ( --- ) Read32 00000002 at 80479d64 ( --- )
+
+After loading CSS
+07:42:439 BreakPoints.cpp:197 I[MI]: CHK 801a507c ( --- ) Read32 00000000 at 80479d64 ( --- )
+07:42:460 BreakPoints.cpp:197 I[MI]: CHK 801a500c ( --- ) Read32 00000000 at 80479d64 ( --- )
+07:42:460 BreakPoints.cpp:197 I[MI]: CHK 801a5024 ( --- ) Read32 00000000 at 80479d64 ( --- )
+07:42:498 BreakPoints.cpp:197 I[MI]: CHK 801a507c ( --- ) Read32 00000000 at 80479d64 ( --- )
+
+Normal CSS
+08:26:641 BreakPoints.cpp:197 I[MI]: CHK 801a500c ( --- ) Read32 00000000 at 80479d64 ( --- )
+08:26:641 BreakPoints.cpp:197 I[MI]: CHK 801a5024 ( --- ) Read32 00000000 at 80479d64 ( --- )
+08:26:672 BreakPoints.cpp:197 I[MI]: CHK 801a507c ( --- ) Read32 00000000 at 80479d64 ( --- )
+
+When is the next screen id being written?
+38:19:864 BreakPoints.cpp:197 I[MI]: CHK 801a42ac ( --- ) Write8 01 at 80479d35 ( --- )
+38:19:864 BreakPoints.cpp:197 I[MI]: CHK 801a4168 ( --- ) Write8 00 at 80479d35 ( --- )
+
+801a42ac is what we really want. When is it run? It's a generic function that takes the next actual screen ID as r3.
+Let's stacktrace:
+801a4144 - Runs which function to use
+	801b1570 - Purely seems to load the CSS
+		801a5820 - r5 is the scene id going into the function (is r31 when it gets here)
+			801a42ac
+
+At 801A413C, we know what r27 is, and we can do a read on this, so we know what sets the next scene id.
+When going to SSS from CSS, r27 is 803dd9a0
+When going from SSS to CSS, r27 is 803dd9b8
+
+L: 00000040
+R: 00000020
+B: 00000200
+     0100 0010
+0010
+So the trick here is this:
+At 8025BAFC, it's checking for if B is pressed, using "rlwinm. r0, r0, 0,22,22".
+At this point, reuse one of the "default 0" toggle debug menu options.
+Set r3 to 0.
+Do the default check. If it is not zero, B was pressed and we shouldn't even check for L or R.
+If it's 0, then we check if L or R is pressed. We check to see if we're at Alpha or Omega and do the normal checks to see if we should change. If we should, set r3 to a menu sound effect to play. Set the "default 0" toggle to 1.
+If we are loading alpha, change the usd name to "Map". If loading the omega version, change filename to "Mop".
+Then, at 8025BB10, nop it, so it plays whatever sound we set it to. (filename is at 803F0A18. The a/o char is at 803F0A1D).
+At 801B156C, it does li r5, 0 so that it can set the screen id to 0, which is the CSS. Instead, set it to the "default 0" toggle, and then reset the "default 0" toggle to 0 so it works properly later. This will reload the CSS.
+
+803fa354 - Alpha/Omega Toggle
+
+@ 8025BAFC:
+rlwinm. r3, r0, 0,22,22
+beq CHECK_L
+li r3, 0
+b RETURN
+CHECK_L:
+lis r4, 0x803f
+ori r4, r4, 0xa354
+li r3, 5  # Pew Pew!
+lwz r5, 0(r4)
+rlwinm. r3, r0, 0,25,25
+beq CHECK_R
+CHECK_IF_OMEGA:
+cmpwi r5, 0
+beq RETURN	#If we're already in alpha, move on
+li r5, 0
+b CHANGE_SSS
+CHECK_R:
+rlwinm. r3, r0, 0,26,26
+beq RETURN	# If R not pressed, just leave
+cmpwi r5, 1
+beq RETURN  # If we're already in omega, move on
+li r5, 1
+CHANGE_SSS:
+stw r5, 0(r4)
+li r3, 5
+lis r4, 0x803f
+ori r4, r4, 0xa37c
+li r5, 1
+stw r5, 0(r4)
+RETURN:
+
+0425BB10 60000000
+
+@ 801B156C:
+lis r6, 0x803f
+ori r6, r6, 0xa37c
+lwz r5, 0(r6)
+li r7, 0
+stw r7, 0(r6)
+
+
+
+When is the filename read?
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 4d at 803f0a18 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 4d at 803f0a18 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 6e at 803f0a19 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 6e at 803f0a19 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 53 at 803f0a1a ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 53 at 803f0a1a ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 6c at 803f0a1b ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 6c at 803f0a1b ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 4d at 803f0a1c ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 4d at 803f0a1c ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 61 at 803f0a1d ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 61 at 803f0a1d ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 70 at 803f0a1e ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 70 at 803f0a1e ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 2e at 803f0a1f ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80016298 ( --- ) Read8 75 at 803f0a20 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325aa8 ( --- ) Read32 4d6e536c at 803f0a18 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 4d61702e at 803f0a1c ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 75736400 at 803f0a20 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325ae0 ( --- ) Read8 75 at 803f0a20 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 73 at 803f0a21 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 64 at 803f0a22 ( --- )
+04:51:854 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 00 at 803f0a23 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 4d at 803f0a18 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 4d at 803f0a18 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 6e at 803f0a19 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 6e at 803f0a19 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 53 at 803f0a1a ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 53 at 803f0a1a ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 6c at 803f0a1b ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 6c at 803f0a1b ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 4d at 803f0a1c ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 4d at 803f0a1c ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 61 at 803f0a1d ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 61 at 803f0a1d ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 70 at 803f0a1e ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 70 at 803f0a1e ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 2e at 803f0a1f ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80016298 ( --- ) Read8 75 at 803f0a20 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325aa8 ( --- ) Read32 4d6e536c at 803f0a18 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 4d61702e at 803f0a1c ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 75736400 at 803f0a20 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325ae0 ( --- ) Read8 75 at 803f0a20 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 73 at 803f0a21 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 64 at 803f0a22 ( --- )
+04:51:855 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 00 at 803f0a23 ( --- )
+04:54:213 BreakPoints.cpp:197 I[MI]: CHK 8025a0c4 ( --- ) Read8 75 at 803f0a20 ( --- )
+04:54:264 BreakPoints.cpp:197 I[MI]: CHK 8025a0c4 ( --- ) Read8 75 at 803f0a20 ( --- )
+04:54:533 BreakPoints.cpp:197 I[MI]: CHK 8025a0c4 ( --- ) Read8 75 at 803f0a20 ( --- )
+The first time's stacktrace:
+8025a9d8 = the filename is the value of 803F06D0 + 0x348 or 0x354
+	80016bfc = r3 into this function is pointer to filename
+		800163f8 = r3 into this function is pointer to filename
+			80016204 = r3 into this function is the pointer to filename
+At 8025A9C8, what this is very likely doing is checking to see what language we are and loading a file depending on which one it is. Instead of reading the lanugage at 8025A9C8, instead, branch and read the omega toggle instead. 0 will go to the "dat" so make this the alpha, and 1 will go to the usd (or USA) version.
+
+
+
+DAT = Alpha
+USD = Omega
+a = 61, o = 6f, r = 52
+
+# Change Map menu filename
+@ 8025A9D4:
+addi r3, r31, 0x348
+lis r4, 0x803f
+ori r4, r4, 0xa354
+lwz r4, 0(r4)
+cmpwi r4, 0  # Is it Alpha?
+bne OMEGA
+li r4, 0x61
+b CHANGE_FILENAME
+OMEGA:
+li r4, 0x6f
+CHANGE_FILENAME:
+stb r4, 5(r3)
+
+
+
+
+
+Otherwise, hook into same place as before where it reads stage id. The table that's read is different from SDR Lite:
+It's a series of 0x20 elements of two words, where the element for the stageID is 1 less than the actual stage id. These cover all of the SSS stages.
+Each element is TWO words, first for alpha, second for omega, with the bytes for each word:
+bytes 0,1 - Half word, alternate stage id, or 0 if keep the same stage
+byte 2 - 0 if load normal (Gr) version, 1 if load alt (Go) version
+byte 3 - Should it toggle DOL mods
+It needs to be Dolphin functional, so don't make any of the DOL mods change code, simply have them branch and check omega toggles.
+The code should check the first half word if it's not 0, and change r0 to it if it's not 0.
+It stores byte 3 into a repurposed debug variable that DOL mods use to check if they should run.
+Byte 2 is stored in another repurposed variable that tells the game whether to load the Gr or the Go version of the stage. This is checked when reading the filename. If it is 0, write 'r' to the second character, or 'o' if it is 1.
+All DOL mods should be of the "check the variable first" type, where it branches and reads the variable. This will help simplify things for Dolphin, even if the Flush Cache on Scene change thing doesn't work.
+At flieskiller's address, do:
+* Reset the dol toggles var (803fa380)
+* Reset the Go/Gr toggles var (803fa384)
+
+00000000 00000001	02 Fountain of Dreams (Izumi)
+001E0000 001E0001	03 Pokémon Stadium (Pstadium)
+00000000 00000001	04 Princess Peach's Castle (Castle)
+00000000 00000100	05 Kongo Jungle (Kongo)
+00000000 00000001	06 Brinstar (Zebes)
+00000000 00000001	07 Corneria
+001D0000 001D0100	08 Yoshi's Story (Story)
+00000000 00000001	09 Onett
+00000000 00000001	0A Mute City
+00000000 00040101	0B Rainbow Cruise (RCruise)
+00000000 00000001	0C Jungle Japes (Garden)
+00000000 00000100	0D GreatBay
+00000000 00000100	0E Hyrule Temple (Shrine)
+00000000 00000100	0F Brinstar Depths (Kraid)
+00000000 00000100	10 Yoshi's Island (Yoster)
+00000000 00000001	11 Green Greens (Greens)
+00000000 00000100	12 Fourside
+00000000 00000100	13 Mushroom Kingdom I (Inishie1)
+00000000 00000101	14 Mushroom Kingdom II (Inishie2)
+00000000 00000000	15 Akaneia (Deleted Stage)
+00000000 00470000	16 Venom
+00000000 000C0101	17 Poké Floats (Pura)
+00000000 00000100	18 Big Blue
+00000000 001B0000	19 Icicle Mountain (Icemt)
+00000000 00000000	1A Icetop
+00530000 00530100	1B Flat Zone
+00000000 00000001	1C Dream Land N64 (old ppp)
+00080000 00080001	1D Yoshi's Story N64 (old yosh)
+00030000 00030001	1E Kongo Jungle N64 (old kong)
+001F0100 00000000	1F Battlefield (battle)
+00110100 00000001	20 Final Destination (last)
+
+@ 8025BB40: Can use r4 to r12
+lbz r0, 0xB(r4)		# r0 is the stage id, don't touch it
+li r4, 0			# Is Go/Gr toggle
+li r5, 0			# Is DOL toggle
+cmpwi r0, 2
+blt RETURN
+cmpwi r0, 0x20
+bgt RETURN
+# Now we know it's one of the SSS stages
+mr r4, r0			# Move it to r4
+subi r4, r4, 2		# Index for the stage table
+slwi r4, r4, 1		# Multiply by two
+lis r5, 0x803f
+ori r5, r5, 0xa354
+lwz r5, 0(r5)		# Get omega toggle
+add r4, r4, r5		# Omega toggle is second word
+slwi r4, r4, 2		# Multiply by 4 to get bytes
+lis r5, 0x8040
+ori r5, r5, 0xAAF4	# Address of table
+add r5, r4, r5		# r5 is now word for stage toggle
+lhz r4, 0(r5)		# Get alternate stage id
+cmpwi r4, 0
+beq NO_ALT
+mr r0, r4			# If there's an alt, set it
+NO_ALT:
+lbz r4, 2(r5)		# Get if we should load Go dats
+lbz r5, 3(r5)		# Get if we should do DOL mods
+RETURN:
+lis r6, 0x803f
+ori r6, r6, 0xa384
+stw r4, 0(r6)		# Store the Go/Gr toggle
+lis r6, 0x803f
+ori r6, r6, 0xa380
+stw r5, 0(r6)		# Store the DOL toggle
+
+@ 801A4168: 
+stb r0, 5(r31)
+li r0, 0
+lis r3, 0x803f
+ori r3, r3, 0xa380
+stw r0, 0(r3)
+lis r3, 0x803f
+ori r3, r3, 0xa384
+stw r0, 0(r3)
+
+Disable Trophy Spawn if in versus mode (Snag the Trophies Stage) (v1.02) [wparam, _glook]
+C22199FC 00000005
+3D808047 618C9D30
+898C0000 2C0C0003
+40820014 3D80802F
+618C2094 7D8903A6
+4E800421 00000000
+
+
+
+# Change stage filename, o = 6f, r = 52
+@ 801C06F4 is where we want to hook into, We can use r3, r5, r6, r7, r8, r9, and r10
+# r4 HAS to be kept what it is, which is the address of the filename:
+li r0, 0
+lis r3, 0x803f
+ori r3, r3, 0xa384
+lwz r3, 0(r3)
+cmpwi r3, 0
+bne OMEGA
+ALPHA:
+li r3, 0x52
+b WRITE_FILENAME
+OMEGA:
+li r3, 0x6f
+WRITE_FILENAME:
+stb r3, 2(r4)
+
+
+
+
+$Disable Trophy Spawn if in versus mode (Snag the Trophies Stage) (v1.02) [wparam, _glook]
+C22199FC 00000005
+3D808047 618C9D30
+898C0000 2C0C0003
+40820014 3D80802F
+618C2094 7D8903A6
+4E800421 00000000
+
+$ Reset toggles at CSS
+C21A4168 00000005
+981F0005 38000000
+3C60803F 6063A380
+90030000 3C60803F
+6063A384 90030000
+60000000 00000000
+
+$ Stage Loader
+C225BB40 00000010
+8804000B 38800000
+38A00000 2C000002
+41800050 2C000020
+41810048 7C040378
+3884FFFE 5484083C
+3CA0803F 60A5A354
+80A50000 7C842A14
+5484103A 3CA08040
+60A5AAF4 7CA42A14
+A0850000 2C040000
+41820008 7C802378
+88850002 88A50003
+3CC0803F 60C6A384
+90860000 3CC0803F
+60C6A380 90A60000
+60000000 00000000
+
+$Change filename
+C21C06F4 00000006
+38000000 3C60803F
+6063A384 80630000
+2C030000 4082000C
+38600052 48000008
+3860006F 98640002
+60000000 00000000

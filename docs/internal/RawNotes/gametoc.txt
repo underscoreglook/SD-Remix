@@ -1,0 +1,75 @@
+In game.toc, 38D0 is the start of the string table
+1,459,976,192 +833 = 1,459,977,025
+
+1,459,978,240 is Max ISO size
+1,430,662,931 is how big the Melee files actually are
+That's 29,315,309 of leftover space
+
+
+1459977030
+
+488,622,656
+
+00003C59 57057B46 00000004
+
+0 + 9280	iso.hdr
+9280 + 111844	apploader.ldr (end 121,124, next sector is 122880)
+122,880 + 4,425,216 = 4,548,096
+4,548,608 + 30014
+
+32,649,216
+
+38DC
+
+ON DVD:
+45E000 First byte that can be written to
+800 = size in hex of each block
+Remember to increase FST Size in header. It's at 0x0428 and 0x042C of ISO.hdr (twice)
+
+1F23000 Opening.bnr  (0128b474)
+1F25000 GmRegend     (128CDD4)
+25AA000 MvOmake15.mth (18FF0FC)
+
+017fd916
+
+003e119c
+
+1459976192
+838
+1459977030
+
+4,578,622
+32,651,264
+
+28,072,642
+
+
+30,014, 753E
+
+DOL 3de19A
+6f is o
+72 is r
+It's byte 803E119A
+
+
+DOL 2FDDF0 is Function inject location, address 80301210
+String at 803FD200
+
+Toggle 803fa37c
+
+lis r4, 0x803e
+ori r4, r4, 0x119A
+lis r3, 0x803f
+ori r3, r3, 0xa37c
+lwz r3, 0(r3)
+cmpwi r3, 0
+bne CHANGE
+NORMAL:
+li r3, 0x72
+b SET
+CHANGE:
+li r3, 0x6f
+SET:
+stb r3, 0(r4)
+li r3, 0
+blr

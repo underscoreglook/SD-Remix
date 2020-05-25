@@ -1,0 +1,11 @@
+Bombs away
+----------
+Function 801C0C2C is called every frame ONCE, no matter what
+Line 801C0EA0: the last common code, so this is also once a frame
+Line 801C0EAC: Only sudden death/overtime
+Line 801C0EB8: Bomb rain
+Line 801C0ECC: Bomb Spawn?
+Line 801C0F44: called only when bomb spawns
+
+041C0EA8 60000000
+041C0EB4 60000000
