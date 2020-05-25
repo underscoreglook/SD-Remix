@@ -1,3 +1,45 @@
+Hold L+R+A+Start During Stage Load to Return to the CSS
+In vanilla Melee, this button combination loads the Main Menu.
+[Jorgasms]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8025b8bc --- 38600001 -> 38600002
+
+
+	-==-
+
+
+Stage Striking (Transparent Struck Stages), Method 1, compatible with Alpha/Omega toggle
+Works like it does in PM.
+
+X = ban currently selected stage
+Y = ban all stages that aren't allowed in random, and unban all that are allowed
+Z = unban all
+
+Banned stages can't be selected anymore, however they can still be selected when someone chooses "Random".
+
+Changed to make it compatible with Alpha/Omega toggle.
+<https://smashboards.com/threads/stage-striking-invisible-struck-stages.422589/post-20401006>
+[Sham Rock, Achilles,]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8025A3BC ---- C022C9E8 -> Branch
+39E00001 3E008046 6210B0FC 1E2F000C 7E31802E 5630014B 4182000C 3A200001
+48000020 56300109 4182000C 3A200002 48000010 563002D7 418200FC 3A200003
+3EA0803F 62B506D0 3EC0804D 62D66CAE 3A800000 3A600000 3A400000 2C110001
+40820014 8A560000 2C12001C 418100C8 4800006C 2C110003 40820010 3A80003F
+3A600002 48000058 1E12001C 7E10AA14 8AF0000A
+lis r16, <<varIsAlphaOrOmega>>@h
+ori r16,r16, <<varIsAlphaOrOmega>>@l
+82100000 2C100000 3E008045 4182000C 6210C38C 48000008 6210C388 82100000
+7E10BC30 561007FF 41820010 3A600002 3A80003F 4800000C 3A600000 3A800000
+1E12001C 7E10A82E 3AE00000 2C130002 4082001C 3EE00008 62F70008 2C120016
+4180000C 3EE02000 62F70008 92F00014 1E12001C 3A100008 7E70A9AE 3A00001E
+9A160000 2C110001 41820010 3A520001 2C12001D 41A0FF44 39EF0001 2C0F0005
+41A0FEC8 C022C9E8 C022C9E8 00000000
+
+
+	-==-
+
+
 Dynamic Lagless Fountain of Dreams
 TODO: This doesn't actually work that well. There's a new code that does a better job and we'll need to integrate that into this code
 [Dan Salvato, _glook]
@@ -20,3 +62,81 @@ NTSC 1.02 ---- 0x802199FC ---- 480D8699 -> Branch
 3D808047 618C9D30 898C0000 2C0C0003
 40820014 3D80802F 618C2094 7D8903A6
 4E800421 00000000
+
+
+	-==-
+
+
+Toggle between Alpha/Omega on SSS (variable)
+If on the Stage Selection Screen, you can press L to switch to the "Alpha" toggle and R to switch to the "Omega" toggle. It then reloads the stage selection screen so the change can be evident.
+When switching, it also plays a sound effect unique to reloading the page.
+When reloading, it actually loads a different file for the stage select, so the two stage lists can have different graphics, so it's expected that the ISO has the different file. Alpha is MnSlMap.usd, while Omega is MnSlMop.usd.
+Provides the (read only) boolean varIsAlphaOrOmega so other stage mods can know if it's alpha or omega.
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varIsAlphaOrOmega> # 0 for alpha, 1 for omega, available for other mods (as read only)
+00000001    # Default to omega
+
+<varSssNextScreenId> # Only used in this mod
+00000000
+
+NTSC 1.02 ---- 0x2586DC ------ 540005AD -> Branch
+# At this location, it's checking if B is pressed, to leave the SSS. We also want to hook in L/R press.
+# If L or R pressed, exit, but the next scene ID should be the SSS instead of the CSS
+540305AD # rlwinm. r3,r0,0,22,22    # Check for B press
+4182000C # beq CHECK_L              # If 0 (b is unpressed), check for L
+38600000 # li r3, 0                 # If b is pressed, set the sound effect
+48000058 # b RETURN                 #   and just return
+# CHECK_L:
+lis r4, <<varIsAlphaOrOmega>>@h
+ori r4, r4, <<varIsAlphaOrOmega>>@l
+38600005 # li r3, 0x5   # Pew Pew!  # We don't need this here I don't think.
+80A40000 # lwz r5, 0(r4)
+54030673 # rlwinm. r3,r0,0,25,25    # Check for L press
+41820014 # beq CHECK_R              # If not pressed, check R
+# If L pressed, check if we're already in Alpha
+2C050000 # cmpwi r5, 0x0
+41820038 # beq RETURN               # If we're already in alpha, move on
+38A00000 # li r5, 0x0               # Otherwise set to Alpha
+48000018 # b CHANGE_SSS
+# CHECK_R:
+540306B5 # rlwinm. r3,r0,0,26,26    # Check for R press
+41820028 # beq RETURN               # If R not pressed, just leave
+2C050001 # cmpwi r5, 0x1            # If toggle is already on Omega
+41820020 # beq RETURN               #   just return
+38A00001 # li r5, 0x1               # Otherwise, set to Omega
+# CHANGE_SSS:
+90A40000 # stw r5, 0(r4)            # r4 == varIsAlphaOrOmega
+38600005 # li r3, 0x5               # Set sound effect to lazer sounds for when screen reloads
+lis r4, <<varSssNextScreenId>>@h
+ori r4, r4, <<varSssNextScreenId>>@l
+38A00001 # li r5, 0x1               # Sets next screen ID to 1, which is the Stage Select Screen
+90A40000 # stw r5, 0(r4)
+# RETURN:
+00000000    # Return
+-------------- 0x2586F0 ------ 38600000 -> 60000000  # Instead of playing default sound, play whatever we did above
+-------------- 0x1AE14C ------ 38A00000 -> Branch
+# Normally, this sets r5 to 0, 0 being CSS screen. But if we're reloading, we want it to be 1, for SSS.
+# varSssNextScreenId should be set to 1 if reloading (from before), but will be 0 otherwise.
+# In addition, once we've loaded this, set varSssNextScreenId to 0, so it will normally load the CSS
+lis r6, <<varSssNextScreenId>>@h
+ori r6, r6, <<varSssNextScreenId>>@l
+80A60000    # lwz r5, 0(r6)
+38E00000    # li r7, 0
+90E60000    # stw r7, 0(r6)
+00000000    # Return
+-------------- 0x2575B4 ------ 387F0348 -> Branch
+# Lastly, when we load the SSS, we want to load a different SSS file from Alpha or Omega, so it looks different.
+387F0348    # addi r3, r31, 0x348   # Do instruction at branch point, which is to have r3 point to filename
+lis r4, <<varIsAlphaOrOmega>>@h
+ori r4, r4, <<varIsAlphaOrOmega>>@l
+80840000    # lwz r4, 0(r4)
+2C040000    # cmpwi r4, 0x0         # Is it Alpha?
+4082000C    # bne- OMEGA
+38800061    # li r4, 0x61
+48000008    # b CHANGE_FILENAME
+# OMEGA:
+3880006F    # li r4, 0x6F
+# CHANGE_FILENAME:
+98830005    # stb r4, 5(r3)         # filename is normally "MnSlMap.usd". Omega changes it to "MnSlMop.usd".
+00000000    # Return

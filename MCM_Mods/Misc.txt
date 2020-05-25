@@ -1,13 +1,3 @@
-Hold L+R+A+Start During Stage Load to Return to the CSS
-In vanilla Melee, this button combination loads the Main Menu.
-[Jorgasms]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8025b8bc --- 38600001 -> 38600002
-
-
-	-==-
-
-
 Disable Name Tag Reset After Exiting Character Select Screen
 Also prevents KO counts from resetting.
 [Todd Bonney]
@@ -278,32 +268,3 @@ PAL ------ 0x1A18C4 ---- 981F0003 -> Branch
 2C0E0004 4080000C
 39EF000C 4BFFFFD8
 981F0003 481A078C
-
-
-	-==-
-
-
-Stage Striking (Transparent Struck Stages), Method 1, compatible with Alpha/Omega toggle
-Works like it does in PM.
-
-X = ban currently selected stage
-Y = ban all stages that aren't allowed in random, and unban all that are allowed
-Z = unban all
-
-Banned stages can't be selected anymore, however they can still be selected when someone chooses "Random".
-<https://smashboards.com/threads/stage-striking-invisible-struck-stages.422589/post-20401006>
-[Sham Rock, Achilles,]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8025A3BC ---- C022C9E8 -> Branch
-39E00001 3E008046 6210B0FC 1E2F000C 7E31802E 5630014B 4182000C 3A200001
-48000020 56300109 4182000C 3A200002 48000010 563002D7 418200FC 3A200003
-3EA0803F 62B506D0 3EC0804D 62D66CAE 3A800000 3A600000 3A400000 2C110001
-40820014 8A560000 2C12001C 418100C8 4800006C 2C110003 40820010 3A80003F
-3A600002 48000058 1E12001C 7E10AA14 8AF0000A
-3E00803F 6210A354   # 803FA354 Alpha/Omega toggle, TODO use standalone instead
-82100000 2C100000 3E008045 4182000C 6210C38C 48000008 6210C388 82100000
-7E10BC30 561007FF 41820010 3A600002 3A80003F 4800000C 3A600000 3A800000
-1E12001C 7E10A82E 3AE00000 2C130002 4082001C 3EE00008 62F70008 2C120016
-4180000C 3EE02000 62F70008 92F00014 1E12001C 3A100008 7E70A9AE 3A00001E
-9A160000 2C110001 41820010 3A520001 2C12001D 41A0FF44 39EF0001 2C0F0005
-41A0FEC8 C022C9E8 C022C9E8 00000000

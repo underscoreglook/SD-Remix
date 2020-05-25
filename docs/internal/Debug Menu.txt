@@ -63,8 +63,6 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here,
 18E510: + Tap Jump (SEE BADHACKS: "Disable Tap Jump")
 18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
 18E584: * nothing here *
-18E634: Toggling Alpha/Omega Stage pages
-18E6E0: * nothing here *
 18E708: Reset DOL and Go/Gr toggles at CSS
 18E7A8: Stage Loader
 18E824: Change Stage Filename
