@@ -1,14 +1,11 @@
 Short term:
 ----------
-Reverse engineer the debug menu so finding other codes will be easier
-Converting the raw changes to actual individual mods in the MCM (see if they match up to included mods, or if there are
- updates to the mods; if there are updates, put them in the End Goal section. Also, put any unused mods included in MCM
-  into the End Goal section as well).
+Converting the raw changes to actual individual mods in the MCM.
+Fix the broken stages (in the Stages.txt, they're TODOs).
 Try to figure out what all the changes to the menu files are, and fill in the assets folder based on that.
 Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
-Move over relevant notes from personal files to this repo, particularly the PK Thunder stuff
 Add SD Remix Lite to this repo
-At this point, tag the commit as 3.2.1+ base (not official as it's not binary compatible).
+At this point, tag the commit as 3.2.1+ base (not official as it's not binary compatible) (take one last look through TODOs)
 
 End Goal, Netplay build:
 -----------------------
