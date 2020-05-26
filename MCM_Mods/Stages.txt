@@ -67,17 +67,17 @@ NTSC 1.02 ---- 0x802199FC ---- 480D8699 -> Branch
 	-==-
 
 
-Toggle between Alpha/Omega on SSS (variable)
+Toggle between Alpha/Omega on SSS
 If on the Stage Selection Screen, you can press L to switch to the "Alpha" toggle and R to switch to the "Omega" toggle. It then reloads the stage selection screen so the change can be evident.
 When switching, it also plays a sound effect unique to reloading the page.
 When reloading, it actually loads a different file for the stage select, so the two stage lists can have different graphics, so it's expected that the ISO has the different file. Alpha is MnSlMap.usd, while Omega is MnSlMop.usd.
 Provides the (read only) boolean varIsAlphaOrOmega so other stage mods can know if it's alpha or omega.
 [_glook]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-<varIsAlphaOrOmega> # 0 for alpha, 1 for omega, available for other mods (as read only)
+<varIsAlphaOrOmega> ALL         # 0 for alpha, 1 for omega, available for other mods (as read only)
 00000001    # Default to omega
 
-<varSssNextScreenId> # Only used in this mod
+<varSssNextScreenId> ALL        # Only used in this mod
 00000000
 
 NTSC 1.02 ---- 0x2586DC ------ 540005AD -> Branch
@@ -139,4 +139,552 @@ ori r4, r4, <<varIsAlphaOrOmega>>@l
 3880006F    # li r4, 0x6F
 # CHANGE_FILENAME:
 98830005    # stb r4, 5(r3)         # filename is normally "MnSlMap.usd". Omega changes it to "MnSlMop.usd".
+00000000    # Return
+
+
+	-==-
+
+
+Stage loader for Alpha/Omega toggle
+When we select a stage, this will take your selection and potentially load something else, based on a table and varIsAlphaOrOmega (requires the Alpha/Omega toggle mod to be on).
+Includes a table to change what happens when a stage is selected, based on omega toggle. This can optionally be used to load an alternate stage file, meaning instead of GrXx.dat, it can load GoXx.dat.
+Provides the boolean varStageDolChangesEnabled, which lets us know if the stage should be altered based on code changes.
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varStageDolChangesEnabled> ALL
+00000000
+
+<varShouldLoadAlternateStageFile> ALL   # Only used locally
+00000000    # If 0, just loads the normal GrXx.dat file for stage. If 1, loads an alt GoXx.dat file.
+
+<tblStageChanges> ALL
+# This is a table of elements that ar 8 bytes long (two dwords). This controls what happens on alpha/omega toggle.
+# The index into the table is (chosen_stage_ID - 2).
+# Each dword in an element is the behavior data, for stage loading, first is alpha info, second is omega info.
+# Each dword is then broken down thusly:
+# bytes 0,1 - Half word, alternate stage id. If 0, we keep normal stage id. If != 0, loads that stage id instead.
+# byte 2 - 0 to load normal version (GrXx.dat), 1 to load alt version (GoXx.dat)
+# byte 3 - Controls dol stage mod triggers. This value is stored in varStageDolChangesEnabled. 0 is usually "all off".
+# Alpha     Omega        SID  Notes
+0000 00 00  0000 00 01  # 02  Fountain of Dreams (Izumi)
+001E 00 00  001E 00 01  # 03  Pok�mon Stadium (Pstadium)
+0000 00 00  0000 00 01  # 04  Princess Peach's Castle (Castle)
+0000 00 00  0000 01 00  # 05  Kongo Jungle (Kongo)
+0000 00 00  0000 00 01  # 06  Brinstar (Zebes)
+0000 00 00  0000 00 01  # 07  Corneria
+001D 00 00  001D 01 00  # 08  Yoshi's Story (Story)
+0000 00 00  0000 00 01  # 09  Onett
+0000 00 00  0000 00 01  # 0A  Mute City
+0000 00 00  0004 01 01  # 0B  Rainbow Cruise (RCruise)
+0000 00 00  0000 00 01  # 0C  Jungle Japes (Garden)
+0000 00 00  0000 01 00  # 0D  GreatBay
+0000 00 00  0000 01 00  # 0E  Hyrule Temple (Shrine)
+0000 00 00  0000 01 00  # 0F  Brinstar Depths (Kraid)
+0000 00 00  0000 01 00  # 10  Yoshi's Island (Yoster)
+0000 00 00  0000 00 01  # 11  Green Greens (Greens)
+0000 00 00  0000 01 00  # 12  Fourside
+0000 00 00  0000 01 00  # 13  Mushroom Kingdom I (Inishie1)
+0000 00 00  0000 01 01  # 14  Mushroom Kingdom II (Inishie2)
+0000 00 00  0000 00 00  # 15  Akaneia (Deleted Stage)
+0000 00 00  0047 00 00  # 16  Venom
+0000 00 00  000C 01 01  # 17  Pok� Floats (Pura)
+0000 00 00  0000 01 00  # 18  Big Blue
+0000 00 00  001B 00 00  # 19  Icicle Mountain (Icemt)
+0000 00 00  0000 00 00  # 1A  Icetop
+0053 00 00  0053 01 00  # 1B  Flat Zone
+0000 00 00  0000 00 01  # 1C  Dream Land N64 (old ppp)
+0008 00 00  0008 00 01  # 1D  Yoshi's Story N64 (old yosh)
+0003 00 00  0003 00 01  # 1E  Kongo Jungle N64 (old kong)
+001F 01 00  0000 00 00  # 1F  Battlefield (battle)
+0011 01 00  0000 00 01  # 20  Final Destination (last)
+0000 00 00  0000 00 00  # ??  Unknown, maybe padding
+
+NTSC 1.02 ---- 0x258720 ------ 8804000B -> Branch
+# This is the actual code that reads the stage loader.
+# We can use r4 to r12 without problems
+8804000B    # lbz r0, 0xB(r4)   # r0 is the stage id, don't touch it
+38800000    # li r4, 0          # Is Go/Gr toggle
+38A00000    # li r5, 0          # Is DOL toggle
+2C000002    # cmpwi r0, 2
+41800050    # blt RETURN
+2C000020    # cmpwi r0, 0x20
+41810048    # bgt RETURN
+# Now we know it's one of the SSS stages
+7C040378    # mr r4, r0         # Move it to r4
+3884FFFE    # subi r4, r4, 2    # Index for the stage table
+5484083C    # slwi r4, r4, 1    # Multiply by two
+lis r5, <<varIsAlphaOrOmega>>@h
+ori r5, r5, <<varIsAlphaOrOmega>>@l
+80A50000    # lwz r5, 0(r5)     # Get omega toggle
+7C842A14    # add r4, r4, r5    # Omega toggle is second word
+5484103A    # slwi r4, r4, 2    # Multiply by 4 to get bytes
+lis r5, <<tblStageChanges>>@h
+ori r5, r5, <<tblStageChanges>>@l
+7CA42A14    # add r5, r4, r5    # r5 is now word for stage toggle
+A0850000    # lhz r4, 0(r5)     # Get alternate stage id
+2C040000    # cmpwi r4, 0
+41820008    # beq NO_ALT
+7C802378    # mr r0, r4         # If there's an alt, set it
+# NO_ALT:
+88850002    # lbz r4, 2(r5)     # Get if we should load Go dats
+88A50003    # lbz r5, 3(r5)     # Get if we should do DOL mods
+# RETURN:
+lis r6, <<varShouldLoadAlternateStageFile>>@h
+ori r6, r6, <<varShouldLoadAlternateStageFile>>@l
+90860000    # stw r4, 0(r6)     # Store the Go/Gr toggle
+lis r6, <<varStageDolChangesEnabled>>@h
+ori r6, r6, <<varStageDolChangesEnabled>>@l
+90A60000    # stw r5, 0(r6)     # Store the DOL toggle
+00000000    # return
+
+NTSC 1.02 ---- 0x1A0D48 ------ 981F0005 -> Branch
+# This resets the toggle variables when going to CSS. This is so that normal stages load normally.
+981F0005    # stb r0, 5(r31)    # Carry over instruction at branch location
+38000000    # li r0, 0          # r0 is used so reuse it
+lis r3, <<varStageDolChangesEnabled>>@h
+ori r3, r3, <<varStageDolChangesEnabled>>@l
+90030000    # stw r0, 0(r3)     # Reset dol changes toggle
+lis r3, <<varShouldLoadAlternateStageFile>>@h
+ori r3, r3, <<varShouldLoadAlternateStageFile>>@l
+90030000    # stw r0, 0(r3)     # Reset filename change toggle
+00000000    # return
+
+NTSC 1.02 ---- 0x1BD2D4 ------ 38000000 -> Branch
+# When the stage dat file loads, this changes the filename, if we want it to change.
+# r4 HAS to be kept what it is, which is the address of the filename.
+# Otherwise, We can use r3, r5, r6, r7, r8, r9, and r10
+38000000    # li r0, 0          # Carry over instruction at branch location
+lis r3, <<varShouldLoadAlternateStageFile>>@h
+ori r3,r3, <<varShouldLoadAlternateStageFile>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+4082000C    # bne OMEGA
+# ALPHA:
+38600052    # li r3, 0x52     # The letter 'r'
+48000008    # b WRITE_FILENAME
+# OMEGA:
+3860006F    # li r3, 0x6f     # The letter 'o'
+# WRITE_FILENAME:
+98640002    # stb r3, 2(r4)
+00000000    # return
+
+
+	-==-
+
+
+Pokemon Stadium - Disable Stage Transformations (SDR Toggleable)
+Uses varStageDolChangesEnabled to toggle on or off.
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1CE128 ------ 48003001 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801D    # lis r12, 0x801D
+618C4548    # ori r12, r12, 0x4548 # Transformation function
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # Return
+
+
+	-==-
+
+
+Dreamland N64 - Disable Wind (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x20E024 ------ 4800059C -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D808021    # lis r12, 0x8021
+618C19E0    # ori r12, r12, 0x19E0  # Call wind function
+7D8903A6    # mtctr r12
+4E800420    # bctr
+# RETURN:
+00000000
+
+
+	-==-
+
+
+Yoshi's Story - Disable Shy Guy Spawns (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1DFF28 ------ 480000D1 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne OMEGA
+3D80801E    # lis r12, 0x801E
+618C3418    # ori r12, r12, 0x3418
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Corneria - Disable Arwing Spawns (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1DA628 ------ 4BFFF3D5 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801D    # lis r12, 0x801D
+618CCE1C    # ori r12, r12, 0xCE1C
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000
+
+
+	-==-
+
+
+Corneria - Disable Great Fox's Gun (starts out dead) (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1DDF70 ------ 40800018 -> Branch
+41800038    # blt RETURN
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820014    # beq ALPHA
+# OMEGA:
+3D80801E    # lis r12, 0x801E
+618C17C0    # ori r12, r12, 0x17C0
+7D8903A6    # mtctr r12
+4E800420    # bctr
+# ALPHA:
+3D80801E    # lis r12, 0x801E
+618C13A8    # ori r12, r12, 0x13A8
+7D8903A6    # mtctr r12
+4E800420    # bctr
+# RETURN:
+00000000
+
+
+	-==-
+
+
+Brinstar - Disable Acid (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1D65C0 ------ 7C0802A6 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820008    # beq RETURN
+4E800020    # blr
+# RETURN:
+7C0802A6    # mflr r0
+00000000    # Branch
+
+
+	-==-
+
+
+Mute City Disable cars (SDR Toggleable)
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1ECD68 ------ 480018AD -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801F    # lis r12, 0x801F
+618C1A34    # ori r12, r12, 0x1A34
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # branch
+
+
+	-==-
+
+
+Fountain of Dreams - Remove Side Platforms (SDR Toggleable)
+- Removes (Disable) the Side Platforms
+- Disables the Water Jets
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1C9494 ------ 801B0014 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820014    # beq ALPHA
+# OMEGA:
+3D80801C    # lis r12, 0x801C
+618CC9F0    # ori r12, r12, 0xC9F0
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# ALPHA:
+801B0014    # lwz r0, 0x14(r27)
+# RETURN:
+00000000    # branch
+-------------- 0x1C948C ------ EC0007FA -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+4182000C    # beq ALPHA
+# OMEGA:
+FC000028    # fsub f0,f0,f0
+48000008    # b RETURN
+# ALPHA:
+EC0007FA    # fmadds f0, f0, f31, f0
+# RETURN:
+00000000    # branch
+
+
+	-==-
+
+
+Peach's Castle - Disable Switches and Bullet Bills (SDR Toggleable)
+TODO: This doesn't seem to be working
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1CA488 ------ 7C0802A6 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+80840000    # lwz r12, 0(r12)
+2C040000    # cmpwi r12, 0
+41820008    # beq ALPHA
+# OMEGA:
+4E800020    # blr
+# ALPHA:
+7C0802A6    # mflr r0
+00000000    # return
+
+
+	-==-
+
+
+Green Greens - Disable Whispy Woods (Wind & Apples) (SDR Toggleable)
+TODO: This doesn't seem to be working
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2107F0 ------ 7C0802A6 -> Branch
+7C0802A6    # mflr r0
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+80840000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820008    # beq BLANK_ALPHA
+4E800020    # blr
+# BLANK_ALPHA:
+00000000    # return
+
+
+	-==-
+
+
+Green Greens - Disable Initial Bricks on Green Greens (SDR Toggleable)
+TODO: This doesn't seem to be working ??
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2112CC ------ 4800046D -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+80840000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D808021    # lis r12, 0x8021
+618C4B58    # ori r12, r12, 0x4B58
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Green Greens - Disable Falling Bricks (SDR Toggleable)
+TODO: This doesn't seem to be working ??
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x21369C ------ 4BFFE89D -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+80840000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D808021    # lis r12, 0x8021
+618C5358    # ori r12, r12, 0x5358
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Jungle Japes No water or klaptraps (SDR Toggleable)
+TODO: This doesn't seem to be working ??
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1FF7AC ------ 480000AD -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D808020    # lis r12, 0x8020
+618C2C78    # ori r12, r12, 0x2C78
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+-------------- 0x1FF97C ------ 7C0802A6 -> Branch
+7C0802A6    # mflr r0
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820008    # beq BLANK_ALPHA
+4E800020    # blr
+# BLANK_ALPHA:
+00000000    # return
+-------------- 0x1FF75C ------ 4BFC1E7D -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D80801C    # lis r12, 0x801C
+618C49F8    # ori r12, r12, 0x49F8
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Kongo Jungle 64 (past stage) Remove Barrel (SDR Toggleable)
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x20C0A0 ------ 4800006D -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D808020    # lis r12, 0x8020
+618CF52C    # ori r12, r12, 0xF52C
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # return
+
+
+	-==-
+
+
+Onett Disable cars and Remove Drug Store platforms (SDR Toggleable)
+TODO: This doesn't seem to be working ??
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1E037C ------ 48000059 -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801E    # lis r12, 0x801E
+618C37F4    # ori r12, r12, 0x37F4
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # return
+-------------- 0x1E0374 ------ 48000061 -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801E    # lis r12, 0x801E
+618C37F4    # ori r12, r12, 0x37F4
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # Return
+
+
+	-==-
+
+
+Mushroom Kingdom 2 Disable Pidgit/Birdo (SDR Toggleable)
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1F9BD0 ------ 480007B9 -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D80801F    # lis r12, 0x801F
+618CD7A8    # ori r12, r12, 0xD7A8
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # Return
+-------------- 0x1F9BC8 ------ 480003E5 -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D80801F    # lis r12, 0x801F
+618CD3CC    # ori r12, r12, 0xD3CC
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # Return
+
+
+	-==-
+
+
+Final Destination - Disable Background Transitions (SDR Toggleable)
+[Achilles, Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2176C4 ------ 48000805 -> Branch
+lis r12, <<varShouldLoadAlternateStageFile>>@h
+ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D808021    # lis r12, 0x8021
+618CB2E8    # ori r12, r12, 0xB2E8
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
 00000000    # Return
