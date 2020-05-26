@@ -537,12 +537,11 @@ ori r12, r12, <<varStageDolChangesEnabled>>@l
 
 
 Jungle Japes No water or klaptraps (SDR Toggleable)
-TODO: This doesn't seem to be working ??
 [Achilles]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x1FF7AC ------ 480000AD -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne BLANK_OMEGA
@@ -554,8 +553,8 @@ ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
 00000000    # return
 -------------- 0x1FF97C ------ 7C0802A6 -> Branch
 7C0802A6    # mflr r0
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 41820008    # beq BLANK_ALPHA
@@ -563,8 +562,8 @@ ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
 # BLANK_ALPHA:
 00000000    # return
 -------------- 0x1FF75C ------ 4BFC1E7D -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne BLANK_OMEGA
@@ -583,8 +582,8 @@ Kongo Jungle 64 (past stage) Remove Barrel (SDR Toggleable)
 [flieskiller]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x20C0A0 ------ 4800006D -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne RETURN
@@ -601,12 +600,11 @@ ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
 
 
 Onett Disable cars and Remove Drug Store platforms (SDR Toggleable)
-TODO: This doesn't seem to be working ??
 [flieskiller]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x1E037C ------ 48000059 -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne RETURN
@@ -618,8 +616,8 @@ ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
 # RETURN:
 00000000    # return
 -------------- 0x1E0374 ------ 48000061 -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne RETURN
@@ -639,8 +637,8 @@ Mushroom Kingdom 2 Disable Pidgit/Birdo (SDR Toggleable)
 [flieskiller]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x1F9BD0 ------ 480007B9 -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne BLANK_OMEGA
@@ -651,8 +649,8 @@ ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
 # BLANK_OMEGA:
 00000000    # Return
 -------------- 0x1F9BC8 ------ 480003E5 -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne BLANK_OMEGA
@@ -671,8 +669,8 @@ Final Destination - Disable Background Transitions (SDR Toggleable)
 [Achilles, Dan Salvato]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x2176C4 ------ 48000805 -> Branch
-lis r12, <<varShouldLoadAlternateStageFile>>@h
-ori r12,r12, <<varShouldLoadAlternateStageFile>>@l
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne RETURN
