@@ -461,19 +461,17 @@ EC0007FA    # fmadds f0, f0, f31, f0
 
 
 Peach's Castle - Disable Switches and Bullet Bills (SDR Toggleable)
-TODO: This doesn't seem to be working
 [Zauron]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x1CA488 ------ 7C0802A6 -> Branch
+7C0802A6    # mflr r0
 lis r12, <<varStageDolChangesEnabled>>@h
 ori r12, r12, <<varStageDolChangesEnabled>>@l
-80840000    # lwz r12, 0(r12)
-2C040000    # cmpwi r12, 0
-41820008    # beq ALPHA
-# OMEGA:
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0x0
+41820008    # beq- RETURN
 4E800020    # blr
-# ALPHA:
-7C0802A6    # mflr r0
+# RETURN:
 00000000    # return
 
 
@@ -481,14 +479,13 @@ ori r12, r12, <<varStageDolChangesEnabled>>@l
 
 
 Green Greens - Disable Whispy Woods (Wind & Apples) (SDR Toggleable)
-TODO: This doesn't seem to be working
 [Zauron]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x2107F0 ------ 7C0802A6 -> Branch
 7C0802A6    # mflr r0
 lis r12, <<varStageDolChangesEnabled>>@h
 ori r12, r12, <<varStageDolChangesEnabled>>@l
-80840000    # lwz r12, 0(r12)
+818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 41820008    # beq BLANK_ALPHA
 4E800020    # blr
@@ -500,13 +497,12 @@ ori r12, r12, <<varStageDolChangesEnabled>>@l
 
 
 Green Greens - Disable Initial Bricks on Green Greens (SDR Toggleable)
-TODO: This doesn't seem to be working ??
 [Zauron]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x2112CC ------ 4800046D -> Branch
 lis r12, <<varStageDolChangesEnabled>>@h
 ori r12, r12, <<varStageDolChangesEnabled>>@l
-80840000    # lwz r12, 0(r12)
+818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne BLANK_OMEGA
 3D808021    # lis r12, 0x8021
@@ -521,13 +517,12 @@ ori r12, r12, <<varStageDolChangesEnabled>>@l
 
 
 Green Greens - Disable Falling Bricks (SDR Toggleable)
-TODO: This doesn't seem to be working ??
 [Zauron]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x21369C ------ 4BFFE89D -> Branch
 lis r12, <<varStageDolChangesEnabled>>@h
 ori r12, r12, <<varStageDolChangesEnabled>>@l
-80840000    # lwz r12, 0(r12)
+818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
 40820014    # bne BLANK_OMEGA
 3D808021    # lis r12, 0x8021
