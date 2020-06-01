@@ -70,7 +70,7 @@ def handleConfigItem(configSection, key, prompt, fileTypes):
 	"""
 	if key in configSection:
 		if path.exists(configSection[key]):
-			ans = input("Would you like to change " + key + " (y/n)? ")
+			ans = input("Would you like to change " + key + " (y/n)? (currently \"" + configSection[key] + "\") ")
 			if ans != 'y':
 				return
 	value = filedialog.askopenfilename(title=prompt,filetypes=fileTypes)

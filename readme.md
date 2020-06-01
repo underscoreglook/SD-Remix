@@ -73,7 +73,7 @@ way to create a fileset that can be dropped into a GALE01 folder for use with DI
 4. Copy all the files in build/sdrFiles to SDR_FILES/root. Do NOT copy the "&&systemdata" folder.
 5. Download GCReEx.
 6. Copy build/game.iso to the GCReEx folder, in the same folder as the EXE.
-7. Open a command line in the GCReEx folder, run
+7. Open a command line in the GCReEx folder.
 8. Run the command "gcreex.exe -x game.iso". It should extract the SDR ISO in GCReEx format in a folder it creates
 based on the GAME_ID and MAKER_CODE from configs/game.cfg.
 9. After it's finished, copy the "sys" folder within the created folder into your "DIOS_MIOS_SDR" folder.
