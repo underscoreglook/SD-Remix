@@ -34,6 +34,14 @@ PAL ------- 0x161E78 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047
 	-==-
 
 
+Unlock Score Display
+[_glook]
+NTSC 1.02 ---- 0x17023C ----- 4180000C -> 60000000
+
+
+	-==-
+
+
 All 51 Event Matches Open but Not Complete
 (Completed event matches are read from the memory card, or from the current boot as normal.)
 [achilles]

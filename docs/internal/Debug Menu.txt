@@ -44,14 +44,7 @@ Running list of free space in debug section (we don't let MCM overwrite it becau
 menus in some regards and also overwrites the menus directly so we don't have to store the new main menu data
 elsewhere) ("+" Means it's stuck there for now, but we should move it out eventually)
 ================================================================================================================
-Main Section, 0xD70 bytes, at 407950 to 408f4c (TODO: Get rid of stuff here, turn into mods or move to debug)
-----------------------------------------------
-407BF4: utf8"Alpha Stages"
-407C13: utf8"Omega Stages"
-407C34: Omega Stages strings in UTF8
-4086C0: * nothing here *
-
-Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here, turn into mods or move to debug region)
+Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of BADHACKs and restore this section in settings.py)
 --------------------------------------------------
 18DCC0: * nothing here *
 18DEA4: + Handicap is Stock/Crew (See BADHACKS: "Stock Control/Crew Battle Mode")
@@ -61,19 +54,7 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of stuff here,
 18E3FC: + Capped Points (See BADHACKS: "Capped (Tennis) Mode"
 18E510: + Tap Jump (SEE BADHACKS: "Disable Tap Jump")
 18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
-18E584: * nothing here *
-18EB60: L Random Stage Menu Toggle
-18EBA8: Display Alpha/Omega text on random stage menu
-18EBE4: Col 1 alternate text set (random stage menu)
-18EC34: Col 2 alternate text set (random stage menu)
-18EC84: Load random stage menu
-18ECA8: Save random stage menu
-18ECD0: Alpha/Omega Random Stage select 1
-18ECF4: Alpha/Omega Random Stage select 2
-18ED18: Play sound when picking random stage for omega and alpha
-18ED44: * nothing here *
-18EEA0: Randomize omega toggle if press start on random
-
+18F510: * End *
 
 Debug menu free space
 -------------------
@@ -97,31 +78,6 @@ Part 2
 803FDC20: *** END ***
 
 
--------------- 0x4086F0 ------  # Seems like unused stage striking code
-73732025 30385820 28726561 64206672
-6F6D2044 4152290A 00000000 2850524F 4752414D 290A0000 49454545 20666C6F
-6174696E 6720706F 696E7420 656E6162 6C656420 70726F67 72616D20 65786365
-7074696F 6E000000 496C6C65 67616C20 696E7374 72756374 696F6E00 50726976
-696C6567 65642069 6E737472 75637469 6F6E0000 54726170 2070726F 6772616D
-20657863 65707469 6F6E0000 556E6B6E 6F776E20 74797065 206F6620 70726F67
-72616D20 65786365 7074696F 6E000000 25732025 73202530 38582028 72656164
-2066726F 6D205352 5230290A 00000000 28464C4F 4154494E 4720504F 494E5429
-0A000000 28444543 52454D45 4E544552 290A0000 28535953 54454D20 43414C4C
-290A0000 28545241 4345290A 00000000 28504552 464F524D 414E4345 204D4F4E
-->  # 0x8040B6F0
-39E00001 3E008046 6210B0FC 1E2F000C
-7E31802E 5630014B 4182000C 3A200001 48000020 56300109 4182000C 3A200002
-48000010 563002D7 418200DC 3A200003 3EA0803F 62B506D0 3EC0804D 62D66CAE
-3A800000 3A600000 3A400000 2C110001 40820014 8A560000 2C12001C 418100A8
-48000050 2C110003 40820010 3A80003F 3A600002 4800003C 1E12001C 7E10AA14
-8AF0000A 3E008045 6210C388 82100000 7E10BC30 561007FF 41820010 3A600002
-3A80003F 4800000C 3A600000 3A800000 1E12001C 7E10A82E 2C120016 41800008
-82100010 82100018 82100004 82100008 8210001C 82100008 9A900024 1E12001C
-3A100008 7E70A9AE 3A00001E 9A160000 2C110001 41820010 3A520001 2C12001D
-41A0FF4C 39EF0001 2C0F0005 41A0FEE8 C022C9E8 4BE4EBAC 00000000 00000000
-# 0x408820
-
-
 ************************************************************
 ** BELOW IS OFFICIALLY PUBLISHED 3.2.1's free space ********
 ************************************************************
@@ -136,7 +92,7 @@ Free Variables
 --------------
 803fa350	Toggles (disabled, enabled, melee+ only)
 803fa354	Alpha/Omega Toggle (default 1)
-803fa358	Alpha/Omega Random Select Option Screen Toggle (default 1)
+803fa358	Alpha/Omega Random Select Option Screen Toggle (default 1)   <varRandomStageListToShow>
 803fa35c	End match even with pause off
 803fa360	(default 1)
 803fa364	(default 1)

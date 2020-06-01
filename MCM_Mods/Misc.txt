@@ -155,6 +155,8 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 40820008 38600002
 28030003 48000000
 
+
+1.02 ----- 0x42FCCC ------ 81400000 -> 20000000  # This is somehow included, not in MCM official code
 1.02 ----- 0x8023cdd4 --- 7C7E01AE -> 7c7e032e
 1.02 ----- 0x8023cdb0 --- 98040000 -> b0040000
 1.02 ----- 0x8023C5A0 --- 546005AD -> Branch

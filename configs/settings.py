@@ -59,7 +59,9 @@ customCodeRegions = OrderedDict([
 
 	# The following regions are used for the multiplayer tournament mode (which of course will no longer be functional if you use this space). 
 	# If you use this space, you may want to add a code that prevents people from accessing this mode so that the game doesn't crash when someone tries to use it.
-	( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18DCC0, 0x197B30 ) ] ), 	# Total space: 0x9E70
+	# TODO: There's still BACHACKs left here. so this is commented out and replaced with one that works
+	#( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18DCC0, 0x197B30 ) ] ), 	# Total space: 0x9E70
+	( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18E584, 0x197B30 ) ] ), 	# Total space: ????
 	( 'NTSC 1.01|Tournament Mode Region', [ ( 0x18D674, 0x1974E4 ) ] ), 	# Total space: 0x9E70
 	( 'NTSC 1.00|Tournament Mode Region', [ ( 0x18CDC0, 0x196DE4 ) ] ), 	# Total space: 0xA024
 	( 'PAL 1.00|Tournament Mode Region', [ ( 0x18E804, 0x1986A0 ) ] ), 		# Total space: 0x9E9C
@@ -114,9 +116,9 @@ customCodeRegions = OrderedDict([
 
 	# The following regions are only for use with extended NTSC 1.02 SSBM DOLs
 	# Part 1 of Data Section 8
-	# ( 'NTSC 1.02|Gecko Code Handler Storage', [ ( 0x4385E0, 0x4395E0 ) ] ), # 0x1000
-	# # Part 2 of Data Section 8
-	# ( 'NTSC 1.02|Gecko Code List Storage', [ ( 0x4395E0, 0x446EE0 ) ] ),  # 0xD900
+	( 'NTSC 1.02|Gecko Code Handler Storage', [ ( 0x4385E0, 0x4395E0 ) ] ), # 0x1000
+	# Part 2 of Data Section 8
+	( 'NTSC 1.02|Gecko Code List Storage', [ ( 0x4395E0, 0x446EE0 ) ] ),  # 0xD900
 
 ])
 

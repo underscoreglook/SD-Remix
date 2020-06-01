@@ -272,6 +272,248 @@ ori r3,r3, <<varShouldLoadAlternateStageFile>>@l
 	-==-
 
 
+Random Stage Select Settings for Alpha/Omega
+Random stage settings are designed for one stage list. If Alpha/Omega are toggled, then the same list will be shared between both.
+This code allows for two separate stage lists, one for Alpha, one for Omega.
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varRandomStageListToShow> ALL
+00000000
+
+<strAlphaStages> ALL    # "Alpha Stages"
+160E 008A 008A 200A 202F 2033 202B 2024 1A20 1C20 3720 2420 2A20 2820 360F 0000
+
+<strOmegaStages> ALL    # "Omega Stages"
+160E 008A 008A 2018 2030 2028 202A 2024 1A20 1C20 3720 2420 2A20 2820 360F 0000
+
+<tblOmegaStagesNames> ALL
+# Table: Each dword is an entry. Byte 1 is slot num, rest is offset into the string table (starting at entry)
+0B000018  # 94 -> Flat Zone (Col 1, Slot 12)
+0F00002D  # 5C -> Peach's Flat (Col 2, slot 1)
+15000059  # 88 -> Warzone Corneria (Col 2, Slot 7)
+1600007C  # 8C -> Cranky's Treehouse (Col 2, Slot 8)
+1B0000A3  # A4 -> Final Destination (Col Two, Slot 13)
+00000000  # end of list
+# String table
+160E 008A 008A 200F 202F 2024 2037 1A20 2320 3220 3120 280F 00
+160E 008A 008A 2019 2035 202C 2031 2026 2028 2036 2036 1A20 1920 2820 2420 2620
+     2B20 F320 361A 200F 202F 2024 2037 0F00
+160E 008A 008A 2020 2024 2035 203D 2032 2031 2028 1A20 0C20 3220 3520 3120 2820 3520 2C20 240F 00
+160E 008A 008A 200C 2035 2024 2031 202E 203C 20F3 2036 1A20 1D20 3520 2820 2820 2B20 3220 3820 3620 280F 00
+160E 008A 008A 200F 202C 2031 2024 202F 1A20 0D20 2820 3620 3720 2C20 3120 2420 3720 2C20 3220 310F 00
+
+NTSC 1.02 ---- 0x2338C8 ------ 38600006 -> Branch
+# This changes varRandomStageListToShow, which the other parts use to display/manipulate the right list.
+# TODO: This does omega if nothing, and alpha if hold L. Maybe what we want is to be able to switch between them.
+# So it's defaults to whatever stage list we are on in the SSS. Then, you can hold L or R to switch to the other.
+# We can use r3 - 5, as long as we do the instruction at hook point LAST.
+3CA0804C    # lis r5, 0x804C
+60A520BC    # ori r5, r5, 0x20BC   # 804C20BC, location of controller input
+38600000    # li r3, 0
+# CHECK_CONTROLLERS:
+80850000    # lwz r4, 0(r5)
+54840673    # rlwinm. r4, r4, 0, 25, 25
+4082001C    # bne SET_TO_ALPHA
+38A50044    # addi r5, r5, 0x44    # Check the next controller
+38630001    # addi r3, r3, 1       # Increment player number
+2C030004    # cmpwi r3, 0x4
+4180FFE8    # blt CHECK_CONTROLLERS  # If player number < 4, then check next controller
+38600001    # li r3, 1
+48000008    # b END
+# SET_TO_ALPHA:
+3C600000    # lis r3, 0
+# END:
+lis r5, <<varRandomStageListToShow>>@h
+ori r5, r5, <<varRandomStageListToShow>>@l
+90650000    # stw r3, 0(r5)
+38600006    # li r3, 6             # Instruction at hook location
+00000000    # Return
+-------------- 0x232800 ------ 2C19001D -> Branch
+# The place we hook is at the place where the text on random stages is displayed.
+# Normally, we check for 0x1D (or 29) items, but we're going to use that last slot to show Alpha/Omega.
+# r26 is the data struct for the text to display. The 0x5C part points to the actual text.
+2C19001E  # cmpwi r25, 30
+40820030  # bne RETURN           # If it's not the last slot, just move on
+lis r5, <<varRandomStageListToShow>>@h
+ori r5,r5, <<varRandomStageListToShow>>@l
+80A50000  # lwz r5, 0(r5)
+2C050000  # cmpwi r5, 0
+40820010  # bne OMEGA
+lis r4, <<strAlphaStages>>@h
+ori r4, r4, <<strAlphaStages>>@l
+4800000C  # b SET_TEXT
+# OMEGA:
+lis r4, <<strOmegaStages>>@h
+ori r4, r4, <<strOmegaStages>>@l
+# SET_TEXT:
+909A005C  # stw r4, 0x5C(r26)
+# RETURN:
+2C19001E  # cmpwi r25, 30        # Instead of exiting on 0x1D, exit on 0x1E slots
+00000000    # Return
+-------------- 0x2337B4 ------ 2C19001D -> 2C19001E # Checks an extra slot for text cleanup, on screen exit
+-------------- 0x232714 ------ 3B180001 -> Branch
+# Replace strings in column 1 of the random stage select screen (since some text is different than stage ID)
+# r25 is text structure with 0x5C as the text. r24 is the current slot number.
+lis r5, <<varRandomStageListToShow>>@h
+ori r5,r5, <<varRandomStageListToShow>>@l
+80A50000  # lwz r5, 0(r5)
+2C050000  # cmpwi r5, 0
+41820038  # beq END
+lis r5, <<tblOmegaStagesNames>>@h
+ori r5, r5, <<tblOmegaStagesNames>>@l
+# LOOP_CHECK:
+80850000  # lwz r4, 0(r5)
+2C040000  # cmpwi r4, 0
+41820024  # beq END
+88850000  # lbz r4, 0(r5)
+7C04C000  # cmpw r4, r24
+4182000C  # beq MATCH_FOUND
+38A50004  # addi r5, r5, 4
+4BFFFFE4  # b LOOP_CHECK
+# MATCH_FOUND:
+A0850002  # lhz r4, 2(r5)
+7CA52214  # add r5, r5, r4
+90B9005C  # stw r5, 0x5C(r25)
+# END:
+3B180001  # addi r24, r24, 1  # instruction at hook point
+00000000  # return
+-------------- 0x2327FC ------ 3B390001 -> Branch
+# Like the previous one, except the second column
+# r26 is the text structure with 0x5C as the text. r25 is current slot number.
+lis r5, <<varRandomStageListToShow>>@h
+ori r5,r5, <<varRandomStageListToShow>>@l
+80A50000  # lwz r5, 0(r5)
+2C050000  # cmpwi r5, 0
+41820038  # beq END
+lis r5, <<tblOmegaStagesNames>>@h
+ori r5, r5, <<tblOmegaStagesNames>>@l
+# LOOP_CHECK:
+80850000  # lwz r4, 0(r5)
+2C040000  # cmpwi r4, 0
+41820024  # beq END
+88850000  # lbz r4, 0(r5)
+7C04C800  # cmpw r4, r25
+4182000C  # beq MATCH_FOUND
+38A50004  # addi r5, r5, 4
+4BFFFFE4  # b LOOP_CHECK
+# MATCH_FOUND:
+A0850002  # lhz r4, 2(r5)
+7CA52214  # add r5, r5, r4
+90BA005C  # stw r5, 0x5C(r26)
+# END:
+3B390001  # addi r25, r25, 1   # Instruction at hook point
+00000000  # return
+-------------- 0x160E4C ----- 80830018 -> Branch
+# This hooks into loading random stages from memory card. Make sure the right list is loaded
+# The normal place is alpha, but add 0x4 to get the omega data. It seems unused in the memory card.
+lis r12, <<varRandomStageListToShow>>@h
+ori r12,r12, <<varRandomStageListToShow>>@l
+818C0000  # lwz r12, 0(r12)
+2C0C0000  # cmpwi r12, 0
+4082000C  # bne OMEGA
+80830018  # lwz r4, 0x18(r3)
+48000008  # b END
+# OMEGA:
+8083001C  # lwz r4, 0x1C(r3)
+# END:
+00000000  # return
+-------------- 0x160DCC ----- 5480063F -> Branch
+# This code (along with the four static overrides below it) saves the random stage list to memory card.
+# As above with loading, there's two separate lists, so we need to save the right list to the right place.
+# This specific code loads the r12 register so that the static overrides have the right information to save.
+lis r12, <<varRandomStageListToShow>>@h
+ori r12,r12, <<varRandomStageListToShow>>@l
+818C0000  # lwz r12, 0(r12)
+2C0C0000  # cmpwi r12, 0
+4082000C  # bne OMEGA
+39800018  # li r12, 0x18
+48000008  # b END
+# OMEGA:
+3980001C  # li r12, 0x1C
+# END:
+5480063F  # clrlwi. r0, r4, 24
+00000000  # Return
+-------------- 0x160DE8 ----- 80A30018 -> 7CA3602E
+-------------- 0x160DF8 ----- 90030018 -> 7C03612E
+-------------- 0x160E08 ----- 80A30018 -> 7CA3602E
+-------------- 0x160E18 ----- 90030018 -> 7C03612E
+
+
+	-==-
+
+
+Use alpha/omega random stage lists
+Given that there are two random stage lists, one for alpha in the normal spot and one for omega, make random stage selectors use the appropriate one, depending on the current state of the omega/alpha toggle.
+The omega list is stored +4 (one dword) after the normal (alpha) list.
+Note: There are two code paths: manually selecting a random stage and having it be done with auto (it's a setting).
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x160F80 ----- 80630018 -> Branch
+lis r4, <<varIsAlphaOrOmega>>@h
+ori r4, r4, <<varIsAlphaOrOmega>>@l
+80840000  # lwz r4, 0(r4)
+2C040000  # cmpwi r4, 0
+4082000C  # bne OMEGA
+80630018  # lwz r3, 0x18(r3)
+48000008  # b END
+# OMEGA:
+8063001C  # lwz r3, 0x1C(r3)
+# END:
+00000000  # return
+NTSC 1.02 ---- 0x160FD4 ----- 80830018 -> Branch
+lis r4, <<varIsAlphaOrOmega>>@h
+ori r4, r4, <<varIsAlphaOrOmega>>@l
+80840000  # lwz r4, 0(r4)
+2C040000  # cmpwi r4, 0
+4082000C  # bne OMEGA
+80830018  # lwz r4, 0x18(r3)
+48000008  # b END
+# OMEGA:
+8083001C  # lwz r4, 0x1C(r3)
+# END:
+00000000  # return
+
+
+	-==-
+
+
+Plan randomize omega/alpha when pressing start
+In the place we check for B, see if there's a check for "Start". If there is, and it goes to random, we should randomly switch the omega toggle to 0 or 1.
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2568A0 ------ 4BFFFD2D -> Branch
+540005EF 41820094 7C6B1B78 3D808045 618CC388 812C0000 3CE02000 39400000 54E7F87E 2C070000 41820014 7D233839
+4182FFF0 394A0001 4BFFFFE8 398C0004 818C0000 3CE02000 7D435378 54E7F87E 2C070000 41820014 7D893839 4182FFF0
+38630001 4BFFFFE8 3D808038 618C0580 7D8903A6 4E800421 7C035000 38600000 41800008 38600001
+lis r12, <<varIsAlphaOrOmega>>@h
+ori r12, r12, <<varIsAlphaOrOmega>>@l
+906C0000 7D635B78 3D808025 618C99EC 7D8903A6 4E800421 480C795C
+
+
+	-==-
+
+
+Play sound when selecting a stage
+The purpose of this is if a stage is randomly selected, the player can tell if it's an omega version or alpha version.
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2568A4 ------ 986DB60E -> Branch
+986DB60E  # instruction at hook point
+lis r3, <<varIsAlphaOrOmega>>@h
+ori r3, r3, <<varIsAlphaOrOmega>>@l
+80630000  # lwz r3, 0(r3)
+1C630003  # mulli r3, r3, 3
+38630004  # addi r3, r3, 4
+3C808002  # lis r4, 0x8002
+60844030  # ori r4, r4, 0x4030
+7C8903A6  # mtctr r4
+4E800421  # bctrl  # Play sound function
+00000000  # return
+
+
+	-==-
+
+
 Pokemon Stadium - Disable Stage Transformations (SDR Toggleable)
 Uses varStageDolChangesEnabled to toggle on or off.
 [Zauron]
