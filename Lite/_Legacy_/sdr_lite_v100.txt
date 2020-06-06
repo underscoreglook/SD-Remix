@@ -1,0 +1,101 @@
+When using Smash calculator to convert 0_codes_0:
+Original File: H:\Users\_glook\Desktop\SDR_Lite\0_codes_0.txt
+Modified 5762: G:\Games\Video Games\Dolphin-dev-4.0-5762\User\GameSettings\GALE01.ini
+Modified Fast: G:\Games\Video Games\dolphin-debug-fast\User\GameSettings\GALE01.ini
+
+
+
+DONE:
+----
+Memory exploit and garbage [wparam]
+Encode a success message on name entry screen [_glook]
+Add a sound effect to the end of the payload for success
+On exploit, Game Mode to Stock, Stock Time Limit to 8, Stock count to 4, Friendly Fire On, and Score Display On
+Taunt Cancelling DOL mod (Dan Salvato)
+Replace Tournament Mode with Debug Mode (Magus, donny2112)
+C-Stick in 1 Player Mode [Zauron]
+Apply c-stick in develop mode [Achilles]
+SD Remix Character DOL mods (Achilles, Dan Salvato, Magus, standardtoaster)
+A+B Salty Runback [Dan Salvato]
+Stage striking [Dan Salvato]
+L+R+A+Start returns to CSS during stage load [Jorgasm]
+Apply Dynamic FoD [Dan Salvato, _glook]
+Changed Portrait Background Colors [ShamRock, _glook]
+Unrestricted Pause Camera [Achilles]
+If you don't select a nametag, instead of showing the character name, show "SDR 3.2 Lite" instead [_glook]
+Capped (Tennis) Mode [_glook]
+Leaving Debug Menu Loads CSS [Jorgasms]
+Let any player control debug menu [wParam]
+Custom Debug Menu [Dan Salvato, _glook]
+Widescreen Support [Dan Salvato]
+Change Color of "Ready to Fight" Banner [Dan Salvato]
+Wall Bracing/Cancelling [_glook]
+Ledge Invincibility Attrition [_glook]
+Tournament Style Overtime [_glook]
+
+FAILED:
+------
+Handicap is Stock Control and Crew Battle Mode [Jorgasm]
+
+TODO:
+----
+Fix Japanese portrait colors
+Fix SSS Alpha/Omega color toggle
+Character Patcher [_glook]
+SD Remix Characters [sdremix_troubleshooter, Ripple]
+Patch Kirby Caps [_glook]
+Patch PlCo.dat [Achilles, _glook]
+	A3A8	CB189680
+	A5E0	40C00000
+	A5EC	3F666666
+	A600	00000001
+
+L and R Toggle Between Alpha and Omega on SSS [_glook]
+Change color between Alpha and Omega [ShamRock, _glook]
+Stage Patcher [_glook]
+Omega Stage Loader [_glook]
+Disable Trophies outside of Classic Mode [wparam, _glook]
+Omega Icicle Mountain = Normal Snag The Trophies [Achilles]
+Omega Peach's Castle, No switches or bullet bill [Zauron]
+Omega Kongo Jungle, no rock, barrel, klaptraps or logs [Milun]
+Omega Great Bay, go to Majora's Mask
+Omega Yoshi's Story, No Shyguys [Zauron]
+Omega Fountain of Dreams, no platforms or water jets [Zauron]
+Omega Corneria, No ships and no Great Fox gun [Zauron]
+Omega Rainbow Cruise, Cranky's Treehouse [Achilles]
+Omega Jungle Japes, Disable water and klaptraps [flieskiller]
+Omega Hyrule Temple: goes to three platforms Snag the Trophies (aka, mount olympus) [Achilles]
+Omega Yoshi's Island: Yoshi's Island Altered [Milun]
+Omega Green Greens, Falling bricks and no initial bombs [flieskiller], no wind or apples [Zauron]
+Omega Venom: 0x47, Corneria with massive arwing attack (aka, Corneria Extreme)
+Omega Flatzone: Go to flipped Battlefield (platform heights reversed) [Achilles, _glook]
+Omega Brinstar: Disable Lava [Zauron]
+Omega Onett: Disable Cars and Drugstore Platforms [flieskiller]
+Omega Mute City: Disable Cars [flieskiller]
+Omega Pokemon Stadium: No transformation [Zauron]
+Omega PokeFloats: Whispy's Battlegrounds [Milun, Achilles]
+Omega Final Destination: No background transitions [Achilles, Dan Salvato]
+Omega Dreamland 64: No wind [Zauron]
+Omega Kongo Jungle 64: No barrel [flieskiller]
+Omega Brinstar Depths: No Kraid [Milun]
+Omega Big Blue: No cars except for first one [Milun]
+Omega Battlefield: Ledges slightly easier to wall jump and grapple [Milun]
+Omega Yoshi's Story 64: Symmetrical, no clouds, only 2 platforms [Milun]
+Omega Fourside: Turned into Melee Smashville [Milun]
+Omega Mushroom Kingdom 2: Sides removed, middle made bigger [Milun]
+Omega Mushroom Kingdom: Rearanged level [Milun]
+
+Change location of name tag loading so it still works [_glook]
+Max number of name tags reduced to 15 to make space for everything else [_glook]
+Can't enter new names if at the new max [flieskiller]
+
+
+Post to smashboards:
+--------------------
+
+
+Space calculation
+-----------------
+8045b888 Start of exploit
+80469120 Non-inclusive end of memory card data
+D898 of total space

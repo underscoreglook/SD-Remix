@@ -1,0 +1,78 @@
+The overwrites table can hop to the next location if it starts with 40. If its 00, then that means END. Else, start writing.
+
+
+########### PAL ############
+lis r3, 0x8044
+ori r3, r3, 0xE800	# Overwrites table 8044E800
+
+ARRAY_LOOP:
+lbz r4, 0(r3)	# Get the code
+cmpwi r4, 0
+beq END_ARRAY_LOOP	# If it is 0, we're done with arrays
+cmpwi r4, 0x40
+bne START_ARRAY_WRITE	# If it isn't 0x40, Start writing the array
+lhz r4, 2(r3)	# Get the hop amount, unsigned
+add r3, r3, r4
+b ARRAY_LOOP	# Start the loop again
+START_ARRAY_WRITE:
+lwz r4, 0(r3)
+lwz r5, 4(r3)
+addi r3, r3, 8
+WRITE_ARRAY:
+lwz r6, 0(r3)
+stw r6, 0(r4)
+addi r4, r4, 4
+addi r3, r3, 4
+subi r5, r5, 1
+cmpwi r5, 0
+bne WRITE_ARRAY
+b ARRAY_LOOP
+
+END_ARRAY_LOOP:
+addi r3, r3, 4
+
+DIRECT_LOOP:
+lbz r4, 0(r3)
+cmpwi r4, 0
+beq SUCCESS	# If 0, stop writing
+
+cmpwi r4, 0x40
+bne WRITE_DIRECT	# If it isn't 0x40, do the write
+lhz r4, 2(r3)
+add r3, r3, r4
+b DIRECT_LOOP
+
+WRITE_DIRECT:
+lwz r4, 0(r3)
+lwz r5, 4(r3)
+addi r3, r3, 8
+stw r5, 0(r4)
+b DIRECT_LOOP
+
+# Play "Success" sound, 84 in sound test
+SUCCESS:
+lis r3, 0x0007
+ori r3, r3, 0xc85e
+li r4, 0x00fe
+li r5, 0x0080
+li r6, 0x0000
+li r7, 0x0007
+lis r12, 0x8038
+ori r12, r12, 0xCF0C  # Function 8038CF0C
+mtctr r12
+bctrl
+
+RETURN:
+
+# Branch back
+lis r4, 0x8023
+ori r4, r4, 0xBDB0
+mtctr r4
+bctr	# Branch to 8023BDB0
+
+
+3C608044 6063E800 88830000 2C040000 41820044 2C040040 40820010 A0830002 7C632214 4BFFFFE4 80830000 80A30004
+38630008 80C30000 90C40000 38840004 38630004 38A5FFFF 2C050000 4082FFE8 4BFFFFB8 38630004 88830000 2C040000
+4182002C 2C040040 40820010 A0830002 7C632214 4BFFFFE4 80830000 80A30004 38630008 90A40000 4BFFFFD0 3C600007
+6063C85E 388000FE 38A00080 38C00000 38E00007 3D808038 618CCF0C 7D8903A6 4E800421 3C808023 6084BDB0 7C8903A6
+4E800420

@@ -1,0 +1,202 @@
+Stock Control/Crew Battle (1.01) [Jorgasms, _glook]
+
+####################
+# SET STOCK AMOUNT #
+####################
+# Sets the stocks equal to the handicap amount when a match starts
+@ 80033CC4:
+lis r14, 0x8045
+ori r14,r14, 0xB235		# 8045B235
+lbz r14,0(r14)
+cmpwi r14,2
+bne- 0x38
+lis r14, 0x8045
+addi r14,r14, 0x242E	# 8045242E
+lis r15, 0x8047
+ori r15,r15, 0xFB48		# 8047FB48
+lbz r18,0(r15)
+stb r18,0(r14)
+lbz r18,36(r15)
+stb r18,3728(r14)
+lbz r18,72(r15)
+stb r18,7456(r14)
+lbz r18,108(r15)
+stb r18,11184(r14)
+b 0x08
+stb r5,142(r3)
+
+C2033CC4 0000000A
+3DC08045 61CEB235
+89CE0000 2C0E0002
+40820038 3DC08045
+39CE242E 3DE08047
+61EFFB48 8A4F0000
+9A4E0000 8A4F0024
+9A4E0E90 8A4F0048
+9A4E1D20 8A4F006C
+9A4E2BB0 48000008
+98A3008E 00000000
+
+########################
+# DISABLE DAMAGE RATIO #
+########################
+# During a match, all knock back is normal instead of handicap based
+@ 801A5194:
+lis r16, 0x8047
+ori r16,r16, 0xFA00		# 8047FA00
+li r17,9
+stb r17,0(r16)
+stb r17,36(r16)
+stb r17,72(r16)
+stb r17,108(r16)
+subi r5,r30,8
+
+C21A5194 00000005
+3E008047 6210FA00
+3A200009 9A300000
+9A300024 9A300048
+9A30006C 38BEFFF8
+60000000 00000000
+
+#########################
+# DON'T STORE SOMETHING #
+#########################
+# This makes it so it doesn't store some value. This helps stuff related to auto handicap.
+80036bb4 60000000
+
+#######################################
+# ENABLE HANDICAP CONTROL DURING AUTO #
+#######################################
+# Normally, handicap can't be controlled when it's set to auto.
+# This un-grays the handicap slider so it can be controlled
+# There are two addresses, the second one is because of something to do with "DON'T STORE SOMETHING"
+@ 8022EFE4 & 8022EF34:
+lbz r0,4(r28)
+lis r14, 0x803F
+ori r14,r14, 0x9706		# 803F9706
+lis r16, 0x8045
+ori r16,r16, 0xB235		# 8045B235
+lbz r17,0(r16)
+cmpwi r17,1
+bne- 0x14
+li r0,2
+li r15,255
+stb r15,0(r14)
+b 0x0C
+li r15,0
+stb r15,0(r14)
+
+C222EFE4 00000008
+881C0004 3DC0803F
+61CE9706 3E008045
+6210B235 8A300000
+2C110001 40820014
+38000002 39E000FF
+99EE0000 4800000C
+39E00000 99EE0000
+60000000 00000000
+
+C222EF34 00000008
+881C0004 3DC0803F
+61CE9706 3E008045
+6210B235 8A300000
+2C110001 40820014
+38000002 39E000FF
+99EE0000 4800000C
+39E00000 99EE0000
+60000000 00000000
+
+#####################
+# SET AUTO HANDICAP #
+#####################
+# Sets the auto handicap to the number of stocks if entering the CSS
+# This is both from menu and from a crew battle
+@ 80265EDC:
+lis r14, 0x803F
+ori r14,r14, 0x9706		# 803F9706
+lbz r14,0(r14)
+cmpwi r14,0
+beq- 0x8C
+lis r14, 0x8045
+addi r14,r14, 0x242E	# 8045242E
+lis r15, 0x8047
+ori r15,r15, 0xFB48		# 8047FB48
+lis r16, 0x8045
+ori r16,r16, 0xB234		# 8045B234
+lbz r16,0(r16)
+cmpwi r16,9
+ble- 0x08
+li r16,9
+lbz r17,0(r14)
+cmpwi r17,0
+beq- 0x0C
+stb r17,0(r15)
+b 0x08
+stb r16,0(r15)
+lbz r17, 0xE90(r14)
+cmpwi r17,0
+beq- 0x0C
+stb r17, 0x24(r15)
+b 0x08
+stb r16, 0x24(r15)
+lbz r17, 0x1D20(r14)
+cmpwi r17,0
+beq- 0x0C
+stb r17, 0x48(r15)
+b 0x08
+stb r16, 0x48(r15)
+lbz r17, 0x2BB0(r14)
+cmpwi r17,0
+beq- 0x0C
+stb r17, 0x6C(r15)
+b 0x08
+stb r16, 0x6C(r15)
+subi r0,r3,1
+
+C2265EDC 00000015
+3DC0803F 61CE9706
+89CE0000 2C0E0000
+4182008C 3DC08045
+39CE242E 3DE08047
+61EFFB48 3E008045
+6210B234 8A100000
+2C100009 40810008
+3A000009 8A2E0000
+2C110000 4182000C
+9A2F0000 48000008
+9A0F0000 8A2E0E90
+2C110000 4182000C
+9A2F0024 48000008
+9A0F0024 8A2E1D20
+2C110000 4182000C
+9A2F0048 48000008
+9A0F0048 8A2E2BB0
+2C110000 4182000C
+9A2F006C 48000008
+9A0F006C 3803FFFF
+60000000 00000000
+
+##########
+# PART 5 #
+##########
+# No idea what this does, but it might be related to auto handicap stuff
+@ 802305CC:
+lbz r0,5(r3)
+lis r14, 0x803F
+ori r14,r14, 0x9706		# 803F9706
+lis r15, 0x8045
+ori r15,r15, 0xB235		# 8045B235
+li r16,1
+lbz r14,0(r14)
+cmpwi r14,255
+bne- 0x0C
+stb r16,0(r15)
+li r0,1
+
+C22305CC 00000006
+88030005 3DC0803F
+61CE9706 3DE08045
+61EFB235 3A000001
+89CE0000 2C0E00FF
+4082000C 9A0F0000
+38000001 00000000

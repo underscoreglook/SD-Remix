@@ -1,0 +1,133 @@
+
+v1.02
+Hook @8036B004:
+---------------
+lwz r3, 0xC(r29)
+cmpwi r3, 0x1F
+bne- END
+
+cmpwi r4, 0xC
+beq- USE_COLOR_1
+
+cmpwi r4, 0xD
+beq- USE_COLOR_2
+
+cmpwi r4, 0xE
+beq- USE_COLOR_3
+b END
+
+USE_COLOR_1:
+li r4, 0xX
+b END
+
+USE_COLOR_2:
+li r4, 0xY
+b END
+
+USE_COLOR_3:
+li r4, 0xZ
+
+END:
+mtlr r12
+
+
+v1.00
+Hook @80369150:
+---------------
+lwz r3, 0xC(r29)
+cmpwi r3, 0x1F
+bne- END
+
+cmpwi r4, 0xC
+beq- USE_COLOR_1
+
+cmpwi r4, 0xD
+beq- USE_COLOR_2
+
+cmpwi r4, 0xE
+beq- USE_COLOR_3
+b END
+
+USE_COLOR_1:
+li r4, 0xX
+b END
+
+USE_COLOR_2:
+li r4, 0xY
+b END
+
+USE_COLOR_3:
+li r4, 0xZ
+
+END:
+mtlr r12
+
+
+
+
+***********************
+* Version which reads *
+***********************
+0E0D0C00 is Teal
+0C0D0E00 is Yellow (normal)
+
+Hook @80369150, 8036A324, 8036B004
+365D30	366F04	367BE4
+---------------
+lwz r3, 0xC(r29)
+cmpwi r3, 0x1F
+bne- END
+
+lis r10, 0x8000
+ori r10, r10, 0x1860  # Banner Color ptr
+
+cmpwi r4, 0xC
+beq- USE_COLOR_1
+
+cmpwi r4, 0xD
+beq- USE_COLOR_2
+
+cmpwi r4, 0xE
+beq- USE_COLOR_3
+b END
+
+USE_COLOR_1:
+lbz r4, 0(r10)
+b END
+
+USE_COLOR_2:
+lbz r4, 1(r10)
+b END
+
+USE_COLOR_3:
+lbz r4, 2(r10)
+
+END:
+mtlr r12
+
+
+C236B004 0000000A
+807D000C 2C03001F
+4082003C 3D408000
+614A1860 2C04000C
+41820018 2C04000D
+41820018 2C04000E
+41820018 48000018
+888A0000 48000010
+888A0001 48000008
+888A0002 7D8803A6
+60000000 00000000
+
+
+PAL: 8036AF08 and 8040BA7C
+C236AF08 0000000A
+807D000C 2C03001F
+4082003C 3D408040
+614ABA7C 2C04000C
+41820018 2C04000D
+41820018 2C04000E
+41820018 48000018
+888A0000 48000010
+888A0001 48000008
+888A0002 7D8803A6
+60000000 00000000

@@ -175,3 +175,7 @@ instructions on how to use the patch, along with instructions on how to find the
 the website). We'll also want to include the changelist along with this.
 
 We'll need to update the website's instructions once we switch to this method.
+
+## Lite
+This directory contains all the files for SD Remix Lite.
+

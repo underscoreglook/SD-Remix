@@ -1,0 +1,265 @@
+New Debug Menu
+==============
+< SD Remix LITE Options >
+Widescreen: [Off, On] // Try and reuse whatever strings are already here.
+Options: [Off, On] // This changes banner color.
+Options >
+	Overtime: [Sudden Death, Tournament]
+	Wall Bracing: [Off, On]
+	Ledge Invinc: [Normal, Dynamic]
+	Handicap: [Damage Ratio, Stock/Crew]
+Credits>
+	sdremix troubleshooter - SD Remix Battle Planner, Lead Director
+	Ripple - SD Remix Developer, Battle Planner
+	StandardToaster - SD Remix Lead ASM Programmer
+	Achilles1515 - Coding and Support
+	_glook - SD Remix Lite Developer, Coding
+	Milun - Stage Modifications
+	Magus420 - Coding
+	Dan Salvato - Coding
+	flieskiller - Coding
+	Jorgasm - Coding
+	ShamRock - Coding
+	Zauron - Coding
+	_Novi - Publicist
+	donny2112 - Coding
+Debug Flag: [MASTER, DEVELOP, ETC]
+Debug Mode > (Goes to versus mode)
+
+-----------
+- Strings -
+-----------
+803FD000	< SD Remix LITE Options >
+803FD01C	Widescreen:
+803FD028		Off
+803FD02C		On
+803FD030		Options
+803FD03C		Options >
+803FD048		Overtime
+803FD054		Sudden Death
+803FD064		Tournament
+803FD070		Wall Bracing
+803FD080		Ledge Invinc
+803FD098		Normal
+803FD0A0		Dynamic
+803FD0A8		Handicap:
+803FD0B4		Damage Ratio
+803FD0C0		Stock/Crew
+803FD0CC		Credits>
+803FD0D8		sdremix troubleshooter - SD Remix Battle Planner, Lead Director
+803FD118		Ripple - SD Remix Developer, Battle Planner
+803FD144		StandardToaster - SD Remix Lead ASM Programmer
+803FD174		Achilles1515 - Coding and Support
+803FD194		_glook - SD Remix Lite Developer, Coding
+803FD1BC		Milun - Stage Modifications
+803FD1D0		Magus420 - Coding
+803FD1E4		Dan Salvato - Coding
+803FD1F8		flieskiller - Coding
+803FD20C		Jorgasm - Coding
+803FD21C		ShamRock - Coding
+803FD230		Zauron - Coding
+803FD240		_Novi - Publicist
+803FD250		donny2112 - Coding
+803FD264		Debug Flag:
+803FD270		Debug Mode >
+
+-----------------
+- String arrays -
+-----------------
+803FD280		Widescreen
+803FD280		Options
+803FD280		Wall Bracing
+803FD288		Overtime
+803FD290		Ledge Invincibility
+803FD298		Handicap
+
+---------------
+- Menu Tables -
+---------------
+803FA4E0	Main Menu
+803FC420	Options
+803FC4C0	Credits
+
+-----------
+- Toggles -
+-----------
+This is a table of entries of 0x10 bytes, 4 words of:
+Variable Address, Code replacement address, Original Code, Replacement Code
+803fa368 801C0EB4 40810094 48000094
+803fa368 80165dc4 38040001 38040000
+803fa368 80165e0c 38040001 38040000
+803fa368 80165e54 38040001 38040000
+803fa368 801A415C 3803ffff 4BFED720
+803fa368 8016DD38 881e0000 48023D80
+803fa368 8016DDCC 901f0028 48023D2C
+803fa368 80067E78 d01b1830 48129CA0
+803fa368 800343B4 7fdd032e 4815D78C
+803fa36c 8008DFAC 2c1c0003 48103BB4
+803fa370 8009A8AC 8084049c 480F72EC
+803fa370 8006A414 807f1990 481277D0
+
+803fa378 80036bb4 9803008e 60000000
+803fa378 80266678 3803ffff 4BF2B59C
+803fa378 801A57DC 38befff8 4BFEC4DC
+803fa378 80230D54 88030005 4BF60F88
+803fa378 8022F76C 881c0004 4BF625A0
+803fa378 8022F6BC 881c0004 4BF6268C
+803fa378 80033CC4 98a3008e 4815E0C0
+
+
+
+
+Custom debug function
+
+mflr r0
+cmpwi r4, 0
+bgt RETURN
+lwz r4,0x14(r4)
+stw r0,0x4(sp)
+stwu sp,-0x8(sp)
+
+lis r5,0x8030
+ori r5,r5,0x03e4
+
+lis r12,0x802F
+ori r12,r12,0xE4F8
+
+mtctr r12
+bctrl
+lwz r0,0xc(sp)
+addi sp,sp,8
+mtlr r0
+RETURN:
+li r3,0
+blr
+
+802FEF2C 00000011
+7C0802A6 2C040000 41810034 80840014 90010004 9421FFF8 3CA08030 60A503E4 3D80802F 618CE4F8 7D8903A6 4E800421
+8001000C 38210008 7C0803A6 38600000 4E800020
+
+
+
+
+Widescreen
+----------
+lis r3, 0x803f
+ori r3, r3, 0xa350
+lwz r3, 0(r3)
+cmpwi r3, 0
+bne CHANGE
+
+NORMAL:
+lis r5, 0x3860
+ori r5, r5, 0x0006
+lis r4, 0xc03f
+ori r4, r4, 0x0034
+b SET
+
+CHANGE:
+lis r5, 0x4816
+ori r5, r5, 0xFD34
+lis r4, 0x4BE2
+ori r4, r4, 0x7354
+
+SET:
+lis r3, 0x8036
+ori r3, r3, 0xA4A8
+stw r4, 0(r3)
+lis r3, 0x8002
+ori r3, r3, 0x1ABC
+stw r5, 0(r3)
+
+li r3, 0
+blr
+
+
+Options changed function
+------------------------
+# This function is run when any toggle other than widescreen is run. Changes everything and banner color
+
+# The master toggle var is in r12
+lis r12, 0x8040
+lwz r12, -0x5CA4(r12)
+
+lis r11, 0x8040
+stw r12, -0x5AC0(r11)	# Enable or disable the options menu depending on if options are enabled or not
+
+cmpwi r12, 0
+beq NORMAL_COLOR
+li r4, 0xE
+li r5, 0xC
+b SET_COLOR
+NORMAL_COLOR:
+li r4, 0xC
+li r5, 0xE
+SET_COLOR:
+lis r3, 0x8019
+ori r3, r3, 0x1834	# Location of change banner code
+stb r4, 0x2B(r3)
+stb r5, 0x3B(r3)
+
+# Set all the actual toggles
+lis r11, 0x803F
+ori r11, r11, 0xC6C0
+LOOP:
+lwz r3, 0(r11)		# Get the address of the toggle variable
+cmpwi r3, 0			# If 0, we're done
+beq BREAK
+lwz r3, 0(r3) 		# The actual toggle value
+and r3, r3, r12		# AND this with the master toggle value
+slwi r3, r3, 2		# Multiply by 4 so we can use as index
+lwz r4, 4(r11)		# Get the address to write to in r4
+addi r11, r11, 8	# Seek to the original or replacement values
+lwzx r3, r11, r3	# Get original if toggle value is 0 or replacement if 1
+stw r3, 0(r4)		# Store value to the address
+addi r11, r11, 8	# Move to next entry in table
+b LOOP
+
+BREAK:
+li r3,0
+blr
+
+
+
+
+PAL:
+# The master toggle var is in r12
+lis r12, 0x8041
+lwz r12, -0x4564(r12)
+
+lis r11, 0x8040
+stw r12, -0x4C94(r11)	# Enable or disable the options menu depending on if options are enabled or not
+
+cmpwi r12, 0
+beq NORMAL_COLOR
+lis r4, 0x0E0D
+ori r4, r4, 0x0C00
+b SET_COLOR
+NORMAL_COLOR:
+lis r4, 0x0C0D
+ori r4, r4, 0x0E00
+SET_COLOR:
+lis r3, 0x8041
+stw r4, -0x4584(r3)
+
+# Set all the actual toggles
+# Variable Address, Code replacement address, Original Code, Replacement Code
+lis r11, 0x8040
+ori r11, r11, 0xBCC0
+LOOP:
+lwz r3, 0(r11)		# Get the address of the toggle variable
+cmpwi r3, 0			# If 0, we're done
+beq BREAK
+lwz r3, 0(r3) 		# The actual toggle value
+and r3, r3, r12		# AND this with the master toggle value
+slwi r3, r3, 2		# Multiply by 4 so we can use as index
+lwz r4, 4(r11)		# Get the address to write to in r4
+addi r11, r11, 8	# Seek to the original or replacement values
+lwzx r3, r11, r3	# Get original if toggle value is 0 or replacement if 1
+stw r3, 0(r4)		# Store value to the address
+addi r11, r11, 8	# Move to next entry in table
+b LOOP
+
+BREAK:
+li r3,0
+blr

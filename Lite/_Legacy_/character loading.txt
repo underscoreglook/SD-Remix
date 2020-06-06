@@ -1,0 +1,506 @@
+Bowser's filename is read here:
+CHK 80085614 ( --- ) Read32 803cf0a0 at 803c1f68 ( --- )
+CHK 80085768 ( --- ) Read32 803cf0a0 at 803c1f68 ( --- )
+
+These likely have to do with P1 data
+CHK 800d0fc8 ( --- ) Write32 3e051eb8 at 80c6bacc ( --- )
+CHK 800d10a8 ( --- ) Write32 3e051eb8 at 80c6bacc ( --- )
+
+Match beginning of Koopa is at:
+811AD5A0, 811dd2a0 But only first part of file and nothing else
+
+
+The four breakpoints we want are:
+80085614 First place we read P1 Filename
+80085768 Second place we read P1 Filename
+800D0FA0 First place we write P1 data
+800D105C Second place we write P1 Data
+
+The code order of the breakpoints:
+
+loadScene
+801a4120
+	8025BB5C
+	8025bbbc
+		80018254
+		8001870c
+			80017960
+			800179c0
+				80031CB0
+				80031cec
+					800855C8
+					80085614 - First read of filename, runs a few times
+			80031D10 calls 800855C8 again
+
+Some time passes, then:
+
+
+loadScene
+801a40e4
+	8016E934
+	8016e948
+		8016E730
+		8016e880
+			8016E2BC
+			8016e56c
+				80031AD0
+				80031bc8
+					** 80068E98 ** - This likely has to do with loading fighters
+					80068f20
+						8008572C
+						80085768 - Second place we read filename
+					80068F2C This breakpoints with first place we write P1 data
+						r3 into this is r31, which is return value of 803901F0
+						80068914 - Specific to Fighters, because there are error messages here
+						80068b3c
+							r3 into this is r30, which was r3 into this function
+							800d0fa0 - First place we write P1 data.
+										  This is right near where we read it, so this is likely it
+									   0x2C(r3) holds some data structure (we'll call Sct1)
+									   0x10C(Sct1) holds Sct2
+									   0x0(Sct2) holds Sct3
+									   Sct3 is the Char data location offset by 0x3640
+					800692e0 This breakpoints with second place we write P1 data
+						80068354
+						80068428
+							800D105C - Second time we write P1 data
+			
+			
+			
+Places read from with Double Bowser on Yoshi's: 811b0bdc, 811b0bdc, 811b0bdc, for P2 81276a98
+The difference seems to be C5EBC per player.
+
+811b0be0 == 3640
+This makes 811ad5a0 the start of the file
+
+
+Results page
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cc3540 at 811b6eb4 ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cd1b20 at 811b6ecc ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cc6200 at 811b6ee4 ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cd3600 at 811b6efc ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cc8a60 at 811b6f2c ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cd4c60 at 811b6f44 ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80ccb640 at 811b6f5c ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cd6400 at 811b6f74 ( --- )
+41:49:054 BreakPoints.cpp:197 I[MI]: CHK 80085c9c ( --- ) Write32 80cd01c0 at 811b6f8c ( --- )
+
+Writing to the location
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00739920 at 811b6254 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00732440 at 811b626c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00736d40 at 811b6284 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007291a0 at 811b629c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00733e80 at 811b62b4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0072cea0 at 811b62cc ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0073ad40 at 811b62e4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00743500 at 811b62fc ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0074c300 at 811b6314 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007458a0 at 811b632c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0074a240 at 811b6344 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0073cf20 at 811b635c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00747580 at 811b6374 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00740a40 at 811b638c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00757100 at 811b63bc ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00751320 at 811b63d4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0074f740 at 811b63ec ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007556a0 at 811b6404 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00753160 at 811b641c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0074d6e0 at 811b6434 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00758e60 at 811b644c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0075e4c0 at 811b6464 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0075d000 at 811b647c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0075a400 at 811b6494 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007663a0 at 811b64ac ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00764bc0 at 811b64c4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007631c0 at 811b64dc ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0076b2c0 at 811b64f4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007696c0 at 811b650c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00767ee0 at 811b6524 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00760a20 at 811b653c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00773ea0 at 811b6554 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00789760 at 811b656c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00778400 at 811b659c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00775920 at 811b65b4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00770d00 at 811b65cc ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0076db80 at 811b65e4 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0077e140 at 811b65fc ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0077ae20 at 811b6614 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00785c40 at 811b662c ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00787ec0 at 811b6644 ( --- )
+42:30:771 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007818e0 at 811b665c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00783080 at 811b6674 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0078b2a0 at 811b6764 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0078bfe0 at 811b677c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00797440 at 811b67c4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00792940 at 811b67dc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00795bc0 at 811b67f4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0078e560 at 811b680c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00790780 at 811b6824 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0079cce0 at 811b683c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00799d00 at 811b6854 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0079fb00 at 811b686c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007a3880 at 811b6884 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b0300 at 811b689c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b1860 at 811b68b4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007aed80 at 811b68cc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b7d40 at 811b68e4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b93e0 at 811b68fc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b4960 at 811b6914 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b2da0 at 811b692c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007b6100 at 811b6944 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007a75e0 at 811b69a4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007a8640 at 811b69bc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007a9700 at 811b69d4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007ab620 at 811b69ec ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 007ad1e0 at 811b6a04 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006bf100 at 811b6b24 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c0740 at 811b6b3c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c1940 at 811b6b54 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c2b80 at 811b6b6c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c4160 at 811b6b84 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c5220 at 811b6b9c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00727640 at 811b6be4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00648ac0 at 811b6bfc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0072f980 at 811b6c14 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00743500 at 811b6c2c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 00736d40 at 811b6c44 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 0074a240 at 811b6c5c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006a2ea0 at 811b6cbc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006a4c80 at 811b6cd4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006a6340 at 811b6cec ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006a82c0 at 811b6d04 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006aa4c0 at 811b6d1c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006aba40 at 811b6d34 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006ad660 at 811b6d4c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006affe0 at 811b6d64 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006affe0 at 811b6d7c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006b1d80 at 811b6d94 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006b4760 at 811b6dac ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006b6ae0 at 811b6dc4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006b9000 at 811b6ddc ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006b9000 at 811b6df4 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006babc0 at 811b6e0c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006bce60 at 811b6e24 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c64e0 at 811b6e3c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006c9be0 at 811b6e54 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006cca60 at 811b6e6c ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006ce8e0 at 811b6e84 ( --- )
+42:30:772 BreakPoints.cpp:197 I[MI]: CHK 80085ae0 ( --- ) Write32 006cfee0 at 811b6e9c ( --- )
+
+All fighter data is written from DVD to memory at Code 80085AE0.
+
+
+8045D850 Start memory card
+0x3E8 + 0x490 + E0 = 0x958 space needed for DOL stuff?
+
+8045F000 is probably a good enough to place to start the patch table. It gives us roughly 0xC000 bytes to use, which is roughly 49,000 bytes, enough to fit 24 Bowsers.
+
+8046b0e4 is Max value saved
+
+
+Diff, store at 803fc420
+
+Table starts at 803fc428
+
+Table holds 1 word per character, offset by their character id.
+First byte is 0 if we haven't patched it or 1 if we have this turn.
+The rest is the offset starting at the first word of table (Mario or Cpt Falcon) to the patch for that character
+
+The data format for the patch is:
+Halfword - Number of words the same
+Halfword - Number of words different
+Variable - The words that should be added to the old word
+Repeat until you see 00000000 for two halfwords
+
+We also need a patch table, for storing whether we've already patched this character or not
+
+
+Table starts at 804663F0
+
+Table holds 1 word per character, offset by their character id.
+First byte is 0 if we haven't patched it or 1 if we have this turn.
+The rest is the offset starting at the first word of table (Mario or Cpt Falcon) to the patch for that character
+
+804598B8 is address of character data pointer table, with a pointer offset by charID*4
+This pointer leads to the location of another pointer, which is the character data, offset by something
+This offset in the character data is right after the hex string "FE000000 00000000 18000000"
+
+The algorithm for the gecko code:
+void patchCharacter(r29 = ptrCharacterID [internal], r31 = file info)  {
+	int characterOffset = word(r29) * 4;
+	pointer ptrTable = 804663F0;
+	
+	int patchOffset = word(ptrTable + characterOffset);
+	if (patchOffset == 0) return;
+
+	pointer ptrPatch = ptrTable + patchOffset;
+	
+	pointer ptrPlayer = word(804598B8 + characterOffset);
+	ptrPlayer = word(ptrPlayer);
+	
+	// Sanity Check, first word of patch is halfword of the byte offset of sanity check and halfword of sanity data
+	sanityOffset = short(ptrPatch);
+	sanityData = short(ptrPatch + 2);
+	if (sanityData == short(ptrPlayer + sanityOffset)) return;
+	
+	do {
+		// First, shift the amount of bytes by the number of bytes that are the same
+		short numWordsSame = (short) *(ptrDiff);
+		short numWordsDiff = (short) *(ptrDiff + 2);
+		ptrPlayer += numWordsSame * 4;
+		
+		// Also, check to see if we're at the end of the line
+		if (numWordsSame == 0)
+			if (numWordsDiff == 0)
+				break;
+
+		// Next, deal with the number of bytes that are different
+		int loopvar = 0;
+		ptrDiff += 4;
+		do {
+			uint old = *(ptrPlayer);
+			uint new = *(ptrDiff);
+			new = old + new;
+			*(ptrPlayer) = new;
+			ptrDiff += 4;
+			ptrPlayer += 4;
+			loopvar++;
+		} while (loopvar < numWordsDiff);
+	}
+}
+0(804598B8 offset by (character id * 4)) => the character file + 0x3644
+
+Written between 80068B08 and 80068B3C
+
+80068b38 is where it's written
+
+ASM, hook into 80068F24. r3 to r12 can be used safely:
+
+lwz r12, 0(r29)
+slwi r12, r12, 1	# Character offset times 2
+
+lis r11, 0x8046
+ori r11, r11, 0x63F0	# ptrTable  804663F0
+
+lhzx r10, r11, r12		# Patch offset
+cmpwi r10, 0
+beq BREAK
+
+add r11, r11, r10		# r11 is ptrPatch (ptrDiff)
+slwi r12, r12, 1		# Character offset times 2 again, for total of 4
+
+lis r10, 0x8045
+ori r10, r10, 0x98B8	# ptr to array of (Pl*.dat + 0x3644) indexed by char id
+lwzx r10, r10, r12		# Load the current character
+lwz r12, 0(r10)			# Need to do another load, r12 is ptrPlayer
+
+# Sanity Check
+lha r10, 0(r11)		# r10 is sanityOffset
+lhz r9, 2(r11)		# r11 is sanityData
+lhzx r10, r12, r10	# r10 is now the actual data to compare to sanity data
+cmpw r9, r10		# See if they're the same
+beq BREAK			# If they're the same, we've already been patched
+addi r11, r11, 4	# Move ptrPatch past the sanity check
+
+MAIN_LOOP:
+lha r10, 0(r11)		# Num words same (could be negative)
+slwi r10, r10, 2	# Multiply by 4
+add r12, r12, r10	# Add numWordsSame * 4 to ptrPlayer
+
+cmpwi r10, 0		# Check if numWordsSame is 0
+lhz r10, 2(r11)		# r10 is numWordsDiff
+bne DO_DIFF
+
+cmpwi r10, 0
+beq BREAK
+
+DO_DIFF:
+li r9, 0			# r9 is loopvar
+addi r11, r11, 4
+
+DIFF_LOOP:
+lwz r8, 0(r12)
+lwz r7, 0(r11)
+add r7, r8, r7
+stw r7, 0(r12)
+addi r11, r11, 4
+addi r12, r12, 4
+addi r9, r9, 1
+cmpw r9, r10
+blt DIFF_LOOP
+
+b MAIN_LOOP
+
+BREAK:
+addi r3, r31, 0		# Important! Remember to do what it did before
+
+
+
+
+80003210 is actually the thing reading data from Disk
+811ad6c0 contains the start point
+
+
+
+
+All addresses in the file are offset by 811AD6E0 (+0x20 from actual start point)
+Possible locations for this offset:
+811B719C (this is inside, so doesn't work) and 811DD3E0 (2FD00)
+
+
+
+
+80068E98 Load Fighter Function
+------------------------------
+r3 contains data about the character. 0(r3) contains the character ID (word).
+
+
+On screen change, flush the patch applied cache:
+801A40B4: addi r25, r27, 0xC
+
+Table starts at 80466444, with 28 entries (words) to zero out
+
+At 801A40B4, should be able to use r3 to r12
+--------------------------------------------
+lis r4, 0x8046
+ori r4, r4, 0x6444
+li r3, 0
+li r0, 0
+LOOP:
+stb r0, 0(r4)
+addi r4, r4, 4
+addi r3, r3, 1
+cmpwi r3, 0x20
+blt LOOP
+addi r25, r27, 0xC
+OBSOLETE, we're going to go with the sanity checker because it's more reliable.
+
+
+
+80c587c0 possible place for 0xA600 in PlCo.dat
+80C4E1C0 would be 0x0
+
+3f80000041000000402000004180000000000012424800004100000041100000 is what's at A5F0
+80c50a10 is A5F0 so 80C46420. It seems to change.
+
+
+
+
+
+
+
+Breakpoint here:
+80068F24
+
+Check memory here:
+804598B8
+
+804598B8 is written at:
+26:20:779 BreakPoints.cpp:197 I[MI]: CHK 80017160 ( --- ) Write32 811b63a4 at 804598b8 ( --- )
+
+80380328 ( --- ) Write32 811b0878 at 811b63a4 ( --- )	811B0878 is the offset
+
+
+
+
+
+
+
+
+
+
+
+Character patcher:
+
+
+
+
+
+
+
+
+
+
+
+PAL:
+@ 80068F24, r3 to r12 can be used safely:
+lwz r12, 0(r29)
+slwi r12, r12, 1	# Character offset times 2
+
+lis r11, 0x8040
+ori r11, r11, 0xBFB0	# ptrTable  8040BFB0
+
+lhzx r10, r11, r12		# Patch offset
+cmpwi r10, 0
+beq BREAK
+
+oris r11, r10, 0x8045	# r11 is ptrPatch (ptrDiff)
+slwi r12, r12, 1		# Character offset times 2 again, for total of 4
+
+lis r10, 0x8044
+ori r10, r10, 0xA6B8	# ptr to array of (Pl*.dat + 0x3644) indexed by char id		8044A6B8
+lwzx r10, r10, r12		# Load the current character
+lwz r12, 0(r10)			# Need to do another load, r12 is ptrPlayer
+
+# Sanity Check
+lha r10, 0(r11)		# r10 is sanityOffset
+lhz r9, 2(r11)		# r11 is sanityData
+lhzx r10, r12, r10	# r10 is now the actual data to compare to sanity data
+cmpw r9, r10		# See if they're the same
+beq BREAK			# If they're the same, we've already been patched
+addi r11, r11, 4	# Move ptrPatch past the sanity check
+
+MAIN_LOOP:
+lha r10, 0(r11)		# Num words same (could be negative)
+slwi r10, r10, 2	# Multiply by 4
+add r12, r12, r10	# Add numWordsSame * 4 to ptrPlayer
+
+cmpwi r10, 0		# Check if numWordsSame is 0
+lhz r10, 2(r11)		# r10 is numWordsDiff
+bne DO_DIFF
+
+cmpwi r10, 0
+beq BREAK
+
+DO_DIFF:
+li r9, 0			# r9 is loopvar
+addi r11, r11, 4
+
+DIFF_LOOP:
+lwz r8, 0(r12)
+lwz r7, 0(r11)
+add r7, r8, r7
+stw r7, 0(r12)
+addi r11, r11, 4
+addi r12, r12, 4
+addi r9, r9, 1
+cmpw r9, r10
+blt DIFF_LOOP
+
+b MAIN_LOOP
+
+BREAK:
+addi r3, r31, 0		# Important! Remember to do what it did before
+
+C2068F24 00000015
+819D0000 558C083C
+3D608040 616BBFB0
+7D4B622E 2C0A0000
+41820084 654B8045
+558C083C 3D408044
+614AA6B8 7D4A602E
+818A0000 A94B0000
+A12B0002 7D4C522E
+7C095000 41820058
+396B0004 A94B0000
+554A103A 7D8C5214
+2C0A0000 A14B0002
+4082000C 2C0A0000
+41820034 39200000
+396B0004 810C0000
+80EB0000 7CE83A14
+90EC0000 396B0004
+398C0004 39290001
+7C095000 4180FFE0
+4BFFFFB4 387F0000
+60000000 00000000

@@ -1,0 +1,863 @@
+Figure out where it's writing to
+
+At 801C07b4, the second time we read the stage's filename, the stage has been loaded into memory.
+
+In this instance, Kongo Jungle is at 81376f20
+
+The reference to it is at two places:
+80431a60 and 80431f94
+
+Do read breakpoints on both, and make sure that they're still pointing to the same place.
+
+At line 801c07c0, sub_801C6038 is called, and there's a memory breakpoint on:
+CHK 8001813c ( --- ) Read32 81376f20 at 80431a60 ( --- )
+All of this is only called once, so we're safe.
+
+Connect the dots...tacktrace
+
+801C0754
+801c07c0 - START
+	801C6038
+	801c608c - STEP_1
+		800171CC
+		80017248 - STEP_2
+			8001819C
+			800181bc - STEP_3
+				80017EBC
+				8001813c - END, Where the location of the file in memory is read
+
+803DFEDC is important in some way, we'll call this stageFilesArray
+
+
+At 801c07c0 - START:
+r29 (which is r3 from the beginning of the function) holds some data about the stage.
+0(r29) is the index in stageFilesArray, which we can use to get the file start location (probably)
+4(r29) is the stage ID (probably)
+The pointer in the element of our stageFilesArray is stored in r30 (r30 = stageFilesArray[r29]). It holds a pointer to something.
+The struct pointed to by r30 holds something important at the 0x8th word, which is passed to STEP_1 as r3.
+r4 is just 0.
+r5 is whether we're at all star heal stage or not.
+
+801c608c - STEP_1:
+
+Passes into STEP_2:
+r3 = Contains r1 + 0x14. Probably a variable to store extra information to (it's used later on in function).
+r4 = Holds the r3 pass into us (mr r4, r3)
+r5 = Holds the r3 passed into us +4 (r5 = r3 + 4) [Wonder why?]
+r6 = holds pointer to the string "map_head"
+r7 = 0
+
+80017248 - STEP_2:
+
+
+800181bc - STEP_3:
+
+
+8001813c - END:
+Does lwz r4, 4(r4), so r4 is now pointing to the first byte of the stage file in memory.
+The previous r4 is: lwz r4, 0x10(r30)
+The r30 is set: addi r30, r3, 0xAC
+r3 = 80432078 + r4
+r4 is mulli r4, r30, 0x1C
+r30 is incredibly convoluted, but it seems to be less than 0x50, which tells me it's something to do with stage identification. This code runs multiple times, and so we have multiple values per stage.
+	It seems to be 9 for the actual stage file with 2 players, at least for FoD. Dunno why.
+	It's 12 for pokemon stadium with 4 players
+	It's also 12 for FoD with 4 players
+
+What we can just do is when the stage id is read the first time, we can set a variable, but only if it should be changed.
+Then at 8001813c, we can check to see if that variable is set. If it is, we should patch.
+The variable should point to the patch file location.
+
+
+
+
+Total stage plan:
+When the stage is first read, there needs to be a few things that happen:
+- See if the stage is a patch file. If so, patch the file.
+- See if the stage is a dol mod omega. If so, mod the dol.
+- See if the stage is an alternate stage. If so, replace the stage id with the alternate stage id.
+
+To accomplish this, we can have a special table that covers all three cases. Each element is 8 bytes:
+- Halfword: Stage ID
+- Halfword: Omega type (Patch = 0, dol mod = 1, alternate stage = 2, alternate AND patch = (new stage id) + 3)
+- Word: If patch, the address of the start of the patch. If dol mod, the address of the start of the dol mod table. If alternate stage, the id of the stage to replace. If alternate and patch, it's same as patch.
+
+
+
+Stage patch file is like char patch file: hw for numWordsSame, hw for numWordsDiff, then diff words. Ends with 00000000.
+However, if numWordsSame is FFFF, the next hw is numBlocksSame (block size is 0x10000 words).
+
+To test stage patching, create the stage patcher as a gecko code and store the raw patch somewhere in memory.
+
+At 80018130: Can use all local registers
+lis r5, 0x803f
+ori r5, r5, 0xa37c	# Stage patch location is 803fa37c
+lwz r5, 0(r5)		# Check the stage patch location
+cmpwi r5, 0
+beq DONE			# If blank, we don't have anything to do
+
+lwz r4, 0x10(r30)
+lwz r4, 4(r4)		# r4 is now address of the stage file (ptrStage)
+
+lis r7, 0
+ori r7, r7, 0xFFFF	# Start up the comparison variable so we know it's a numblocks diff
+
+LOOP:
+lhz r3, 0(r5)		# Get num words same into r3
+lhz r6, 2(r5)		# Get num words different into r6
+addi r5, r5, 4		# Shift ptrPatch to the words that are different
+cmpw r3, r7			# If 0xFFFF
+bne WORDS_SAME		# Then r6 is numblockssame
+slwi r6, r6, 18		# r6 = r6 * 0x10000 * 4 (the 4 is for the word size)
+add r4, r4, r6		# Shift ptrStage to go to the next block with differences
+b LOOP				# Go back so we can get the actual num words same and different
+
+WORDS_SAME:
+add r8, r3, r6		# Add the numWordsSame and Diff together into r8
+cmpwi r8, 0			# If both are 0
+beq DONE			# Then we're done
+
+slwi r3, r3, 2		# Multiply by 4 to get bytes same
+add r4, r4, r3		# Seek ptrStage to the next word different
+
+LOOP_PATCH:
+lwz r3, 0(r4)		# Get the original word from the stage
+lwz r8, 0(r5)		# Get the patch amount
+add r3, r3, r8		# Apply the patch
+stw r3, 0(r4)		# Save the patch
+addi r4, r4, 4		# Seek to next word in ptrStage
+addi r5, r5, 4		# Seek to next word in ptrPatch
+subi r6, r6, 1		# Decrement numWordsDiff
+cmpwi r6, 0			# If we're at 0 words different, we're done
+bne LOOP_PATCH
+b LOOP				# Apply the next words same
+
+DONE:
+lwz r3, 0x14(r30)	# Do what it normally does
+
+C2018130 00000011
+3CA0803F 60A5A37C
+80A50000 2C050000
+41820070 809E0010
+80840004 3CE00000
+60E7FFFF A0650000
+A0C50002 38A50004
+7C033800 40820010
+54C6901A 7C843214
+4BFFFFE4 7D033214
+2C080000 41820034
+5463103A 7C841A14
+80640000 81050000
+7C634214 90640000
+38840004 38A50004
+38C6FFFF 2C060000
+4082FFE0 4BFFFFA8
+807E0014 00000000
+
+
+
+
+
+Patch file stored at 8040A950: (for Kongo Jungle, 0x98 bytes)
+2240A950 5C560001
+0640A950 00000098
+
+5C560001 45000000
+7AAF0002 01000000
+02000000 17320018
+BD6570B1 3E07FC85
+BD5FD525 3E10EC57
+BD445A86 3DB81E35
+BD4B5A86 3DA75168
+BD47EE70 3E10F86C
+BD436042 3E07CD36
+BD593694 3DB98467
+BD639CFB 3DCCB79A
+BD6B6ACE 3DE430D8
+BD6A21E5 3DF50831
+BD3F0546 3DF50539
+BD3BE4C3 3DE434D7
+18C60002 0A000000
+0A000000 218A0001
+00380000 001F0001
+00140000 00000000
+
+e2000001 00000000
+
+
+
+The algorithm of the omega handler
+switch (omegaType) {
+	DOL_MOD:
+		// Do dol mod
+		break;
+	STAGE_ALT:
+	PATCH_ALT:
+		// Do Stage Alt
+		if (omegaType == STAGE_ALT) break;
+	PATCH:
+		// Do Patch
+		break;
+}
+
+803fa37c - Stage patcher var
+8040AA48 - Stage omega table
+	Each entry is XXXXYYYY ZZZZZZZZ, with 00000000 00000000 as last entry
+	XXXX: Stage ID
+	YYYY: Omega type (Patch = 0, dol mod = 1, alternate stage = 2, alternate AND patch = (new stage id) + 3)
+	ZZZZZZZZ:
+		If patch (YYYY == 0), the address of the start of the patch.
+		If dol mod (YYYY == 1), the address of the start of the dol mod table.
+		If alternate stage (YYYY == 2), the id of the stage to replace.
+		If alternate and patch (YYYY >= 3), it's same as patch.
+Stage DOL mod table
+	Each stage with DOL mods has a different table. Each entry in that table is C bytes, with a terminating word of 0.
+	The format of an entry is as follows:
+	[Address to write to] [Alpha Value] [Omega Value]
+
+Now we want to check the current stage against the stage mod table and apply the appropriate thing. We do this by hooking into 8025BB40, when the stage ID is just read.
+
+At 8025BB40: can use r5 to r12
+lbz r0, 0xB(r4)			# This is what it did before. r0 is now stageId
+
+lis r8, 0x803f
+ori r8, r8, 0xa37c		# The stage patcher variable, 803fa37c, in r8
+li r12, 0
+stw r12, 0(r8)			# Zero it out preemtively, in case there's no patch
+
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)			# Get the omega toggle at 803fa3d0
+
+lis r11, 0x8040
+ori r11, r11, 0xAA40	# Get stage omega table at 8040AA48
+# Except it's minus 8 to optimize for FIND_STAGE
+
+FIND_STAGE:
+lhzu r5, 8(r11)	# Get stage id, and update r11 to that position
+cmpwi r5, 0		# If stage id is 0, we've reached the end of the list
+beq DONE
+cmpw r5, r0		# Compare stageid to normal stage
+bne FIND_STAGE	# If not equal, go to the next one
+
+# Check if we're DOL_MOD
+lhz r10, 2(r11)	# Get the omega type into r10
+lwz r9, 4(r11)	# Get the stage data into r9
+cmpwi r10, 1	# Compare to 1 (DOL_MOD)
+beq CASE_DOL_MOD
+
+# If not DOL MOD, we don't even want to do anything if it's not omega
+cmpwi r12, 0
+beq DONE
+
+# Otherwise, we are omega and we want to apply the other omega stuff
+cmpwi r10, 2		# Compare to 2 (STAGE_ALT)
+bgt CASE_PATCH_ALT	# If greater, then we're a PATCH_ALT
+blt CASE_PATCH		# If we're less, we're 0 and therefore PATCH
+
+CASE_ALT:
+mr r0, r9
+b DONE
+
+CASE_PATCH_ALT:
+subi r10, r10, 3
+mr r0, r10
+# Check if we're in classic mode, and don't patch if we are
+lis r12,-32697
+ori r12,r12,40240
+lbz r12,0(r12)		# Scene 1d
+cmpwi r12,3
+beq DONE			# if 3 (Classic mode) skip to done
+# Otherwise, continue onto CASE_PATCH
+
+CASE_PATCH:
+stw r9, 0(r8)	# Store the payload into the stage patcher variable
+b DONE
+
+CASE_DOL_MOD:
+slwi r12, r12, 2	# Make r12 the offset of the value to write
+MOD_LOOP:
+lwz r11, 0(r9)	# Get the address to write to
+cmpwi r11, 0	# If address is 0, we're done
+beq DONE
+addi r9, r9, 4	# Seek to the values to write
+lwzx r10, r9, r12	# Depending on omega value, get the value to write
+stw r10, 0(r11)	# Write the value
+addi r9, r9, 8	# Go to next entry
+b MOD_LOOP
+
+DONE:
+
+C225BB40 00000017
+8804000B 3D00803F
+6108A37C 39800000
+91880000 3D80803F
+618CA3D0 818C0000
+3D608040 616BAA40
+A4AB0008 2C050000
+41820080 7C050000
+4082FFF0 A14B0002
+812B0004 2C0A0001
+41820044 2C0C0000
+41820060 2C0A0002
+41810010 41800028
+7D204B78 4800004C
+394AFFFD 7D405378
+3D808047 618C9D30
+898C0000 2C0C0003
+41820030 91280000
+48000028 558C103A
+81690000 2C0B0000
+41820018 39290004
+7D49602E 914B0000
+39290008 4BFFFFE4
+60000000 00000000
+
+
+
+Also: Disable trophy spawn on snag trophies if outside classic mode
+v1.02
+@ 802199FC:
+lis r12, 0x8047
+ori r12,r12, 0x9D30		# 80479D30
+lbz r12,0(r12)
+cmpwi r12,3
+bne- 0x14
+lis r12,  0x802F
+ori r12,r12, 0x2094		# 802F2094
+mtctr r12
+bctrl
+
+C22199FC 00000005
+3D808047 618C9D30
+898C0000 2C0C0003
+40820014 3D80802F
+618C2094 7D8903A6
+4E800421 00000000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rewrite:
+
+Stage Patcher:
+v1.00
+C20180B0 00000011
+3CA08000 60A51884
+80A50000 2C050000
+41820070 809E0010
+80840004 3CE00000
+60E7FFFF A0650000
+A0C50002 38A50004
+7C033800 40820010
+54C6901A 7C843214
+4BFFFFE4 7D033214
+2C080000 41820034
+5463103A 7C841A14
+80640000 81050000
+7C634214 90640000
+38840004 38A50004
+38C6FFFF 2C060000
+4082FFE0 4BFFFFA8
+807E0014 00000000
+
+v1.01
+C2018130 00000011
+3CA08000 60A51884
+80A50000 2C050000
+41820070 809E0010
+80840004 3CE00000
+60E7FFFF A0650000
+A0C50002 38A50004
+7C033800 40820010
+54C6901A 7C843214
+4BFFFFE4 7D033214
+2C080000 41820034
+5463103A 7C841A14
+80640000 81050000
+7C634214 90640000
+38840004 38A50004
+38C6FFFF 2C060000
+4082FFE0 4BFFFFA8
+807E0014 00000000
+
+v1.02
+C2018130 00000011
+3CA08000 60A51884
+80A50000 2C050000
+41820070 809E0010
+80840004 3CE00000
+60E7FFFF A0650000
+A0C50002 38A50004
+7C033800 40820010
+54C6901A 7C843214
+4BFFFFE4 7D033214
+2C080000 41820034
+5463103A 7C841A14
+80640000 81050000
+7C634214 90640000
+38840004 38A50004
+38C6FFFF 2C060000
+4082FFE0 4BFFFFA8
+807E0014 00000000
+
+OLD PAL
+C2018374 00000011
+3CA08040 60A5BA84
+80A50000 2C050000
+41820070 809E0010
+80840004 3CE00000
+60E7FFFF A0650000
+A0C50002 38A50004
+7C033800 40820010
+54C6901A 7C843214
+4BFFFFE4 7D033214
+2C080000 41820034
+5463103A 7C841A14
+80640000 81050000
+7C634214 90640000
+38840004 38A50004
+38C6FFFF 2C060000
+4082FFE0 4BFFFFA8
+807E0014 00000000
+
+NEW PAL:
+At 80018374: Can use all local registers
+lis r5, 0x8040
+ori r5, r5, 0xBA84	# Stage patch location is 8040BA84
+lwz r5, 0(r5)		# Check the stage patch location
+cmpwi r5, 0
+beq DONE			# If blank, we don't have anything to do
+
+lwz r4, 0x10(r30)
+lwz r4, 4(r4)		# r4 is now address of the stage file (ptrStage)
+
+lis r7, 0
+ori r7, r7, 0xFFFF	# Start up the comparison variable so we know it's a numblocks diff
+
+LOOP:
+lhz r3, 0(r5)		# Get num words same into r3
+lhz r6, 2(r5)		# Get num words different into r6
+addi r5, r5, 4		# Shift ptrPatch to the words that are different
+cmpw r3, r7			# If 0xFFFF
+bne WORDS_SAME		# Then r6 is numblockssame
+cmpw r6, r7			# If numblocksame is also FFFF...
+bne BLOCKS_SAME
+addi r5, r5, 4		# ... skip next word (because it's probably 00000000 for PAL)
+b LOOP
+BLOCKS_SAME:
+slwi r6, r6, 18		# r6 = r6 * 0x10000 * 4 (the 4 is for the word size)
+add r4, r4, r6		# Shift ptrStage to go to the next block with differences
+b LOOP				# Go back so we can get the actual num words same and different
+
+WORDS_SAME:
+add r8, r3, r6		# Add the numWordsSame and Diff together into r8
+cmpwi r8, 0			# If both are 0
+beq DONE			# Then we're done
+
+slwi r3, r3, 2		# Multiply by 4 to get bytes same
+add r4, r4, r3		# Seek ptrStage to the next word different
+
+LOOP_PATCH:
+lwz r3, 0(r4)		# Get the original word from the stage
+lwz r8, 0(r5)		# Get the patch amount
+add r3, r3, r8		# Apply the patch
+stw r3, 0(r4)		# Save the patch
+addi r4, r4, 4		# Seek to next word in ptrStage
+addi r5, r5, 4		# Seek to next word in ptrPatch
+subi r6, r6, 1		# Decrement numWordsDiff
+cmpwi r6, 0			# If we're at 0 words different, we're done
+bne LOOP_PATCH
+b LOOP				# Apply the next words same
+
+DONE:
+lwz r3, 0x14(r30)	# Do what it normally does
+
+C2018374 00000013
+3CA08040 60A5BA84
+80A50000 2C050000
+41820080 809E0010
+80840004 3CE00000
+60E7FFFF A0650000
+A0C50002 38A50004
+7C033800 40820020
+7C063800 4082000C
+38A50004 4BFFFFE0
+54C6901A 7C843214
+4BFFFFD4 7D033214
+2C080000 41820034
+5463103A 7C841A14
+80640000 81050000
+7C634214 90640000
+38840004 38A50004
+38C6FFFF 2C060000
+4082FFE0 4BFFFF98
+807E0014 00000000
+
+
+
+
+
+Also: Disable trophy spawn on snag trophies if outside classic mode
+v1.00
+@ 80218744:
+lis r12, 0x8047
+ori r12,r12, 0x7D68		# 80477D68
+lbz r12,0(r12)
+cmpwi r12,3
+bne- 0x14
+lis r12,  0x802F
+ori r12,r12, 0x09D8		# 802F09D8
+mtctr r12
+bctrl
+
+C2218744 00000005
+3D808047 618C7D68
+898C0000 2C0C0003
+40820014 3D80802F
+618C09D8 7D8903A6
+4E800421 00000000
+
+v1.01
+@ 80219274:
+lis r12, 0x8047
+ori r12,r12, 0x9050		# 80479050
+lbz r12,0(r12)
+cmpwi r12,3
+bne- 0x14
+lis r12,  0x802F
+ori r12,r12, 0x160C		# 802F160C
+mtctr r12
+bctrl
+
+C2219274 00000005
+3D808047 618C9050
+898C0000 2C0C0003
+40820014 3D80802F
+618C160C 7D8903A6
+4E800421 00000000
+
+v1.02
+@ 802199FC:
+lis r12, 0x8047
+ori r12,r12, 0x9D30		# 80479D30
+lbz r12,0(r12)
+cmpwi r12,3
+bne- 0x14
+lis r12,  0x802F
+ori r12,r12, 0x2094		# 802F2094
+mtctr r12
+bctrl
+
+C22199FC 00000005
+3D808047 618C9D30
+898C0000 2C0C0003
+40820014 3D80802F
+618C2094 7D8903A6
+4E800421 00000000
+
+PAL
+@ 8021B8B0:
+lis r12, 0x8046
+ori r12,r12, 0xAB38		# 8046AB38
+lbz r12,0(r12)
+cmpwi r12,3
+bne- 0x14
+lis r12,  0x802F
+ori r12,r12, 0x2688		# 802F2688
+mtctr r12
+bctrl
+
+C221B8B0 00000005
+3D808046 618CAB38
+898C0000 2C0C0003
+40820014 3D80802F
+618C2688 7D8903A6
+4E800421 00000000
+
+
+
+
+New stages table entry: AAAACCCC DDDDEEEE
+AAAA - Original Stage ID
+CCCC - Omega Stage ID, 0 if it shouldn't change
+DDDD - Offset to DOL mods, 0 if there are no DOL mods
+EEEE - Offset to the stage patch, 0 if there is no stage patch
+
+Stage DOL Mods format:
+[entry 1] [entry 2] ... [entry n-1] [entry n] 00000000
+Entry format:
+[v1.00 addr] [v1.01 addr] [v1.02 addr] [alpha val] [omega val]
+
+
+Alternate stage thing:
+v1.00
+@ 8025A834:
+lbz r0, 0xB(r4)			# This is what it did before. r0 is now stageId
+lis r8, 0x8000
+ori r8, r8, 0x1884		# The stage patcher variable, in r8
+li r12, 0
+stw r12, 0(r8)			# Zero it out preemtively, in case there's no patch
+lis r9, 0x8000
+lbz r9, 0x7(r9)
+slwi r9, r9, 0x2		# Version number index, in r9
+lis r12, 0x8000
+ori r12, r12, 0x1888
+lwz r12, 0(r12)			# Get the omega toggle, in r12
+lis r11, 0x8045
+ori r11, r11, 0xF7B0	# Get stage omega table							# 8045F7B0
+# Except it's minus 8 to optimize for FIND_STAGE
+FIND_STAGE:
+lhzu r5, 8(r11)	# Get stage id, and update r11 to that position
+cmpwi r5, 0		# If stage id is 0, we've reached the end of the list
+beq DONE
+cmpw r5, r0		# Compare stageid to normal stage
+bne FIND_STAGE	# If not equal, go to the next one
+
+CHECK_DOL:
+lhz r5, 4(r11)	# Offset to the DOL Mods
+cmpwi r5, 0
+beq CHECK_ALPHA
+# Do the dol mods
+add r5, r5, r11		# r5 is now the address of the DOL Mods
+slwi r12, r12, 2	# Make r12 the Alpha/Omega index
+DOL_MOD_LOOP:
+lwz r6, 0(r5)		# First check to see if we're done
+cmpwi r6, 0
+beq CHECK_ALPHA
+lwzx r6, r5, r9		# r6 is now the address to write to, based on version
+addi r5, r5, 0xC	# Seek forward to values
+lwzx r7, r5, r12	# r7 is now the value to write, based on Alpha/Omega
+stw r7, 0(r6)		# Write the value
+addi r5, r5, 0x8	# Go to next set of addresses
+b DOL_MOD_LOOP
+
+CHECK_ALPHA:
+cmpwi r12, 0
+beq DONE
+
+CHECK_STAGE:
+lhz r5, 2(r11)
+cmpwi r5, 0
+beq CHECK_PATCH
+mr r0, r5		# Set the alt stage
+
+CHECK_PATCH:
+lhz r5, 6(r11)	# Offset to the Patch
+cmpwi r5, 0
+beq DONE
+add r5, r5, r11	# If we do have a patch, go to that address
+stw r5, 0(r8)	# Store it in the stage patcher variable
+DONE:
+
+C225A834 00000016
+8804000B 3D008000
+61081884 39800000
+91880000 3D208000
+89290007 5529103A
+3D808000 618C1888
+818C0000 3D608045
+616BF7B0 A4AB0008
+2C050000 41820070
+7C050000 4082FFF0
+A0AB0004 2C050000
+41820030 7CA55A14
+558C103A 80C50000
+2C060000 4182001C
+7CC5482E 38A5000C
+7CE5602E 90E60000
+38A50008 4BFFFFE0
+2C0C0000 41820028
+A0AB0002 2C050000
+41820008 7CA02B78
+A0AB0006 2C050000
+4182000C 7CA55A14
+90A80000 00000000
+
+v1.01
+@ 8025B3A4
+lbz r0, 0xB(r4)			# This is what it did before. r0 is now stageId
+lis r8, 0x8000
+ori r8, r8, 0x1884		# The stage patcher variable, in r8
+li r12, 0
+stw r12, 0(r8)			# Zero it out preemtively, in case there's no patch
+lis r9, 0x8000
+lbz r9, 0x7(r9)
+slwi r9, r9, 0x2		# Version number index, in r9
+lis r12, 0x8000
+ori r12, r12, 0x1888
+lwz r12, 0(r12)			# Get the omega toggle, in r12
+lis r11, 0x8046
+ori r11, r11, 0x0A98	# Get stage omega table							# 80460A98
+Rest is same
+
+C225B3A4 00000016
+8804000B 3D008000
+61081884 39800000
+91880000 3D208000
+89290007 5529103A
+3D808000 618C1888
+818C0000 3D608046
+616B0A98 A4AB0008
+2C050000 41820070
+7C050000 4082FFF0
+A0AB0004 2C050000
+41820030 7CA55A14
+558C103A 80C50000
+2C060000 4182001C
+7CC5482E 38A5000C
+7CE5602E 90E60000
+38A50008 4BFFFFE0
+2C0C0000 41820028
+A0AB0002 2C050000
+41820008 7CA02B78
+A0AB0006 2C050000
+4182000C 7CA55A14
+90A80000 00000000
+
+v1.02
+@ 8025BB40: r5 to r12
+lbz r0, 0xB(r4)			# This is what it did before. r0 is now stageId
+lis r8, 0x8000
+ori r8, r8, 0x1884		# The stage patcher variable, in r8
+li r12, 0
+stw r12, 0(r8)			# Zero it out preemtively, in case there's no patch
+lis r9, 0x8000
+lbz r9, 0x7(r9)
+slwi r9, r9, 0x2		# Version number index, in r9
+lis r12, 0x8000
+ori r12, r12, 0x1888
+lwz r12, 0(r12)			# Get the omega toggle, in r12
+lis r11, 0x8046
+ori r11, r11, 0x1778	# Get stage omega table							# 80461778
+Rest is same
+
+C225BB40 00000016
+8804000B 3D008000
+61081884 39800000
+91880000 3D208000
+89290007 5529103A
+3D808000 618C1888
+818C0000 3D608046
+616B1778 A4AB0008
+2C050000 41820070
+7C050000 4082FFF0
+A0AB0004 2C050000
+41820030 7CA55A14
+558C103A 80C50000
+2C060000 4182001C
+7CC5482E 38A5000C
+7CE5602E 90E60000
+38A50008 4BFFFFE0
+2C0C0000 41820028
+A0AB0002 2C050000
+41820008 7CA02B78
+A0AB0006 2C050000
+4182000C 7CA55A14
+90A80000 00000000
+
+
+
+
+
+Updated for PAL version
+New stages table entry: AAAACCCC DDDDEEEE
+AAAA - Original Stage ID
+CCCC - Omega Stage ID, 0 if it shouldn't change
+DDDD - Second half of DOL mods address, 0 if there are no DOL mods
+EEEE - Second hald of stage patch address, 0 if there is no stage patch
+The addresses start with 8045, as that's the range that the data is in the memory card.
+
+Stage DOL Mods format:
+[entry 1] [entry 2] ... [entry n-1] [entry n] 00000000
+Entry format:
+[address] [alpha val] [omega val]
+
+
+Alternate stage thing:
+PAL
+@ 8025C66C:
+lbz r0, 0xB(r4)			# This is what it did before. r0 is now stageId
+lis r8, 0x8040
+ori r8, r8, 0xBA84		# The stage patcher variable, in r8		8040BA84
+li r12, 0
+stw r12, 0(r8)			# Zero it out preemtively, in case there's no patch
+lis r12, 0x8041
+lwz r12, -0x4578(r12)			# Get the omega toggle, in r12		8040BA88
+
+lis r11, 0x8040
+ori r11, r11, 0xBEBC	# Get stage omega table				# 8040BEC4 - 8
+# Except it's minus 8 to optimize for FIND_STAGE
+FIND_STAGE:
+lhzu r5, 8(r11)	# Get stage id, and update r11 to that position
+cmpwi r5, 0		# If stage id is 0, we've reached the end of the list
+beq DONE
+cmpw r5, r0		# Compare stageid to normal stage
+bne FIND_STAGE	# If not equal, go to the next one
+
+CHECK_DOL:
+lhz r5, 4(r11)	# Second half of dol mods address
+cmpwi r5, 0
+beq CHECK_ALPHA
+# Do the dol mods
+oris r5, r5, 0x8045	# r5 is now the address of the DOL Mods
+slwi r12, r12, 2	# Make r12 the Alpha/Omega index
+DOL_MOD_LOOP:
+lwz r6, 0(r5)		# r6 is now the address to write to, based on version
+cmpwi r6, 0
+beq CHECK_ALPHA		# If 0, we're done
+addi r5, r5, 0x4	# Seek forward to values
+lwzx r7, r5, r12	# r7 is now the value to write, based on Alpha/Omega
+stw r7, 0(r6)		# Write the value
+addi r5, r5, 0x8	# Go to next set of addresses
+b DOL_MOD_LOOP
+
+CHECK_ALPHA:
+cmpwi r12, 0
+beq DONE
+
+CHECK_STAGE:
+lhz r5, 2(r11)
+cmpwi r5, 0
+beq CHECK_PATCH
+mr r0, r5		# Set the alt stage
+
+CHECK_PATCH:
+lhz r5, 6(r11)	# Second half of Patch address
+cmpwi r5, 0
+beq DONE
+oris r5, r5, 0x8045	# If we do have a patch, go to that address
+stw r5, 0(r8)		# Store it in the stage patcher variable
+DONE:
+
+C225C66C 00000014
+8804000B 3D008040
+6108BA84 39800000
+91880000 3D808041
+818CBA88 3D608040
+616BBEBC A4AB0008
+2C050000 4182006C
+7C050000 4082FFF0
+A0AB0004 2C050000
+4182002C 64A58045
+558C103A 80C50000
+2C060000 41820018
+38A50004 7CE5602E
+90E60000 38A50008
+4BFFFFE4 2C0C0000
+41820028 A0AB0002
+2C050000 41820008
+7CA02B78 A0AB0006
+2C050000 4182000C
+64A58045 90A80000
+60000000 00000000

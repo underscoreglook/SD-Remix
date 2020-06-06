@@ -1,0 +1,1307 @@
+Controller data is at
+8046B108 for P1. Every subsequent player is 0xC away.
+The second byte contains the L/R value. 0x40 means L is pressed, 0x20 means R is pressed
+
+rlwinm. rD, rS, 0, bit, bit checks the bit (seemingly starting from 0) and compares it to 0.
+
+We will want to hook into 8025A3C4.
+
+Based on Dan's code, we can use the following registers for free:
+r15, r16, r17, r18, r19, r20, r21, r22, r23
+We're going to repurpose one of the debug option variables: 803fa3d0
+
+# First, OR all of the controller data:
+lis r15, 0x8046
+ori r15, r15, 0xB108
+li r16, 0
+li r17, 0
+CONTROLLER_LOOP:
+lwzx r18, r15, r16
+or r17, r17, r18
+addi r16, r16, 0xC
+cmpwi r16, 0x25
+ble CONTROLLER_LOOP
+# r17 is now the combined controller data for the 4 players
+
+# Next, check if omega or alpha are enabled (alpha is 0, omega is 1):
+lis r16, 0x803f
+ori r16, r16, 0xa3d0   # r16 is now the omega/alpha toggle
+lwz r15, 0(r16)
+cmpwi r15, 0
+bne OMEGA
+
+# If we're in alpha and R is pressed, we want to go to Omega
+ALPHA:
+rlwinm. r15, r17, 0, 10, 10
+beq RETURN    # If not pressed, just leave
+li r15, 1     # Otherwize, set to Omega...
+stw r15, 0(r16)
+li r3, 8
+b PLAY_SOUND  # ... and play indication sound
+
+# If we're in omega and L is pressed, we want to go to Alpha
+OMEGA:
+rlwinm. r15, r17, 0, 9, 9
+beq RETURN
+li r15, 0
+stw r15, 0(r16)
+li r3, 9
+
+PLAY_SOUND:
+lis r15, 0x8002
+ori r15, r15, 0x4030
+mtctr r15
+bctrl
+
+RETURN:
+# Last, repeat the old code:
+nop  # Replace with FC010040
+
+0 is back
+1 is Forward
+2 is select
+3 is "Wrong"
+4 is tingaling, which is... okay
+5 is PEW! which is great for going to omega
+6 is snapshot
+7 is siren
+8 is pick up
+9 is drop
+A is eat food
+
+
+The resulting Gecko Code is:
+C225A3C4 00000010
+3DE08046 61EFB108
+3A000000 3A200000
+7E4F802E 7E319378
+3A10000C 2C100025
+4081FFF0 3E00803F
+6210A3D0 81F00000
+2C0F0000 4082001C
+562F0295 41820038
+39E00001 91F00000
+38600008 48000018
+562F0253 41820020
+39E00000 91F00000
+38600009 3DE08002
+61EF4030 7DE903A6
+4E800421 FC010040
+60000000 00000000
+
+Customizable:
+C225A3C4 00000010
+3DE08046 61EFB108
+3A000000 3A200000
+7E4F802E 7E319378
+3A10000C 2C100025
+4081FFF0 3E00803F
+6210A3D0 81F00000
+2C0F0000 4082001C
+562F0295 41820038
+39E00001 91F00000
+3860000X 48000018 <--- To Omega
+562F0253 41820020
+39E00000 91F00000
+3860000Y 3DE08002 <--- To Alpha
+61EF4030 7DE903A6
+4E800421 FC010040
+60000000 00000000
+
+
+
+Next we want to use ShamRock's color changing code for SSS, except we need to modify it:
+location is 8025A3C0
+lis r16, 0x803f
+ori r16, r16, 0xa3d0
+lwz r16, 0(r16)
+cmpwi r16, 0
+bne OMEGA
+ALPHA:
+lis r16,0xFF
+b CHANGE_COLOR
+OMEGA:
+lis r16,0x33
+ori r16,r16,0x66
+CHANGE_COLOR:
+lis r17,-32691
+ori r17,r17,30427
+lbz r17,0(r17)
+mulli r17,r17,3
+li r18,0
+rlwinm. r19,r16,0,24,31
+add r19,r19,r17
+cmpwi r19,255
+ble- 0x08
+li r19,255
+rlwinm. r16,r16,0,0,23
+or r16,r16,r19
+rlwinm. r16,r16,24,0,31
+addi r18,r18,1
+cmpwi r18,3
+blt- 0xFFFFFFD8
+lis r17,-32566
+ori r17,r17,13680
+stw r16,0(r17)
+stw r16,4(r17)
+lfs f0,28(r1)
+Resulting in:
+C225A3C0 00000013
+3E00803F 6210A3D0
+82100000 2C100000
+4082000C 3E0000FF
+4800000C 3E000033
+62100066 822DC038
+1E310003 3A400000
+5613063F 7E738A14
+2C1300FF 40810008
+3A6000FF 5610002F
+7E109B78 5610C03F
+3A520001 2C120003
+41A0FFD8 822D8840
+3A311CB0 8A310016
+2C110001 41820010
+3E2080CA 6231E610
+4800000C 3E2080CA
+62313570 92110000
+92110004 C001001C
+480C8D00 00000000
+
+
+
+
+
+804eea18
+
+Next, we want to hook into where the stage files are loaded and change the Gr to a Go and back.
+801C06F4 is where we want to hook into
+We can use r3, r5, r6, r7, r8, r9, and r10
+r4 HAS to be kept what it is, which is the address of the filename:
+
+# Get the string location:
+li r0, 0
+lis r3, 0x803f
+ori r3, r3, 0xa3d0
+lwz r3, 0(r3)
+cmpwi r3, 0
+beq ALPHA
+# Store the r4 into the stack
+li r3, 0x6f
+stb r3, 2(r4)
+stw r4, 0x4(r1)
+addi r1, r1, -0x4
+mr r3, r4
+lis r5, 0x8001
+ori r5, r5, 0x6204
+mtctr r5
+bctrl
+lis r5, 0x8033
+ori r5, r5, 0x796C
+mtctr r5
+bctrl
+addi r1, r1, 0x4
+lwz r4, 0x4(r1)
+cmpwi r3, 0
+bge END
+b END
+ALPHA:
+li r3, 0x72
+stb r3, 2(r4)
+END:
+
+C21C06F4 0000000D
+38000000 3C60803F
+6063A3D0 80630000
+2C030000 41820048
+3860006F 98640002
+90810004 3821FFFC
+7C832378 3CA08001
+60A56204 7CA903A6
+4E800421 3CA08033
+60A5796C 7CA903A6
+4E800421 38210004
+80810004 2C030000
+4080000C 38600072
+98640002 00000000
+
+
+Credits:
+Milun with stage mods
+Zauron, Achilles, FliesKiller with Stage DOL mods
+ShamRock change color at SSS
+
+
+
+
+Next Offset:
+3C59 which is Game.toc 0x75D1
+3978 is start of string section
+
+
+
+GoGb.dat	75D1	3C59
+GoBb.dat	75DA	3C62
+GoGr.dat	75E3	3C6B
+GoFs.dat	75EC	3C74
+GoOy.dat	75F5	3C7D
+GoCs.dat	75FE	3C86
+GoI2.dat	7607	3C8F
+GoNBa.dat	7610	3C98
+GoNLa.dat	761A	3CA2
+GoI1.dat	7624	3CAC
+GoYt.dat	762D	3CB5
+GoKr.dat	7636	3CBE
+GoKg.dat	763F	3CC7
+GoSh.dat	7648	3CD0
+
+
+The next thing to do is to make Gecko codes for all of the Omega style hacks for other stages:
+It each of these needs to look at the following toggle: 803fa3d0
+The basic template is:
+
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq ALPHA
+OMEGA:
+
+b RETURN
+ALPHA:
+
+RETURN:
+
+
+
+Peach's Castle Disable Switches and Bullet Bill (Zauron)
+-----------------------------------------------
+At 801CD8A8:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq ALPHA
+OMEGA:
+blr
+ALPHA:
+mflr r0
+C21CD8A8 00000004
+3C80803F 6084A3D0
+80840000 2C040000
+41820008 4E800020
+7C0802A6 00000000
+
+Disable Shy Guys on Yoshi's Story (Zauron)
+---------------------------------
+At 801E3348:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne OMEGA
+lis r12, 0x801E
+ori r12, r12, 0x3418
+mtctr r12
+bctrl
+OMEGA:
+C21E3348 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D80801E
+618C3418 7D8903A6
+4E800421 00000000
+
+Disable Rising Platforms and Water Jets on Fountain of Dreams (Zauron)
+-------------------------------------------------------------
+At 801CC8AC:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq ALPHA
+OMEGA:
+nop # Replace with FC000028
+b RETURN
+ALPHA:
+fmadds f0, f0, f31, f0
+RETURN:
+C21CC8AC 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+4182000C FC000028
+48000008 EC0007FA
+60000000 00000000
+----
+At 801CC8B4:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq ALPHA
+OMEGA:
+lis r12, 0x801C
+ori r12, r12, 0xC9F0
+mtctr r12
+bctrl
+ALPHA:
+lwz r0, 0x14(r27)
+RETURN:
+C21CC8B4 00000006
+3D80803F 618CA3D0
+818C0000 2C0C0000
+41820014 3D80801C
+618CC9F0 7D8903A6
+4E800421 801B0014
+60000000 00000000
+
+Disable Ship Spawn on & Great Fox's Gun on Corneria [Zauron]
+------------------------------------------------------------
+At 801DDA48:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x801D
+ori r12, r12, 0xCE1C
+mtctr r12
+bctrl
+RETURN:
+C21DDA48 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D80801D
+618CCE1C 7D8903A6
+4E800421 00000000
+----
+At 801E1390:
+blt RETURN
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq ALPHA
+OMEGA:
+lis r12, 0x801E
+ori r12, r12, 0x17C0
+mtctr r12
+bctr
+ALPHA:
+lis r12, 0x801E
+ori r12, r12, 0x13A8
+mtctr r12
+bctr
+RETURN:
+C21E1390 00000008
+41800038 3D80803F
+618CA3D0 818C0000
+2C0C0000 41820014
+3D80801E 618C17C0
+7D8903A6 4E800420
+3D80801E 618C13A8
+7D8903A6 4E800420
+60000000 00000000
+
+Jungle Japes Everything is disabled and immobile (water, doodads, Klap Traps)(1.02)[flieskiller]
+-----------------------------------------------------------------------------------
+At 80202c98:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+mulli     r0, r28, 0x14
+RETURN:
+C2202C98 00000004
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820008 1C1C0014
+60000000 00000000
+
+
+8025ad74 is alt
+Various omega toggles (Venom -> Snag Trophies, Icicle -> Brinstar Escape, Flatzone -> Majora's, Cruise -> Goomba, Floats -> Entei) [_glook]
+--------------------------------------------
+At 8025BB40:
+lbz r0, 0xB(r4)
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq RETURN
+
+CHECK_VENOM:
+cmpwi r0, 0x16
+bne CHECK_ICICLE
+li r0, 0x53
+b RETURN
+
+CHECK_ICICLE:
+cmpwi r0, 0x19
+bne CHECK_FLATZONE
+li r0, 0x42
+b RETURN
+
+CHECK_FLATZONE:
+cmpwi r0, 0x1B
+bne CHECK_CRUISE
+li r0, 0xF8
+b RETURN
+
+CHECK_CRUISE:
+cmpwi r0, 0x0B
+bne CHECK_FLOATS
+li r0, 0xD7
+b RETURN
+
+CHECK_FLOATS:
+cmpwi r0, 0x17
+bne RETURN
+li r0, 0xE3
+
+RETURN:
+C225BB40 0000000D
+8804000B 3D80803F
+618CA3D0 818C0000
+2C0C0000 41820050
+2C000016 4082000C
+38000053 48000040
+2C000019 4082000C
+38000042 48000030
+2C00001B 4082000C
+380000F8 48000020
+2C00000B 4082000C
+380000D7 48000010
+2C000017 40820008
+380000E3 00000000
+----
+Disable Trophy Spawn if in versus mode (Snag the Trophies Stage) [wparam, _glook]
+At 802199FC:
+lis r12, 0x8047
+ori r12, r12, 0x9D30
+lbz r12, 0(r12)
+cmpwi r12, 0x3
+bne RETURN
+CLASSIC:
+lis r12, 0x802F
+ori r12, r12, 0x2094
+mtctr r12
+bctrl
+RETURN:
+C22199FC 00000005
+3D808047 618C9D30
+898C0000 2C0C0003
+40820014 3D80802F
+618C2094 7D8903A6
+4E800421 00000000
+
+Disable Rising Lava on Brinstar [Zauron]
+----------------------------------------
+At 801D99E0:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+beq RETURN
+blr
+RETURN:
+mflr r0
+C21D99E0 00000004
+3D80803F 618CA3D0
+818C0000 2C0C0000
+41820008 4E800020
+7C0802A6 00000000
+
+Onett Disable cars and Remove Drug Store platforms [flieskiller]
+----------------------------------------------------------------
+At 801e379c:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x801E
+ori r12, r12, 0x37F4
+mtctr r12
+bctrl
+RETURN:
+C21E379C 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D80801E
+618C37F4 7D8903A6
+4E800421 00000000
+----
+At 801e3794:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x801E
+ori r12, r12, 0x37F4
+mtctr r12
+bctrl
+RETURN:
+C21E3794 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D80801E
+618C37F4 7D8903A6
+4E800421 00000000
+
+Mute City Disable cars [flieskiller]
+------------------------------------
+At 801f0188:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x801F
+ori r12, r12, 0x1A34
+mtctr r12
+bctrl
+RETURN:
+C21F0188 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D80801F
+618C1A34 7D8903A6
+4E800421 00000000
+
+Disable Stage Transformations on Pokemon Stadium [Zauron]
+---------------------------------------------------------
+At 801D1548:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x801D
+ori r12, r12, 0x4548
+mtctr r12
+bctrl
+RETURN:
+C21D1548 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D80801D
+618C4548 7D8903A6
+4E800421 00000000
+
+Disable Final Destination Background Transitions [Achilles, Dan Salvato]
+------------------------------------------------------------------------
+At 8021AAE4:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x8021
+ori r12, r12, 0xB2E8
+mtctr r12
+bctrl
+RETURN:
+C221AAE4 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D808021
+618CB2E8 7D8903A6
+4E800421 00000000
+
+Disable Tree Blow on Dreamland [Zauron]
+---------------------------------------
+At 80211444:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x8021
+ori r12, r12, 0x19E0
+mtctr r12
+bctr
+RETURN:
+C2211444 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D808021
+618C19E0 7D8903A6
+4E800420 00000000
+
+Kongo Jungle 64 (past stage) Remove Barrel [flieskiller]
+--------------------------------------------------------
+At 8020f4c0:
+lis r12, 0x803f
+ori r12, r12, 0xa3d0
+lwz r12, 0(r12)
+cmpwi r12, 0
+bne RETURN
+ALPHA:
+lis r12, 0x8020
+ori r12, r12, 0xF52C
+mtctr r12
+bctrl
+RETURN:
+C220F4C0 00000005
+3D80803F 618CA3D0
+818C0000 2C0C0000
+40820014 3D808020
+618CF52C 7D8903A6
+4E800421 00000000
+
+
+8025A3C4	256FA4	481A0024
+8025A3C0	256FA0	481A009C
+801C06F4	1BD2D4	48239DE4
+801CD8A8	1CA488	4822CC98
+801E3348	1DFF28	48217218
+801CC8AC	1C948C	4822DCDC
+801CC8B4	1C9494	4822DCF8
+801DDA48	1DA628	4821CB90
+801E1390	1DDF70	48219270
+80202C98	1FF878	481F79A4
+8025BB40	258720	4819EB18
+802199FC	2165DC	481E0CC4
+801D99E0	1D65C0	48220D08
+801E379C	1E037C	48216F6C
+801E3794	1E0374	48216F9C
+801F0188	1ECD68	4820A5D0
+801D1548	1CE128	48229238
+8021AAE4	2176C4	481DFCC4
+80211444	20E024	481E938C
+8020F4C0	20C0A0	481EB338
+
+
+
+
+27:51:061 BreakPoints.cpp:197 I[MI]: CHK 8025a0ac ( --- ) Read8 02 at 803f06d8 ( --- )
+27:51:061 BreakPoints.cpp:197 I[MI]: CHK 8025a4c0 ( --- ) Read8 02 at 803f06d8 ( --- )
+27:51:372 BreakPoints.cpp:197 I[MI]: CHK 80259e4c ( --- ) Read8 02 at 803f06d8 ( --- )
+27:52:883 BreakPoints.cpp:197 I[MI]: CHK 8025a0f8 ( --- ) Read8 00 at 803f06d9 ( --- )
+27:52:884 BreakPoints.cpp:197 I[MI]: CHK 80259fc4 ( --- ) Read8 02 at 803f06d8 ( --- )
+27:52:884 BreakPoints.cpp:197 I[MI]: CHK 80259fe0 ( --- ) Read8 00 at 803f06d9 ( --- )
+27:53:200 BreakPoints.cpp:197 I[MI]: CHK 8025a26c ( --- ) Read8 00 at 803f06d9 ( --- )
+
+31:38:143 BreakPoints.cpp:197 I[MI]: CHK 8025bb28 ( --- ) Read8 04 at 803f06db ( --- )
+
+
+Stage ID * 0x1C
+
+
+The eventual product of the stage id is used:
+51:40:829 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 00 at 80432088 ( --- )
+51:40:829 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 00 at 80432089 ( --- )
+51:40:829 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 00 at 8043208a ( --- )
+51:40:829 BreakPoints.cpp:197 I[MI]: CHK 800182a8 ( --- ) Read32 00000004 at 80432088 ( --- )
+51:40:843 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 00 at 80432088 ( --- )
+51:40:843 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 00 at 80432089 ( --- )
+51:40:843 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 00 at 8043208a ( --- )
+51:40:843 BreakPoints.cpp:197 I[MI]: CHK 803238dc ( --- ) Read8 04 at 8043208b ( --- )
+
+
+80018254 is important for stage loading
+
+
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 2f at 803e6500 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 2f at 803e6500 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 47 at 803e6501 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 47 at 803e6501 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 72 at 803e6502 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 72 at 803e6502 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 4f at 803e6503 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 4f at 803e6503 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 79 at 803e6504 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 79 at 803e6504 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 2e at 803e6505 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80016298 ( --- ) Read8 64 at 803e6506 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80325aa8 ( --- ) Read32 2f47724f at 803e6500 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 792e6461 at 803e6504 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 74000000 at 803e6508 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80325ae0 ( --- ) Read8 74 at 803e6508 ( --- )
+00:25:760 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 00 at 803e6509 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 2f at 803e6500 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 2f at 803e6500 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 47 at 803e6501 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 47 at 803e6501 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 72 at 803e6502 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 72 at 803e6502 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 4f at 803e6503 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 4f at 803e6503 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 79 at 803e6504 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016264 ( --- ) Read8 79 at 803e6504 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016278 ( --- ) Read8 2e at 803e6505 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80016298 ( --- ) Read8 64 at 803e6506 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80325aa8 ( --- ) Read32 2f47724f at 803e6500 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 792e6461 at 803e6504 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80325acc ( --- ) Read32 74000000 at 803e6508 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80325ae0 ( --- ) Read8 74 at 803e6508 ( --- )
+00:26:641 BreakPoints.cpp:197 I[MI]: CHK 80325af0 ( --- ) Read8 00 at 803e6509 ( --- )
+
+
+
+The anatomy of a stage load:
+The stage select screen runs the function 8025B850. This is called every frame.
+
+On the very last frame of the stage load, this code is called:
+8025BB28
+Then it just goes back to runScene. Sigh.
+
+
+80016204 checks files in general, even on startup.
+800178E8 also checks files, and calls the above function.
+
+801c06e8 is run once on startup as well.
+
+
+The stage filename is read from:
+801c06e8 ( --- ) Read32 803e1198 at 803e11ac ( --- )
+801c07b4 ( --- ) Read32 803e1198 at 803e11ac ( --- )
+
+loadScene
+801a4120
+	8025BB5C - Probably function for loading the stage
+	8025bbbc
+		80018254
+		8001870c
+			80017960
+			800179a4
+				802251B4
+				802251d4
+					801C06B8
+					801c06e8 - First read location (word 0x8 of a data structure)
+
+Few frames pass, and then:
+
+loadScene
+801a40e4
+	8016E934
+	8016e948
+		8016E730
+		8016e7fc
+			802251E8
+			80225238
+				801C0754
+				801c07b4 - Second read location (also 0x8 of a data structure)
+				
+				
+If the filename is unexpected, the second time doesn't run. To figure out why let's look at what happens in the actual function of 8033798C:
+Normal:
+
+Function 8033796C
+returns = 000004bc or something when file is found
+ffffffff when file is not found
+This is incredibly useful
+Must be called after 80016204, which takes in the filename in r3
+
+
+
+				
+CHK 801c06dc ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c07a0 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c0864 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c1ed8 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c46a8 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c17a8 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c17a8 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c17a8 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c17a8 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c2f6c ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c0f98 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+CHK 801c3044 ( --- ) Read32 803e11a4 at 803dfee4 ( --- )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Alpha/Omega Toggle:
+-------------------
+
+v1.00
+@ 80259114:
+lis r15, 0x8046
+ori r15, r15, 0x9134	# 80469134
+li r16, 0
+li r17, 0
+CONTROLLER_LOOP:
+lwzx r18, r15, r16
+or r17, r17, r18
+addi r16, r16, 0xC
+cmpwi r16, 0x25
+ble CONTROLLER_LOOP
+# r17 is now the combined controller data for the 4 players
+# Next, check if omega or alpha are enabled (alpha is 0, omega is 1):
+lis r16, 0x8000
+ori r16, r16, 0x1888   # r16 is now the omega/alpha toggle
+lwz r15, 0(r16)
+cmpwi r15, 0
+bne OMEGA
+# If we're in alpha and R is pressed, we want to go to Omega
+ALPHA:
+rlwinm. r15, r17, 0, 10, 10
+beq RETURN    # If not pressed, just leave
+li r15, 1     # Otherwize, set to Omega...
+stw r15, 0(r16)
+li r3, 8
+b PLAY_SOUND  # ... and play indication sound
+# If we're in omega and L is pressed, we want to go to Alpha
+OMEGA:
+rlwinm. r15, r17, 0, 9, 9
+beq RETURN
+li r15, 0
+stw r15, 0(r16)
+li r3, 9
+PLAY_SOUND:
+lis r15, 0x8002
+ori r15, r15, 0x3FB0	# 80023FB0
+mtctr r15
+bctrl
+RETURN:
+# Last, repeat the old code:
+nop  # Replace with FC010040
+
+C2259114 00000010
+3DE08046 61EF9134
+3A000000 3A200000
+7E4F802E 7E319378
+3A10000C 2C100025
+4081FFF0 3E008000
+62101888 81F00000
+2C0F0000 4082001C
+562F0295 41820038
+39E00001 91F00000
+38600008 48000018
+562F0253 41820020
+39E00000 91F00000
+38600009 3DE08002
+61EF3FB0 7DE903A6
+4E800421 FC010040
+60000000 00000000
+
+v1.01
+@ 80259C28:
+lis r15, 0x8046
+ori r15, r15, 0xA428	# 8046A428
+li r16, 0
+li r17, 0
+CONTROLLER_LOOP:
+lwzx r18, r15, r16
+or r17, r17, r18
+addi r16, r16, 0xC
+cmpwi r16, 0x25
+ble CONTROLLER_LOOP
+# r17 is now the combined controller data for the 4 players
+# Next, check if omega or alpha are enabled (alpha is 0, omega is 1):
+lis r16, 0x8000
+ori r16, r16, 0x1888   # r16 is now the omega/alpha toggle
+lwz r15, 0(r16)
+cmpwi r15, 0
+bne OMEGA
+# If we're in alpha and R is pressed, we want to go to Omega
+ALPHA:
+rlwinm. r15, r17, 0, 10, 10
+beq RETURN    # If not pressed, just leave
+li r15, 1     # Otherwize, set to Omega...
+stw r15, 0(r16)
+li r3, 8
+b PLAY_SOUND  # ... and play indication sound
+# If we're in omega and L is pressed, we want to go to Alpha
+OMEGA:
+rlwinm. r15, r17, 0, 9, 9
+beq RETURN
+li r15, 0
+stw r15, 0(r16)
+li r3, 9
+PLAY_SOUND:
+lis r15, 0x8002
+ori r15, r15, 0x4030	# 80024030
+mtctr r15
+bctrl
+RETURN:
+# Last, repeat the old code:
+nop  # Replace with FC010040
+
+C2259C28 00000010
+3DE08046 61EFA428
+3A000000 3A200000
+7E4F802E 7E319378
+3A10000C 2C100025
+4081FFF0 3E008000
+62101888 81F00000
+2C0F0000 4082001C
+562F0295 41820038
+39E00001 91F00000
+38600008 48000018
+562F0253 41820020
+39E00000 91F00000
+38600009 3DE08002
+61EF4030 7DE903A6
+4E800421 FC010040
+60000000 00000000
+
+v1.02
+@ 8025A3C4:
+lis r15, 0x8046
+ori r15, r15, 0xB108	# 8046B108
+li r16, 0
+li r17, 0
+CONTROLLER_LOOP:
+lwzx r18, r15, r16
+or r17, r17, r18
+addi r16, r16, 0xC
+cmpwi r16, 0x25
+ble CONTROLLER_LOOP
+# r17 is now the combined controller data for the 4 players
+# Next, check if omega or alpha are enabled (alpha is 0, omega is 1):
+lis r16, 0x8000
+ori r16, r16, 0x1888   # r16 is now the omega/alpha toggle
+lwz r15, 0(r16)
+cmpwi r15, 0
+bne OMEGA
+# If we're in alpha and R is pressed, we want to go to Omega
+ALPHA:
+rlwinm. r15, r17, 0, 10, 10
+beq RETURN    # If not pressed, just leave
+li r15, 1     # Otherwize, set to Omega...
+stw r15, 0(r16)
+li r3, 8
+b PLAY_SOUND  # ... and play indication sound
+# If we're in omega and L is pressed, we want to go to Alpha
+OMEGA:
+rlwinm. r15, r17, 0, 9, 9
+beq RETURN
+li r15, 0
+stw r15, 0(r16)
+li r3, 9
+PLAY_SOUND:
+lis r15, 0x8002
+ori r15, r15, 0x4030	# 80024030
+mtctr r15
+bctrl
+RETURN:
+# Last, repeat the old code:
+nop  # Replace with FC010040
+
+C225A3C4 00000010
+3DE08046 61EFB108
+3A000000 3A200000
+7E4F802E 7E319378
+3A10000C 2C100025
+4081FFF0 3E008000
+62101888 81F00000
+2C0F0000 4082001C
+562F0295 41820038
+39E00001 91F00000
+38600008 48000018
+562F0253 41820020
+39E00000 91F00000
+38600009 3DE08002
+61EF4030 7DE903A6
+4E800421 FC010040
+60000000 00000000
+
+PAL
+@ 8025AEFC:
+lis r15, 0x8045
+ori r15, r15, 0xBF10	# 8045BF10
+li r16, 0
+li r17, 0
+CONTROLLER_LOOP:
+lwzx r18, r15, r16
+or r17, r17, r18
+addi r16, r16, 0xC
+cmpwi r16, 0x25
+ble CONTROLLER_LOOP
+# r17 is now the combined controller data for the 4 players
+# Next, check if omega or alpha are enabled (alpha is 0, omega is 1):
+lis r16, 0x8040
+ori r16, r16, 0xBA88   # r16 is now the omega/alpha toggle  8040BA88
+lwz r15, 0(r16)
+cmpwi r15, 0
+bne OMEGA
+# If we're in alpha and R is pressed, we want to go to Omega
+ALPHA:
+rlwinm. r15, r17, 0, 10, 10
+beq RETURN    # If not pressed, just leave
+li r15, 1     # Otherwize, set to Omega...
+stw r15, 0(r16)
+li r3, 8
+b PLAY_SOUND  # ... and play indication sound
+# If we're in omega and L is pressed, we want to go to Alpha
+OMEGA:
+rlwinm. r15, r17, 0, 9, 9
+beq RETURN
+li r15, 0
+stw r15, 0(r16)
+li r3, 9
+PLAY_SOUND:
+lis r15, 0x8002
+ori r15, r15, 0x42F0	# 800242F0
+mtctr r15
+bctrl
+RETURN:
+# Last, repeat the old code:
+nop  # Replace with FC010040
+
+C225AEFC 00000010
+3DE08045 61EFBF10
+3A000000 3A200000
+7E4F802E 7E319378
+3A10000C 2C100025
+4081FFF0 3E008040
+6210BA88 81F00000
+2C0F0000 4082001C
+562F0295 41820038
+39E00001 91F00000
+38600008 48000018
+562F0253 41820020
+39E00000 91F00000
+38600009 3DE08002
+61EF42F0 7DE903A6
+4E800421 FC010040
+60000000 00000000
+
+
+
+
+
+
+
+
+Color Change
+------------
+v1.00
+@ 802590B4:
+lis r16, 0x8000
+ori r16,r16, 0x1888		# Alpha/Omega toggle
+lwz r16,0(r16)
+cmpwi r16,0
+bne OMEGA
+ALPHA:
+lis r16,0xFF
+b CHANGE_COLOR
+OMEGA:
+lis r16,0x33
+ori r16,r16,0x66
+CHANGE_COLOR:
+lwz r17,-0x3FD0(r13)	# FRAME TIMER
+mulli r17,r17,3
+li r18,0
+LOOP:
+rlwinm. r19,r16,0,24,31
+add r19,r19,r17
+cmpwi r19,255
+ble- 0x08
+li r19,255
+rlwinm. r16,r16,0,0,23
+or r16,r16,r19
+rlwinm. r16,r16,24,0,31
+addi r18,r18,1
+cmpwi r18,3
+blt- LOOP
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0xE(r17)
+cmpwi r17, 1
+beq LANG_ENG  # If 1, then we're usd
+lis r17, 0x80CA
+ori r17,r17, 0xC490		# 80CAC490
+b STORE_COLOR
+LANG_ENG:
+lis r17, 0x80ca
+ori r17,r17, 0x13F0		# 80CA13F0
+STORE_COLOR:
+stw r16,0(r17)
+stw r16,4(r17)
+lfs f0,28(r1)
+
+
+
+C22590B4 00000013
+3E008000 62101888
+82100000 2C100000
+4082000C 3E0000FF
+4800000C 3E000033
+62100066 822DC030
+1E310003 3A400000
+5613063F 7E738A14
+2C1300FF 40810008
+3A6000FF 5610002F
+7E109B78 5610C03F
+3A520001 2C120003
+41A0FFD8 822D8840
+3A311CB0 8A31000E
+2C110001 41820010
+3E2080CA 6231C490
+4800000C 3E2080CA
+623113F0 92110000
+92110004 C001001C
+60000000 00000000
+
+
+v1.01
+@ 80259C24:
+lis r16, 0x8000
+ori r16,r16, 0x1888		# Alpha/Omega toggle
+lwz r16,0(r16)
+cmpwi r16,0
+bne OMEGA
+ALPHA:
+lis r16,0xFF
+b CHANGE_COLOR
+OMEGA:
+lis r16,0x33
+ori r16,r16,0x66
+CHANGE_COLOR:
+lwz r17,-0x3FC8(r13)
+mulli r17,r17,3
+li r18,0
+LOOP:
+rlwinm. r19,r16,0,24,31
+add r19,r19,r17
+cmpwi r19,255
+ble- 0x08
+li r19,255
+rlwinm. r16,r16,0,0,23
+or r16,r16,r19
+rlwinm. r16,r16,24,0,31
+addi r18,r18,1
+cmpwi r18,3
+blt- LOOP
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0x16(r17)
+cmpwi r17, 1
+beq LANG_ENG  # If 1, then we're usd
+lis r17, 0x80CA
+ori r17,r17, 0xD8F0		# 80CAD8F0
+b STORE_COLOR
+LANG_ENG:
+lis r17, 0x80ca
+ori r17,r17, 0x2850		# 80CA2850
+STORE_COLOR:
+stw r16,0(r17)
+stw r16,4(r17)
+lfs f0,28(r1)
+
+C2259C24 00000013
+3E008000 62101888
+82100000 2C100000
+4082000C 3E0000FF
+4800000C 3E000033
+62100066 822DC038
+1E310003 3A400000
+5613063F 7E738A14
+2C1300FF 40810008
+3A6000FF 5610002F
+7E109B78 5610C03F
+3A520001 2C120003
+41A0FFD8 822D8840
+3A311CB0 8A310016
+2C110001 41820010
+3E2080CA 6231D8F0
+4800000C 3E2080CA
+62312850 92110000
+92110004 C001001C
+60000000 00000000
+
+
+
+v1.02
+@ 8025A3C0
+lis r16, 0x8000
+ori r16,r16, 0x1888		# Alpha/Omega toggle
+lwz r16,0(r16)
+cmpwi r16,0
+bne OMEGA
+ALPHA:
+lis r16,0xFF
+b CHANGE_COLOR
+OMEGA:
+lis r16,0x33
+ori r16,r16,0x66
+CHANGE_COLOR:
+lwz r17,-0x3FC8(r13)	# FRAME TIMER
+mulli r17,r17,3
+li r18,0
+LOOP:
+rlwinm. r19,r16,0,24,31
+add r19,r19,r17
+cmpwi r19,255
+ble- 0x08
+li r19,255
+rlwinm. r16,r16,0,0,23
+or r16,r16,r19
+rlwinm. r16,r16,24,0,31
+addi r18,r18,1
+cmpwi r18,3
+blt- LOOP
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0x16(r17)
+cmpwi r17, 1
+beq LANG_ENG  # If 1, then we're usd
+lis r17, 0x80CA
+ori r17,r17, 0xE610		# 80CAE610
+b STORE_COLOR
+LANG_ENG:
+lis r17, 0x80ca
+ori r17,r17, 0x3570		# 80ca3570
+STORE_COLOR:
+stw r16,0(r17)
+stw r16,4(r17)
+lfs f0,28(r1)
+
+C225A3C0 00000013
+3E008000 62101888
+82100000 2C100000
+4082000C 3E0000FF
+4800000C 3E000033
+62100066 822DC038
+1E310003 3A400000
+5613063F 7E738A14
+2C1300FF 40810008
+3A6000FF 5610002F
+7E109B78 5610C03F
+3A520001 2C120003
+41A0FFD8 822D8840
+3A311CB0 8A310016
+2C110001 41820010
+3E2080CA 6231E610
+4800000C 3E2080CA
+62313570 92110000
+92110004 C001001C
+60000000 00000000

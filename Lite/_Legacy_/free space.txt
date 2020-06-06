@@ -1,0 +1,244 @@
+Melee Free Space
+-------------------
+Start		End			Bytes
+80001800	80003fff	27FF	Free memory in all GCN Wii Games (gecko is approx 0xba8 in size)
+
+8022887c	8022892c	B0		Unused code function (nop 801a4f84 and 801a5070)
+8032c848	8032c880	38		Unused code function (nop 801a4f84 and 801a5070)
+8032dcb0	8032ddbc	10C		Unused code function (nop 801a4f84 and 801a5070)
+8032ed8c	8032ee90	104		Unused code function (nop 801a4f84 and 801a5070)
+80393a5c	80393c10	1B4		Unused code function (nop 801a4f84 and 801a5070)
+8040A950	8040B6C0	D70		The main section of free space
+801910e0	80192934	1854	Tournament Mode
+
+803fa3e8	803fc2ec	1F04	Debug menu tables/strings
+803fc420	803fdc1c	17FC	Debug menu tables/strings
+803001DC	80301E44	1C68	Debug menu functions
+
+===============================
+== SD Remix free space usage ==
+===============================
+
+DATA Section, 0xD70 bytes
+-------------------------
+8040A950: Kirby Cap Patches
+8040AA20: Mewtwo Side+B dol stuff
+8040AA48: Stage omega table
+8040AB38: ** FREE **
+8040B8B0: FSM code
+
+CODE Section, 0x1854 bytes
+--------------------------
+801910E0: ** FREE **
+80191108: Help limit name tags to 4
+80191134: Kirby Cap Patcher
+801911C0: PlCo.dat patcher
+801911F4: A+B for salty runback
+80191234: Pause with LRAStart when pause disabled
+80191264: Dynamic Lagless FoD
+801912F4: Capped (Tennis) Mode
+80191408: Character Patcher
+801914A8: Stage Striking
+801915D0: ** FREE **
+80191634: Change color of alpha/omega toggle
+801916C8: ** FREE **
+801917F0: Widescreen Support 1
+801917FC: Widescreen support 2
+80191834: Change banner color
+8019187C: Tournament Style Overtime
+80191B60: Wall Bracing
+80191B98: Ledge Invincibility Attrition
+80191C14: Handicap is stock control
+80191DD4: Stage Patcher
+80191E5C: Alpha/Omega Stage Toggle
+80191ED8: ** FREE **
+80191F54: Omega stage loader
+80192008: Handle trophy spawn
+80192030: Fix corneria reset bug
+80192060: Character background portrait colors
+80192298: ** FREE **
+80192930: *** END ***
+
+
+==================================
+== Debug Menu Memory Allocation ==
+==================================
+
+*****************
+* Menus/Strings *
+*****************
+
+Fixed Menus/Strings
+-------------------
+Main menu table:		803FA4E0 to 803FA5E0
+"< Global Data Edit>":	803FA640 to 803FA658
+Global Data table:		803FA658 to 803FA758
+Debug Mode Strings:		803FA758 to 803FA790
+Debug menu table:		803FA790 to 803FA878
+Rules strings:			803FA878 to 803FA8E8
+Rumble strings:			803FAA08 to 803FAA44
+Rumble menu table:		803FAA44 to 803FAB04
+Stage Strings:			803FAB04 to 803FB064
+Melee Kind Strings:		803FB064 to 803FB080
+Dairantou Strings:		803FB080 to 803FB168
+Dairantou menu table:	803FB168 to 803FB368
+Character strings:		803FB368 to 803FB5C0
+CharSelect strings:		803FB5C0 to 803FB60C
+Charselect menu table:	803FB60C to 803FB6EC
+Scale strings:			803FB6EC to 803FB728
+Scale menu table:		803FB728 to 803FB7E8
+PKind stuff:			803FB7E8 to 803FB950
+Color stuff:			803FB950 to 803FBA4C
+Sub color stuff:		803FBA4C to 803FBB5C
+Damage stuff:			803FBB5C to 803FBC58
+Ratios:					803FBC58 to 803FBE80
+CPU Type stuff:			803FBE80 to 803FC0BC
+CPU Level stuff:		803FC0BC to 803FC1BC
+Team select stuff:		803FC1BC to 803FC2EC
+Credits table:			803FC4CC to 803FCACC
+
+Free Menu/String Space
+----------------------
+803FA3E8: ** FREE F8 **
+803FA4E0: Main Menu Table
+803FA5E0: ** FREE 60 **
+803FA640: Global Data Title
+803FA658: Global Data table
+803FA758: Debug Menu 
+803FA790: Debug Menu Table
+803FA878: Rules strings
+803FA8E8: ** FREE 120 **
+803FAA08: Rumble Strings
+803FAA44: Rumble menu Table
+803FAB04: Stage Strings
+803FB064: Meleekind Strings
+803FB080: Dairantou Strings
+803FB168: Dairantou Menu Table
+803FB368: Character Strings
+803FB5C0: CharSelect strings
+803FB60C: Charselect menu table
+803FB6EC: Scale strings
+803FB728: Scale menu table
+803FB7E8: PKind Stuff
+803FB950: Color stuff
+803FBA4C: Sub color stuff
+803FBB5C: Damage stuff
+803FBC58: Ratios
+803FBE80: CPU Type stuff
+803FC0BC: CPU Level stuff
+803FC1BC: Team Select Stuff
+803FC2EC: XX Unusable XX
+803FC420: >> Options Menu
+803FC4C0: >> Credits Menu
+803FC6C0: >> Toggle Table
+????????: ** FREE 940 **
+803FD000: >> Strings and String Arrays
+803FD2C4: ** FREE 63C **
+803FD900: Credits Table
+803FDC1C: *** END ***
+
+*************
+* Functions *
+*************
+
+Fixed Functions
+---------------
+Load Debug:			803001DC to 80300218
+Save Publicity:		80300248 to 80300290
+GLOBAL DATA EDIT:	80300290 to 803002FC
+Load Credits:		803002FC to 80300338
+GDE ADDR:			80300338 to 80300378
+GDE ADDR2:			80300378 to 803003C4
+GDE ADDR4:			803003c4 to 80300410
+GDE U32:			80300410 to 80300480
+Load Dairantou:		80300480 to 803004B4
+Load Rules:			803004b4 to 803004E8
+Load Vibration:		803004E8 to 8030051C
+Load DaiRan Subs:	8030051C to 80300758
+Random Functions:	80301BA8 to 80301E44
+Functions always return 0
+
+Free Function Space
+-------------------
+803001DC: Load Debug
+80300218: ** FREE 30 **
+80300248: Save Publicity
+80300290: GLOBAL DATA EDIT
+803002FC: Load Credits
+80300338: Global Data Edit - ADDR
+80300378: Global Data Edit - ADDR2
+803003c4: Global Data Edit - ADDR4
+80300410: Global Data Edit - U32
+80300480: Load Dairantou
+803004B4: Load Rules
+803004E8: Load Vibration Select
+8030051C: Load DaiRanTou submenus
+80300758: > Custom Load Submenu
+80300790: PKIND FUNCTION (2FD370)
+803007C8: > Widescreen Toggle
+80300820: > Debug Function toggles
+8030089C: ** FREE **
+80301BA8: Random Functions
+80301E44: *** END ***
+
+*******************
+* Debug Variables *
+*******************
+Fixed Variables
+---------------
+803fa25c	PUBLICITY
+804d4a08	DBLEVEL
+
+Free Variables
+--------------
+803fa350	Widescreen
+803fa354	(default 1)
+803fa358	(default 1)
+803fa35c	Options
+803fa360	(default 1)
+803fa364	(default 1)
+803fa368	Overtime
+803fa36c	Wall Bracing
+803fa370	Ledge Invincibility
+803fa374	(default 1)
+803fa378	Handicap
+803fa37c	Stage Patch Var
+803fa380	
+803fa384	
+803fa388	
+803fa38c	
+803fa390	
+803fa394	
+803fa39c	
+803fa3a0	
+803fa3a4	
+803fa3a8	
+803fa3ac	
+803fa3b0	(default 1)
+803fa3b4	(default 1)
+803fa3b8	(default 1)
+803fa3bc	(default 3)
+803fa3c0	(default 1)
+803fa3c4	(default 2)
+803fa3c8	(default 3)
+803fa3cc	(default 3)
+803fa3d0	Omega Toggle
+803fa3d4
+803fa3d8
+803fa3e0
+804d5908
+804d590c
+804d5910
+804d6dc8
+804d6dcc
+804d6dd4
+804d6ddc
+804d6de0
+804d6de4
+804d6de8
+804d6dec
+804d6df0
+804d6df4
+804d6e0c
+804d6e10
+804d6e14

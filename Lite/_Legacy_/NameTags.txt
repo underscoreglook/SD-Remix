@@ -1,0 +1,538 @@
+Name tags function is probably the function of the memory card return location, which is 80239E9C
+Or we can attempt when it tries to read from the memory card location.
+
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 80239d70 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+CHK 802379d0 ( --- ) Read8 00 at 8045d850 ( --- )
+
+
+sub 8015CC9C takes the name tag slot and returns an address of some sort
+
+They're all separated by 1A4, total of C4E0
+input	output
+0		8045d6b8 to 8045D85C
+1		8045d85c
+2		8045da00
+3		8045dba4
+...		80469B98
+
+We want the new names storage start location to be 8046A900.
+So at 8015CCDC, instead of adding 0x2FF8 to r3, add 10240.
+This will require a branch to a sub function to do three separate addi calls.
+Hook 8015CCDC:
+addi r3, r3, 0x7FFF
+addi r3, r3, 0x7FFF
+addi r3, r3, 0x242
+
+C215CCDC 00000002
+38637FFF 38637FFF
+38630242 00000000
+
+
+
+Now to limit the number of names to 4, trace back from the rumble function to figure out what is making it loop
+802375b4 - Jackpot
+	802379BC
+	802379cc
+		8015CC9C - Get address function
+		
+		
+At 802375C8: cmpwi r31, 0x78
+This checks r31 against 120, which is the names limit
+We can just overwrite this to be 0x5, like so:
+802375C8: cmpwi r31, 0x5 or  2C1F0004
+
+We also need to limit it at the name entry screen
+	80239ddc
+		8015CC9C
+Maybe 80239E94: cmpwi r26, 0x18
+We can try and change that to 0x5 (2C1A0004), which kinda works
+
+We have to breakpoint on this function and make sure every place that calls this we reset the cmpwi to 0x5
+----------------------------------------------------------------------------------------------------------
+802379cc ++ Common return function
+
+At startup:
+802375b4 *
+80239ddc *
+80239d6c-
+80239da0-
+
+On List:
+802385f4  (8023862C needs to go from 2C1E0078 to 2C1E0004)
+80237c0c  (80237D68 needs to go from 2c190078 to 2c190004)
+80237c58 same as above
+80237c9c  (80237D74 needs to go from 2c1a0078 to 2c1a0004)
+
+On Delete Press Button:
+Nothing new at first
+After load:
+802386b8  (802386F0 needts to go from 2C1E0078 to 2C1E0004)
+
+On Delete miss:
+80238400  (80238424 needs to check if we're above max names or not, see below section for 80238400)
+
+On Delete actually delete:
+80238078 and 80238088 - Gets current and next item. Uses stuff from other functions, so should be fine.
+80237854 - There are a ton of references to 0x78 and 0x77. Replace them all, mentioned in 80237854 below
+802378c8, 802378d8, 802378e8, 80237920, 8023792c, 80237960 - Same function as above
+
+On New Press Button:
+802382a4  (802382DC needs to go from 2c1f0078 to 2c1f0004)
+
+On New Confirm:
+802377c8  (80237810 needs to go from 2c1f0078 to 2c1f0004)
+802377e0 - Same function as above
+80237a2c & 80237A3C => 8023caa8 ??? Don't really know, there's no reference to 0x78 or anything
+8023c000 ??? Don't really know, there's no reference to 0x78 or anything
+
+
+For 80238400:
+At 80238400:
+cmpwi r3, 0x4
+bge OVER_LIMIT
+lis r12, 0x8015
+ori r12, r12, 0xCC9C
+mtctr r12
+bctrl
+lbz       r3, 0x198(r3)
+lbz       r0, -0x6AB4(r13)
+b RETURN
+OVER_LIMIT:
+mr r0, r3
+RETURN:
+Then, make 80238404 and 80238408 nops
+
+For 80237854:
+80237994: 2c1d0078 -> 2c1d0004
+802379A0: 2c1e0078 -> 2c1e0004
+802378AC: 2c1b0078 -> 2c1b0004
+80237884: 2c050077 -> 2c050003
+80237870: 2c050078 -> 2c050004
+8023786C: 20050078 -> 20050004
+
+
+
+At the CSS
+----------
+On CSS Load:
+80237560 => 802668d8 (802668F4 should go from 28030078 to 28030004)
+802653e8 (802653F8 should go from 2c110078 to 2c110004)
+
+While Name Tag select is open Open:
+80263938 (80263A28 should go from 2c190009 to 2c190005)
+
+On Name Tag Select:
+80263d04 - Doesn't loop
+
+On Name Tag Name Entry Press:
+8023760c (80237620 should go from 2c1e0078 to 2c1e0004)
+
+On Name Tag Name Entry Confirm:
+8023caa8 - Doesn't loop
+80265548 (80265530 should go from 28000078 to 28000004)
+
+
+
+There's still an issue where we're trying to get the 4th item on write. Stack trace when this happens:
+
+80390dfc - Oh god not this again
+	80238584 - Runs every frame while in Name Entry screen
+		8023caa8 - Only runs when Confirm is pressed (once)
+			80237a2c - Runs once as well
+				8015CC9C
+
+We notice we get the slot to write to here:
+8023CAA4 lbz       r3, 0x59(r28)
+Therefore, we can make it run the following to overwrite the last name instead of not doing anything.
+At 8023CAA4:
+lbz r3, 0x59(r28)
+cmpwi r3, 0x4
+blt RETURN
+li r3, 3
+stb r3, 0x59(r28)
+RETURN:
+
+C223CAA4 00000003
+887C0059 2C030004
+4180000C 38600003
+987C0059 00000000
+
+
+Total codes
+-----------
+042375C8 2C1F0004
+04239E94 2C1A0004
+0423862C 2C1E0004
+04237D68 2c190004
+04237D74 2c1a0004
+042386F0 2C1E0004
+04237994 2c1d0004
+042379A0 2c1e0004
+042378AC 2c1b0004
+04237884 2c050003
+04237870 2c050004
+0423786C 20050004
+042382DC 2c1f0004
+04237810 2c1f0004
+042668F4 28030004
+042653F8 2c110004
+04263A28 2c190005 <-- max + 1 or 9, whichever is smaller
+04237620 2c1e0004
+04265530 28000004
+
+C2238400 00000006
+2C030004 40800020
+3D808015 618CCC9C
+7D8903A6 4E800421
+88630198 880D954C
+48000008 7C601B78
+60000000 00000000
+
+04238404 60000000
+04238408 60000000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+There's another spot that's overwriting things on name write:
+CHK 8015f128 ( --- ) Write8 05 at 8045d85a ( --- ) on first name
+
+On second name:
+CHK 8015efec ( --- ) Write16 0000 at 8045d85c ( --- )
+CHK 8015eff0 ( --- ) Write16 0000 at 8045d85e ( --- )
+CHK 8015eff4 ( --- ) Write16 0000 at 8045d860 ( --- )
+CHK 8015eff8 ( --- ) Write16 0000 at 8045d862 ( --- )
+CHK 8015effc ( --- ) Write16 0000 at 8045d864 ( --- )
+CHK 8015f000 ( --- ) Write16 0000 at 8045d866 ( --- )
+CHK 8015f004 ( --- ) Write16 0000 at 8045d868 ( --- )
+CHK 8015f008 ( --- ) Write16 0000 at 8045d86a ( --- )
+CHK 8015f00c ( --- ) Write16 0000 at 8045d86c ( --- )
+CHK 8015f010 ( --- ) Write16 0000 at 8045d86e ( --- )
+CHK 8015f014 ( --- ) Write16 0000 at 8045d870 ( --- )
+CHK 8015f018 ( --- ) Write16 0000 at 8045d872 ( --- )
+CHK 8015f01c ( --- ) Write16 0000 at 8045d874 ( --- )
+CHK 8015f020 ( --- ) Write16 0000 at 8045d876 ( --- )
+CHK 8015f024 ( --- ) Write16 0000 at 8045d878 ( --- )
+CHK 8015f028 ( --- ) Write16 0000 at 8045d87a ( --- )
+CHK 8015f02c ( --- ) Write16 0000 at 8045d87c ( --- )
+CHK 8015f030 ( --- ) Write16 0000 at 8045d87e ( --- )
+CHK 8015f034 ( --- ) Write16 0000 at 8045d880 ( --- )
+
+8015EFE0 being increased like the other place takes care of this. However, there's now a problem with the first slot.
+
+
+
+8045d6b8
+
+
+More still:
+55:16:630 BreakPoints.cpp:197 I[MI]: CHK 803238d8 ( --- ) Read8 82 at 8045d850 ( --- )
+55:16:630 BreakPoints.cpp:197 I[MI]: CHK 803238d8 ( --- ) Read8 72 at 8045d851 ( --- )
+55:16:630 BreakPoints.cpp:197 I[MI]: CHK 803238d8 ( --- ) Read8 82 at 8045d852 ( --- )
+... etc, etc, etc ...
+r6 seems to be a pointer to the tag name for some reason, and it's not set properly. Let's figure out why this is happening. (r6 is the r3 that's passed into the function)
+
+	803a9a90
+		803238d8
+		
+803A9A8C lwz r3, 0x28(r3) Might be a solution
+do that and then add an amount to r3
+
+Hook 803A9A8C:
+lwz r3, 0x28(r3)
+addi r3, r3, 0x27A0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The glitch that keeps on giving. When returning to the CSS from results, when returning to the main menu from CSS:
+52:32:136 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045d71b ( --- )
+52:32:136 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045d71a ( --- )
+52:32:136 BreakPoints.cpp:197 I[MI]: CHK 80003230 ( --- ) Read8 00 at 8045d719 ( --- )
+... etc ...
+Figure out what's going on. Breakpoint on the point of 80003230, which is 80003220, and step out. r4 is the address of the memory card stuff.
+
+When returning to main menu from CSS (first click on back button)
+-----------------------------------------------------------------
+[NORMAL NOT CHECKING MEM CARD]
+801a40b0 - Inside function loadScene
+	801b1020
+		8001d1b0
+			80016e74
+				80016a74
+					8038023c
+						80003220 - Start
+		8001d1c8
+			80016e74
+				80016a74
+					8038023c
+						80003220 - Start
+	801b103c
+		8001e268
+			80016e74
+				80016a74
+					8038023c
+						80003220 - Start
+[NORMAL NOT CHECKING MEM CARD, BUT DIFFERENT ADDRESS]
+	8022e5e0
+		80016d1c
+			80016a74
+				8038023c
+					80003220
+	8022e600
+		803a62c8			
+			803a9468
+				80016c40		
+					80016a74
+						8038023c
+							80003220
+	8022e624
+		803a62c8
+			803a9468
+				80016c40
+					80016a74
+						8038023c
+							80003220
+	8022e628	
+		801ba924
+			80016d1c
+				80016a74
+					8038023c
+						80003220
+	8022e62c
+		80023954		
+			80016d1c
+				80016a74
+					8038023c
+						80003220
+		
+			80370d88
+				8035e22c
+					8035e0d0
+						80363254
+							8036316c
+								8035ed98
+									8035ed04
+										8035ee40
+											80003220
+			80370c80
+				80363188
+					80003220
+				8035ed04
+					8035ee40
+						80003220
+	Confusing...
+[NOT NORMAL, CHECKING MEM CARD]
+	803ab480
+		80003220
+
+Need to breakpoint on this generic var to get the memory card transfer function:
+At 80003240: b 80002000
+lis r7, 0x8045
+ori r7, r7, 0xD85C
+cmpw r4, r7
+bge NOT_FOUND
+lis r7, 0x8045
+ori r7, r7, 0xd6b8
+cmpw r4, r7
+blt NOT_FOUND
+nop
+NOT_FOUND:
+blr
+
+(Also need to check name tag 2 and see if it's running into similar issues)
+
+
+
+At 803AB47C:
+lis r7, 0x8046
+ori r7, r7, 0x9B98
+cmpw r4, r7
+bge NOT_FOUND
+lis r7, 0x8045
+ori r7, r7, 0xd6b8
+cmpw r4, r7
+blt NOT_FOUND
+addi r4, r4, 0x27A0
+NOT_FOUND:
+addi r3, r3, 0x20
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rewrite:
+
+
+
+# Help limit name tags
+v1.00
+@ 802370F4:
+cmpwi r3, 0xA	# <-- The limit
+bge- 0x20
+lis r12, 0x8015
+ori r12,r12, 0xC2E8		# 8015
+mtctr r12
+bctrl
+lbz r3,408(r3)
+lbz r0,-27316(r13)
+b 0x08
+mr r0,r3
+
+C22370F4 00000006
+2C03000A 40800020
+3D808015 618CC2E8
+7D8903A6 4E800421
+88630198 880D954C
+48000008 7C601B78
+60000000 00000000
+
+v1.01
+@ 80237C64:
+cmpwi r3, 0xA	# <-- The limit
+bge- 0x20
+lis r12, 0x8015
+ori r12,r12, 0xC874		# 8015C874
+mtctr r12
+bctrl
+lbz r3,408(r3)
+lbz r0,-27316(r13)
+b 0x08
+mr r0,r3
+
+C2237C64 00000006
+2C03000A 40800020
+3D808015 618CC874
+7D8903A6 4E800421
+88630198 880D954C
+48000008 7C601B78
+60000000 00000000
+
+v1.02
+@ 80238400:
+cmpwi r3, 0xA	# <-- The limit
+bge- 0x20
+lis r12, 0x8015
+ori r12,r12, 0xCC9C		# 8015CC9C
+mtctr r12
+bctrl
+lbz r3,408(r3)
+lbz r0,-27316(r13)
+b 0x08
+mr r0,r3
+
+C2238400 00000006
+2C03000A 40800020
+3D808015 618CCC9C
+7D8903A6 4E800421
+88630198 880D954C
+48000008 7C601B78
+60000000 00000000
+
+PAL:
+@ 8023A314:
+cmpwi r3, 0xA	# <-- The limit
+bge- 0x20
+lis r12, 0x8015
+ori r12,r12, 0xD440		# 8015D440
+mtctr r12
+bctrl
+lbz r3,408(r3)
+lbz r0,-27316(r13)
+b 0x08
+mr r0,r3
+
+C223A314 00000006
+2C03000A 40800020
+3D808015 618CD440
+7D8903A6 4E800421
+88630198 880D954C
+48000008 7C601B78
+60000000 00000000
+
+
+
+
+
+# Name tag limiting
+802370F8 80237C68 80238404 60000000
+802370FC 80237C6C 80238408 60000000
+802362D0 80236E40 802375C8 2C1F0009
+80238B88 802396F8 80239E94 2C1A0009
+80237320 80237E90 8023862C 2C1E0009
+80236A70 802375E0 80237D68 2c190009
+80236A7C 802375EC 80237D74 2c1a0009
+802373E4 80237F54 802386F0 2C1E0009
+8023669C 8023720C 80237994 2c1d0009
+802366A8 80237218 802379A0 2c1e0009
+802365B4 80237124 802378AC 2c1b0009
+80236FD0 80237B40 802382DC 2c1f0009
+80236518 80237088 80237810 2c1f0009
+802655DC 80266158 802668F4 28030009
+802640E0 80264C5C 802653F8 2c110009
+80236328 80236E98 80237620 2c1e0009
+80236F48 80237AB8 80238254 2c030009
+80236330 80236EA0 80237628 2c1f0009
+# 8026271C 8026328C 80263A28 2c190009 <-- max + 1 or 9, whichever is smaller
+
+
+v1.00				v1.01				v1.02
+8015C328 386361F4	8015C8B4 386361FC	8015CCDC 386361FC 	# When reading saved tags, read from later in memory card
+8015E63C 3BFF61F4	8015EC1C 3BFF61FC	8015EFE0 3BFF61FC 	# When writing names, put it later in memory card
+80236594 2C040008	80237104 2C040008	80237884 2c050008
+80236578 2c070009	802370E8 2c070009	80237870 2c050009
+80236574 20070009	802370E4 20070009	8023786C 20050009

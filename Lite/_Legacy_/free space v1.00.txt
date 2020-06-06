@@ -1,0 +1,135 @@
+Melee Free Space
+-------------------
+Start		End			Bytes
+80001800	80003fff	27FF	Free memory in all GCN Wii Games (gecko is approx 0xba8 in size)
+80408990	80409700	D70		The main section of free space
+8018F2E0	80190B34	1854	Tournament Mode
+
+803f8558	803FA45C	1F04	Debug menu tables/strings
+803fa590	803FBD8C	17FC	Debug menu tables/strings
+These are 1E90 less than in v1.02
+
+802fe940	803005A8	1C68	Debug menu functions
+This is 189C less than in 1.02
+
+===============================
+== SD Remix free space usage ==
+===============================
+
+DATA Section, 0xD70 bytes
+-------------------------
+80408990: ** FREE D70 **
+80409700: End of free space
+
+CODE Section, 0x1854 bytes
+--------------------------
+8018F2E0: Overtime 1
+8018F51C: Overtime 2
+8018F55C: Overtime 3
+8018F57C: Overtime 4
+8018F5A4: Overtime 5
+8018F5D0: ** FREE ~ 0xC00 **
+801901e0: A+B for salty runback
+80190220: Stage Striking
+80190348: Dynamic lagless FoD
+801903D8: Change portrait colors
+801905FC: Any player can control debug menu
+801906A8: Widescreen Part 1
+801906B4: Widescreen Part 2
+801906EC: Banner Color Toggle
+80190738: Capped/Tennis Mode
+8019084C: Wall Bracing
+80190884: Ledge Invincibility Part 1
+801908D0: Ledge Invincibility Part 2
+80190900: ** FREE < 0x448 **
+80190B34: *** END ***
+
+
+==================================
+== Debug Menu Memory Allocation ==
+==================================
+
+*****************
+* Menus/Strings *
+*****************
+803FA590: Options Sub Menu
+803FA630: Credits Submenu
+803FA830: Toggle functions array
+** Free  **
+803FB170: Strings and stuff
+803FB410: ** FREE **
+803FBD8C: *** END ***
+
+*************
+* Functions *
+*************
+802FEF2C: Custom Debug Menu function
+802FEF70: Widescreen
+802FEFE4: Toggle options function
+802FF05C: ** FREE **
+8030030C: *** END ***
+
+
+*******************
+* Debug Variables *
+*******************
+Fixed Variables (they're all 1E90 less than in 1.02)
+---------------
+803f83cc	PUBLICITY
+804D2B78	DBLEVEL
+
+Free Variables
+--------------
+803F84C0	Widescreen
+803F84C4	Banner Color (default 1)
+803F84C8	(default 1)
+803F84CC	Options
+803F84D0	(default 1)
+803F84D4	(default 1)
+803F84D8	Overtime
+803F84DC	Wall Bracing
+803F84E0	Ledge Invincibility
+803F84E4	(default 1)
+803F84E8	Handicap
+803F84EC	Stage Patch Var
+803F84F0	Omega Toggle
+
+These are all v1.02. Need to subtract 1E90 to get v1.00
+803fa384	
+803fa388	
+803fa38c	
+803fa390	
+803fa394	
+803fa39c	
+803fa3a0	
+803fa3a4	
+803fa3a8	
+803fa3ac	
+803fa3b0	(default 1)
+803fa3b4	(default 1)
+803fa3b8	(default 1)
+803fa3bc	(default 3)
+803fa3c0	(default 1)
+803fa3c4	(default 2)
+803fa3c8	(default 3)
+803fa3cc	(default 3)
+803fa3d0	
+803fa3d4
+803fa3d8
+803fa3e0
+804d5908
+804d590c
+804d5910
+804d6dc8
+804d6dcc
+804d6dd4
+804d6ddc
+804d6de0
+804d6de4
+804d6de8
+804d6dec
+804d6df0
+804d6df4
+804d6e0c
+804d6e10
+804d6e14

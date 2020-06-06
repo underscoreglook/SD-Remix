@@ -1,0 +1,51 @@
+@ original 1.02 location 8025E98C
+130C away
+
+@ 8025D680
+stb r0, 0(r27)
+lis r4, 0x803E
+ori r4, r4, 0xEF54	# r4 = 803EEF54
+li r6, 0x4
+
+NEXT_PLAYER:
+addi r4,r4, 0x24
+lbz r19, 0(r4)
+cmpwi r19,3
+beq+ NORMAL_FOD
+addi r6, r6, -1
+cmpwi r6, 0
+bne- NEXT_PLAYER
+
+LAGLESS_FOD:
+lis r4, 0x801c
+ori r4, r4,0xac04	# r4 = 801cac04
+lis r19,0x6000		# r19 is nop
+stw r19, 0(r4)		# nop 801cac04
+stw r19,0x380(r4)	# nop 801CAF84
+stw r19,0x3B0(r4)	# nop 801CAFB4
+lis r19,0x4800
+addi r19,r19,0x28
+stw r19,0x328(r4)	# alter 801CAF2C
+b END
+
+NORMAL_FOD:
+lis r4, 0x801c
+ori r4, r4,0xac04	# r4 = 801cac04
+lis r19,0x4800
+addi r19,r19,0x115
+stw r19, 0(r4)		# restore 801cac04
+lis r19,0x4182
+addi r19,r19,0x28
+stw r19,0x328(r4)	# Restore 801CAF2C
+lis r19,0x4800
+addi r19,r19,0xBC5
+stw r19,0x380(r4)	# Restore 801CAF84
+lis r19,0x4BFF
+ori r19,r19,0xD775
+stw r19,0x3B0(r4)	# Restore 801CAFB4
+END:
+
+
+v1.00 8025d670
+v1.02 8025E97C
+881C0000386D9A2C3F0043304CC63182981B00007E7EEA14881C000038810048

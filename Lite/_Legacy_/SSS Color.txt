@@ -1,0 +1,304 @@
+injection point
+
+	@8025a3c0	lfs	f0, 0x001C (sp)	c001001c
+	gets executed once per frame on the sss, right after 
+	8025a3bc (inject point stage striking)
+
+
+
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+mem-addresses:	
+
+	80ca3570 center color of cursor
+	80ca3574 border color of the cursor
+	-normally these toggle between ff000000 (pure red) and ff656500 (very bright red)
+	every 5 frames on the SSS
+	-changing these (at break point mentioned above) will cause the next single frame 
+	to be loaded with that color instead of the normal one
+
+	80cb21a3	
+	-"frame counter", this memory address shows on which frame (0 to 9)
+	of the cursors color cycle you´re on
+
+	804d76db	
+	804d76de
+	-I have no clue what these do, but they count up from 0 to 3B continiously on the SSS,
+	I used them to create the slow fading white instead of the rapid flashing
+	-refered to below as "brightness"
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+the code:
+
+
+lis r16, 0x00XX		
+ori r16,r16, 0xXXXX
+			//set the desired color
+
+lwz r17,-0x3FC8(r13)
+			//load "brightness
+
+
+mulli r17,r17,0x3	
+			//multiply to get desired brightness to add later,
+			//if to much of the cycle is jsut white, lower this multiplier
+
+li r18, 0x0		
+			//counter
+
+	//loop
+
+	rlwinm. r19,r16,0,24,31		
+					//takes last byte from r16 and puts it into r19
+
+	add r19,r19,r17			//add the brightness
+
+	cmpwi r19, 0xFF			//bigger than max? yes, step back to max
+	ble- 0x08
+	li r19,0xFF
+					
+	rlwinm. r16,r16,0,0,23		//takes out last byte form r16
+	or r16,r16,r19 			//add r16 and r19(last byte) together
+
+
+
+	rlwinm. r16,r16,24,0,31		//rotate right 8 bit
+
+	addi r18,r18,1		//repeat until all 3 colors have been set
+	cmpwi r18, 0x3
+	blt- 0xFFFFFFd8
+
+# Save destination, check if japanese
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0x16(r17)
+cmpwi r17, 1
+beq LANG_ENG  # If 1, then we're usd
+lis r17, 0x80CA
+ori r17,r17, 0xE610
+b STORE_COLOR
+LANG_ENG:
+lis r17, 0x80ca
+ori r17,r17, 0x3570
+
+STORE_COLOR:
+stw r16,0(r17)
+stw r16,0x04(r17)
+
+
+lfs	f0, 0x001C (sp)			
+			//was there before
+
+
+C225A3C0 0000000C
+3E0000XX 6210XXXX			//replace these XX XX XX with RR GG BB desired
+3E20804D 623176DB
+8A310000 1E310003
+3A400000 5613063F
+7E738A14 2C1300FF
+40810008 3A6000FF
+5610002F 7E109B78
+5610C03F 3A520001
+2C120003 41A0FFD8
+3E2080CA 62313570
+92110000 92110004
+C001001C 00000000
+
+
+C225A3C0 0000000F
+3E0000XX 6210XXXX
+822DC038 1E310003
+3A400000 5613063F
+7E738A14 2C1300FF
+40810008 3A6000FF
+5610002F 7E109B78
+5610C03F 3A520001
+2C120003 41A0FFD8
+822D8840 3A311CB0
+8A310016 2C110001
+41820010 3E2080CA
+6231E610 4800000C
+3E2080CA 62313570
+92110000 92110004
+C001001C 00000000
+
+
+
+
+
+
+3E0000XX 6210XXXX		3E0000XX 6210XXXX
+
+						822DC038
+3E20804D 623176DB
+8A310000
+
+1E310003		        1E310003
+3A400000 5613063F		3A400000 5613063F
+7E738A14 2C1300FF		7E738A14 2C1300FF
+40810008 3A6000FF		40810008 3A6000FF
+5610002F 7E109B78		5610002F 7E109B78
+5610C03F 3A520001		5610C03F 3A520001
+2C120003 41A0FFD8		2C120003 41A0FFD8
+						822D8840 3A311CB0
+						8A310016 2C110001
+						41820010 3E2080CA
+						6231E610 4800000C
+3E2080CA 62313570		3E2080CA 62313570
+92110000 92110004		92110000 92110004
+C001001C 00000000		C001001C 00000000
+
+
+# New SDR Lite code
+C225A3C0 00000013
+3E00803F 6210A3D0
+82100000 2C100000
+4082000C 3E0000FF
+4800000C 3E000033
+62100066 822DC038
+1E310003 3A400000
+5613063F 7E738A14
+2C1300FF 40810008
+3A6000FF 5610002F
+7E109B78 5610C03F
+3A520001 2C120003
+41A0FFD8 822D8840
+3A311CB0 8A310016
+2C110001 41820010
+3E2080CA 6231E610
+4800000C 3E2080CA
+62313570 92110000
+92110004 C001001C
+60000000 00000000
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+Pal port
+
+
+Injection point 8025aef8
+
+	80ccda30/80ccda34 contain the color of the cursor
+
+	80cdc6a3 contain the frame counter 0-9
+
+	804c8a0b/804c8a0f counter from 0 to 3B
+
+
+
+C225aef8 0000000C
+3E0000XX 6210XXXX			//replace these XX XX XX with the RR GG BB color desired
+3E20804c 62318a0b
+8A310000 1E310003
+3A400000 5613063F
+7E738A14 2C1300FF
+40810008 3A6000FF
+5610002F 7E109B78
+5610C03F 3A520001
+2C120003 41A0FFD8
+3E2080CC 6231da30
+92110000 92110004
+C001001C 00000000
+
+
+
+
+ff000000 Red
+ff656500 lighter
+
+
+
+804d76db Brightness
+80ca3570 Save Dest
+03:08:448 BreakPoints.cpp:197 I[MI]: CHK 8035e9b8 ( --- ) Write8 ff at 80ca3570 ( --- )
+03:08:448 BreakPoints.cpp:197 I[MI]: CHK 8035e9dc ( --- ) Write8 65 at 80ca3571 ( --- )
+03:08:448 BreakPoints.cpp:197 I[MI]: CHK 8035ea00 ( --- ) Write8 65 at 80ca3572 ( --- )
+03:08:448 BreakPoints.cpp:197 I[MI]: CHK 8035e9b8 ( --- ) Write8 ff at 80ca3570 ( --- )
+03:08:448 BreakPoints.cpp:197 I[MI]: CHK 8035e9dc ( --- ) Write8 00 at 80ca3571 ( --- )
+03:08:448 BreakPoints.cpp:197 I[MI]: CHK 8035ea00 ( --- ) Write8 00 at 80ca3572 ( --- )
+03:08:464 BreakPoints.cpp:197 I[MI]: CHK 80384fd4 ( --- ) Read32 ff000000 at 80ca3570 ( --- )
+
+05:40:482 BreakPoints.cpp:197 I[MI]: CHK 80384fd4 ( --- ) Read32 ff000000 at 80ca3570 ( --- )
+05:40:726 BreakPoints.cpp:197 I[MI]: CHK 80375bd0 ( --- ) Read32 0000003a at 804d76d8 ( --- )
+05:40:726 BreakPoints.cpp:197 I[MI]: CHK 80375bd8 ( --- ) Write32 0000003b at 804d76d8 ( --- )
+05:40:732 BreakPoints.cpp:197 I[MI]: CHK 8035e9b8 ( --- ) Write8 ff at 80ca3570 ( --- )
+05:40:732 BreakPoints.cpp:197 I[MI]: CHK 8035e9dc ( --- ) Write8 00 at 80ca3571 ( --- )
+05:40:732 BreakPoints.cpp:197 I[MI]: CHK 8035ea00 ( --- ) Write8 00 at 80ca3572 ( --- )
+
+
+80375bd8 brightness
+80384fd4 color
+
+
+
+lis r17, 0x804C
+ori r17,r17, 0x8A0B
+
+804c8a08
+
+804cc720 r13
+
+C2EB
+
+0xFF000000
+0xFF656500
+
+PAL SD Remix
+C225AEF8 00000014
+3E008040 6210BA88
+82100000 2C100000
+4082000C 3E0000FF
+4800000C 3E000033
+62100066 822DC2E8
+1E310003 3A400000
+5613063F 7E738A14
+2C1300FF 40810008
+3A6000FF 5610002F
+7E109B78 5610C03F
+3A520001 2C120003
+41A0FFD8 3E20804C
+8A314913 2C110004
+40820010 3E2080CD
+62312BF0 48000018
+2C110006 3E2080CC
+6231DA30 40820008
+3A31FFE0 92110000
+92110004 C001001C
+60000000 00000000
+
+Get language:
+Var is at 804c4910
+lis r17, 0x804C
+lbz r17, 0x4913(r17)
+
+Now change if French or Spanish
+cmpwi r17, 4	# Is it french
+bne CHECK_SPANISH
+IS_FRENCH:
+lis r17, 0x80CD
+ori r17, r17, 0x2BF0
+b SET_COLOR
+CHECK_SPANISH:
+cmpwi r17, 6	# Is it spanish
+lis r17, 0x80CC
+ori r17, r17, 0xDA30	# Either way, start with this
+bne SET_COLOR	# If not spanish, go ahead
+IS_SPANISH:
+subi r17, r17, 0x20 # to 80CCDA10
+SET_COLOR:
+
+Color:
+ESpanol (6) - 80CCDA10
+Union Jack & Deutsch & Italiano - 80CCDA30
+Francais (4) - 80CD2BF0

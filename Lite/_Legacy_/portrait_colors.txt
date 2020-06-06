@@ -1,0 +1,1152 @@
+810eac90 is P2 character background color
+
+Background Colors, These are the only functions being read
+CHK 8035e9b8 ( --- ) Write8 4b at 810eac90 ( --- )
+CHK 8035e9dc ( --- ) Write8 4c at 810eac91 ( --- )
+CHK 8035ea00 ( --- ) Write8 e5 at 810eac92 ( --- )
+
+ShamRock: (Hooked at 8026304C)
+lbz r0,14(r3)				8803000E 
+lis r14,-32699				3DC08045
+ori r14,r14,50048			61CEC380 # r14 is rumble
+
+lis r15,-32698				3DE08046
+ori r15,r15,45308			61EFB0FC # r15 is For getting P1 controller data
+
+li r20,0					3A800000
+
+LOOP_RUMBLE:
+lwzu r16,12(r15)			860F000C # P1 Controller data, I think
+rlwinm. r17,r16,0,12,12		56110319 # See if dpad is down
+beq- BRANCH1				41820010 # If not go to not P1
+li r17,1					3A200001 # Otherwise, set rumble to true
+stb r17,0(r14)				9A2E0000
+b BRANCH2					48000014
+
+BRANCH1:
+rlwinm. r17,r16,0,13,13		5611035B # Check the if Dpad Up is pressed
+beq- BRANCH2				4182000C
+li r17,0					3A200000
+stb r17,0(r14)				9A2E0000 # Set rumble off
+
+BRANCH2:
+addi r20,r20,1				3A940001
+addi r14,r14,1				39CE0001
+cmpwi r20,4					2C140004
+blt- LOOP_RUMBLE			41A0FFCC # Check next controller above
+
+subi r14,r14,5				39CEFFFB
+lis r18,6425				3E401919
+ori r18,r18,6400			62521900
+
+lis r16,0x804C				 
+
+cmpwi r20,0					2C140004
+bne- 0x08					40820008
+ori r16,r16,9452			6210 24EC #P1
+cmpwi r20,1					2C140005
+bne- 0x08					40820008
+ori r16,r16,9304			6210 2458 #P2
+cmpwi r20,2					2C140006
+bne- 0x08					40820008
+ori r16,r16,9560			6210 2558 #P3
+cmpwi r20,3					2C140007
+bne- 0x08					40820008
+ori r16,r16,9412			6210 24C4 #P4
+
+# What the fuck dude?
+lwz r16,0(r16)				82100000 8111df20
+lwz r16,0(r16)				82100000 810ffa40
+lwz r16,0(r16)				82100000 810eb680
+lwz r16,8(r16)				82100008 810ea3e0
+lwz r16,24(r16)				82100018 810eab60
+lwz r16,8(r16)				82100008 810eac40
+lwz r16,28(r16)				8210001C 810eb160
+lwz r16,4(r16)				82100004 810eb140
+lwz r16,8(r16)				82100008 810eac90
+
+lbzu r17,1(r14)				8E2E0001 #Check the rumble again
+cmpwi r17,1					2C110001 If not on, skip
+bne- NO_RUMBLE				40820010
+
+RUMBLE:
+lis r17,-4370				3E20EEEE
+ori r17,r17,60928			6231EE00
+b SET_STUFF					4800000C
+
+NO_RUMBLE:
+lis r17,21845				3E205555
+ori r17,r17,21760			62315500
+
+SET_STUFF:
+stw r17,0(r16)				92300000
+stw r18,4(r16)				92500004
+
+CONTINUE_LOOP:
+addi r20,r20,1				3A940001
+cmpwi r20,8					2C140008
+blt- 0xFFFFFF70				41A0FF70
+
+
+Shamrock v1.00: (Hooked at 80261D40)
+lbz r0,14(r3)
+lis r14,-32699
+ori r14,r14,41912
+
+lis r15,-32698
+ori r15,r15,37172
+
+li r20,0
+
+LOOP_RUMBLE:
+lwzu r16,12(r15)
+rlwinm. r17,r16,0,12,12
+beq- 0x10
+li r17,1
+stb r17,0(r14)
+b 0x14
+
+BRANCH1:
+rlwinm. r17,r16,0,13,13
+beq- 0x0C
+li r17,0
+stb r17,0(r14)
+
+BRANCH2:
+addi r20,r20,1
+addi r14,r14,1
+cmpwi r20,4
+blt- 0xFFFFFFCC
+
+subi r14,r14,5
+lis r18,6425
+ori r18,r18,6400
+
+lis r16, 0x804C
+
+cmpwi r20,4
+bne- 0x08
+ori r16,r16,912
+cmpwi r20,5
+bne- 0x08
+ori r16,r16,764
+cmpwi r20,6
+bne- 0x08
+ori r16,r16,1020
+cmpwi r20,7
+bne- 0x08
+ori r16,r16,872
+cmpwi r20,5
+bgt- 0x08
+
+# What the fuck, dude? Again.
+lwz r16,0(r16)
+lwz r16,0(r16)
+lwz r16,0(r16)
+lwz r16,8(r16)
+lwz r16,24(r16)
+lwz r16,8(r16)
+lwz r16,28(r16)
+lwz r16,4(r16)
+lwz r16,8(r16)
+
+lbzu r17,1(r14)
+cmpwi r17,1
+bne- 0x10
+
+RUMBLE:
+lis r17,-4370
+ori r17,r17,60928
+b 0x0C
+
+NO_RUMBLE:
+lis r17,21845
+ori r17,r17,21760
+
+SET_STUFF:
+stw r17,0(r16)
+stw r18,4(r16)
+
+CONTINUE_LOOP:
+addi r20,r20,1
+cmpwi r20,8
+blt- 0xFFFFFF70
+
+
+
+4b4ce5
+
+
+Breakpoint on variable:
+
+Coming from 8036b010
+
+Switching to teams on (Red):
+CHK 8035e9b8 ( --- ) Write8 e5 at 810eac90 ( --- )
+CHK 8035e9dc ( --- ) Write8 4c at 810eac91 ( --- )
+CHK 8035ea00 ( --- ) Write8 4c at 810eac92 ( --- )
+CHK 8035ea48 ( --- ) Write8 98 at 810eac94 ( --- )
+CHK 8035ea6c ( --- ) Write8 00 at 810eac95 ( --- )
+CHK 8035ea90 ( --- ) Write8 00 at 810eac96 ( --- )
+
+Switching to Blue Team:
+CHK 8035e9b8 ( --- ) Write8 4b at 810eac90 ( --- )
+CHK 8035e9dc ( --- ) Write8 4c at 810eac91 ( --- )
+CHK 8035ea00 ( --- ) Write8 e5 at 810eac92 ( --- )
+CHK 8035ea48 ( --- ) Write8 00 at 810eac94 ( --- )
+CHK 8035ea6c ( --- ) Write8 00 at 810eac95 ( --- )
+CHK 8035ea90 ( --- ) Write8 98 at 810eac96 ( --- )
+
+Switching to normal P2 color:
+CHK 8035e9b8 ( --- ) Write8 4b at 810eac90 ( --- )
+CHK 8035e9dc ( --- ) Write8 4c at 810eac91 ( --- )
+CHK 8035ea00 ( --- ) Write8 e5 at 810eac92 ( --- )
+CHK 8035ea48 ( --- ) Write8 00 at 810eac94 ( --- )
+CHK 8035ea6c ( --- ) Write8 00 at 810eac95 ( --- )
+CHK 8035ea90 ( --- ) Write8 98 at 810eac96 ( --- )
+
+
+810ea3e8
+810eb228
+
+
+When is player 1 color read?
+
+On entering CSS:
+04:20:545 BreakPoints.cpp:197 I[MI]: CHK 8037ce4c ( --- ) Read32 00000000 at 804c24ec ( --- )
+04:20:545 BreakPoints.cpp:197 I[MI]: CHK 8037cebc ( --- ) Read32 00000000 at 804c24ec ( --- )
+04:20:592 BreakPoints.cpp:197 I[MI]: CHK 8037ce4c ( --- ) Read32 810d5be0 at 804c24ec ( --- )
+04:20:592 BreakPoints.cpp:197 I[MI]: CHK 8037cebc ( --- ) Read32 810d5be0 at 804c24ec ( --- )
+04:20:645 BreakPoints.cpp:197 I[MI]: CHK 8037ce4c ( --- ) Read32 810ebae0 at 804c24ec ( --- )
+04:20:645 BreakPoints.cpp:197 I[MI]: CHK 8037cebc ( --- ) Read32 810ebae0 at 804c24ec ( --- )
+
+09:15:440 BreakPoints.cpp:197 I[MI]: CHK 8037cec4 ( --- ) Write32 8111e380 at 804c24ec ( --- )
+04:20:716 BreakPoints.cpp:197 I[MI]: CHK 8037ce4c ( --- ) Read32 810fece0 at 804c24ec ( --- )
+04:20:716 BreakPoints.cpp:197 I[MI]: CHK 8037cebc ( --- ) Read32 810fece0 at 804c24ec ( --- )
+
+On exiting CSS:
+05:09:963 BreakPoints.cpp:197 I[MI]: CHK 8037ce4c ( --- ) Read32 00000000 at 804c24ec ( --- )
+05:09:963 BreakPoints.cpp:197 I[MI]: CHK 8037cebc ( --- ) Read32 00000000 at 804c24ec ( --- )
+05:10:001 BreakPoints.cpp:197 I[MI]: CHK 8037ce4c ( --- ) Read32 8133db40 at 804c24ec ( --- )
+05:10:001 BreakPoints.cpp:197 I[MI]: CHK 8037cebc ( --- ) Read32 8133db40 at 804c24ec ( --- )
+05:10:017 BreakPoints.cpp:197 I[MI]: CHK 8037cfd0 ( --- ) Read32 8134f000 at 804c24ec ( --- )
+
+Normal colors:
+Red: e54c4c00 98000000
+Blue: 4b4ce500 00009800
+Yellow: ffcb0000 b27f0000
+Green: 00b20000 004c0000
+Gray: 7f656500 32191900
+
+How to find color start location:
+Search color
+Search
+Subtract 8, Search
+Subtract 4, Search
+Subtract 1C, Search
+Subtract 8, Search
+Subtract 18, Search
+Subtract 8, Search
+Search
+Search
+If P3 or P4, Search
+
+Japanese player 1 backwards:
+P1: 804C24B8 (34 earlier from USA)
+
+Japanese player 2 backwards:
+P2: 804C2424 (34 earlier from USA)
+
+To get current language:
+
+byte 8045c386
+
+lwz r3, -0x77C0(r13)
+addi r3, r3, 0x1CB0
+lbz r0, 0x16(r3) <- if 1, then usd
+
+Hook into same place as he is, except have custom colors that depend on various factors:
+		PLAYER				CPU
+P1		(660066/60047A)		(FFBBEE/660066)
+P2		(FA6900/DB3340)		(FFA940/DB3340)
+P3		(007034/0F5959)		(00ff85/00FF00)
+P4		(02659A/10206B)		(10a1ff/0000FF)
+Red		(F05B47/ED1C24)		(FF9B87/ED1C24)
+Blue	(02659A/10206B)		(10a1ff/0000FF)
+Green	(007034/0F5959)		(00ff85/00FF00)
+
+
+
+
+
+
+
+
+
+Normal colors:
+Red: e54c4c00 98000000
+Blue: 4b4ce500 00009800
+Yellow: ffcb0000 b27f0000
+Green: 00b20000 004c0000
+Gray: 7f656500 32191900
+
+
+
+
+
+
+
+
+
+Search color
+Search
+Subtract 8, Search
+Subtract 4, Search
+Subtract 1C, Search
+Subtract 8, Search
+Subtract 18, Search
+Subtract 8, Search
+Search
+Search
+
+Language  P1        P2        P3        P4
+English   804B354C  804B34B8  804B35B8  804B3524
+Deustch   804B354C
+Francais  
+Italiano  
+Espanol   
+
+
+
+
+PAL
+@ 802637F8: can use r5, r6, r9, r10, r11, r12
+li r12,0				# Player Number
+lis r11, 0x803F			# This is team number struct
+ori r11, r11, 0x1C72	# Separated by 0x24, also holds player type in 1(r11)
+LOOP_PLAYER:
+
+lis r9, 0x804B		# Get first half of color location
+cmpwi r12,0
+bne NOT_P1
+ori r9,r9,0x354C	# Color location second half
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne P1_HUMAN
+lis r5, 0xFFBB
+ori r5, r5, 0xEE00
+lis r6, 0x6600
+ori r6, r6, 0x6600
+b CHECK_LANGUAGE
+P1_HUMAN:
+lis r5, 0x6600
+ori r5, r5, 0x6600
+lis r6, 0x6004
+ori r6, r6, 0x7A00
+b CHECK_LANGUAGE
+
+NOT_P1:
+cmpwi r12,1
+bne- NOT_P2
+ori r9,r9,0x34B8	# Color location second half
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne P2_HUMAN
+lis r5, 0xFFA9
+ori r5, r5, 0x4000
+lis r6, 0xDB33
+ori r6, r6, 0x4000
+b CHECK_LANGUAGE
+P2_HUMAN:
+lis r5, 0xFA69
+lis r6, 0xDB33
+ori r6, r6, 0x4000
+b CHECK_LANGUAGE
+
+NOT_P2:
+cmpwi r12,2
+bne- NOT_P3
+ori r9,r9,0x35B8	# Color location second half
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne P3_HUMAN
+lis r5, 0x00ff
+ori r5, r5, 0x8500
+lis r6, 0x00FF
+ori r6, r6, 0x0000
+b CHECK_LANGUAGE
+P3_HUMAN:
+lis r5, 0x0070
+ori r5, r5, 0x3400
+lis r6, 0x0F59
+ori r6, r6, 0x5900
+b CHECK_LANGUAGE
+
+NOT_P3:
+ori r9,r9,0x3524	# Color location second half
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne P4_HUMAN
+lis r5, 0x10a1
+ori r5, r5, 0xff00
+lis r6, 0x0000
+ori r6, r6, 0xFF00
+b CHECK_LANGUAGE
+P4_HUMAN:
+lis r5, 0x0265
+ori r5, r5, 0x9A00
+lis r6, 0x1020
+ori r6, r6, 0x6B00
+
+CHECK_LANGUAGE:
+# In PAL, there is no language diffs
+
+CHECK_TEAM:
+lis r10, 0x8047
+lbz r10, 0x15D0(r10)	# Team mode flag
+cmpwi r10, 0
+beq SET_COLOR
+
+lbz r10, 0(r11)
+cmpwi r10, 0		# RED team
+bne NOT_RED
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne RED_HUMAN
+lis r5, 0xFF9B
+ori r5, r5, 0x8700
+lis r6, 0xED1C
+ori r6, r6, 0x2400
+b SET_COLOR
+RED_HUMAN:
+lis r5, 0xF05B
+ori r5, r5, 0x4700
+lis r6, 0xED1C
+ori r6, r6, 0x2400
+b SET_COLOR
+
+NOT_RED:
+cmpwi r10, 1	# BLUE team
+bne NOT_BLUE
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne BLUE_HUMAN
+lis r5, 0x10a1
+ori r5, r5, 0xff00
+lis r6, 0x0000
+ori r6, r6, 0xFF00
+b SET_COLOR
+BLUE_HUMAN:
+lis r5, 0x0265
+ori r5, r5, 0x9A00
+li r6, 0x1020
+ori r6, r6, 0x6B00
+b SET_COLOR
+
+NOT_BLUE:
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 1
+bne GREEN_HUMAN
+lis r5, 0x00ff
+ori r5, r5, 0x8500
+lis r6, 0x00FF
+ori r6, r6, 0x0000
+b SET_COLOR
+GREEN_HUMAN:
+lis r5, 0x0070
+ori r5, r5, 0x3400
+lis r6, 0x0F59
+ori r6, r6, 0x5900
+
+SET_COLOR:
+lbz r10, 1(r11)		# Get what type of player we are
+cmpwi r10, 3
+bne NOT_NONE
+lis r5, 0xFFFF
+ori r5, r5, 0xFF00
+mr r6, r5
+NOT_NONE:
+
+lwz r9,0(r9)
+lwz r9,0(r9)
+lwz r9,0(r9)
+lwz r9,8(r9)
+lwz r9,24(r9)
+lwz r9,8(r9)
+lwz r9,28(r9)
+lwz r9,4(r9)
+lwz r9,8(r9)		# We now have the location of the color in r9
+stw r5, 0(r9)		# r5 is portrait color
+stw r6, 4(r9)		# r6 is border color
+
+CONTINUE:
+addi r12, r12, 1	# Increment player number
+addi r11, r11, 0x24	# Go to next team color or player type
+cmpwi r12, 4
+blt LOOP_PLAYER
+
+lbz r0,14(r3)		# Do what it did before
+
+
+C22637F8 00000043
+39800000 3D60803F
+616B1C72 3D20804B
+2C0C0000 4082003C
+6129354C 894B0001
+2C0A0001 40820018
+3CA0FFBB 60A5EE00
+3CC06600 60C66600
+480000C8 3CA06600
+60A56600 3CC06004
+60C67A00 480000B4
+2C0C0001 40820038
+612934B8 894B0001
+2C0A0001 40820018
+3CA0FFA9 60A54000
+3CC0DB33 60C64000
+48000088 3CA0FA69
+3CC0DB33 60C64000
+48000078 2C0C0002
+4082003C 612935B8
+894B0001 2C0A0001
+40820018 3CA000FF
+60A58500 3CC000FF
+60C60000 4800004C
+3CA00070 60A53400
+3CC00F59 60C65900
+48000038 61293524
+894B0001 2C0A0001
+40820018 3CA010A1
+60A5FF00 3CC00000
+60C6FF00 48000014
+3CA00265 60A59A00
+3CC01020 60C66B00
+3D408047 894A15D0
+2C0A0000 418200B0
+894B0000 2C0A0000
+40820038 894B0001
+2C0A0001 40820018
+3CA0FF9B 60A58700
+3CC0ED1C 60C62400
+48000084 3CA0F05B
+60A54700 3CC0ED1C
+60C62400 48000070
+2C0A0001 40820038
+894B0001 2C0A0001
+40820018 3CA010A1
+60A5FF00 3CC00000
+60C6FF00 48000048
+3CA00265 60A59A00
+38C01020 60C66B00
+48000034 894B0001
+2C0A0001 40820018
+3CA000FF 60A58500
+3CC000FF 60C60000
+48000014 3CA00070
+60A53400 3CC00F59
+60C65900 894B0001
+2C0A0003 40820010
+3CA0FFFF 60A5FF00
+7CA62B78 81290000
+81290000 81290000
+81290008 81290018
+81290008 8129001C
+81290004 81290008
+90A90000 90C90004
+398C0001 396B0024
+2C0C0004 4180FE00
+8803000E 00000000
+
+
+
+
+
+v1.02
+At 8026304C: can use r14-18, r20
+li r20,0				# Player Number
+lis r18, 0x803F			# This is team number struct
+ori r18, r18, 0x0E06	# Separated by 0x24, also holds player type in 2(r18)
+LOOP_PLAYER:
+
+lis r16, 0x804C		# Get first half of color location
+cmpwi r20,0
+bne NOT_P1
+ori r16,r16,0x24EC	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P1_HUMAN
+lis r14, 0xFFBB
+ori r14, r14, 0xEE00
+lis r15, 0x6600
+ori r15, r15, 0x6600
+b CHECK_JAPANESE
+P1_HUMAN:
+lis r14, 0x6600
+ori r14, r14, 0x6600
+lis r15, 0x6004
+ori r15, r15, 0x7A00
+b CHECK_JAPANESE
+
+NOT_P1:
+cmpwi r20,1
+bne- NOT_P2
+ori r16,r16,0x2458	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P2_HUMAN
+lis r14, 0xFFA9
+ori r14, r14, 0x4000
+lis r15, 0xDB33
+ori r15, r15, 0x4000
+b CHECK_JAPANESE
+P2_HUMAN:
+lis r14, 0xFA69
+lis r15, 0xDB33
+ori r15, r15, 0x4000
+b CHECK_JAPANESE
+
+NOT_P2:
+cmpwi r20,2
+bne- NOT_P3
+ori r16,r16,0x2558	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P3_HUMAN
+lis r14, 0x00ff
+ori r14, r14, 0x8500
+lis r15, 0x00FF
+ori r15, r15, 0x0000
+b CHECK_JAPANESE
+P3_HUMAN:
+lis r14, 0x0070
+ori r14, r14, 0x3400
+lis r15, 0x0F59
+ori r15, r15, 0x5900
+b CHECK_JAPANESE
+
+NOT_P3:
+ori r16,r16,0x24C4	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P4_HUMAN
+lis r14, 0x10a1
+ori r14, r14, 0xff00
+lis r15, 0x0000
+ori r15, r15, 0xFF00
+b CHECK_JAPANESE
+P4_HUMAN:
+lis r14, 0x0265
+ori r14, r14, 0x9A00
+lis r15, 0x1020
+ori r15, r15, 0x6B00
+
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0x16(r17)
+cmpwi r17, 1
+beq CHECK_TEAM  # If 1, then we're usd
+subi r16, r16, 0x34
+
+CHECK_TEAM:
+lis r17, 0x8048
+lbz r17, 0x07C8(r17)	# Team mode flag
+cmpwi r17, 0
+beq SET_COLOR
+
+lbz r17, 0(r18)
+cmpwi r17, 0		# RED team
+bne NOT_RED
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne RED_HUMAN
+lis r14, 0xFF9B
+ori r14, r14, 0x8700
+lis r15, 0xED1C
+ori r15, r15, 0x2400
+b SET_COLOR
+RED_HUMAN:
+lis r14, 0xF05B
+ori r14, r14, 0x4700
+lis r15, 0xED1C
+ori r15, r15, 0x2400
+b SET_COLOR
+
+NOT_RED:
+cmpwi r17, 1	# BLUE team
+bne NOT_BLUE
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne BLUE_HUMAN
+lis r14, 0x10a1
+ori r14, r14, 0xff00
+lis r15, 0x0000
+ori r15, r15, 0xFF00
+b SET_COLOR
+BLUE_HUMAN:
+lis r14, 0x0265
+ori r14, r14, 0x9A00
+li r15, 0x1020
+ori r15, r15, 0x6B00
+b SET_COLOR
+
+NOT_BLUE:
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne GREEN_HUMAN
+lis r14, 0x00ff
+ori r14, r14, 0x8500
+lis r15, 0x00FF
+ori r15, r15, 0x0000
+b SET_COLOR
+GREEN_HUMAN:
+lis r14, 0x0070
+ori r14, r14, 0x3400
+lis r15, 0x0F59
+ori r15, r15, 0x5900
+
+SET_COLOR:
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 3
+bne NOT_NONE
+lis r14, 0xFFFF
+ori r14, r14, 0xFF00
+mr r15, r14
+NOT_NONE:
+
+cmpwi r20, 1
+bgt WHAT
+lwz r16,0(r16)
+WHAT:
+lwz r16,0(r16)
+lwz r16,0(r16)
+lwz r16,8(r16)
+lwz r16,24(r16)
+lwz r16,8(r16)
+lwz r16,28(r16)
+lwz r16,4(r16)
+lwz r16,8(r16)		# We now have the location of the color in r16
+stw r14, 0(r16)		# r14 is portrait color
+stw r15, 4(r16)		# r15 is border color
+
+CONTINUE:
+addi r20, r20, 1	# Increment player number
+addi r18, r18, 0x24	# Go to next team color or player type
+cmpwi r20, 4
+blt LOOP_PLAYER
+
+lbz r0,14(r3)		# Do what it did before
+
+
+
+
+
+Normal colors:
+Red: e54c4c00 98000000
+Blue: 4b4ce500 00009800
+Yellow: ffcb0000 b27f0000
+Green: 00b20000 004c0000
+Gray: 7f656500 32191900
+
+JPN:
+P1: 172C (-34)
+P2: 182C (+160)
+P3: ????
+
+810F6628
+810F6A44
+810F659C
+810F5E88
+810F6278
+810F61C8
+Subtract 8, Search
+Search
+Search
+If P3 or P4, Search
+
+810F65B0
+Search
+Subtract 8, Search
+Subtract 4, Search
+Subtract 1C, Search
+Subtract 8, Search
+Subtract 18, Search
+Subtract 8, Search
+Search
+Search
+If P3 or P4, Search
+
+P4: ????
+Search color
+Search
+Subtract 8, Search
+Subtract 4, Search
+Subtract 1C, Search
+Subtract 8, Search
+Subtract 18, Search
+Subtract 8, Search
+Search
+Search
+If P3 or P4, Search
+
+USA:
+Pi:	1760
+P2:	16CC
+P3:	17CC
+P4:	1738
+
+v1.01
+At 802628B0: can use r14-18, r20
+li r20,0				# Player Number
+lis r18, 0x803F			# This is team number struct
+ori r18, r18, 0x0126	# Separated by 0x24, also holds player type in 2(r18)
+LOOP_PLAYER:
+
+lis r16,0x804C		# Get first hasf of color location
+cmpwi r20,0
+bne NOT_P1
+ori r16,r16,0x1760	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P1_HUMAN
+lis r14, 0xFFBB
+ori r14, r14, 0xEE00
+lis r15, 0x6600
+ori r15, r15, 0x6600
+b CHECK_JAPANESE
+P1_HUMAN:
+lis r14, 0x6600
+ori r14, r14, 0x6600
+lis r15, 0x6004
+ori r15, r15, 0x7A00
+b CHECK_JAPANESE
+
+NOT_P1:
+cmpwi r20,1
+bne- NOT_P2
+ori r16,r16,0x16CC	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P2_HUMAN
+lis r14, 0xFFA9
+ori r14, r14, 0x4000
+lis r15, 0xDB33
+ori r15, r15, 0x4000
+b CHECK_JAPANESE
+P2_HUMAN:
+lis r14, 0xFA69
+lis r15, 0xDB33
+ori r15, r15, 0x4000
+b CHECK_JAPANESE
+
+NOT_P2:
+cmpwi r20,2
+bne- NOT_P3
+ori r16,r16,0x17CC	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P3_HUMAN
+lis r14, 0x00ff
+ori r14, r14, 0x8500
+lis r15, 0x00FF
+ori r15, r15, 0x0000
+b CHECK_JAPANESE
+P3_HUMAN:
+lis r14, 0x0070
+ori r14, r14, 0x3400
+lis r15, 0x0F59
+ori r15, r15, 0x5900
+b CHECK_JAPANESE
+
+NOT_P3:
+ori r16,r16,0x1738	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P4_HUMAN
+lis r14, 0x10a1
+ori r14, r14, 0xff00
+lis r15, 0x0000
+ori r15, r15, 0xFF00
+b CHECK_JAPANESE
+P4_HUMAN:
+lis r14, 0x0265
+ori r14, r14, 0x9A00
+lis r15, 0x1020
+ori r15, r15, 0x6B00
+
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0x16(r17)
+cmpwi r17, 1
+beq CHECK_TEAM  # If 1, then we're usd
+subi r16, r16, 0x34
+
+CHECK_TEAM:
+lis r17, 0x8048
+lbz r17, -0x518(r17)	# Team mode flag
+cmpwi r17, 0
+beq SET_COLOR
+
+lbz r17, 0(r18)
+cmpwi r17, 0		# RED team
+bne NOT_RED
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne RED_HUMAN
+lis r14, 0xFF9B
+ori r14, r14, 0x8700
+lis r15, 0xED1C
+ori r15, r15, 0x2400
+b SET_COLOR
+RED_HUMAN:
+lis r14, 0xF05B
+ori r14, r14, 0x4700
+lis r15, 0xED1C
+ori r15, r15, 0x2400
+b SET_COLOR
+
+NOT_RED:
+cmpwi r17, 1	# BLUE team
+bne NOT_BLUE
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne BLUE_HUMAN
+lis r14, 0x10a1
+ori r14, r14, 0xff00
+lis r15, 0x0000
+ori r15, r15, 0xFF00
+b SET_COLOR
+BLUE_HUMAN:
+lis r14, 0x0265
+ori r14, r14, 0x9A00
+li r15, 0x1020
+ori r15, r15, 0x6B00
+b SET_COLOR
+
+NOT_BLUE:
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne GREEN_HUMAN
+lis r14, 0x00ff
+ori r14, r14, 0x8500
+lis r15, 0x00FF
+ori r15, r15, 0x0000
+b SET_COLOR
+GREEN_HUMAN:
+lis r14, 0x0070
+ori r14, r14, 0x3400
+lis r15, 0x0F59
+ori r15, r15, 0x5900
+
+SET_COLOR:
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 3
+bne NOT_NONE
+lis r14, 0xFFFF
+ori r14, r14, 0xFF00
+mr r15, r14
+NOT_NONE:
+
+cmpwi r20, 1
+bgt WHAT
+lwz r16,0(r16)
+WHAT:
+lwz r16,0(r16)
+lwz r16,0(r16)
+lwz r16,8(r16)
+lwz r16,24(r16)
+lwz r16,8(r16)
+lwz r16,28(r16)
+lwz r16,4(r16)
+lwz r16,8(r16)		# We now have the location of the color in r16
+stw r14, 0(r16)		# r14 is portrait color
+stw r15, 4(r16)		# r15 is border color
+
+CONTINUE:
+addi r20, r20, 1	# Increment player number
+addi r18, r18, 0x24	# Go to next team color or player type
+cmpwi r20, 4
+blt LOOP_PLAYER
+
+lbz r0,14(r3)		# Do what it did before
+
+
+
+
+
+v1.00
+At 80261D40: can use r14-18, r20
+li r20,0				# Player Number
+lis r18, 0x803E			# This is team number struct
+ori r18, r18, 0xEF76	# Separated by 0x24, also holds player type in 2(r18)
+LOOP_PLAYER:
+
+lis r16,0x804C		# Get first hasf of color location
+cmpwi r20,0
+bne NOT_P1
+ori r16,r16,912		# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P1_HUMAN
+lis r14, 0xFFBB
+ori r14, r14, 0xEE00
+lis r15, 0x6600
+ori r15, r15, 0x6600
+b CHECK_JAPANESE
+P1_HUMAN:
+lis r14, 0x6600
+ori r14, r14, 0x6600
+lis r15, 0x6004
+ori r15, r15, 0x7A00
+b CHECK_JAPANESE
+
+NOT_P1:
+cmpwi r20,1
+bne- NOT_P2
+ori r16,r16,764		# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P2_HUMAN
+lis r14, 0xFFA9
+ori r14, r14, 0x4000
+lis r15, 0xDB33
+ori r15, r15, 0x4000
+b CHECK_JAPANESE
+P2_HUMAN:
+lis r14, 0xFA69
+lis r15, 0xDB33
+ori r15, r15, 0x4000
+b CHECK_JAPANESE
+
+NOT_P2:
+cmpwi r20,2
+bne- NOT_P3
+ori r16,r16,1020	# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P3_HUMAN
+lis r14, 0x00ff
+ori r14, r14, 0x8500
+lis r15, 0x00FF
+ori r15, r15, 0x0000
+b CHECK_JAPANESE
+P3_HUMAN:
+lis r14, 0x0070
+ori r14, r14, 0x3400
+lis r15, 0x0F59
+ori r15, r15, 0x5900
+b CHECK_JAPANESE
+
+NOT_P3:
+ori r16,r16,872		# Color location second half
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne P4_HUMAN
+lis r14, 0x10a1
+ori r14, r14, 0xff00
+lis r15, 0x0000
+ori r15, r15, 0xFF00
+b CHECK_JAPANESE
+P4_HUMAN:
+lis r14, 0x0265
+ori r14, r14, 0x9A00
+lis r15, 0x1020
+ori r15, r15, 0x6B00
+
+CHECK_JAPANESE:
+lwz r17, -0x77C0(r13)
+addi r17, r17, 0x1CB0
+lbz r17, 0xE(r17)
+cmpwi r17, 1
+beq CHECK_TEAM  # If 1, then we're usd
+subi r16, r16, 0x34
+
+CHECK_TEAM:
+lis r17, 0x8048
+lbz r17, -0x1800(r17)	# Team mode flag
+cmpwi r17, 0
+beq SET_COLOR
+
+lbz r17, 0(r18)
+cmpwi r17, 0		# RED team
+bne NOT_RED
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne RED_HUMAN
+lis r14, 0xFF9B
+ori r14, r14, 0x8700
+lis r15, 0xED1C
+ori r15, r15, 0x2400
+b SET_COLOR
+RED_HUMAN:
+lis r14, 0xF05B
+ori r14, r14, 0x4700
+lis r15, 0xED1C
+ori r15, r15, 0x2400
+b SET_COLOR
+
+NOT_RED:
+cmpwi r17, 1	# BLUE team
+bne NOT_BLUE
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne BLUE_HUMAN
+lis r14, 0x10a1
+ori r14, r14, 0xff00
+lis r15, 0x0000
+ori r15, r15, 0xFF00
+b SET_COLOR
+BLUE_HUMAN:
+lis r14, 0x0265
+ori r14, r14, 0x9A00
+li r15, 0x1020
+ori r15, r15, 0x6B00
+b SET_COLOR
+
+NOT_BLUE:
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 1
+bne GREEN_HUMAN
+lis r14, 0x00ff
+ori r14, r14, 0x8500
+lis r15, 0x00FF
+ori r15, r15, 0x0000
+b SET_COLOR
+GREEN_HUMAN:
+lis r14, 0x0070
+ori r14, r14, 0x3400
+lis r15, 0x0F59
+ori r15, r15, 0x5900
+
+SET_COLOR:
+lbz r17, 2(r18)		# Get what type of player we are
+cmpwi r17, 3
+bne NOT_NONE
+lis r14, 0xFFFF
+ori r14, r14, 0xFF00
+mr r15, r14
+NOT_NONE:
+
+cmpwi r20, 1
+bgt WHAT
+lwz r16,0(r16)
+WHAT:
+lwz r16,0(r16)
+lwz r16,0(r16)
+lwz r16,8(r16)
+lwz r16,24(r16)
+lwz r16,8(r16)
+lwz r16,28(r16)
+lwz r16,4(r16)
+lwz r16,8(r16)		# We now have the location of the color in r16
+stw r14, 0(r16)		# r14 is portrait color
+stw r15, 4(r16)		# r15 is border color
+
+CONTINUE:
+addi r20, r20, 1	# Increment player number
+addi r18, r18, 0x24	# Go to next team color or player type
+cmpwi r20, 4
+blt LOOP_PLAYER
+
+lbz r0,14(r3)		# Do what it did before

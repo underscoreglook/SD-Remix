@@ -1,0 +1,90 @@
+# Custom debug menu function v1.00
+802FEF2C 00000011
+7C0802A6 2C040000 41810034 80840014 90010004 9421FFF8 3CA08030 60A503E4 3D80802F 618CE4F8 7D8903A6 4E800421
+8001000C 38210008 7C0803A6 38600000 4E800020
+
+mflr r0
+cmpwi r4,0
+bgt- 0x34
+lwz r4,20(r4)
+stw r0,4(r1)
+stwu r1,-8(r1)
+lis r5,-32720
+ori r5,r5,996
+lis r12,-32721
+ori r12,r12,58616
+mtctr r12
+bctrl
+lwz r0,12(r1)
+addi r1,r1,8
+mtlr r0
+li r3,0
+blr
+
+
+
+# Custom debug menu loader function v1.02
+80300758 0000000E
+2C040000 4181002C 7C0802A6 90010004 9421FFF8 80840014 3CA08030 60A51C80 4BFFF61D 8001000C 38210008 7C0803A6
+38600000 4E800020
+
+8030 03E4	8030 1038	8030 1C80
+2FCFC4	2FDC18	2FE860
+
+cmpwi r4,0
+bgt- 0x2C
+mflr r0
+stw r0,4(r1)
+stwu r1,-8(r1)
+lwz r4,20(r4)
+lis r5,-32720
+ori r5,r5,7296
+bl 0xFFFFF61C
+lwz r0,12(r1)
+addi r1,r1,8
+mtlr r0
+li r3,0
+blr
+
+
+cmpwi r4,0
+bgt- 0x2C
+mflr r0
+stw r0,4(r1)
+stwu r1,-8(r1)
+lwz r4,20(r4)
+lis r5,-32720
+ori r5,r5,0x3E4		ori r5,r5,0x1038	ori r5,r5,0x1C80
+bl 0x2FC9E8			bl 0x2FD63C			bl 0x2FE284
+lwz r0,12(r1)
+addi r1,r1,8
+mtlr r0
+li r3,0
+blr
+
+cmpwi r4,0
+bgt- 0x2C
+mflr r0
+stw r0,4(r1)
+stwu r1,-8(r1)
+lwz r4,20(r4)
+lis r5,-32720
+ori r5,r5,0x1C80
+bl 0x16E37C
+lwz r0,12(r1)
+addi r1,r1,8
+mtlr r0
+li r3,0
+blr
+
+# Custom Debug Menu Function, 0x38 bytes
+80001B2C 80001B2C 80001B2C 0000000E
+2C040000 4181002C 7C0802A6 90010004 9421FFF8 80840014 3CA08030 60A503E4
+482FC9E9 8001000C 38210008 7C0803A6 38600000 4E800020
+
+Custom menu function is at 80001B2C in all versions
+That means the ori is at 80001B48	60A503E4	60A51038	60A51C80
+Also, the branch is at 80001B4C		482FC9E9	482FD63D	482FE285
+
+Sub-branch locations in all version:
+802FE4F8	802FF14C	802ffd94

@@ -1,0 +1,216 @@
+v1.00
+@ 80068E00
+lwz r12, 0(r29)
+slwi r12, r12, 1	# Character offset times 2
+lis r11, 0x8046
+ori r11, r11, 0x4C50	# ptrTable  80464C50
+lhzx r10, r11, r12		# Patch offset
+cmpwi r10, 0
+beq BREAK
+add r11, r11, r10		# r11 is ptrPatch (ptrDiff)
+slwi r12, r12, 1		# Character offset times 2 again, for total of 4
+lis r10, 0x8045
+ori r10, r10, 0x78F8	# ptr to array of (Pl*.dat + 0x3644) indexed by char id
+lwzx r10, r10, r12		# Load the current character
+lwz r12, 0(r10)			# Need to do another load, r12 is ptrPlayer
+# Sanity Check
+lha r10, 0(r11)		# r10 is sanityOffset
+lhz r9, 2(r11)		# r11 is sanityData
+lhzx r10, r12, r10	# r10 is now the actual data to compare to sanity data
+cmpw r9, r10		# See if they're the same
+beq BREAK			# If they're the same, we've already been patched
+addi r11, r11, 4	# Move ptrPatch past the sanity check
+MAIN_LOOP:
+lha r10, 0(r11)		# Num words same (could be negative)
+slwi r10, r10, 2	# Multiply by 4
+add r12, r12, r10	# Add numWordsSame * 4 to ptrPlayer
+cmpwi r10, 0		# Check if numWordsSame is 0
+lhz r10, 2(r11)		# r10 is numWordsDiff
+bne DO_DIFF
+cmpwi r10, 0
+beq BREAK
+DO_DIFF:
+li r9, 0			# r9 is loopvar
+addi r11, r11, 4
+DIFF_LOOP:
+lwz r8, 0(r12)
+lwz r7, 0(r11)
+add r7, r8, r7
+stw r7, 0(r12)
+addi r11, r11, 4
+addi r12, r12, 4
+addi r9, r9, 1
+cmpw r9, r10
+blt DIFF_LOOP
+b MAIN_LOOP
+BREAK:
+addi r3, r31, 0		# Important! Remember to do what it did before
+
+C2068E00 00000015
+819D0000 558C083C
+3D608046 616B4C50
+7D4B622E 2C0A0000
+41820084 7D6B5214
+558C083C 3D408045
+614A78F8 7D4A602E
+818A0000 A94B0000
+A12B0002 7D4C522E
+7C095000 41820058
+396B0004 A94B0000
+554A103A 7D8C5214
+2C0A0000 A14B0002
+4082000C 2C0A0000
+41820034 39200000
+396B0004 810C0000
+80EB0000 7CE83A14
+90EC0000 396B0004
+398C0004 39290001
+7C095000 4180FFE0
+4BFFFFB4 387F0000
+60000000 00000000
+
+
+
+v1.01
+@ 80068F10
+lwz r12, 0(r29)
+slwi r12, r12, 1	# Character offset times 2
+lis r11, 0x8046
+ori r11, r11, 0x5F38	# ptrTable  80465F38
+lhzx r10, r11, r12		# Patch offset
+cmpwi r10, 0
+beq BREAK
+add r11, r11, r10		# r11 is ptrPatch (ptrDiff)
+slwi r12, r12, 2		# Character offset times 2 again, for total of 4
+lis r10, 0x8045
+ori r10, r10, 0x8BD8	# ptr to array of (Pl*.dat + 0x3644) indexed by char id
+lwzx r10, r10, r12		# Load the current character
+lwz r12, 0(r10)			# Need to do another load, r12 is ptrPlayer
+# Sanity Check
+lha r10, 0(r11)		# r10 is sanityOffset
+lhz r9, 2(r11)		# r11 is sanityData
+lhzx r10, r12, r10	# r10 is now the actual data to compare to sanity data
+cmpw r9, r10		# See if they're the same
+beq BREAK			# If they're the same, we've already been patched
+addi r11, r11, 4	# Move ptrPatch past the sanity check
+MAIN_LOOP:
+lha r10, 0(r11)		# Num words same (could be negative)
+slwi r10, r10, 2	# Multiply by 4
+add r12, r12, r10	# Add numWordsSame * 4 to ptrPlayer
+cmpwi r10, 0		# Check if numWordsSame is 0
+lhz r10, 2(r11)		# r10 is numWordsDiff
+bne DO_DIFF
+cmpwi r10, 0
+beq BREAK
+DO_DIFF:
+li r9, 0			# r9 is loopvar
+addi r11, r11, 4
+DIFF_LOOP:
+lwz r8, 0(r12)
+lwz r7, 0(r11)
+add r7, r8, r7
+stw r7, 0(r12)
+addi r11, r11, 4
+addi r12, r12, 4
+addi r9, r9, 1
+cmpw r9, r10
+blt DIFF_LOOP
+b MAIN_LOOP
+BREAK:
+addi r3, r31, 0		# Important! Remember to do what it did before
+
+C2068F10 00000015
+819D0000 558C083C
+3D608046 616B5F38
+7D4B622E 2C0A0000
+41820084 7D6B5214
+558C083C 3D408045
+614A8BD8 7D4A602E
+818A0000 A94B0000
+A12B0002 7D4C522E
+7C095000 41820058
+396B0004 A94B0000
+554A103A 7D8C5214
+2C0A0000 A14B0002
+4082000C 2C0A0000
+41820034 39200000
+396B0004 810C0000
+80EB0000 7CE83A14
+90EC0000 396B0004
+398C0004 39290001
+7C095000 4180FFE0
+4BFFFFB4 387F0000
+60000000 00000000
+
+
+
+v1.02
+@ 80068F24
+lwz r12, 0(r29)
+slwi r12, r12, 1	# Character offset times 2
+lis r11, 0x8046
+ori r11, r11, 0x6C18	# ptrTable  80466C18
+lhzx r10, r11, r12		# Patch offset
+cmpwi r10, 0
+beq BREAK
+add r11, r11, r10		# r11 is ptrPatch (ptrDiff)
+slwi r12, r12, 2		# Character offset times 2 again, for total of 4
+lis r10, 0x8045
+ori r10, r10, 0x98B8	# ptr to array of (Pl*.dat + 0x3644) indexed by char id
+lwzx r10, r10, r12		# Load the current character
+lwz r12, 0(r10)			# Need to do another load, r12 is ptrPlayer
+# Sanity Check
+lha r10, 0(r11)		# r10 is sanityOffset
+lhz r9, 2(r11)		# r11 is sanityData
+lhzx r10, r12, r10	# r10 is now the actual data to compare to sanity data
+cmpw r9, r10		# See if they're the same
+beq BREAK			# If they're the same, we've already been patched
+addi r11, r11, 4	# Move ptrPatch past the sanity check
+MAIN_LOOP:
+lha r10, 0(r11)		# Num words same (could be negative)
+slwi r10, r10, 2	# Multiply by 4
+add r12, r12, r10	# Add numWordsSame * 4 to ptrPlayer
+cmpwi r10, 0		# Check if numWordsSame is 0
+lhz r10, 2(r11)		# r10 is numWordsDiff
+bne DO_DIFF
+cmpwi r10, 0
+beq BREAK
+DO_DIFF:
+li r9, 0			# r9 is loopvar
+addi r11, r11, 4
+DIFF_LOOP:
+lwz r8, 0(r12)
+lwz r7, 0(r11)
+add r7, r8, r7
+stw r7, 0(r12)
+addi r11, r11, 4
+addi r12, r12, 4
+addi r9, r9, 1
+cmpw r9, r10
+blt DIFF_LOOP
+b MAIN_LOOP
+BREAK:
+addi r3, r31, 0		# Important! Remember to do what it did before
+
+C2068F24 00000015
+819D0000 558C083C
+3D608046 616B6C18
+7D4B622E 2C0A0000
+41820084 7D6B5214
+558C083C 3D408045
+614A98B8 7D4A602E
+818A0000 A94B0000
+A12B0002 7D4C522E
+7C095000 41820058
+396B0004 A94B0000
+554A103A 7D8C5214
+2C0A0000 A14B0002
+4082000C 2C0A0000
+41820034 39200000
+396B0004 810C0000
+80EB0000 7CE83A14
+90EC0000 396B0004
+398C0004 39290001
+7C095000 4180FFE0
+4BFFFFB4 387F0000
+60000000 00000000

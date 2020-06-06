@@ -1,0 +1,408 @@
+New Debug Menu
+==============
+< SD Remix LITE Options >
+Widescreen: [Off, On] // Try and reuse whatever strings are already here.
+Options: [Off, On] // This changes banner color.
+Options >
+	Overtime: [Sudden Death, Tournament]
+	Wall Bracing: [Off, On]
+	Ledge Invinc: [Normal, Dynamic]
+	Handicap: [Damage Ratio, Stock/Crew]
+Credits>
+	sdremix troubleshooter - SD Remix Battle Planner, Lead Director
+	Ripple - SD Remix Developer, Battle Planner
+	StandardToaster - SD Remix Lead ASM Programmer
+	Achilles1515 - Coding and Support
+	_glook - SD Remix Lite Developer, Coding
+	Milun - Stage Modifications
+	Magus420 - Coding
+	Dan Salvato - Coding
+	flieskiller - Coding
+	Jorgasm - Coding
+	ShamRock - Coding
+	Zauron - Coding
+	_Novi - Publicist
+	donny2112 - Coding
+Debug Flag: [MASTER, DEVELOP, ETC]
+Debug Mode > (Goes to versus mode)
+
+-----------
+- Strings -
+-----------
+803FD000	< SD Remix LITE Options >
+803FD01C	Widescreen:
+803FD028		Off
+803FD02C		On
+803FD030		Options
+803FD03C		Options >
+803FD048		Overtime
+803FD054		Sudden Death
+803FD064		Tournament
+803FD070		Wall Bracing
+803FD080		Ledge Invinc
+803FD098		Normal
+803FD0A0		Dynamic
+803FD0A8		Handicap:
+803FD0B4		Damage Ratio
+803FD0C0		Stock/Crew
+803FD0CC		Credits>
+803FD0D8		sdremix troubleshooter - SD Remix Battle Planner, Lead Director
+803FD118		Ripple - SD Remix Developer, Battle Planner
+803FD144		StandardToaster - SD Remix Lead ASM Programmer
+803FD174		Achilles1515 - Coding and Support
+803FD194		_glook - SD Remix Lite Developer, Coding
+803FD1BC		Milun - Stage Modifications
+803FD1D0		Magus420 - Coding
+803FD1E4		Dan Salvato - Coding
+803FD1F8		flieskiller - Coding
+803FD20C		Jorgasm - Coding
+803FD21C		ShamRock - Coding
+803FD230		Zauron - Coding
+803FD240		_Novi - Publicist
+803FD250		donny2112 - Coding
+803FD264		Debug Flag:
+803FD270		Debug Mode >
+
+-----------------
+- String arrays -
+-----------------
+803FD280		Widescreen
+803FD280		Options
+803FD280		Wall Bracing
+803FD288		Overtime
+803FD290		Ledge Invincibility
+803FD298		Handicap
+
+---------------
+- Menu Tables -
+---------------
+803F8650	Main Menu
+803FA590	Options
+803FA630	Credits
+
+-----------
+- Toggles -
+-----------
+This is a table of entries of 0x10 bytes, 4 words of:
+Variable Address, Code replacement address, Original Code, Replacement Code
+803fa368 801C0EB4 40810094 48000094
+803fa368 80165dc4 38040001 38040000
+803fa368 80165e0c 38040001 38040000
+803fa368 80165e54 38040001 38040000
+803fa368 801A415C 3803ffff 4BFED720
+803fa368 8016DD38 881e0000 48023D80
+803fa368 8016DDCC 901f0028 48023D2C
+803fa368 80067E78 d01b1830 48129CA0
+803fa368 800343B4 7fdd032e 4815D78C
+803fa36c 8008DFAC 2c1c0003 48103BB4
+803fa370 8009A8AC 8084049c 480F72EC
+803fa370 8006A414 807f1990 481277D0
+
+803fa378 80036bb4 9803008e 60000000
+803fa378 80266678 3803ffff 4BF2B59C
+803fa378 801A57DC 38befff8 4BFEC4DC
+803fa378 80230D54 88030005 4BF60F88
+803fa378 8022F76C 881c0004 4BF625A0
+803fa378 8022F6BC 881c0004 4BF6268C
+803fa378 80033CC4 98a3008e 4815E0C0
+
+
+
+
+Custom debug function
+
+mflr r0
+cmpwi r4, 0
+bgt RETURN
+lwz r4,0x14(r4)
+stw r0,0x4(sp)
+stwu sp,-0x8(sp)
+
+lis r5,0x8030
+ori r5,r5,0x03e4
+
+lis r12,0x802F
+ori r12,r12,0xE4F8
+
+mtctr r12
+bctrl
+lwz r0,0xc(sp)
+addi sp,sp,8
+mtlr r0
+RETURN:
+li r3,0
+blr
+
+802FEF2C 00000011
+7C0802A6 2C040000 41810034 80840014 90010004 9421FFF8 3CA08030 60A503E4 3D80802F 618CE4F8 7D8903A6 4E800421
+8001000C 38210008 7C0803A6 38600000 4E800020
+
+
+
+
+Widescreen
+----------
+lis r3, 0x803F
+ori r3, r3, 0x84C0
+lwz r3, 0(r3)
+cmpwi r3, 0
+bne CHANGE
+NORMAL:
+
+lis r4, 0x8002
+ori r4, r4, 0x1A3C
+lis r3, 0x3860
+ori r3, r3, 0x0006
+stw r3, 0(r4)
+lis r4, 0x8036
+ori r4, r4, 0x85F4
+lis r3, 0xc03f
+ori r3, r3, 0x0034
+stw r3, 0(r4)
+
+b RETURN
+CHANGE:
+
+lis r4, 0x8002
+ori r4, r4, 0x1A3C
+lis r3, 0x4816
+ori r3, r3, 0xEC6C
+stw r3, 0(r4)
+lis r4, 0x8036
+ori r4, r4, 0x85F4
+lis r3, 0x4BE2
+ori r3, r3, 0x80C0
+stw r3, 0(r4)
+
+RETURN:
+li r3, 0
+blr
+80021A3C,38600006,4816EC6C
+803685F4,c03f0034,4BE280C0
+
+
+
+
+
+
+
+
+
+
+*************************************
+*********** REWRITE STUFF ***********
+*************************************
+
+In the rewrite, the toggle table should be of the following format to ease things for the memory card hack:
+4 arrays, one after another:
+- Original values
+- Modified values
+- Addresses to write to
+- Toggle variables
+
+
+
+Strings left
+------------
+   0	< SD Remix LITE Options >
+  1C	Options: 
+  28	Options >
+  34	Overtime: 
+  40	Sudden Death
+  50	Tournament
+  5C	Wall Bracing:
+  6C	Ledge Invincibility:
+  84	Normal
+  8C	Dynamic
+  94	Handicap:
+  A0	DamageRatio
+  AC	Stock/Crew
+  B8	Credits >
+  C4	sdremix troubleshooter: SD Remix Battle Planner, Lead Director
+ 104	Ripple: SD Remix Developer, Battle Planner
+ 130	StandardToaster: SD Remix Lead ASM Programmer
+ 15C	_glook: SD Remix Lite Developer
+ 17C	wParam: Memory Card Hack
+ 198	Other Contributions: Achilles1515, Magus420, Dan Salvato,
+ 1D4	  flieskiller, Jorgasm, Zauron, ShamRock, donny2112
+ 208	Stages: Milun, Zauron, flieskiller, Achilles1515
+ 23C	_Freeze_: Testing
+ 250	_Novi: Publicist
+ 264	Debug Mode >
+
+String arrays
+-------------
+[Sudden Death, Tournament]
+[Normal, Dynamic]
+[Damage Ratio, Stock/Crew]
+
+
+
+
+Actual Main Menu
+----------------
+< SD Remix LITE Options >
+Widescreen: [Off, On] // Try and reuse whatever strings are already here.
+Options: [Off, On] // This changes banner color.
+Options >
+	Overtime: [Sudden Death, Tournament]
+	Wall Bracing: [Off, On]
+	Ledge Invinc: [Normal, Dynamic]
+	Handicap: [Damage Ratio, Stock/Crew]
+Credits>
+	|-------------------------------------------|
+	sdremix troubleshooter: Project Lead
+	Ripple: SD Remix Developer, Battle Planner
+	StandardToaster: SD Remix Lead ASM Coder
+	_glook: SD Remix Lite Developer
+	wParam: Memory Card Hack, Code
+	Coding Contributions: Achilles, Dan Salvato,
+       Magus420, flieskiller, Jorgasm, ShamRock
+	Stages: Milun, Zauron, flieskiller, Achilles
+	_Freeze_: Testing
+	_Novi: Publicist
+Debug Flag: [MASTER, DEVELOP, ETC]
+Debug Mode > (Goes to versus mode)
+
+-0x30, C less words (12 less words)
+
+Actual bytes to write, starting at 800018A0:
+# Strings, 142 or 0x8E words
+3C 20 53 44 52 20 4F 70 74 69 6F 6E 73 20 3E 00 4F 70 74 69 6F 6E 73 3A 20 20 20 00 4F 70 74 69 6F 6E 73 20 3E 00 00 00 4F 76 65 72 74 69 6D 65 3A 20 00 00 53 75 64 64 65 6E 20 44 65 61 74 68 00 00 00 00 54 6F 75 72 6E 61 6D 65 6E 74 00 00 57 61 6C 6C 20 42 72 61 63 69 6E 67 3A 20 00 00 4C 65 64 67 65 20 49 6E 76 69 6E 63 69 62 69 6C 69 74 79 3A 20 00 00 00 4E 6F 72 6D 61 6C 00 00 44 79 6E 61 6D 69 63 00 48 61 6E 64 69 63 61 70 3A 20 00 00 44 61 6D 61 67 65 52 61 74 69 6F 00 53 74 6F 63 6B 2F 43 72 65 77 00 00 43 72 65 64 69 74 73 20 3E 00 00 00 73 64 72 65 6D 69 78 5F 74 72 6F 75 62 6C 65 73 68 6F 6F 74 65 72 3A 20 50 72 6F 6A 65 63 74 20 4C 65 61 64 00 00 00 00 52 69 70 70 6C 65 3A 20 53 44 20 52 65 6D 69 78 20 44 65 76 65 6C 6F 70 65 72 2C 20 42 61 74 74 6C 65 20 50 6C 61 6E 6E 65 72 00 00 53 74 61 6E 64 61 72 64 54 6F 61 73 74 65 72 3A 20 53 44 20 52 65 6D 69 78 20 41 53 4D 20 4C 65 61 64 20 43 6F 64 65 72 00 00 00 00 5F 67 6C 6F 6F 6B 3A 20 53 44 20 52 65 6D 69 78 20 4C 69 74 65 20 44 65 76 65 6C 6F 70 65 72 00 77 50 61 72 61 6D 3A 20 4D 65 6D 6F 72 79 20 43 61 72 64 20 48 61 63 6B 2C 20 43 6F 64 65 00 00 43 6F 64 65 20 43 6F 6E 74 72 69 62 75 74 69 6F 6E 73 3A 20 41 63 68 69 6C 6C 65 73 2C 20 44 61 6E 20 53 61 6C 76 61 74 6F 00 00 00 20 20 4D 61 67 75 73 34 32 30 2C 20 66 6C 69 65 73 6B 69 6C 6C 65 72 2C 20 4A 6F 72 67 61 73 6D 73 2C 20 53 68 61 6D 52 6F 63 6B 00 53 74 61 67 65 73 3A 20 4D 69 6C 75 6E 2C 20 5A 61 75 72 6F 6E 2C 20 66 6C 69 65 73 6B 69 6C 6C 65 72 2C 20 41 63 68 69 6C 6C 65 73 00 00 00 00 5F 46 72 65 65 7A 65 5F 3A 20 54 65 73 74 69 6E 67 00 00 00 5F 4E 6F 76 69 3A 20 50 75 62 6C 69 63 69 73 74 00 00 00 00 44 65 62 75 67 20 4D 6F 64 65 20 3E 00 00 00 00
+# String arrays, 6 words
+800018D4 800018E4 80001918 80001920 80001934 80001940
+# Custom Debug menu function, 14 or 0xE words
+2C040000 4181002C 7C0802A6 90010004 9421FFF8 80840014 3CA08030 60A503E4
+482FC9E9 8001000C 38210008 7C0803A6 38600000 4E800020
+# Toggles Function, 26 or 0x1A words
+3D408000 818A189C 3D608040 918B86B0 2C0C0000 41820010 3C800E0D 60840C00 4800000C 3C800C0D 60840E00 908A1860
+614A1B90 806A00B4 2C030000 41820024 80630000 7C636038 1C63003C 808A0078 7C6A182E 90640000 394A0004 4BFFFFD8
+38600000 4E800020
+
+# -- Toggles Table, 60 or 0x3C words --
+# Original Values
+2C1C0003 8084049C 807F1990 3803FFFF 881E0000 901F0028 D01B1830 7FDD032E
+98A3008E 38BEFFF8 9803008E 881C0004 881C0004 3803FFFF 88030005
+# Modified values
+48102A70 480F61AC 4812653C 4BFED414 48023734 480236E0 48128D70 4815C7B8
+4815CED4 4BFEC0D4 60000000 4BF62718 4BF62804 4BF2B8A4 4BF6124C
+# Addresses
+8008DD04 8009A600 8006A2BC 801A3414 8016D330 8016D3C4 80067D54 80034334
+80033C44 801A4A94 80036B30 8022E474 8022E3C4 80265360 8022FA5C
+# Toggle vars
+80001894 80001890 80001890 80001898 80001898 80001898 80001898 80001898
+8000188C 8000188C 8000188C 8000188C 8000188C 8000188C 8000188C
+
+# -v1.01 Toggles Table-
+00000000 80001BCC 00000000 0000001E
+# Modified values
+4810323C 480F6978 48126CE0 4BFED5C8 480238F4 480238A0 48129514 4815CFEC
+4815D708 4BFEC288 60000000 4BF6245C 4BF62548 4BF2B5DC 4BF60F90
+# Addresses
+8008DDEC 8009A6E8 8006A3CC 801A3B14 8016DA24 8016DAB8 80067E64 800343B4
+80033CC4 801A5194 80036bb4 8022EFE4 8022EF34 80265EDC 802305CC
+
+# -v1.02 Toggles Table-
+00000000 00000000 80001BCC 0000001E
+# Modified values
+481036C8 480F6E00 481272E4 4BFED5CC 48023C2C 48023BD8 48129B4C 4815D638
+4815DD54 4BFEC28C 60000000 4BF62320 4BF6240C 4BF2B48C 4BF60E54
+# Addresses
+8008DFAC 8009A8AC 8006A414 801A415C 8016DD38 8016DDCC 80067E78 800343B4
+80033CC4 801A57DC 80036bb4 8022F76C 8022F6BC 80266678 80230D54
+
+
+
+
+
+
+Debug Function Changes v1.01
+80001B0C 60A51038 80001B10 482FD63D 80001B34 918B9860
+
+Debug Function Changes v1.02
+80001B0C 60A51C80 80001B10 482FE285 80001B34 918BA540
+
+
+
+# Main menu title overwrite
+803F8658 803F9808 803FA4E8 800018A0
+
+# Main Menu Overwrites
+803F8670 803F9820 803FA500 00000020
+00000002 80001814 80001844 80001858 80001800 00000000 40000000 00000000 # Widescreen
+00000002 80001B28 800018B0 80001858 8000189C 00000000 40000000 00000000 # Options Toggle
+00000001 80001AF0 800018BC 00000000 00000000 80001D20 00000000 00000000 # Options Menu
+00000001 80001AF0 8000194C 00000000 00000000 80001DC0 00000000 00000000 # Credits Menu
+803F8710 803F98C0 803FA5A0 0000000A
+00000001 802FE940 80001AC8 00000000 00000000 00000000 00000000 00000000 00000009 00000000 # Debug Menu
+
+v1.01: 803F98C4 802FF594
+v1.02: 803FA5A4 803001DC
+
+# Options menu: 4 items + termination, 0x84 bytes
+80001D20 80001D20 80001D20 00000021
+00000002 80001B28 800018C8 80001AD8 80001898 00000000 40000000 00000000 # Overtime
+00000002 80001B28 800018F0 80001858 80001894 00000000 40000000 00000000 # Wall Bracing
+00000002 80001B28 80001900 80001AE0 80001890 00000000 40000000 00000000 # Ledge Invincibility
+00000002 80001B28 80001928 80001AE8 8000188C 00000000 40000000 00000000 # Handicap
+00000009
+
+# Credits menu: 10 items + termination, but this is purely text
+Start at 80001DC0. There's 11 lines here.
+80001DC8 80001DC8 80001DC8 80001958
+80001DE8 80001DE8 80001DE8 80001980
+80001E08 80001E08 80001E08 800019AC
+80001E28 80001E28 80001E28 800019D8
+80001E48 80001E48 80001E48 800019F8
+80001E68 80001E68 80001E68 80001A18
+80001E88 80001E88 80001E88 80001A44
+80001EA8 80001EA8 80001EA8 80001A70
+80001EC8 80001EC8 80001EC8 80001AA0
+80001EE8 80001EE8 80001EE8 80001AB4
+80001F00 80001F00 80001F00 00000009
+
+
+
+Options changed function
+------------------------
+# This function is run when any toggle other than widescreen is run. Changes everything and banner color
+
+# r10 always is 80000000
+lis r10, 0x8000
+
+# The master toggle var is in r12
+lwz r12, 0x189C(r10)
+
+# Enable or disable the options menu depending on if options are enabled or not
+lis r11, 0x8040
+v1.00: stw r12, -0x7950(r11)	v1.01: stw r12, -0x67A0(r11)	v1.02: stw r12, -0x5AC0(r11)
+
+cmpwi r12, 0
+beq NORMAL_COLOR
+lis r4, 0x0E0D
+ori r4, r4, 0x0C00
+b SET_COLOR
+NORMAL_COLOR:
+lis r4, 0x0C0D
+ori r4, r4, 0x0E00
+SET_COLOR:
+stw r4, 0x1860(r10)	# Location of banner color
+
+# Set all the actual toggles
+ori r10, r10, 0x1B90	# The toggles table location
+LOOP:
+lwz r3, 192(r10)	# Get the address of the toggle variable
+cmpwi r3, 0			# If 0, we're done
+beq BREAK
+lwz r3, 0(r3) 		# The actual toggle value
+and r3, r3, r12		# AND this with the master toggle value
+mulli r3, r3, 64	# Multiply by 60, which is the array size in bytes
+lwz r4, 128(r10)	# Get the address to write to in r4
+lwzx r3, r10, r3	# Get original if toggle value is 0 or replacement if 1
+stw r3, 0(r4)		# Store value to the address
+addi r10, r10, 4	# Move to next entry in table
+b LOOP
+
+BREAK:
+li r3,0
+blr

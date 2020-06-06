@@ -1,0 +1,110 @@
+0xA5E0 - Reduction per input (frames) 9.0 -> 6.0
+0xA5EC - Multiplier for damage in bury formula 0.7 -> 0.9
+0xA600 - Frames of invincibility on exit 18 -> 1
+0xA3A8 : CB189680
+
+Which is:
+A5E0 : 41100000 -> 40c00000 [Reduction per input (frames) 9.0 -> 6.0]
+A5EC : 3F333333 -> 3f666666 [Multiplier for damage in bury formula 0.7 -> 0.9]
+A600 : 00000012 -> 00000001 [Frames of invincibility on exit 18 -> 1]
+A3A8 : 41900000 -> CB189680 [Fix Kirby side throw stuff]
+
+
+804d6554 is where the plco memory is at
+CHK 80067af0 ( --- ) Write32 80c51ce0 at 804d6554 ( --- )
+80067AF0 stw       r0, -0x514C(r13)
+
+
+Hook into 80067AF0, don't use r3 or r0
+r0 is 9fe0 of PlCo.dat
+
+New offsets:
+3C8 : CB189680
+600 : 40c00000
+60C : 3f666666
+620 : 00000001
+
+At 80067AF0:
+stw r0, -0x514C(r13)
+mr r11, r0
+
+lis r12, 0xCB18
+ori r12, r12, 0x9680
+stw r12, 0x3C8(r11)
+
+lis r12, 0x40c0
+stw r12, 0x600(r11)
+
+lis r12, 0x3f66
+ori r12, r12, 0x6666
+stw r12, 0x60C(r11)
+
+li r12, 0x1
+stw r12, 0x620(r11)
+
+# Shield colors
+lis r12, 0x6600
+ori r12, r12, 0x6600
+stw r12, 0x2ED8(r11)
+lis r12, 0xFA69
+ori r12, r12, 0x0000
+stw r12, 0x2EDC(r11)
+lis r12, 0x0070
+ori r12, r12, 0x3400
+stw r12, 0x2EE0(r11)
+lis r12, 0x0265
+ori r12, r12, 0x9A00
+stw r12, 0x2EE4(r11)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+v1.00 - 800679CC
+C20679CC 00000007
+900DAEB4 7C0B0378
+3D80CB18 618C9680
+918B03C8 3D8040C0
+918B0600 3D803F66
+618C6666 918B060C
+39800001 918B0620
+60000000 00000000
+
+v1.01 - 80067ADC
+C2067ADC 00000007
+900DAEB4 7C0B0378
+3D80CB18 618C9680
+918B03C8 3D8040C0
+918B0600 3D803F66
+618C6666 918B060C
+39800001 918B0620
+60000000 00000000
+
+v1.02 - 80067AF0
+C2067AF0 00000007
+900DAEB4 7C0B0378
+3D80CB18 618C9680
+918B03C8 3D8040C0
+918B0600 3D803F66
+618C6666 918B060C
+39800001 918B0620
+60000000 00000000
+
+PAL - 800681B4
+C20681B4 00000007
+900DB0F4 7C0B0378
+3D80CB18 618C9680
+918B03C8 3D8040C0
+918B0600 3D803F66
+618C6666 918B060C
+39800001 918B0620
+60000000 00000000

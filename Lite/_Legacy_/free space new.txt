@@ -1,0 +1,280 @@
+Melee Free Space for v1.02
+-------------------
+Start		End			Bytes
+80001800	80003000	1800	Free memory in all GCN Wii Games (gecko is approx 0xba8 in size)
+
+8022887c	8022892c	B0		Unused code function (nop 801a4f84 and 801a5070)
+8032c848	8032c880	38		Unused code function (nop 801a4f84 and 801a5070)
+8032dcb0	8032ddbc	10C		Unused code function (nop 801a4f84 and 801a5070)
+8032ed8c	8032ee90	104		Unused code function (nop 801a4f84 and 801a5070)
+80393a5c	80393c10	1B4		Unused code function (nop 801a4f84 and 801a5070)
+8040A950	8040B6C0	D70		The main section of free space
+801910e0	80192934	1854	Tournament Mode
+
+803fa3e8	803fc2ec	1F04	Debug menu tables/strings
+803fc420	803fdc1c	17FC	Debug menu tables/strings
+803001DC	80301E44	1C68	Debug menu functions
+
+===============================
+== SD Remix free space usage ==
+===============================
+
+DATA Section, 0xD70 bytes
+v1.01 is 0xCE0 less, v1.00 is 0x1FC0 less
+-------------------------
+8040A950: A+B Salty Runback
+8040A990: ** FREE **
+8040B6C0: *** END ***
+
+CODE Section, 0x1854 bytes
+v1.01 is 0x64C less, v1.00 is 0xF00
+--------------------------
+801910E0: Stage Striking
+80191208: Dynamic Lagless FoD
+80191298: CSS Portrait BG Color
+801914D0: Capped (Tennis) Mode
+801915E4: Widescreen Support
+80191628: Banner Color Changer
+80191674: Wall bracing
+801916AC: Ledge Attrition
+80191728: Tournament Overtime
+80191964: Overtime 2
+801919A4: Overtime 3
+801919C4: Overtime 4
+801919EC: Overtime 5
+80191A18: Handicap: Set Stock Amount
+80191A68: Handicap: Disable Damage Ratio
+80191A8C: Handicap: Enable Handicap in Auto 1
+80191AC8: Handicap: Enable Handicap in Auto 2
+80191B04: Handicap: set auto handicap
+80191BA8: Handicap extra
+80191BD8: Mewtwo Side+B
+80191C00: FSM Engine
+80191CE0: Character Patcher
+80191D84: Kirby Cap Patcher
+80191E10: PlCo.dat changes
+80191E44: Alpha/Omega Toggler
+80191EC0: Alpha/Omega Color Change
+80191F54: Stage Patcher
+80191FDC: Trophy Spawn Issue
+80192004: Stage Loader
+801920B4: Help Limit Name Tags
+801920E0: ** FREE **
+80192930: *** END ***
+
+Debug Function, 0x2800 bytes
+All versions same address
+-------------------------
+80001800: Widescreen toggle var
+80001804: Widescreen write values
+80001814: Widescreen toggle function
+80001844: "Widescreen"
+80001850: "Off"
+80001854: "On"
+80001858: ["Off", "On"]
+80001860: Enough space for 16 variables
+	80001860: Banner color
+	80001864:
+	80001868:
+	8000186C:
+	80001870:
+	80001874:
+	80001878:
+	8000187C:
+	80001880:
+	80001884: Stage Patch Data
+	80001888: Alpha/Omega stage toggle
+	8000188C: Handicap
+	80001890: Ledge Invincibility
+	80001894: Wall Bracing
+	80001898: Overtime
+	8000189C: Master Debug Toggle
+800018A0: Other Debug Menu Strings
+	800018A0	< SD Remix LITE Options >
+	800018B0	Options: 
+	800018BC	Options >
+	800018C8	Overtime: 
+	800018D4	Sudden Death
+	800018E4	Tournament
+	800018F0	Wall Bracing:
+	80001900	Ledge Invincibility:
+	80001918	Normal
+	80001920	Dynamic
+	80001928	Handicap:
+	80001934	DamageRatio
+	80001940	Stock/Crew
+	8000194C	Credits >
+	80001958	sdremix troubleshooter: SD Remix Battle Planner, Lead Director
+	80001980	Ripple: SD Remix Developer, Battle Planner
+	800019AC	StandardToaster: SD Remix Lead ASM Programmer
+	800019D8	_glook: SD Remix Lite Developer
+	800019F8	wParam: Memory Card Hack, Code
+	80001A18	Code Contributions: Achilles, Dan Salvato,
+	80001A44	  Magus420, flieskiller, Jorgasm, ShamRock
+	80001A70	Stages: Milun, Zauron, flieskiller, Achilles
+	80001AA0	_Freeze_: Testing
+	80001AB4	_Novi: Publicist
+	80001AC8	Debug Mode >
+80001AD8: String Arrays
+	80001AD8	[Sudden Death, Tournament]
+	80001AE0	[Normal, Dynamic]
+	80001AE8	[DamageRatio, Stock/Crew]
+80001AF0: Custom Debug Menu function
+80001B28: Toggles Function
+80001B90: Toggles Table
+-- Random Free Space --
+80001D20: Options Menu
+80001DC0: Credits Menu
+80001F20: FSM Data List
+800023B0: Kirby Cap Patch Data
+80002480: ** FREE **
+80004000: ** END **
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================================
+== Debug Menu Memory Allocation ==
+==================================
+
+*****************
+* Menus/Strings *
+*****************
+
+Fixed Menus/Strings
+-------------------
+Main menu table:		803FA4E0 to 803FA5E0
+"< Global Data Edit>":	803FA640 to 803FA658
+Global Data table:		803FA658 to 803FA758
+Debug Mode Strings:		803FA758 to 803FA790
+Debug menu table:		803FA790 to 803FA878
+Rules strings:			803FA878 to 803FA8E8
+Rumble strings:			803FAA08 to 803FAA44
+Rumble menu table:		803FAA44 to 803FAB04
+Stage Strings:			803FAB04 to 803FB064
+Melee Kind Strings:		803FB064 to 803FB080
+Dairantou Strings:		803FB080 to 803FB168
+Dairantou menu table:	803FB168 to 803FB368
+Character strings:		803FB368 to 803FB5C0
+CharSelect strings:		803FB5C0 to 803FB60C
+Charselect menu table:	803FB60C to 803FB6EC
+Scale strings:			803FB6EC to 803FB728
+Scale menu table:		803FB728 to 803FB7E8
+PKind stuff:			803FB7E8 to 803FB950
+Color stuff:			803FB950 to 803FBA4C
+Sub color stuff:		803FBA4C to 803FBB5C
+Damage stuff:			803FBB5C to 803FBC58
+Ratios:					803FBC58 to 803FBE80
+CPU Type stuff:			803FBE80 to 803FC0BC
+CPU Level stuff:		803FC0BC to 803FC1BC
+Team select stuff:		803FC1BC to 803FC2EC
+Credits table:			803FC4CC to 803FCACC
+
+Free Menu/String Space
+----------------------
+803FA3E8: ** FREE F8 **
+803FA4E0: Main Menu Table
+803FA5E0: ** FREE 60 **
+803FA640: Global Data Title
+803FA658: Global Data table
+803FA758: Debug Menu 
+803FA790: Debug Menu Table
+803FA878: Rules strings
+803FA8E8: ** FREE 120 **
+803FAA08: Rumble Strings
+803FAA44: Rumble menu Table
+803FAB04: Stage Strings
+803FB064: Meleekind Strings
+803FB080: Dairantou Strings
+803FB168: Dairantou Menu Table
+803FB368: Character Strings
+803FB5C0: CharSelect strings
+803FB60C: Charselect menu table
+803FB6EC: Scale strings
+803FB728: Scale menu table
+803FB7E8: PKind Stuff
+803FB950: Color stuff
+803FBA4C: Sub color stuff
+803FBB5C: Damage stuff
+803FBC58: Ratios
+803FBE80: CPU Type stuff
+803FC0BC: CPU Level stuff
+803FC1BC: Team Select Stuff
+803FC2EC: XX Unusable XX
+803FC420: >> Options Menu
+803FC4C0: >> Credits Menu
+803FC6C0: >> Toggle Table
+????????: ** FREE 940 **
+803FD000: >> Strings and String Arrays
+803FD2C4: ** FREE 63C **
+803FD900: Credits Table
+803FDC1C: *** END ***
+
+*************
+* Functions *
+*************
+
+Fixed Functions
+---------------
+Load Debug:			803001DC to 80300218
+Save Publicity:		80300248 to 80300290
+GLOBAL DATA EDIT:	80300290 to 803002FC
+Load Credits:		803002FC to 80300338
+GDE ADDR:			80300338 to 80300378
+GDE ADDR2:			80300378 to 803003C4
+GDE ADDR4:			803003c4 to 80300410
+GDE U32:			80300410 to 80300480
+Load Dairantou:		80300480 to 803004B4
+Load Rules:			803004b4 to 803004E8
+Load Vibration:		803004E8 to 8030051C
+Load DaiRan Subs:	8030051C to 80300758
+Random Functions:	80301BA8 to 80301E44
+Functions always return 0
+
+Free Function Space
+-------------------
+803001DC: Load Debug
+80300218: ** FREE 30 **
+80300248: Save Publicity
+80300290: GLOBAL DATA EDIT
+803002FC: Load Credits
+80300338: Global Data Edit - ADDR
+80300378: Global Data Edit - ADDR2
+803003c4: Global Data Edit - ADDR4
+80300410: Global Data Edit - U32
+80300480: Load Dairantou
+803004B4: Load Rules
+803004E8: Load Vibration Select
+8030051C: Load DaiRanTou submenus
+80300758: > Custom Load Submenu
+80300790: PKIND FUNCTION (2FD370)
+803007C8: > Widescreen Toggle
+80300820: > Debug Function toggles
+8030089C: ** FREE **
+80301BA8: Random Functions
+80301E44: *** END ***
+
+*******************
+* Debug Variables *
+*******************
+Fixed Variables
+---------------
+803fa25c	PUBLICITY
+804d4a08	DBLEVEL

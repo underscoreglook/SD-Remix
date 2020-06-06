@@ -1,0 +1,105 @@
+When using Smash calculator to convert 2_codes_2:
+Original File: H:\Users\_glook\Desktop\SDR_Lite\2_codes_2.txt
+Modified 5762: G:\Games\Video Games\Dolphin-dev-4.0-5762\User\GameSettings\GALE01.ini
+Modified Fast: G:\Games\Video Games\dolphin-debug-fast\User\GameSettings\GALE01.ini
+
+
+
+What I'm NOT going to do:
+------------------------
+Change the menus - This is not worth the effort to do by myself
+Checking version number - The exploit has to be fit to work with every version. If you nop a bunch, theoretically it might work, but I don't have the room to spare for that, so this ain't happening.
+
+Done:
+----
+Memory exploit and garbage [wparam]
+Encode a success message on name entry screen [_glook]
+Add a sound effect to the end of the payload for success
+SD Remix Character DOL mods (Achilles, Dan Salvato, Magus, standardtoaster, _glook)
+Taunt Cancelling DOL mod (Dan Salvato)
+Replace Tournament Mode with Debug Mode (Magus, donny2112)
+Leaving Debug Menu Loads CSS (Achilles)
+Change location of name tag loading so it still works [_glook]
+Max number of name tags reduced to 20 to make space for everything else [_glook]
+Can't enter new names if at the new max [flieskiller]
+Patch Kirby Caps [_glook]
+Patch PlCo.dat [Achilles, _glook]
+Let any player control Debug Menu. [Achilles]
+L+R+A+Start returns to CSS during stage load [Jorgasm]
+A+B Salty Runback [Dan Salvato]
+C-Stick in 1 Player Mode [Zauron]
+Apply c-stick in develop mode [Achilles]
+Apply Dynamic FoD [Dan Salvato, _glook]
+Unrestricted Pause Camera [Achilles]
+Capped (Tennis) Mode [_glook]
+Character Patcher [_glook]
+SD Remix Characters [sdremix_troubleshooter, Ripple]
+Stage striking [Dan Salvato]
+Changed Portrait Background Colors [ShamRock, _glook]
+Widescreen Support [Dan Salvato]
+Change Color of "Ready to Fight" Banner [Dan Salvato]
+Custom Debug Menu [Dan Salvato, _glook]
+Tournament Style Overtime [_glook]
+Wall Bracing/Cancelling [_glook]
+Ledge Invincibility Attrition [_glook]
+Handicap is Stock Control and Crew Battle Mode [Jorgasm]
+L and R Toggle Between Alpha and Omega on SSS [_glook]
+Change color between Alpha and Omega [ShamRock, _glook]
+Stage Patcher [_glook]
+Omega Stage Loader [_glook]
+Disable Trophies outside of Classic Mode [wparam, _glook]
+Omega Icicle Mountain = Normal Snag The Trophies [Achilles]
+Omega Peach's Castle, No switches or bullet bill [Zauron]
+Omega Kongo Jungle, no rock, barrel, klaptraps or logs [Milun]
+Omega Great Bay, go to Majora's Mask
+Omega Yoshi's Story, No Shyguys [Zauron]
+Omega Fountain of Dreams, no platforms or water jets [Zauron]
+Omega Corneria, No ships and no Great Fox gun [Zauron]
+Omega Rainbow Cruise, Cranky's Treehouse [Achilles]
+Omega Jungle Japes, Disable water and klaptraps [flieskiller]
+Omega Hyrule Temple: goes to three platforms Snag the Trophies (aka, mount olympus) [Achilles]
+Omega Yoshi's Island: Yoshi's Island Altered [Milun]
+Omega Green Greens, Falling bricks and no initial bombs [flieskiller], no wind or apples [Zauron]
+Omega Venom: 0x47, Corneria with massive arwing attack (aka, Corneria Extreme)
+Omega Flatzone: Go to flipped Battlefield (platform heights reversed) [Achilles, _glook]
+Omega Brinstar: Disable Lava [Zauron]
+Omega Onett: Disable Cars and Drugstore Platforms [flieskiller]
+Omega Mute City: Disable Cars [flieskiller]
+Omega Pokemon Stadium: No transformation [Zauron]
+Omega PokeFloats: Whispy's Battlegrounds [Milun, Achilles]
+Omega Final Destination: No background transitions [Achilles, Dan Salvato]
+Omega Dreamland 64: No wind [Zauron]
+Omega Kongo Jungle 64: No barrel [flieskiller]
+Omega Brinstar Depths: No Kraid [Milun]
+Omega Big Blue: No cars except for first one [Milun]
+Omega Battlefield: Ledges slightly easier to wall jump and grapple [Milun]
+Omega Yoshi's Story 64: Symmetrical, no clouds, only 2 platforms [Milun]
+Omega Fourside: Turned into Melee Smashville [Milun]
+Omega Mushroom Kingdom 2: Sides removed, middle made bigger [Milun]
+Omega Mushroom Kingdom: Rearanged level [Milun]
+On exploit, Game Mode to Stock, Stock Time Limit to 8, Stock count to 4, Friendly Fire On, and Score Display On
+If you don't select a nametag, instead of showing the character name, show "SDR 3.2 Lite" instead [_glook]
+
+TODO:
+----
+Rearchitect everything
+Release plan:
+Create a program that will automatically sort by Norcal and Gar PRs. Have it also attempt to separate by location, using a weighted system that takes the relative position in the PR and weighs it against the seed position. Possibly also have a window to show people on screen what their name tag looks like and what their position on NorcalPR/GarPR is, but only if they're in the top 100.
+Buglist:
+ - Extraneous notifications after classic mode is over.
+
+Space calculation
+-----------------
+8045D850 Start of exploit
+8045D930 Start of payload
+8045DA00 Start of overwrites structure
+8045FE58 New name tag location
+80461F28 Mushroom Kingdom 1 patch
+8046336C Mushroom Kingdom 2 patch
+8046440C Fourside patch
+804663F0 Character Patches Structure
+8046A900 Other stage data and patches
+8046b0e4 Max memory card address (approx)
+
+8045FDE4 is first free address after array overwrites
+80461790

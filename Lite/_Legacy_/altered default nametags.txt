@@ -1,0 +1,108 @@
+8269828982878287828c82998290829582868286
+
+8260826082878287828c82998290829582868286
+
+Jigglypuff's text is at: 803d4ec8
+Pointer to Jigglypuff's text is at: 803d5018
+
+When hovering over a character when not having a name every frame:
+CHK 801609b0 ( --- ) Read32 803d4ec8 at 803d5018 ( --- )
+
+Nothing is done when actually pressing down on the name
+
+When opening name tag selector:
+CHK 801609b0 ( --- ) Read32 803d4eb0 at 803d5014 ( --- ) (same place)
+
+When picking default name tag:
+CHK 801609b0 ( --- ) Read32 803d4eb0 at 803d5014 ( --- ) (same place)
+
+We still need to figure out why SDR Lite is not trying to read the name sometimes
+
+Stacktrace when trying to read the name from blank name:
+80390dfc
+	80260c30 - Is run each time we hover over character
+		8025dbe8 - Is only run if we're getting default name, which is not always
+			801609DC
+
+Mr.Game&Watch is 803F0A48 (803eebb8 in 1.00)
+826C8292814482668281828D82858195827682818294828382880000
+
+In function 8025DB34, we determine if we're going to read a default name or not:
+8025dbe8 is out end goal
+8025DB94 does a check, and it's 0x1 when we don't read a name. It is 0 when we want to read a name.
+r30 points to the name tag Mr.Game&Watch for some reason
+r31 is passed in from r3 into function. It sets an offset of 0xC somewhere after r30 in memory
+When we start with bad state of no name but can't picK:
+	r31 = 0
+When in good state with no name:
+    r31 = 0
+In other words, r31 is always the same, it's the data passed in which is important.
+r26 is always the same, is r3 always the same?
+
+When in proper blank:
+r26 = 803f0e8c, r3 = 8111d2a0
+When in broken blank:
+r26 = 803f0e8c, r3 = 8111d2a0
+Nope still same. It's the contents of what's in there.
+Let's see what writes to that byte:
+
+On CSS load (broken state):
+14:44:437 BreakPoints.cpp:197 I[MI]: CHK 80265024 ( --- ) Write8 00 at 8111d2bb ( --- )
+14:44:441 BreakPoints.cpp:197 I[MI]: CHK 8026553c ( --- ) Write8 01 at 8111d2bb ( --- )
+When switching from broken to unbroken:
+15:58:359 BreakPoints.cpp:197 I[MI]: CHK 80261b30 ( --- ) Write8 00 at 8111d2bb ( --- )
+On CSS Load (without SDR Lite):
+17:02:082 BreakPoints.cpp:197 I[MI]: CHK 80265024 ( --- ) Write8 00 at 8111d2bb ( --- )
+
+80265530 28000078 <-- probably the thing going wrong
+80265530 cmplwi    r0, 0x78
+
+Not exactly:
+In unhealthy Melee, runs multiple times:
+First:
+r0 = 0x78
+r3 = 0
+r4 = 0x7a
+r5 = 804807b0
+Second:
+r0 = 0x78
+r3 = 0x24
+r4 = 0x9e
+r5 = 804807b0
+Third:
+r0 = 0x78
+r3 = 0x48
+r4 = 0xc2
+r5 = 804807b0
+Fourth:
+r0 = 0x78
+r3 = 0x6c
+r4 = 0xe6
+r5 = 804807b0
+Fifth:
+
+
+SDR 3.2 Lite => 8272 8263 8271 20 8252 8144 8251 20 826b 8289 8294 8285 00
+
+82728263 82712082
+52814482 5120826b
+82898294 82850000
+
+Store this in 8040AB38
+801609AC and 801609B0, make r3 point to this
+lis r3, 0x8040
+ori r3, r3, 0xAB38
+
+801609AC 3C608040
+801609B0 6063AB38
+
+In 1.00, should say 803eebb8
+lis r3, 0x803e
+ori r3, r3, 0xebb8
+
+It is at 801601a4 in 1.00
+7C6022148063000048000018
+
+So 801601a4 && 801601a8, do
+801601a4 3C60803e
+801601a8 6063ebb8

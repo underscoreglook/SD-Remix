@@ -1,0 +1,562 @@
+Mario Cap is read from 800EED50 and 800EEC34
+
+The pointer table to the cap structure is at 803CA9D0
+
+Mario Cap seems to be the start of the data structure for Kirby's caps, it starts at 803CA5FC
+
+
+The pointer structure is at 803CA9D0, each entry is 8 bytes.
+First word is pointer to Filename, second is to the descriptive name of it
+
+
+For first function, 800EED9C is when we definitely know we need to load a kirby cap
+Similarly, in the second function, 800EEC6C is when we definitely know we need to load Kirby Cap
+
+The second one actually checks to see if the file exists, so that's probably the one, since it calls the loading function. I wonder, maybe that function actually loads stuff. I should do a breakpoint there and see if I can find data.
+
+Plan of action:
+Breakpoint on 800EEC94, and step into function. Before and between every function call, check to see if a string of data is read into memory. Keep in mind, though, that it could take a while for the file to load, so it might not show up right away. Simply check the first 0x20 bytes, I think.
+
+Before we even do anything, 8129fe80 already has the data.
+
+
+Where is the file being accessed from?
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00ac ( --- )
+CHK 803804c4 ( --- ) Read32 0000022c at 812a00bc ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00bc ( --- )
+CHK 803804c4 ( --- ) Read32 0000023c at 812a00cc ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00cc ( --- )
+CHK 803804c4 ( --- ) Read32 0000024c at 812a00dc ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00dc ( --- )
+CHK 803804c4 ( --- ) Read32 0000025c at 812a00ec ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00ec ( --- )
+CHK 803804c4 ( --- ) Read32 ffffffff at 812a00fc ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00fc ( --- )
+
+CHK 80380428 ( --- ) Read32 00000028 at 812ad06c ( --- )
+CHK 80380470 ( --- ) Read32 00000000 at 812ad064 ( --- )
+CHK 803258e8 ( --- ) Read8 49 at 812ad098 ( --- )
+CHK 803258ec ( --- ) Read8 49 at 812ad070 ( --- )
+CHK 8032596c ( --- ) Read32 49746d4b at 812ad098 ( --- )
+CHK 8032597c ( --- ) Read32 49746d4b at 812ad070 ( --- )
+CHK 8032598c ( --- ) Read32 69726279 at 812ad09c ( --- )
+CHK 80325990 ( --- ) Read32 69726279 at 812ad074 ( --- )
+CHK 8032598c ( --- ) Read32 53734368 at 812ad0a0 ( --- )
+CHK 80325990 ( --- ) Read32 53734368 at 812ad078 ( --- )
+CHK 8032598c ( --- ) Read32 61726765 at 812ad0a4 ( --- )
+CHK 80325990 ( --- ) Read32 61726765 at 812ad07c ( --- )
+CHK 8032598c ( --- ) Read32 53686f74 at 812ad0a8 ( --- )
+CHK 80325990 ( --- ) Read32 53686f74 at 812ad080 ( --- )
+CHK 8032598c ( --- ) Read32 5f546f70 at 812ad0ac ( --- )
+CHK 80325990 ( --- ) Read32 5f546f70 at 812ad084 ( --- )
+CHK 8032598c ( --- ) Read32 4e5f7368 at 812ad0b0 ( --- )
+CHK 80325990 ( --- ) Read32 4e5f6d61 at 812ad088 ( --- )
+CHK 80380470 ( --- ) Read32 00000028 at 812ad06c ( --- )
+CHK 803258e8 ( --- ) Read8 49 at 812ad098 ( --- )
+CHK 803258ec ( --- ) Read8 49 at 812ad098 ( --- )
+CHK 8032596c ( --- ) Read32 49746d4b at 812ad098 ( --- )
+CHK 8032597c ( --- ) Read32 49746d4b at 812ad098 ( --- )
+CHK 8032598c ( --- ) Read32 69726279 at 812ad09c ( --- )
+CHK 80325990 ( --- ) Read32 69726279 at 812ad09c ( --- )
+CHK 8032598c ( --- ) Read32 53734368 at 812ad0a0 ( --- )
+CHK 80325990 ( --- ) Read32 53734368 at 812ad0a0 ( --- )
+CHK 8032598c ( --- ) Read32 61726765 at 812ad0a4 ( --- )
+CHK 80325990 ( --- ) Read32 61726765 at 812ad0a4 ( --- )
+CHK 8032598c ( --- ) Read32 53686f74 at 812ad0a8 ( --- )
+CHK 80325990 ( --- ) Read32 53686f74 at 812ad0a8 ( --- )
+CHK 8032598c ( --- ) Read32 5f546f70 at 812ad0ac ( --- )
+CHK 80325990 ( --- ) Read32 5f546f70 at 812ad0ac ( --- )
+CHK 8032598c ( --- ) Read32 4e5f7368 at 812ad0b0 ( --- )
+CHK 80325990 ( --- ) Read32 4e5f7368 at 812ad0b0 ( --- )
+CHK 8032598c ( --- ) Read32 61706561 at 812ad0b4 ( --- )
+CHK 80325990 ( --- ) Read32 61706561 at 812ad0b4 ( --- )
+CHK 8032598c ( --- ) Read32 6e696d5f at 812ad0b8 ( --- )
+CHK 80325990 ( --- ) Read32 6e696d5f at 812ad0b8 ( --- )
+CHK 8032598c ( --- ) Read32 6a6f696e at 812ad0bc ( --- )
+CHK 80325990 ( --- ) Read32 6a6f696e at 812ad0bc ( --- )
+CHK 8032598c ( --- ) Read32 74006674 at 812ad0c0 ( --- )
+CHK 80325990 ( --- ) Read32 74006674 at 812ad0c0 ( --- )
+CHK 803259bc ( --- ) Read8 74 at 812ad0c0 ( --- )
+CHK 803259c0 ( --- ) Read8 74 at 812ad0c0 ( --- )
+CHK 803259e4 ( --- ) Read8 00 at 812ad0c1 ( --- )
+CHK 803259e8 ( --- ) Read8 00 at 812ad0c1 ( --- )
+CHK 8038048c ( --- ) Read32 000001e0 at 812ad068 ( --- )
+CHK 803804c4 ( --- ) Read32 000001f0 at 812a0080 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a0080 ( --- )
+CHK 803804c4 ( --- ) Read32 00000200 at 812a0090 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a0090 ( --- )
+CHK 803804c4 ( --- ) Read32 00000210 at 812a00a0 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00a0 ( --- )
+CHK 803804c4 ( --- ) Read32 00000220 at 812a00b0 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00b0 ( --- )
+CHK 803804c4 ( --- ) Read32 00000230 at 812a00c0 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00c0 ( --- )
+CHK 803804c4 ( --- ) Read32 00000240 at 812a00d0 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00d0 ( --- )
+CHK 803804c4 ( --- ) Read32 00000250 at 812a00e0 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00e0 ( --- )
+CHK 803804c4 ( --- ) Read32 00000260 at 812a00f0 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a00f0 ( --- )
+CHK 803804c4 ( --- ) Read32 ffffffff at 812a0100 ( --- )
+CHK 803804c8 ( --- ) Write32 00000000 at 812a0100 ( --- )
+CHK 80380398 ( --- ) Read32 00000052 at 812ad05c ( --- )
+CHK 803258e8 ( --- ) Read8 66 at 812ad0c2 ( --- )
+CHK 803259e4 ( --- ) Read8 74 at 812ad0c3 ( --- )
+CHK 803259e4 ( --- ) Read8 44 at 812ad0c4 ( --- )
+CHK 803259e4 ( --- ) Read8 61 at 812ad0c5 ( --- )
+CHK 803259e4 ( --- ) Read8 74 at 812ad0c6 ( --- )
+CHK 803259e4 ( --- ) Read8 61 at 812ad0c7 ( --- )
+CHK 803259e4 ( --- ) Read8 4b at 812ad0c8 ( --- )
+CHK 803259e4 ( --- ) Read8 69 at 812ad0c9 ( --- )
+CHK 803259e4 ( --- ) Read8 72 at 812ad0ca ( --- )
+CHK 803259e4 ( --- ) Read8 62 at 812ad0cb ( --- )
+CHK 803259e4 ( --- ) Read8 79 at 812ad0cc ( --- )
+CHK 803259e4 ( --- ) Read8 43 at 812ad0cd ( --- )
+CHK 803259e4 ( --- ) Read8 6f at 812ad0ce ( --- )
+CHK 803259e4 ( --- ) Read8 70 at 812ad0cf ( --- )
+CHK 803259e4 ( --- ) Read8 79 at 812ad0d0 ( --- )
+CHK 803259e4 ( --- ) Read8 53 at 812ad0d1 ( --- )
+CHK 803259e4 ( --- ) Read8 61 at 812ad0d2 ( --- )
+CHK 803259e4 ( --- ) Read8 6d at 812ad0d3 ( --- )
+CHK 803259e4 ( --- ) Read8 75 at 812ad0d4 ( --- )
+CHK 803259e4 ( --- ) Read8 73 at 812ad0d5 ( --- )
+CHK 803259e4 ( --- ) Read8 00 at 812ad0d6 ( --- )
+CHK 803803b8 ( --- ) Read32 00000280 at 812ad058 ( --- )
+
+
+loadScene
+801a40e4
+	8016E934
+	8016e948
+		8016E730
+		8016e880
+			8016E2BC
+			8016e56c
+				80031AD0
+				80031bc8
+					80068E98
+					80068f20 - Runs without Kirby
+						8008572C
+						80085778
+							80017040
+							800170bc
+								8001819C
+								800181bc - Runs without Kirby
+									80017EBC
+									80018108 - Runs without Kirby
+										80016A54 - Seems to really want to load Kirby's hats
+										80016ac8 - Only runs with Kirby
+											80380434
+											803804c8 - First access
+	
+Verify that this only runs once more, or at least runs into 80380428 beforehand
+
+When 80016ac8 is hit, we want to know the r3 and r4 values for different characters:
+
+Vs Fox, r3 = 811dde80, r4 = 811dde08
+0xC has 0x1, which might be the character ID of the opponent.
+PlKbCpFx.dat => 81291fa0
+0x20 of r3 is 811ad5c0, which is E49E0 afterwards.
+Runs a second time: r3 = 811dde80, r4 = 811dde37
+
+
+
+
+Try 80380428 instead
+80016A54
+80016ab0
+	803803FC
+	80380428
+	
+	
+There are some places that hold the pointer to the file structure. Need to figure out when that gets read/written.
+CHK 800152cc ( --- ) Read32 81291fa0 at 804319a0 ( --- ) - Gets called regardless of if we're Kirby or not, about 12 times at first, 14 the second time
+CHK 80015034 ( --- ) Read32 81291fa0 at 804319a0 ( --- )
+CHK 8001506c ( --- ) Read32 81291fa0 at 804319a0 ( --- )
+CHK 80015034 ( --- ) Read32 81291fa0 at 804319a0 ( --- )
+CHK 8001506c ( --- ) Read32 81291fa0 at 804319a0 ( --- )
+CHK 80018100 ( --- ) Read32 81291fa0 at 804319a0 ( --- ) - Seems to be called once per character on two separate occasions
+
+
+
+01290340
+
+
+
+At call 80018108, there must be a difference between hats and characters (as it seems to run for every character and every hat, I think). We have the file address at this point, so this is the perfect spot to do the funky.
+r4 holds the address of the start of the file data
+Fox Cap address is: 812eaa00
+
+For breakpoint on 80018108, during 1 frame we get:
+--------------------------------------------------
+First time:
+r3 = 812943a0
+r4 = 81263ac0 - This is P1 (Kirby's) file
+r5 = 000308d2
+r29 = 0000026c
+r30 = 80432258 => 04020401 0200026c 270f0000
+
+Second time:
+r3 = 812ea9a0
+r4 = 812a5440 - Matches one of kirby's subfiles
+r5 = 0004555a
+r29 = 00000292
+r30 = 80432274 => 04020401 01000292 270f0000
+
+Third time:
+r3 = 811eccc0
+r4 = 811ad5a0 - Matches PlFx.dat
+r5 = 0003f70a
+r29 = 00000253
+r30 = 80432204 => 04020401 02000253 270f0000
+
+Fourth time:
+r3 = 81263a60
+r4 = 8120b060
+r5 = 000589e2
+r29 = 00000258
+r30 = 80432220 => 04020401 01000258 270f0000
+
+Fifth time:
+r3 = 812fd620
+r4 = 812eaa00 - Fox Cap
+r5 = 00012c1b
+r29 = 00000279
+r30 = 804322c8 => 04020401 01000279 270f0000
+
+r30's 0x4 seems to be some sort of file identifier. Maybe we can leverage this to determine if we're going to patch a file or not.
+For LinkCap: 0100027e
+For Ness: 01000282
+For Samus: 01000289oo
+For Child Link: 01000274
+For Pichu: 01000283
+
+
+Link Cap is the easiest to test on Battlefield. Roll to edge facing into platform. If arrow stays on battlefield, it didn't work. If it flew past platform, it worked.
+
+
+Hook into 800180F4 to diff cap data
+
+
+
+
+
+
+Kirby cap Gecko test
+--------------------
+Use free space 803fa3e8 to put diff files
+
+Use similar to patch table as before, except we loop through the array that is the diff table to find the right offset, and these are direct patches that don't need to worry about things breaking if we apply more than once.
+
+Diff table entry consists of two half words, with the last entry being full zeroes.
+First half word is the file ID of the cap file.
+Second half word is the offset from this word in the table to the actual diff file (number of bytes)
+
+Each diff file is the same basic form:
+Half word for num bytes the same
+Byte for num bytes different
+The actual bytes that are different
+Repeat until you see num bytes same AND different both as 0.
+0's are filled in to align to a word
+
+Use 800023B0 for the start of the diff table
+Size of this is 0xD0
+027e 0018	# Link	(PAL 03d9)
+0282 0034	# Ness	(PAL 03dd)
+0289 0068	# Samus (PAL 03e4)
+0274 00AC	# Young Link (PAL 03cf)
+0283 00B8	# Pichu (PAL 03de)
+0000 0000	# End
+Link's Diff		0x20
+01880440 00000000
+0101F000 46010200
+0703B494 00000101
+08000000 00000000
+Ness's Diff		0x38
+00B40241 80000309
+B333333D 4CCCCD3D
+23000B01 7000C703
+B70A3D00 05033851
+EC000402 0FA00007
+02140000 01011E00
+00000000 00000000
+Samus's Diff	0x48
+00CB0104 000B0108
+00020104 000C0106
+000E0108 000C0109
+000E010C 000C010C
+000E0110 000C010F
+000E0114 000C0113
+000E0118 000C0116
+000E011C 000C011A
+000E0122 00000000
+Young Link		0x10
+01D40102 000B011E
+00000000 00000000
+Pichu's Diff	0x08
+02E80240 00000000
+
+
+Hook into 800180F4, we can use all local registers. Has "lwz r3, 0x14(r30)"
+lbz r3, 0x4(r30)	# If this is 1, it is potentially a cap file
+cmpwi r3, 1
+bne RETURN
+
+lhz r3, 0x6(r30)	# The file id
+lis r4, 0x8040
+ori r4, r4, 0xBDF4	# The diff file table, set to 8040BDF4
+FIND_OFFSET:
+lhz r5, 0(r4)
+cmpw r5, 0
+beq RETURN			# If file id is 0, we're at the end of the table
+addi r4, r4, 4
+cmpw r5, r3
+bne FIND_OFFSET		# If not equal, we haven't found the offset
+
+subi r4, r4, 4
+lhz r5, 2(r4)		# Get the actual offset from the entry
+add r5, r4, r5		# Add offset to current entry addr to get diff addr to r5
+lwz r4, 0x10(r30)
+lwz r4, 4(r4)		# r4 is now the start addr of Kirby Cap file data
+
+DIFF_LOOP:
+lhz r3, 0(r5)		# Get the number of bytes the same
+add r4, r4, r3		# Seek ahead to the point where bytes are different
+cmpwi r3, 0
+lbz r3, 2(r5)		# Get the number of bytes different
+addi r5, r5, 3		# Go to first modified byte in the diff
+bne APPLY_DIFF
+cmpwi r3, 0
+beq RETURN			# If both number of bytes are 0, we're done, and we can exit
+
+APPLY_DIFF:
+lbz r6, 0(r5)
+stb r6, 0(r4)
+addi r5, r5, 1
+addi r4, r4, 1
+subi r3, r3, 1
+cmpwi r3, 0
+bne APPLY_DIFF
+b DIFF_LOOP
+
+RETURN:
+lwz r3, 0x14(r30)
+
+
+
+
+
+
+
+
+v1.00: 80018074
+C2018074 00000012
+887E0004 2C030001
+4082007C A07E0006
+3C808000 608423B0
+A0A40000 7C050000
+41820064 38840004
+7C051800 4082FFEC
+3884FFFC A0A40002
+7CA42A14 809E0010
+80840004 A0650000
+7C841A14 2C030000
+88650002 38A50003
+4082000C 2C030000
+41820024 88C50000
+98C40000 38A50001
+38840001 3863FFFF
+2C030000 4082FFE8
+4BFFFFC4 807E0014
+60000000 00000000
+
+v1.01 && v1.02: 800180F4
+C20180F4 00000012
+887E0004 2C030001
+4082007C A07E0006
+3C808000 608423B0
+A0A40000 7C050000
+41820064 38840004
+7C051800 4082FFEC
+3884FFFC A0A40002
+7CA42A14 809E0010
+80840004 A0650000
+7C841A14 2C030000
+88650002 38A50003
+4082000C 2C030000
+41820024 88C50000
+98C40000 38A50001
+38840001 3863FFFF
+2C030000 4082FFE8
+4BFFFFC4 807E0014
+60000000 00000000
+
+PAL: 80018338
+C2018338 00000012
+887E0004 2C030001
+4082007C A07E0006
+3C808040 6084BDF4
+A0A40000 7C050000
+41820064 38840004
+7C051800 4082FFEC
+3884FFFC A0A40002
+7CA42A14 809E0010
+80840004 A0650000
+7C841A14 2C030000
+88650002 38A50003
+4082000C 2C030000
+41820024 88C50000
+98C40000 38A50001
+38840001 3863FFFF
+2C030000 4082FFE8
+4BFFFFC4 807E0014
+60000000 00000000
+
+
+For PAL, we also want to include the character patcher here.
+@ 80018338, we can use all local registers. Has "lwz r3, 0x14(r30)"
+lbz r3, 0x4(r30)	# If this is 1, it is potentially a cap file
+cmpwi r3, 2			# If it is 2, it is potentially a character file
+beq CHARACTER_PATCH
+cmpwi r3, 1
+bne RETURN
+
+lhz r3, 0x6(r30)	# The file id
+lis r4, 0x8040
+ori r4, r4, 0xBDF4	# The diff file table, set to 8040BDF4
+FIND_OFFSET:
+lhz r5, 0(r4)
+cmpw r5, 0
+beq RETURN			# If file id is 0, we're at the end of the table
+addi r4, r4, 4
+cmpw r5, r3
+bne FIND_OFFSET		# If not equal, we haven't found the offset
+
+subi r4, r4, 4
+lhz r5, 2(r4)		# Get the actual offset from the entry
+add r5, r4, r5		# Add offset to current entry addr to get diff addr to r5
+lwz r4, 0x10(r30)
+lwz r4, 4(r4)		# r4 is now the start addr of Kirby Cap file data
+
+DIFF_LOOP:
+lhz r3, 0(r5)		# Get the number of bytes the same
+add r4, r4, r3		# Seek ahead to the point where bytes are different
+cmpwi r3, 0
+lbz r3, 2(r5)		# Get the number of bytes different
+addi r5, r5, 3		# Go to first modified byte in the diff
+bne APPLY_DIFF
+cmpwi r3, 0
+beq RETURN			# If both number of bytes are 0, we're done, and we can exit
+
+APPLY_DIFF:
+lbz r6, 0(r5)
+stb r6, 0(r4)
+addi r5, r5, 1
+addi r4, r4, 1
+subi r3, r3, 1
+cmpwi r3, 0
+bne APPLY_DIFF
+b DIFF_LOOP
+
+
+CHARACTER_PATCH:
+lhz r3, 0x6(r30)	# The file id
+
+lis r11, 0x8040
+ori r11, r11, 0xC47C	# Character Patch Table minus 4		8040C480 - 4
+
+FIND_ADDRESS:
+lhzu r12, 4(r11)		# Get file ID of current item
+cmpwi r12, 0
+beq RETURN				# If 0, we finished the list and we should return
+cmpw r3, r12			# Compare file IDs
+beq ADDRESS_FOUND		# If equal, we found it
+b FIND_ADDRESS
+
+ADDRESS_FOUND:
+lhz r12, 2(r11)			# Get the second half of address
+oris r11, r12, 0x8045	# r11 is ptrPatch (ptrDiff)
+
+lwz r12, 0x10(r30)
+lwz r12, 4(r12)			# r12 is now the start addr of character file data, ptrPlayer
+
+# Sanity Check
+lha r10, 0(r11)		# r10 is sanityOffset
+lhz r9, 2(r11)		# r11 is sanityData
+lhzx r10, r12, r10	# r10 is now the actual data to compare to sanity data
+cmpw r9, r10		# See if they're the same
+beq RETURN			# If they're the same, we've already been patched
+addi r11, r11, 4	# Move ptrPatch past the sanity check
+
+MAIN_LOOP:
+lha r10, 0(r11)		# Num words same (could be negative)
+slwi r10, r10, 2	# Multiply by 4
+add r12, r12, r10	# Add numWordsSame * 4 to ptrPlayer
+
+cmpwi r10, 0		# Check if numWordsSame is 0
+lhz r10, 2(r11)		# r10 is numWordsDiff
+bne DO_DIFF
+
+cmpwi r10, 0
+beq RETURN
+
+DO_DIFF:
+li r9, 0			# r9 is loopvar
+addi r11, r11, 4
+
+DIFF_LOOP2:
+lwz r8, 0(r12)
+lwz r7, 0(r11)
+add r7, r8, r7
+stw r7, 0(r12)
+addi r11, r11, 4
+addi r12, r12, 4
+addi r9, r9, 1
+cmpw r9, r10
+blt DIFF_LOOP2
+
+b MAIN_LOOP
+
+RETURN:
+lwz r3, 0x14(r30)
+
+
+C2018338 00000026
+887E0004 2C030002
+41820084 2C030001
+40820118 A07E0006
+3C808040 6084BDF4
+A0A40000 7C050000
+41820100 38840004
+7C051800 4082FFEC
+3884FFFC A0A40002
+7CA42A14 809E0010
+80840004 A0650000
+7C841A14 2C030000
+88650002 38A50003
+4082000C 2C030000
+418200C0 88C50000
+98C40000 38A50001
+38840001 3863FFFF
+2C030000 4082FFE8
+4BFFFFC4 A07E0006
+3D608040 616BC47C
+A58B0004 2C0C0000
+41820088 7C036000
+41820008 4BFFFFEC
+A18B0002 658B8045
+819E0010 818C0004
+A94B0000 A12B0002
+7D4C522E 7C095000
+41820058 396B0004
+A94B0000 554A103A
+7D8C5214 2C0A0000
+A14B0002 4082000C
+2C0A0000 41820034
+39200000 396B0004
+810C0000 80EB0000
+7CE83A14 90EC0000
+396B0004 398C0004
+39290001 7C095000
+4180FFE0 4BFFFFB4
+807E0014 00000000

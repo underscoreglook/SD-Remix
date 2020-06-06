@@ -1,0 +1,147 @@
+Hooks should just branch back to the payload. The actual payload is the hook at 1.02.
+
+Actual Payload:
+- Array Overwrites
+- Direct Overwrites, including version specific
+- "Success" announcer
+- Branch back to the main area
+
+
+
+# Get the version and store it in r12
+lis r12, 0x8000
+lbz r12, 0x7(r12)
+slwi r12, r12, 0x2	# Multiply by 4 for indexing purposes
+
+# Get start of the array overwrites structure
+lis r3, 0x8045
+cmpwi r12, 0x4
+beq STRUCT_01
+bgt STRUCT_02
+ori r3, r3, 0xC64C
+b ARRAY_LOOP
+STRUCT_01:
+ori r3, r3, 0xD934
+b ARRAY_LOOP
+STRUCT_02:
+ori r3, r3, 0xE614
+
+# NEW FORMAT. The first three words are the addresses for each version, then the number of words, then array.
+# If the address for that version is 0, then you skip the array.
+# If all three words are 0, the fourth word is an offset saying where the direct overwrites start
+# If all three words or'd are 1, the fourth word is an offset saying where the next array overwrites are
+# Array overwrites
+ARRAY_LOOP:
+# First, or the addresses to see if we have a special case
+lwz r4, 0(r3)
+lwz r5, 4(r3)
+or r4, r4, r5
+lwz r5, 8(r3)
+or r4, r4, r5
+lwz r5, 0xC(r3)
+cmpwi r4, 0
+beq GO_DIRECT
+cmpwi r4, 1
+bne ARRAY_NORMAL
+add r3, r3, r5
+b ARRAY_LOOP
+ARRAY_NORMAL:
+lwzx r4, r3, r12
+addi r3, r3, 0x10
+cmpwi r4, 0
+bne WRITE_ARRAY
+slwi r5, r5, 0x2
+add r3, r3, r5
+b ARRAY_LOOP
+WRITE_ARRAY:
+lwz r6, 0(r3)
+stw r6, 0(r4)
+addi r4, r4, 4
+addi r3, r3, 4
+subi r5, r5, 1
+cmpwi r5, 0
+bne WRITE_ARRAY
+b ARRAY_LOOP
+
+GO_DIRECT:
+add r3, r3, r5
+
+# Direct overwrites
+# Has same special cases as array overwrites
+# First three words are addresses with last word being the actual value written
+DIRECT_LOOP:
+# Check for special cases
+lwz r4, 0(r3)
+lwz r5, 4(r3)
+or r4, r4, r5
+lwz r5, 8(r3)
+or r4, r4, r5
+cmpwi r4, 0
+beq END_DIRECT
+lwz r5, 0xC(r3)
+cmpwi r4, 1
+bne DO_DIRECT_WRITE
+add r3, r3, r5
+b DIRECT_LOOP
+DO_DIRECT_WRITE:
+lwzx r4, r3, r12
+addi r3, r3, 0x10
+cmpwi r4, 0
+beq DIRECT_LOOP
+stw r5, 0(r4)		# this is at 8045BA48 in memory in v1.00
+b DIRECT_LOOP
+
+END_DIRECT:
+# Now we will get into the "version specific lists", which behave like the old ones.
+addi r3, r3, 0xC # Go to the offset list
+lwzx r4, r3, r12 # Get the offset
+add r3, r3, r4   # Get to that table
+
+VERSION_LOOP:
+lwz r4, 0(r3)
+lwz r5, 4(r3)
+cmpwi r4, 0
+beq PLAY_SOUND
+stw r5, 0(r4)
+addi r3, r3, 8
+b VERSION_LOOP
+
+PLAY_SOUND:
+# Play "SUCCESS" sound and exit (84 in sound test)
+lis r3, 0x0007
+ori r3, r3, 0xc85e
+li r4, 0x00fe
+li r5, 0x0080
+li r6, 0x0000
+li r7, 0x0007
+# Function calls differ for each version
+cmpwi r12, 0x4
+beq SUCCESS_101
+bgt SUCCESS_102
+SUCCESS_100:
+lis r12, 0x8038
+ori r12, r12, 0xb130	# Sound Function 8038b130
+mtctr r12
+bctrl
+lis r12, 0x8023
+ori r12, r12, 0x8b90	# Return location 80238b90
+mtctr r12
+bctr
+SUCCESS_101:
+lis r12, 0x8038
+ori r12, r12, 0xC314	# Sound Function 8038C314
+mtctr r12
+bctrl
+lis r12, 0x8023
+ori r12, r12, 0x9700	# Return location 80239700
+mtctr r12
+bctr
+SUCCESS_102:
+lis r12, 0x8038
+ori r12, r12, 0xcff4	# Sound Function 8038cff4
+mtctr r12
+bctrl
+lis r12, 0x8023
+ori r12, r12, 0x9E9C	# Return location 80239E9C
+mtctr r12
+bctr
