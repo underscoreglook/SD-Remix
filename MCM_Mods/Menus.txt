@@ -1,0 +1,237 @@
+Disable Name Tag Reset After Exiting Character Select Screen
+Also prevents KO counts from resetting.
+[Todd Bonney]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x801A55EC --- 7C0802A6 -> 4E800020
+
+
+	-==-
+
+
+Disable Name Tag Reset After Closing Character Port (v2)
+On the CSS, name tags normally switch back to the default character name after closing and reopening a port, and KO stars would also disappear. This mod prevents that.
+[Ato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80261B1C --- 98A4007A -> 60000000
+1.02 ----- 0x80261B30 --- 98A4001B -> 60000000
+1.01 ----- 0x80261380 --- 98A4007A -> 60000000
+1.01 ----- 0x80261394 --- 98A4001B -> 60000000
+1.00 ----- 0x80260810 --- 98A4007A -> 60000000
+1.00 ----- 0x80260824 --- 98A4001B -> 60000000
+PAL ------ 0x802622C8 --- 98A4007A -> 60000000
+PAL ------ 0x802622DC --- 98A4001B -> 60000000
+
+
+	-==-
+
+
+Debug Menu replaces Tournament Mode
+- Selecting Tournament Melee in the main menu takes you to the Debug Menu instead
+(Concomitant Graphical Mod Here: http://smashboards.com/threads/326347/page-3#post-15738900)
+[Magus, donny2112, SypherPhoenix]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code 
+1.00 ------ 0x228F20 ---- 3800001B -> 38000006 ---- (li r0,27 -> li r0,6)
+
+1.01 ------ 0x229A90 ---- 3800001B -> 38000006 ---- (li r0,27 -> li r0,6)
+
+1.02 ------ 0x22A218 ---- 3800001B -> 38000006 ---- (li r0,27 -> li r0,6)
+
+PAL ------- 0x22C084 ---- 3800001E -> 38000006 ---- (li r0,30 -> li r0,6)
+
+
+	-==-
+
+
+Debug Menu Default Language to English
+The default language in vanilla Melee is Japanese. As the name says, this changes it to English.
+(For PAL, you can edit the code in the text file library in the "Mods" folder to change what language this sets. The other options are UK English, German, French, Italian, or Spanish.)
+[SypherPhoenix]
+Version -- DOL Offset --- Hex to Replace
+1.00 ------ 0x3F53CB ------- 00 -> 01
+1.01 ------ 0x3F657B ------- 00 -> 01
+1.02 ------ 0x3F725B ------- 00 -> 01
+PAL ------- 0x3F8003 ------- 02 -> 01
+
+# Possible values:
+# 00 - Japanese
+# 01 - US English
+# 02 - UK English (PAL Only)
+# 03 - German (PAL Only)
+# 04 - French (PAL Only)
+# 05 - Italian (PAL Only)
+# 06 - Spanish (PAL Only)
+
+
+	-==-
+
+
+Go to the CSS when leaving Debug Menu
+This mod can be modified to go to other screens by modifying the last byte with a different ID.
+A list of different menu IDs can be found here: http://tinyurl.com/Menu-ID-Notes
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x1AD5F4 ---- 38600000 -> 38600002
+
+
+	-==-
+
+
+All Players Can Control the Debug Menu
+Hold R or use C-Stick for turbo speed through menu selections.
+[wParam]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x803039A4 --- 3C80804C -> Branch
+
+39400000 39000000
+38E00008 3C80804C
+608420BC 1CAA0044
+7D242A14 80690008
+70631F10 7D081B78
+80690000 70600020
+41820008 38E00000
+5460C8C6 5060D884
+5060F002 7D080378
+54606006 7D080378
+54604007 4182000C
+38E00000 7D080378
+394A0001 2C0A0004
+4180FFA4 7500F000
+41820028 886DB7AC
+2C030000 41820014
+3863FFFF 986DB7AC
+5508013E 48000014
+98EDB7AC 4800000C
+38600000 986DB7AC
+7D034378 4E800020
+60000000 48000000
+
+
+	-==-
+
+
+Extended Name Entry
+English alphabet name tags can be up to 8 characters in length.
+Press X Button to shift between upper and lowercase characters.
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8023C718 --- 38030001 -> Branch
+
+1CC30003 7CC6F214
+88060001 2C000000
+7C601B78 41820008
+38030001 48000000
+
+1.02 ----- 0x8023C270 --- 98030000 -> Branch
+
+88C30000 2C060000
+41820008 38630001
+98030000 48000000
+
+1.02 ----- 0x8023C710 --- 28030003 -> Branch
+
+28030003 4180001C
+1CC30003 7CC6F214
+88060001 2C000000
+40820008 38600002
+28030003 48000000
+
+
+1.02 ----- 0x42FCCC ------ 81400000 -> 20000000  # This is somehow included, not in MCM official code
+1.02 ----- 0x8023cdd4 --- 7C7E01AE -> 7c7e032e
+1.02 ----- 0x8023cdb0 --- 98040000 -> b0040000
+1.02 ----- 0x8023C5A0 --- 546005AD -> Branch
+
+5460056B 41820068
+88BC0050 28050002
+4082005C 3CA0804D
+60A54D90 38C00000
+2C0600B4 41810038
+7CE628AE 2C070041
+41800024 2C07007A
+4181001C 2C070061
+4180000C 38E7FFE0
+48000008 38E70020
+7CE629AE 38C60004
+4BFFFFC8 3D808023
+618CC7EC 7D8903A6
+4E800420 546005AD
+60000000 48000000
+
+1.02 ----- 0x804d4d90 ---
+
+82690000 82730000
+82580000 81440000
+82680000 82720000
+82570000 81900000
+82670000 82710000
+82560000 81950000
+82660000 82700000
+82550000 81930000
+82650000 826f0000
+82790000 82540000
+81970000 82640000
+826e0000 82780000
+82530000 81480000
+82630000 826d0000
+82770000 82520000
+81490000 82620000
+826c0000 82760000
+82510000 81810000
+82610000 826b0000
+82750000 82500000
+817b0000 82600000
+826a0000 82740000
+824f0000 817c0000
+
+->
+
+4a000000 54000000
+39000000 2e000000
+49000000 53000000
+38000000 81900000
+48000000 52000000
+37000000 81950000
+47000000 51000000
+36000000 81930000
+46000000 50000000
+5a000000 35000000
+81970000 45000000
+4f000000 59000000
+34000000 81480000
+44000000 4e000000
+58000000 33000000
+81490000 43000000
+4d000000 57000000
+32000000 81810000
+42000000 4c000000
+56000000 31000000
+817b0000 41000000
+4b000000 55000000
+30000000 817c0000
+
+
+	-==-
+
+
+Hold start to force game out of result screen_V2 +B goes back from ready state
+[rice]
+1.02 ------ 0x80178224 ---- 80030008 -> Branch
+3DE08047 61EF9DF8
+3A000044 7E0083D6
+3A200000 1E5000A8
+7E2F932E 1E7100A8
+7E4F9A2E 2C12003C # 3C = 60 frames = 1 second
+4180000C 38001000
+48000014 3A310001
+2C110004 41A0FFE0
+80030008 00000000
+1.02 ------ 0x801782F8 ---- 80030008 -> Branch
+3DE08047 61EF9DF8
+3A000044 7E0083D6
+1E1000A8 7E2F822E
+80030000 541304E7
+41820014 2C117FFE
+41810008 3A310001
+48000008 3A200000
+7E2F832E 00000000
+1.02 ------ 0x801782FC ---- 540004E7 -> 540005AD

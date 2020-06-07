@@ -31,34 +31,6 @@ EC210032 C0010034 EC210024 39C00000
 	-==-
 
 
-Hold Start to exit results screen (SDR Staticly placed @ 803FC834 and 803FC87C and 0x803FC8B0)
-Normally, the results screen requires all players to be ready in order to exit the results screen.
-This can get annoying when either a player is being absent-minded or when the controller is still plugged in and the player has left to do something else.
-This is a shortcut to dealing with that, where you just hold start to exit.
-[achilles]
-NTSC 1.02 ---- 0x803FC834 ------
-00000000 00000000 00000000 00000000 00000000 00000002 803009E0 803FC804
-803FB538 804D6DC8 00000000 42080000 00000000 00000003 80300A88 803FC810
-00000000 804D6DCC
-->
-3C808047 3E208046 6231B0FC 3E40817F 6252FFF7 3A600000 8691000C 8EB20001
-569400C7 4182000C 3AB50001 48000008 3AA00000 9AB20000 3A730001 2C130004
-41A0FFD8 4BD7B7E0
--------------- 0x803FC87C ------
-00000000 49742400 3F800000 00000003 00000000 803FC81C 00000000 804D6DD4
-00000000 49742400 41200000 00000009 00000000
-->
-3E40817F 6252FFF7 3A600000 8E920001 2C140096 4180000C 38001000 48000014
-3A730001 2C130004 41A0FFE4 80030008 4BD7B97C
--------------- 0x803FC8B0 ------
-00000000 00000000 00000000 00000000 00000000
-->
-38000000 3E40817F 6252FFF8 90120000 4BDA78A8
-
-
-	-==-
-
-
 Stock Dependent Revival Platform Colors (SDR Staticly placed @ 803FA3E8)
 The coloring of the revival platform changes based on how many stocks a player has remaining.
 4 stocks left (via a minigame or something...) = purple

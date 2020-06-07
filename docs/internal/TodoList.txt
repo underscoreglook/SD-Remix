@@ -1,21 +1,15 @@
 Short term:
 ----------
-Converting the raw changes to actual individual mods in the MCM.
 Try to figure out what all the changes to the menu files are, and fill in the assets folder based on that.
 Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
 Add SD Remix Lite to this repo
-At this point, tag the commit as 3.2.1+ base (not official as it's not binary compatible) (take one last look through TODOs)
 
 End Goal, Netplay build:
 -----------------------
-There seems to be several bugs with the "Start on results screen" code:
-    - Whispy woods would crash if Gametoc not align properly
-    - There seems to be a bug when picking pika for P3 and P4 and having stock platform colors enabled
-    - Random crashes when going to SSS
-    We may want to just disable this code and get rid of it from the debug menu.
 Probably rework the debug screen.
 Make the default stage list normal, so we can just use vMelee default settings, then just have a settings code for the
  SDR Stage List.
+Save debug options in the memory card.
 SDR Stage List should have all Melee viable stages, certain stages being frozen. Maybe try and get other stages too.
 Include some netplay specific codes built in
 Maybe include Magus's updated 1.00 hitlag code

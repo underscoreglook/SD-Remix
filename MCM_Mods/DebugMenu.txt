@@ -300,9 +300,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <varToggleWidescreend> ALL
 0000 0000
 
-<varToggleStartResultsScreen> ALL
-0000 0000
-
 <varTogglePlatformColors> ALL
 0000 0000
 
@@ -311,9 +308,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
 <strWidescreenOpt> ALL                  # "Widescreen:"
 57696465 73637265 656E3A00
-
-<strHoldStartExitResultsOpt> ALL        # "Hold start exit results: "
-486F6C64 20737461 72742065 78697420 72657375 6C74733A 20000000
 
 <strStockPlatformColorOpt> ALL          # "Stock platform colors: "
 53746F63 6B20706C 6174666F 726D2063 6F6C6F72 733A2000
@@ -346,50 +340,6 @@ TURN_ON:
   ori r4, r4, 0xA4A8        # BADHACK   8036A4A8     Branch
   lis r3, 0x4809
   ori r3, r3, 0x2354
-  stw r3, 0(r4)
-RETURN:
-  li r3, 0x0
-  blr
-
-<funDbgToggleHoldStartResultsScreen> NTSC 1.02
-loc_0x0:
-  lis r3, <<varToggleStartResultsScreen>>@h
-  ori r3, r3, <<varToggleStartResultsScreen>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x0
-  bne- ENABLE
-DISABLE:
-  lis r4, 0x8017
-  ori r4, r4, 0x8054        # BADHACK 80178054     Default 3C808047
-  lis r3, 0x3C80
-  ori r3, r3, 0x8047
-  stw r3, 0(r4)
-  lis r4, 0x8017            # BADHACK 80178224     Default 80030008
-  ori r4, r4, 0x8224
-  lis r3, 0x8003
-  ori r3, r3, 0x8
-  stw r3, 0(r4)
-  lis r4, 0x801A            # BADHACK 801A4164     Default 41643800
-  ori r4, r4, 0x4164
-  lis r3, 0x3800
-  ori r3, r3, 0x0
-  stw r3, 0(r4)
-  b RETURN
-ENABLE:
-  lis r4, 0x8017
-  ori r4, r4, 0x8054        # BADHACK 80178054     Enable branch
-  lis r3, 0x4828
-  ori r3, r3, 0x47E0
-  stw r3, 0(r4)
-  lis r4, 0x8017
-  ori r4, r4, 0x8224        # BADHACK 80178224     Enable branch
-  lis r3, 0x4828
-  ori r3, r3, 0x4658
-  stw r3, 0(r4)
-  lis r4, 0x801A
-  ori r4, r4, 0x4164        # BADHACK 801A4164     Enable branch
-  lis r3, 0x4825
-  ori r3, r3, 0x874C
   stw r3, 0(r4)
 RETURN:
   li r3, 0x0
@@ -433,16 +383,7 @@ RETURN:
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
-# Entry 2: Hold start to exit results screen
-    00000002                                        # String Table
-    .long <<funDbgToggleHoldStartResultsScreen>>    # Toggle function
-    .long <<strHoldStartExitResultsOpt>>            # Label
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
-    .long <<varToggleStartResultsScreen>>           # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
-# Entry 3: Stock Platform Colors
+# Entry 2: Stock Platform Colors
     00000002                                        # String Table
     .long <<funDbgToggleStockPlatformColor>>        # Toggle function
     .long <<strStockPlatformColorOpt>>              # Label
