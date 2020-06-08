@@ -7,7 +7,6 @@ Add SD Remix Lite to this repo
 End Goal, Netplay build:
 -----------------------
 With stage randomization, choose from both stage lists if hold down the Z button; get rid of sound effects.
-Hold L/R for random stage select, default to current toggle, and update MnExtAll.usd random stage label.
 
 Include some netplay specific codes built in
 Maybe include Magus's updated 1.00 hitlag code
@@ -46,6 +45,7 @@ Moved Hold Start code from debug menu to always on
 Changed stage striking to transparent version
 Revert alpha stage list to Melee stage list
 New Omega stage list
+Random Stage setting now defaults to current alpha/omega toggle, and can be changed with holding L or R
 
 
 
