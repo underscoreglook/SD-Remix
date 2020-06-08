@@ -6,9 +6,9 @@ Add SD Remix Lite to this repo
 
 End Goal, Netplay build:
 -----------------------
-Fix random select names to be new omega stage list. Change default to be just first two rows.
 With stage randomization, choose from both stage lists if hold down the Z button; get rid of sound effects.
 Hold L/R for random stage select, default to current toggle, and update MnExtAll.usd random stage label.
+
 Include some netplay specific codes built in
 Maybe include Magus's updated 1.00 hitlag code
 Probably good to have UCF and other such stuff

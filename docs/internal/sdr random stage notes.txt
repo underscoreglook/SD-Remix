@@ -18,36 +18,36 @@ previous value vertically above it except bit shifted left.
 
 OMEGA	043D4A7C
 =====================
-Peach's Castle	E0000001		Princess Peach's Flat	E0001000
-Kongo Jungle	E0000002		Jungle Japes
-Great Bay		E0000004		Temple
-Brinstar						Brinstar Depths
-Yoshi N64		E0000010		Yoshi's Island			E0010000
-Fountain of Dr					Green Greens
-Corneria						Warzone Corneria
-Kongo Jungle64					Cranky's Treehouse
-Mute City		E0000100		Big Blue				E0100000
-Onett			E0000200		Fourside
-Mushroom King	E0000800		Mushroom Kingdom II
-Flat Zone		E0000400		Mount Olympus			E0800000
+Peach's Castle	E0000001		Mushroom Kingdom I 	    E0001000
+Big Blue    	E0000002		Mute City               E0002000
+Great Bay		E0000004		Skyrule                 E0004000
+Brinstar		E0000008		Fountain of Dreams      E0008000
+Reverse BField	E0000010		Yoshi's Island			E0010000
+Fountain of Dr	E0000020		Green Greens            E0020000
+Corneria		E0000040		Warzone Corneria        E0040000
+Kongo Jungle   	E0000080		Yoshi Island 64         E0080000
+Mush King II 	E0000100		Cranky's Treehouse		E0100000
+Peach's Flat	E0000200		Fourside                E0200000
+Kongo Jungle 64	E0000800		Pokemon Stadium         E0400000
+Trophy Tussle	E0000400		Mount Olympus  			E0800000
 Battlefield		E1000000		Final Destination		E2000000
-Dream Land 64	E4000000		Yoshi's Story			E8000000
-Pokemon Stadium	F0000000
+Dream Land 64	E4000000		Yoshi's Story   		E8000000
+Whispy's BG     F0000000
 
-ALPHA	043D4A78
+Normal	043D4A78
 =====================
-Peach's Castle	E0000001		Princess Peach's Flat	E0001000
-Kongo Jungle	E0000002		Jungle Japes
-Great Bay		E0000004		Temple
-Brinstar						Brinstar Depths
-Yoshi N64		E0000010		Yoshi's Island			E0010000
-Fountain of Dr					Green Greens
-Corneria						Warzone Corneria
-Kongo Jungle64					Cranky's Treehouse
+Peach's Castle	E0000001		Rainbow Cruise  	    E0001000
+Kongo Jungle	E0000002		Jungle Japes            E0002000
+Great Bay		E0000004		Temple                  E0004000
+Brinstar		E0000008		Brinstar Depths         E0008000
+Yoshi Story		E0000010		Yoshi's Island			E0010000
+Fountain of Dr	E0000020		Green Greens            E0020000
+Corneria		E0000040		Venom                   E0040000
+Staidum     	E0000080		Pokefloats              E0080000
 Mute City		E0000100		Big Blue				E0100000
-Onett			E0000200		Fourside
-Mushroom King	E0000800		Mushroom Kingdom II
-Flat Zone		E0000400		Mount Olympus			E0800000
+Onett			E0000200		Fourside                E0200000
+Mushroom King	E0000800		Mushroom Kingdom II     E0400000
+Icicle Mnt		E0000400		Flatzone    			E0800000
 Battlefield		E1000000		Final Destination		E2000000
-Dream Land 64	E4000000		Yoshi's Story			E8000000
-Pokemon Stadium	F0000000
+Dream Land 64	E4000000		Yoshi's Island 64		E8000000
+Kongo Jnugle 64 F0000000

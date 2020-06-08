@@ -1,3 +1,13 @@
+SDR Default random omega stages
+Melee Code Manager doesn't have any settings for this, so it won't complain
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A7C ------ 00000000 -> FF788000
+
+
+	-==-
+
+
 Hold L+R+A+Start During Stage Load to Return to the CSS
 In vanilla Melee, this button combination loads the Main Menu.
 [Jorgasms]
@@ -280,27 +290,104 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 <varRandomStageListToShow> ALL
 00000000
 
-<strAlphaStages> ALL    # "Alpha Stages"
+<wsrAlphaStages> ALL    # "Alpha Stages"
 160E 008A 008A 200A 202F 2033 202B 2024 1A20 1C20 3720 2420 2A20 2820 360F 0000
 
-<strOmegaStages> ALL    # "Omega Stages"
+<wsrOmegaStages> ALL    # "Omega Stages"
 160E 008A 008A 2018 2030 2028 202A 2024 1A20 1C20 3720 2420 2A20 2820 360F 0000
 
+<wsrBigBlue> ALL        # u"Big Blue"
+160E 008A 008A 200b 202c 202a 1a20 0b20 2f20 3820 28 0F00 00
+
+<wsrReverseBattlefield> ALL # u"Reverse Battlefield"
+160E 008A 008A 201b 2028 2039 2028 2035 2036 2028 1a20 0b20 2420 3720 3720 2f20 2820 2920 2c20 2820
+2f20 27 0F00 000000
+
+<wsrFodNoSides> ALL     # u"FoD No Sides"
+160E 008A 008A 200f 2032 200d 1a20 1720 321a 201c 202c 2027 2028 2036 0F00 0000
+
+<wsrKongoJungle> ALL    # u"Kongo Jungle"
+160E 008A 008A 2014 2032 2031 202a 2032 1a20 1320 3820 3120 2a20 2f20 28 0F00 00
+
+<wsrMushroomKingdom2> ALL     # u"Mushroom Kingdom II"
+160E 008A 008A 2016 2038 2036 202b 2035 2032 2032 2030 1a20 1420 2c20 3120 2a20 2720 3220 301a 2012 2012 0F00
+
+<wsrPeachesFlat> ALL        # u"Princess Peach's Flat"
+160E 008A 008A 2019 2035 202C 2031 2026 2028 2036 2036 1A20 1920 2820 2420 2620 2B20 F320 361A 200F 202F 2024
+2037 0F00
+
+<wsrTrophyTussle> ALL        # u"Trophy Tussle"
+160E 008A 008A 201d 2035 2032 2033 202b 203c 1a20 1d20 3820 3620 3620 2f20 28 0F00 000000
+
+<wsrKongoJungle64> ALL        # u"Kongo Jungle 64"
+160E 008A 008A 2014 2032 2031 202a 2032 1a20 1320 3820 3120 2a20 2f20 281a 2006 2004 0F00
+
+<wsrMushroomKingdomI> ALL    # u"Mushroom Kingdom I"
+160E 008A 008A 2016 2038 2036 202b 2035 2032 2032 2030 1a20 1420 2c20 3120 2a20 2720 3220 301a 2012 0F00 0000
+
+<wsrMuteCity> ALL           # u"Mute City"
+160E 008A 008A 2016 2038 2037 2028 1a20 0c20 2c20 3720 3c 0F00 000000
+
+<wsrSkyrule> ALL            # u"Skyrule"
+160E 008A 008A 201c 202e 203c 2035 2038 202f 2028 0F00 0000
+
+<wsrFoD> ALL                # u"Fountain of Dreams"
+160E 008A 008A 200f 2032 2038 2031 2037 2024 202c 2031 1a20 3220 291a 200d 2035 2028 2024 2030 2036 0F00 0000
+
+<wsrWarzoneCorneria> ALL    # u"Warzone Corneria"
+160E 008A 008A 2020 2024 2035 203D 2032 2031 2028 1A20 0C20 3220 3520 3120 2820 3520 2C20 24 0F00 00
+
+<wsrYoshisIsland64> ALL     # u"Yoshi Island 64"
+160E 008A 008A 2022 2032 2036 202b 202c 1a20 1220 3620 2f20 2420 3120 271a 2006 2004 0F00
+
+<wsrCrankysTreehouse> ALL   # u"Cranky's Treehouse"
+160E 008A 008A 200c 2035 2024 2031 202e 203c 20f3 2036 1a20 1d20 3520 2820 2820 2b20 3220 3820 3620 28 0F00 00
+
+<wsrPokemonStadium> ALL     # u"Pokemon Stadium"
+160E 008A 008A 2019 2032 202e 2028 2030 2032 2031 1a20 1c20 3720 2420 2720 2c20 3820 30 0F00 000000
+
+<wsrMountOlympus> ALL       # u"Mount Olympus"
+160E 008A 008A 2016 2032 2038 2031 2037 1a20 1820 2f20 3c20 3020 3320 3820 36 0F00 000000
+
+<wsrYoshisStory> ALL        # u"Yoshi's Story"
+160E 008A 008A 2022 2032 2036 202b 202c 20f3 2036 1a20 1c20 3720 3220 3520 3c 0F00 000000
+
+<wsrWhispysBattlegrounds> ALL        # u"Whispy's Battlegrounds"
+160E 008A 008A 2020 202b 202c 2036 2033 203c 20f3 2036 1a20 0b20 2420 3720 3720 2f20 2820 2a20 3520 3220 3820
+3120 2720 36 0F00 00
+
 <tblOmegaStagesNames> ALL
-# Table: Each dword is an entry. Byte 1 is slot num, rest is offset into the string table (starting at entry)
-0B000018  # 94 -> Flat Zone (Col 1, Slot 12)
-0F00002D  # 5C -> Peach's Flat (Col 2, slot 1)
-15000059  # 88 -> Warzone Corneria (Col 2, Slot 7)
-1600007C  # 8C -> Cranky's Treehouse (Col 2, Slot 8)
-1B0000A3  # A4 -> Final Destination (Col Two, Slot 13)
-00000000  # end of list
-# String table
-160E 008A 008A 200F 202F 2024 2037 1A20 2320 3220 3120 280F 00
-160E 008A 008A 2019 2035 202C 2031 2026 2028 2036 2036 1A20 1920 2820 2420 2620
-     2B20 F320 361A 200F 202F 2024 2037 0F00
-160E 008A 008A 2020 2024 2035 203D 2032 2031 2028 1A20 0C20 3220 3520 3120 2820 3520 2C20 240F 00
-160E 008A 008A 200C 2035 2024 2031 202E 203C 20F3 2036 1A20 1D20 3520 2820 2820 2B20 3220 3820 3620 280F 00
-160E 008A 008A 200F 202C 2031 2024 202F 1A20 0D20 2820 3620 3720 2C20 3120 2420 3720 2C20 3220 310F 00
+# Table, each dword is the address to a "SmashTF-8" string. Index = Slot Num
+00000000                            # Col 01, Slot 01: Peach's Castle
+.long <<wsrBigBlue>>                # Col 01, Slot 02: Kongo Jungle
+00000000                            # Col 01, Slot 03: Great Bay
+00000000                            # Col 01, Slot 04: Brinstar
+.long <<wsrReverseBattlefield>>     # Col 01, Slot 05: Yoshis Story
+.long <<wsrFodNoSides>>             # Col 01, Slot 06: FoD
+00000000                            # Col 01, Slot 07: Corneria
+.long <<wsrKongoJungle>>            # Col 01, Slot 08: Pokemon Stadium
+.long <<wsrMushroomKingdom2>>       # Col 01, Slot 09: Mute City
+.long <<wsrPeachesFlat>>            # Col 01, Slot 10: Onett
+.long <<wsrKongoJungle64>>          # Col 01, Slot 11: Mushroom Kingdom I
+.long <<wsrTrophyTussle>>           # Col 01, Slot 12: Icicle Mountain
+00000000                            # Col 01, Slot 13: Battlefield
+00000000                            # Col 01, Slot 14: Dream land N64
+.long <<wsrWhispysBattlegrounds>>   # Col 01, Slot 15: Kongo Jungle 64
+.long <<wsrMushroomKingdomI>>       # Col 02, Slot 01: Rainbow Cruise
+.long <<wsrMuteCity>>               # Col 02, Slot 02: Jungle Japes
+.long <<wsrSkyrule>>                # Col 02, Slot 03: Hyrule Temple
+.long <<wsrFoD>>                    # Col 02, Slot 04: Brinstar Depths
+00000000                            # Col 02, Slot 05: Yoshi's Island
+00000000                            # Col 02, Slot 06: Green Greens
+.long <<wsrWarzoneCorneria>>        # Col 02, Slot 07: Venom
+.long <<wsrYoshisIsland64>>         # Col 02, Slot 08: PokeFloats
+.long <<wsrCrankysTreehouse>>       # Col 02, Slot 09: Big Blue
+00000000                            # Col 02, Slot 10: Fourside
+.long <<wsrPokemonStadium>>         # Col 02, Slot 11: Mushroom Kingdom II
+.long <<wsrMountOlympus>>           # Col 02, Slot 12: Flatzone
+00000000                            # Col 02, Slot 13: Final Destination
+.long <<wsrYoshisStory>>            # Col 02, Slot 14: Yoshi's Island 64
+00000000                            # Col 02, Slot 15: Empty
 
 NTSC 1.02 ---- 0x2338C8 ------ 38600006 -> Branch
 # This changes varRandomStageListToShow, which the other parts use to display/manipulate the right list.
@@ -339,66 +426,52 @@ ori r5,r5, <<varRandomStageListToShow>>@l
 80A50000  # lwz r5, 0(r5)
 2C050000  # cmpwi r5, 0
 40820010  # bne OMEGA
-lis r4, <<strAlphaStages>>@h
-ori r4, r4, <<strAlphaStages>>@l
+lis r4, <<wsrAlphaStages>>@h
+ori r4, r4, <<wsrAlphaStages>>@l
 4800000C  # b SET_TEXT
 # OMEGA:
-lis r4, <<strOmegaStages>>@h
-ori r4, r4, <<strOmegaStages>>@l
+lis r4, <<wsrOmegaStages>>@h
+ori r4, r4, <<wsrOmegaStages>>@l
 # SET_TEXT:
 909A005C  # stw r4, 0x5C(r26)
 # RETURN:
 2C19001E  # cmpwi r25, 30        # Instead of exiting on 0x1D, exit on 0x1E slots
 00000000    # Return
 -------------- 0x2337B4 ------ 2C19001D -> 2C19001E # Checks an extra slot for text cleanup, on screen exit
--------------- 0x232714 ------ 3B180001 -> Branch
+-------------- 0x232714 ------ 3B180001 -> Branch   # 80235B34
 # Replace strings in column 1 of the random stage select screen (since some text is different than stage ID)
 # r25 is text structure with 0x5C as the text. r24 is the current slot number.
 lis r5, <<varRandomStageListToShow>>@h
 ori r5,r5, <<varRandomStageListToShow>>@l
 80A50000  # lwz r5, 0(r5)
 2C050000  # cmpwi r5, 0
-41820038  # beq END
+41820024  # beq END
 lis r5, <<tblOmegaStagesNames>>@h
 ori r5, r5, <<tblOmegaStagesNames>>@l
-# LOOP_CHECK:
-80850000  # lwz r4, 0(r5)
-2C040000  # cmpwi r4, 0
-41820024  # beq END
-88850000  # lbz r4, 0(r5)
-7C04C000  # cmpw r4, r24
-4182000C  # beq MATCH_FOUND
-38A50004  # addi r5, r5, 4
-4BFFFFE4  # b LOOP_CHECK
-# MATCH_FOUND:
-A0850002  # lhz r4, 2(r5)
-7CA52214  # add r5, r5, r4
-90B9005C  # stw r5, 0x5C(r25)
+5704103A  # slwi r4, r24, 2   # Multiply b5 4 to get bytes offset
+7CA42A14  # add r5, r4, r5    # r5 points to the pointer to text
+80A50000  # lwz r5, 0(r5)
+2C050000  # cmpwi r5, 0
+41820008  # beq END     # If no replacement, then just stop
+90B9005C  # stw r5, 0x5C(r25)   # Store the address of the text into the data
 # END:
 3B180001  # addi r24, r24, 1  # instruction at hook point
 00000000  # return
--------------- 0x2327FC ------ 3B390001 -> Branch
+-------------- 0x2327FC ------ 3B390001 -> Branch   # 80235C1C
 # Like the previous one, except the second column
 # r26 is the text structure with 0x5C as the text. r25 is current slot number.
 lis r5, <<varRandomStageListToShow>>@h
 ori r5,r5, <<varRandomStageListToShow>>@l
 80A50000  # lwz r5, 0(r5)
 2C050000  # cmpwi r5, 0
-41820038  # beq END
+41820024  # beq END
 lis r5, <<tblOmegaStagesNames>>@h
 ori r5, r5, <<tblOmegaStagesNames>>@l
-# LOOP_CHECK:
-80850000  # lwz r4, 0(r5)
-2C040000  # cmpwi r4, 0
-41820024  # beq END
-88850000  # lbz r4, 0(r5)
-7C04C800  # cmpw r4, r25
-4182000C  # beq MATCH_FOUND
-38A50004  # addi r5, r5, 4
-4BFFFFE4  # b LOOP_CHECK
-# MATCH_FOUND:
-A0850002  # lhz r4, 2(r5)
-7CA52214  # add r5, r5, r4
+5724103A  # slwi r4, r25, 2    # Multiply b5 4 to get bytes offset
+7CA42A14  # add r5, r4, r5    # r5 points to the pointer to text
+80A50000  # lwz r5, 0(r5)
+2C050000  # cmpwi r5, 0
+41820008  # beq END     # If no replacement, then just stop
 90BA005C  # stw r5, 0x5C(r26)
 # END:
 3B390001  # addi r25, r25, 1   # Instruction at hook point

@@ -1,13 +1,3 @@
-SDR Default random omega stages
-Melee Code Manager doesn't have any settings for this, so it won't complain
-[n/a]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 ---- 0x3D1A7C ------ 00000000 -> FF7B79BE
-
-
-	-==-
-
-
 Unlock All Characters, Stages, & Random Stage Select
 - All characters are available (does not save to memory card)
 - All stages are available (does not save to memory card)
