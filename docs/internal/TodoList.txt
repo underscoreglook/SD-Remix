@@ -6,8 +6,6 @@ Add SD Remix Lite to this repo
 
 End Goal, Netplay build:
 -----------------------
-With stage randomization, choose from both stage lists if hold down the Z button; get rid of sound effects.
-
 Include some netplay specific codes built in
 Maybe include Magus's updated 1.00 hitlag code
 Probably good to have UCF and other such stuff

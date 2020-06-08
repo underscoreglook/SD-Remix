@@ -557,43 +557,6 @@ ori r4, r4, <<varIsAlphaOrOmega>>@l
 	-==-
 
 
-Plan randomize omega/alpha when pressing start
-In the place we check for B, see if there's a check for "Start". If there is, and it goes to random, we should randomly switch the omega toggle to 0 or 1.
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x2568A0 ------ 4BFFFD2D -> Branch
-540005EF 41820094 7C6B1B78 3D808045 618CC388 812C0000 3CE02000 39400000 54E7F87E 2C070000 41820014 7D233839
-4182FFF0 394A0001 4BFFFFE8 398C0004 818C0000 3CE02000 7D435378 54E7F87E 2C070000 41820014 7D893839 4182FFF0
-38630001 4BFFFFE8 3D808038 618C0580 7D8903A6 4E800421 7C035000 38600000 41800008 38600001
-lis r12, <<varIsAlphaOrOmega>>@h
-ori r12, r12, <<varIsAlphaOrOmega>>@l
-906C0000 7D635B78 3D808025 618C99EC 7D8903A6 4E800421 480C795C
-
-
-	-==-
-
-
-Play sound when selecting a stage
-The purpose of this is if a stage is randomly selected, the player can tell if it's an omega version or alpha version.
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x2568A4 ------ 986DB60E -> Branch
-986DB60E  # instruction at hook point
-lis r3, <<varIsAlphaOrOmega>>@h
-ori r3, r3, <<varIsAlphaOrOmega>>@l
-80630000  # lwz r3, 0(r3)
-1C630003  # mulli r3, r3, 3
-38630004  # addi r3, r3, 4
-3C808002  # lis r4, 0x8002
-60844030  # ori r4, r4, 0x4030
-7C8903A6  # mtctr r4
-4E800421  # bctrl  # Play sound function
-00000000  # return
-
-
-	-==-
-
-
 Pokemon Stadium - Disable Stage Transformations (SDR Toggleable)
 Uses varStageDolChangesEnabled to toggle on or off.
 [Zauron]
