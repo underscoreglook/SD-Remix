@@ -1,3 +1,58 @@
+SDR Default random omega stages
+Melee Code Manager doesn't have any settings for this, so it won't complain
+[n/a]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3D1A7C ------ 00000000 -> FF7B79BE
+
+
+	-==-
+
+
+Unlock All Characters, Stages, & Random Stage Select
+- All characters are available (does not save to memory card)
+- All stages are available (does not save to memory card)
+- Random stage select is available (does not save to memory card)
+[standardtoaster]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.00 ------ 0x160CA0 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x160894 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x16F6BC ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+
+1.01 ------ 0x161280 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x160E74 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x16FE1C ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+
+1.02 ------ 0x1614A8 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x16109C ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x170160 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+
+PAL ------- 0x161E78 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x161A6C ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+----------- 0x170B14 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047)
+
+
+	-==-
+
+
+Unlock Score Display
+[_glook]
+NTSC 1.02 ---- 0x17023C ----- 4180000C -> 60000000
+
+
+	-==-
+
+
+All 51 Event Matches Open but Not Complete
+(Completed event matches are read from the memory card, or from the current boot as normal.)
+[achilles]
+Version -- DOL Offset ----- Hex to Replace ----------
+1.02 ------ 0x249AA4 ------ 2C1F0005 -> 48000058
+----------- 0x15FAC8 ------ 4182000C -> 60000000
+
+
+	-==-
+
+
 Unrestricted Pause Camera
 [achilles]
 Version ---- DOL Offset ------ Hex to Replace ---------- ASM Code

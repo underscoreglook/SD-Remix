@@ -158,46 +158,45 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 00000000    # If 0, just loads the normal GrXx.dat file for stage. If 1, loads an alt GoXx.dat file.
 
 <tblStageChanges> ALL
-# This is a table of elements that ar 8 bytes long (two dwords). This controls what happens on alpha/omega toggle.
+# This is a table of elements that ar 4 bytes long (dword). This controls what happens on alpha/omega toggle.
 # The index into the table is (chosen_stage_ID - 2).
-# Each dword in an element is the behavior data, for stage loading, first is alpha info, second is omega info.
-# Each dword is then broken down thusly:
+# Each dword in an element is the behavior data, for stage loading, for omega stage list.
 # bytes 0,1 - Half word, alternate stage id. If 0, we keep normal stage id. If != 0, loads that stage id instead.
 # byte 2 - 0 to load normal version (GrXx.dat), 1 to load alt version (GoXx.dat)
 # byte 3 - Controls dol stage mod triggers. This value is stored in varStageDolChangesEnabled. 0 is usually "all off".
-# Alpha     Omega        SID  Notes
-0000 00 00  0000 00 01  # 02  Fountain of Dreams (Izumi)
-001E 00 00  001E 00 01  # 03  Pok�mon Stadium (Pstadium)
-0000 00 00  0000 00 01  # 04  Princess Peach's Castle (Castle)
-0000 00 00  0000 01 00  # 05  Kongo Jungle (Kongo)
-0000 00 00  0000 00 01  # 06  Brinstar (Zebes)
-0000 00 00  0000 00 01  # 07  Corneria
-001D 00 00  001D 01 00  # 08  Yoshi's Story (Story)
-0000 00 00  0000 00 01  # 09  Onett
-0000 00 00  0000 00 01  # 0A  Mute City
-0000 00 00  0004 01 01  # 0B  Rainbow Cruise (RCruise)
-0000 00 00  0000 00 01  # 0C  Jungle Japes (Garden)
-0000 00 00  0000 01 00  # 0D  GreatBay
-0000 00 00  0000 01 00  # 0E  Hyrule Temple (Shrine)
-0000 00 00  0000 01 00  # 0F  Brinstar Depths (Kraid)
-0000 00 00  0000 01 00  # 10  Yoshi's Island (Yoster)
-0000 00 00  0000 00 01  # 11  Green Greens (Greens)
-0000 00 00  0000 01 00  # 12  Fourside
-0000 00 00  0000 01 00  # 13  Mushroom Kingdom I (Inishie1)
-0000 00 00  0000 01 01  # 14  Mushroom Kingdom II (Inishie2)
-0000 00 00  0000 00 00  # 15  Akaneia (Deleted Stage)
-0000 00 00  0047 00 00  # 16  Venom
-0000 00 00  000C 01 01  # 17  Pok� Floats (Pura)
-0000 00 00  0000 01 00  # 18  Big Blue
-0000 00 00  001B 00 00  # 19  Icicle Mountain (Icemt)
-0000 00 00  0000 00 00  # 1A  Icetop
-0053 00 00  0053 01 00  # 1B  Flat Zone
-0000 00 00  0000 00 01  # 1C  Dream Land N64 (old ppp)
-0008 00 00  0008 00 01  # 1D  Yoshi's Story N64 (old yosh)
-0003 00 00  0003 00 01  # 1E  Kongo Jungle N64 (old kong)
-001F 01 00  0000 00 00  # 1F  Battlefield (battle)
-0011 01 00  0000 00 01  # 20  Final Destination (last)
-0000 00 00  0000 00 00  # ??  Unknown, maybe padding
+# Alt  Go Dol  SID  Original Stage                      SDR Stage
+  0000 00 01  # 02  Fountain of Dreams (Izumi)          No side platforms FoD
+  0005 01 00  # 03  Pokemon Stadium (Pstadium)          Omega Kongo Jungle
+  0000 00 01  # 04  Princess Peach's Castle (Castle)    Omega Peach's Castle
+  0018 01 00  # 05  Kongo Jungle (Kongo)                Omega Big Blue
+  0000 00 01  # 06  Brinstar (Zebes)                    No Acid Brinstar
+  0000 00 01  # 07  Corneria                            Omega Corneria
+  001F 01 00  # 08  Yoshi's Story (Story)               Reverse Battlefield
+  0004 01 01  # 09  Onett                               Princess Peach's Flat
+  0014 01 01  # 0A  Mute City                           Omega Mushroom Kingdom II
+  0013 01 00  # 0B  Rainbow Cruise (RCruise)            Omega Mushroom Kingdom I
+  000A 00 01  # 0C  Jungle Japes (Garden)               Omega Mute City
+  0000 01 00  # 0D  GreatBay                            High Tide @ Great Bay
+  0000 01 00  # 0E  Hyrule Temple (Shrine)              Skyrule
+  0002 00 00  # 0F  Brinstar Depths (Kraid)             Fountain of Dreams (normal)
+  0000 01 00  # 10  Yoshi's Island (Yoster)             Omega Yoshi's Island
+  0000 00 01  # 11  Green Greens (Greens)               Omega Green Greens
+  0000 01 00  # 12  Fourside                            Fourside Smashville
+  001E 00 01  # 13  Mushroom Kingdom I (Inishie1)       Omega Kongo Jungle 64
+  0003 00 00  # 14  Mushroom Kingdom II (Inishie2)      Pokemon Stadium (normal)
+  0000 00 00  # 15  Akaneia (Deleted Stage)             <No Change>
+  0047 00 00  # 16  Venom                               Warzone Corneria
+  001D 01 00  # 17  Poke Floats (Pura)                  Omega Yoshi Island 64
+  000C 01 01  # 18  Big Blue                            Cranky's Treehouse
+  0053 00 00  # 19  Icicle Mountain (Icemt)             Trophy Tussle
+  0000 00 00  # 1A  Icetop                              <No Change>
+  0053 01 00  # 1B  Flat Zone                           Mount Olympus
+  0000 00 01  # 1C  Dream Land N64 (old ppp)            No Wind Dreamland 64
+  0008 00 01  # 1D  Yoshi's Story N64 (old yosh)        No Flyguys Yoshi's Story
+  0011 01 00  # 1E  Kongo Jungle N64 (old kong)         Whispy's Battlegrounds
+  0000 00 00  # 1F  Battlefield (battle)                <No Change>
+  0000 00 01  # 20  Final Destination (last)            No BG Transitions Final Destination
+  0000 00 00  # ??  Unknown, maybe padding              <No Change>
 
 NTSC 1.02 ---- 0x258720 ------ 8804000B -> Branch
 # This is the actual code that reads the stage loader.
@@ -209,22 +208,23 @@ NTSC 1.02 ---- 0x258720 ------ 8804000B -> Branch
 41800050    # blt RETURN
 2C000020    # cmpwi r0, 0x20
 41810048    # bgt RETURN
-# Now we know it's one of the SSS stages
+# HANDLE_SSS_ID:    # Now we know it's one of the SSS stages
+lis r6, <<varIsAlphaOrOmega>>@h
+ori r6, r6, <<varIsAlphaOrOmega>>@l
+80C60000    # lwz r6, 0(r6)     # Get omega toggle
+2C060000    # cmpwi r6, 0
+41820034    # beq RETURN        # If alpha, skip (only Omega is changed)
+# HANDLE_OMEGA:
 7C040378    # mr r4, r0         # Move it to r4
-3884FFFE    # subi r4, r4, 2    # Index for the stage table
-5484083C    # slwi r4, r4, 1    # Multiply by two
-lis r5, <<varIsAlphaOrOmega>>@h
-ori r5, r5, <<varIsAlphaOrOmega>>@l
-80A50000    # lwz r5, 0(r5)     # Get omega toggle
-7C842A14    # add r4, r4, r5    # Omega toggle is second word
-5484103A    # slwi r4, r4, 2    # Multiply by 4 to get bytes
+3884FFFE    # subi r4, r4, 2    # Index for the stage table (table starts at ID 2)
+5484103A    # slwi r4, r4, 2    # Multiply by 4 to get bytes offset
 lis r5, <<tblStageChanges>>@h
 ori r5, r5, <<tblStageChanges>>@l
 7CA42A14    # add r5, r4, r5    # r5 is now word for stage toggle
 A0850000    # lhz r4, 0(r5)     # Get alternate stage id
 2C040000    # cmpwi r4, 0
 41820008    # beq NO_ALT
-7C802378    # mr r0, r4         # If there's an alt, set it
+7C802378    # mr r0, r4         # If there's an alt stage ID, set it
 # NO_ALT:
 88850002    # lbz r4, 2(r5)     # Get if we should load Go dats
 88A50003    # lbz r5, 3(r5)     # Get if we should do DOL mods
@@ -836,40 +836,6 @@ ori r12,r12, <<varStageDolChangesEnabled>>@l
 4E800421    # bctrl
 # RETURN:
 00000000    # return
-
-
-	-==-
-
-
-Onett Disable cars and Remove Drug Store platforms (SDR Toggleable)
-[flieskiller]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x1E037C ------ 48000059 -> Branch
-lis r12, <<varStageDolChangesEnabled>>@h
-ori r12,r12, <<varStageDolChangesEnabled>>@l
-818C0000    # lwz r12, 0(r12)
-2C0C0000    # cmpwi r12, 0
-40820014    # bne RETURN
-# ALPHA:
-3D80801E    # lis r12, 0x801E
-618C37F4    # ori r12, r12, 0x37F4
-7D8903A6    # mtctr r12
-4E800421    # bctrl
-# RETURN:
-00000000    # return
--------------- 0x1E0374 ------ 48000061 -> Branch
-lis r12, <<varStageDolChangesEnabled>>@h
-ori r12,r12, <<varStageDolChangesEnabled>>@l
-818C0000    # lwz r12, 0(r12)
-2C0C0000    # cmpwi r12, 0
-40820014    # bne RETURN
-# ALPHA:
-3D80801E    # lis r12, 0x801E
-618C37F4    # ori r12, r12, 0x37F4
-7D8903A6    # mtctr r12
-4E800421    # bctrl
-# RETURN:
-00000000    # Return
 
 
 	-==-
