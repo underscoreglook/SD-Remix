@@ -94,16 +94,21 @@ ori r31,r31, <<fsmData>>@l
 
 
 v1.00 Hitlag Behavior
-Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v1
+Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v2
 - Prevents moves that deal less than 1% from having hitlag and being A/S/DIable. 
 - Allows many moves, such as Y.Link's Up-B and Zelda's Fsmash, to work properly.
-TODO: Is isn't comprehensive, there's a V2 of this code that covers all cases
-(Notes on this: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-31#post-18650879)
+<http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-31#post-18650879>
 [Magus]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 ---- 0x73DC0 ------ 41820010 -> 60000000
 -------------- 0x73E84 ------ 41820010 -> 60000000
 -------------- 0x74DB4 ------ 41820010 -> 60000000
+-------------- 0x73628 ------ 41820010 -> 60000000
+-------------- 0x7377C ------ 41820010 -> 60000000
+-------------- 0x745FC ------ 41820010 -> 60000000
+-------------- 0x74750 ------ 41820010 -> 60000000
+-------------- 0x7391C ------ 41820010 -> 60000000
+-------------- 0x742DC ------ 41820010 -> 60000000
 
 
 	-==-

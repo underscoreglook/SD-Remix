@@ -7,7 +7,6 @@ Add SD Remix Lite to this repo
 End Goal, Netplay build:
 -----------------------
 Include some netplay specific codes built in
-Maybe include Magus's updated 1.00 hitlag code
 Probably good to have UCF and other such stuff
 Probably should update to new versions of existing codes, like grab attrition and widescreen.
 Probably should get around to addressing the to do's in the codebase
@@ -22,12 +21,17 @@ Update the website with new instructions (such as new quicker xdelta methods) an
 
 SD Remix Lite
 -------------
-Two options, convert everything to Melee Mod Loader, or create some sort of compiler, like MCM except for SDR Lite.
+Create compiler.
+Have configurable injection locations for NTSC and PAL
+Have generic ACE code for NTSC or PAL
+Do it like MCM: separate mods into own groups. Compile these into the direct overwrites, array overwrites, and data addresses for data overwrites.
+The location on all versions are different, so depending on build target, this will have to be changed.
+This should be a command line tool in C#.
+Take changed character files and stages and compile the data differences to put in. Automatically add them to a list so that character loader and stage loader can work.
 
 My stuff:
-* Non-balance Bug fixes
+* Non-balance Bug fixes (See old todolist)
 * Updated features
-* Revert Alpha stage list to the "normal" stage list and redo omega stage list.
 * New codes, like hide nametag on teleport and UCF by default.
 * New toggleable features like 20XX neutral spawns.
 * Save debug menu selections to memory card
@@ -44,6 +48,7 @@ Changed stage striking to transparent version
 Revert alpha stage list to Melee stage list
 New Omega stage list
 Random Stage setting now defaults to current alpha/omega toggle, and can be changed with holding L or R
+Updated 1.00 hitlag code to latest. (rice for codes)
 
 
 
@@ -51,21 +56,6 @@ POSSIBLE CODES
 ==============
 These are possible new codes or updated codes
 https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/
-
-Replace existing hitlag code with the following updated code
-Attacks that Deal Less than 1 Damage Have No Hitlag or DIability v2 (v1.02) [Magus]
-040771E0 60000000
-040772A4 60000000
-040781D4 60000000
-04076A48 60000000
-04076B9C 60000000
-04077A1C 60000000
-04077B70 60000000
-04076D3C 60000000
-040776FC 60000000
--DOL-
-1.02	0x73DC0, 0x73E84, 0x74DB4, 0x73628, 0x7377C, 0x745FC, 0x74750, 0x7391C, 0x742DC
-PAL	0x74498, 0x7455C, 0x7548C, 0x73D00, 0x73E54, 0x74CD4, 0x74E28, 0x73FF4, 0x749B4
 
 New version of revival platform colors
 https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
@@ -105,7 +95,6 @@ $SDR Netplay Settings [Achilles, Dan Salvato, Magus, UnclePunch, tauKhan, Ptomer
 041A45A0 3C000202 #Boot to CSS [Dan Salvato, Achilles]
 041A45A4 901E0000
 042641B0 38000001 #Faster CSS Load [UnclePunch]
-0421AAE4 60000000 #Disable FD Background Transitions [Achilles, Dan Salvato]
 0425D22C 3BA00000 #External/UCF + Arduino Toggle UI/Disable KO Stars.asm
 044DC47C C0200000 #External/CSS Player Hands Default to HMN Button/Change Default Hand Position.asm
 C2261A6C 00000005 #External/CSS Player Hands Default to HMN Button/Fix A Button Buffer When Exiting Name Entry.asm
@@ -242,20 +231,6 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 	-==-
 
 
-Stale Moves in Develop Mode
-This leaves the DEBUG-ROM setting (3) to still not use stale moves.
-(Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-31#post-18625334)
-[Magus]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x85E34 ---- 48000030 -> 41820030
-1.01 ------ 0x85C74 ---- 48000030 -> 41820030
-1.00 ------ 0x85B8C ---- 48000030 -> 41820030
-PAL ------- 0x864EC ---- 48000030 -> 41820030
-
-
-	-==-
-
-
 Break the Targets Intangibility Glitch Fix
 Fixes glitch that causes player to not receive intangibility after quitting Adventure Mode while the stage was transformed
 <https://smashboards.com/threads/bug-fixes.471624/post-23834249>
@@ -268,52 +243,6 @@ NTSC 1.02 --- 0x801B65AC ---- 9003000C -> Branch
 3D808000 618CC160
 7D8903A6 4E800421
 60000000 00000000
-
-
-	-==-
-
-
-Rainbow FD
-The stage's edges & highlights continually change colors.
-(From the 20XX Pack)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x16CDF4 ---- 38600000  -> Branch
-
-3DC08048 89CE0687
-2C0E0020 408200FC
-3A200000 3DC080C2
-61CEE244 8A4E0003
-2C120002 41820024
-2C120003 41820034
-3A400001 89EE0000
-2C0F00FF 41820064
-3A000001 480000AC
-3A400002 8DEE0001
-2C0F00FF 41820074
-3A000001 48000094
-3A400003 8DEE0002
-2C0F00FF 4182000C
-3A00FFFE 4800007C
-89EEFFFF 2C0F0000
-41820014 39EFFFFF
-99EEFFFF 99EE0FFF
-48000078 3A400001
-9A4E0001 4800006C
-89EE0002 2C0F0000
-41820014 39EFFFFF
-99EE0002 99EE1002
-48000050 3A400002
-9A4E0003 48000044
-89EEFFFF 2C0F0000
-41820014 39EFFFFF
-99EEFFFF 99EE0FFF
-48000028 3A400003
-9A4E0002 4800001C
-39EF0001 99EE0000
-99EE1000 7DCE8214
-9A2E0000 9A2E1000
-38030001 00000000
 
 
 	-==-
@@ -493,21 +422,6 @@ EC210024 39C00000
 	-==-
 
 
-Hold Start to Skip Results (2 Seconds)
-[Achilles]
-1.02
-C21795B8 00000006
-38ADB4EF 38800004
-7C8903A6 8C850001
-2C040078 4180000C
-3C808048 90A49D64
-4200FFEC 901F0008
-60000000 00000000
-
-
-	-==-
-
-
 No Delay on Start at SSS
 <https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
 [UnclePunch]
@@ -628,19 +542,6 @@ EC010024 4808A354
 39E00000 91EE0014
 91EE0018 91EE001C
 80030008 48174E08
-
-
-	-==-
-
-
-'RANDOM' is Default Highlighted on Stage Select Screen
-Th cursor is set as if you had already dragged it over top of the "Random" selection.
-[Jorgasms]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x2575F0 ---- 38E0001E -> 38E0001D
-1.01 ------ 0x256E54 ---- 38E0001E -> 38E0001D
-1.00 ------ 0x2562E4 ---- 38E0001E -> 38E0001D
-PAL ------- 0x25810C ---- 38E0001E -> 38E0001D
 
 
 	-==-
@@ -1099,114 +1000,6 @@ C20343B4 00000004
 04165dc4 38040000
 04165e0c 38040000
 04165e54 38040000
-
-v1.00
-C21A3414 00000048
-3803FFFF 2C000003
-40820230 2C0B0020
-41820228 3821FFEC
-3C80FFFF 6084FFFF
-90810000 90810004
-90810008 9081000C
-90810010 3A800000
-3AA00000 3E208045
-623110C0 3E408047
-62527E38 3E00803E
-6210EF76 3C808047
-6084E800 88840000
-2C040001 4182004C
-80910008 2C040003
-41820028 88920001
-5484801E A0B10060
-7C842B78 56A5103A
-7CA50A14 90850004
-7EB409AE 3A940001
-3A310E90 3A5200A8
-3AB50001 2C150004
-4082FFC0 4800005C
-80910008 2C040003
-41820038 88D00000
-54C5103A 7CA50A14
-80850004 2C040000
-40800014 7CD409AE
-3A940001 88920001
-5484801E A0D10060
-7C843214 90850004
-3A100024 3A310E90
-3A5200A8 3AB50001
-2C150004 4082FFAC
-3AA00000 7E41AA14
-8A520000 2C1200FF
-4182005C 7EB4AB78
-2C140000 4182003C
-7E21A214 8A31FFFF
-5646103A 5625103A
-7CC60A14 7CA50A14
-80C60004 80A50004
-7C062800 40A00014
-7E01A214 9A300000
-3A94FFFF 4BFFFFC4
-7E81A214 9A540000
-3AB50001 2C150004
-4082FF9C 38600005
-38000004 3A400000
-3E20FFFF 6231FFFF
-3A000000 7CC18214
-88C60000 2C0600FF
-41820088 54C5103A
-7CA50A14 80A50004
-7C112800 40A20018
-2C120000 40A20018
-38600004 38000003
-4800000C 7CB12B78
-7E128378 3E808047
-6294E800 8A940000
-2C140000 41A20020
-3CA08047 60A57E00
-1CC6000C 7CC62A14
-9A460000 9A460001
-4800001C 3CA08047
-60A57E38 1CC600A8
-7CC62A14 9A460001
-9A460002 3A100001
-2C100004 4082FF70
-38210014 3A000000
-3A200000 3A400000
-3A800000 3AA00000
-60000000 00000000
-C216D330 00000008
-3CA08046 60A5BBA6
-88650000 2C030000
-41A20024 38600004
-3CA08047 60A57D6D
-98650000 38600032
-3CA08046 60A5BBA0
-98650000 38BF24C0
-881E0000 00000000
-C216D3C4 00000004
-3C608046 6063BBA6
-88630000 2C030000
-41A20008 380000B4
-901F0028 00000000
-C2067D54 00000005
-3C608046 6063BBA6
-88630000 2C030000
-41A20010 38600000
-907B1830 48000008
-D01B1830 00000000
-C2034334 00000006
-3C608046 6063BBA6
-88630000 2C030000
-41A20014 38600001
-3BDD0000 987E008E
-3BC00000 7FDD032E
-60000000 00000000
-041BFEF8 48000094
-041655BC 38040000
-04165604 38040000
-0416564C 38040000
-
-
 
 
 	-==-
