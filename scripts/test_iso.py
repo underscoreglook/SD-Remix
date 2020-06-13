@@ -24,4 +24,4 @@ if __name__ == "__main__":
         print("SDR ISO has not been built. Run \"build iso\" to build an ISO")
         exit(1)
 
-    subprocess.Popen([dolphinPath, "-b", "-e=" + sdrIsoPath])
+    subprocess.Popen([dolphinPath, "-b", "-e" + sdrIsoPath])
