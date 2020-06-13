@@ -49,6 +49,8 @@ Revert alpha stage list to Melee stage list
 New Omega stage list
 Random Stage setting now defaults to current alpha/omega toggle, and can be changed with holding L or R
 Updated 1.00 hitlag code to latest. (rice for codes)
+Get rid of special messages
+Dolphin no longer complains when entering debug menu.
 
 
 
@@ -67,16 +69,6 @@ Shy Guys drop food even if items are at off (1.02)[flieskiller]
 I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
  as well, even if the food item is at off.
 
-[Debug Menus] Submenus Resemble Normal Menus
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80304254 --- 887F0000 -> 38600000
-1.02 ----- 0x8030425c --- 88A90004 -> 38A00006
-1.02 ----- 0x803030dc --- 80010058 -> 3C000000
-1.02 ----- 0x80303158 --- 80010050 -> 3C000000
-1.02 ----- 0x803031d4 --- 80010048 -> 3C000000
-1.02 ----- 0x80303244 --- 80010040 -> 3C000000
-
 Consider an easy way to get to Debug Menu from CSS (maybe Dpad button?)
 
 Consider maybe having PM style control editing, tied to nametags.
@@ -88,10 +80,6 @@ Consider maybe having PM style control editing, tied to nametags.
 =============
 
 $SDR Netplay Settings [Achilles, Dan Salvato, Magus, UnclePunch, tauKhan, Ptomerty, Cilan, Zauron, Datel, donny2112, Jorgasms, strikebowler585, Myougi]
-0445BF28 FFFFFFFF #Unlock All Characters and Stages [Datel]
-0445BF2C FFFFFFFF
-043D4A78 FC000020 #Singles Stages Alpha (PS, DL64, YS, FoD)
-043D4A7C FF280000 #Single Stages Omega (BF, FD, DL64, YS, PS, Fourside, Treehouse)
 041A45A0 3C000202 #Boot to CSS [Dan Salvato, Achilles]
 041A45A4 901E0000
 042641B0 38000001 #Faster CSS Load [UnclePunch]
@@ -103,56 +91,6 @@ C2261A6C 00000005 #External/CSS Player Hands Default to HMN Button/Fix A Button 
 618C1B6C 7D8903A6
 4E800420 1C130024
 60000000 00000000
-
-
-	-==-
-
-
-Remove Special Messages
-- Gets rid of all those annoying messages that pop up if you used some DOL codes to unlock stuff.
-or use this:
-0415D94C 4E800020 #Disable Special Messages [Most]
-0415D984 4E800020 #Disable Trophy Messages [Achilles]
-[???]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x001BC600 ----- 887f0004 -> Branch
-
-3E408045 6252C20C
-3AA03940 B2B20000
-3AA00010 9AB20024
-3AA00001 9AB20023
-3AA00080 9AB2001C
-3DE08046 61EFAF5C
-3E00803F 6210A25C
-39E00000 99F0008A
-887F0004 481BC310
-
-
-	-==-
-
-
-Unlock Stage Select Upon Boot
-[Ato]
-1.00 ---- 0x15afac ---- 8803186c -> 3800000e
-1.02 ---- 0x15ba28 ---- 8803186c -> 3800000e
-
-
-	-==-
-
-
-Unlock All 293 Trophies
-[Datel]
-1.02
-0245C390 00000125
-0245C395 01266363
-
-1.01
-0245B6B0 00000125
-0245B6B5 01266363
-
-1.00
-0245A3C8 00000125
-0245A3CD 01266363
 
 
 	-==-

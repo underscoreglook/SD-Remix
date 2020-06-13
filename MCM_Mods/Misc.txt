@@ -32,6 +32,29 @@ NTSC 1.02 ---- 0x17023C ----- 4180000C -> 60000000
 	-==-
 
 
+Remove Special Messages
+- Gets rid of all those annoying messages that pop up if you used some DOL codes to unlock stuff.
+or use this:
+0415D94C 4E800020 #Disable Special Messages [Most]
+0415D984 4E800020 #Disable Trophy Messages [Achilles]
+[????]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x001BC600 ----- 887f0004 -> Branch
+
+3E408045 6252C20C
+3AA03940 B2B20000
+3AA00010 9AB20024
+3AA00001 9AB20023
+3AA00080 9AB2001C
+3DE08046 61EFAF5C
+3E00803F 6210A25C
+39E00000 99F0008A
+887F0004 481BC310
+
+
+	-==-
+
+
 All 51 Event Matches Open but Not Complete
 (Completed event matches are read from the memory card, or from the current boot as normal.)
 [achilles]
