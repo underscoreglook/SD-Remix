@@ -235,3 +235,19 @@ Hold start to force game out of result screen_V2 +B goes back from ready state
 48000008 3A200000
 7E2F832E 00000000
 1.02 ------ 0x801782FC ---- 540004E7 -> 540005AD
+
+
+	-==-
+
+
+CSS Hands Default to HMN Button
+(With double bug fix)
+[achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x804dc47c --- C1AC0000 -> c0200000
+1.02 ----- 0x80261a6c --- 1C130024 -> Branch
+89FF0005 2C0F0002
+40820014 3DE08026
+61EF1B6C 7DE903A6
+4E800420 1C130024
+60000000 00000000
