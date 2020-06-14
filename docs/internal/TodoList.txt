@@ -47,7 +47,7 @@ Random Stage setting now defaults to current alpha/omega toggle, and can be chan
 Updated 1.00 hitlag code to latest. (rice for codes)
 Get rid of special messages
 Dolphin no longer complains when entering debug menu.
-UCF 0.73 inserted
+UCF 0.73 added
 
 
 
