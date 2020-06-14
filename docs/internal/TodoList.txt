@@ -48,6 +48,8 @@ Updated 1.00 hitlag code to latest. (rice for codes)
 Get rid of special messages
 Dolphin no longer complains when entering debug menu.
 UCF 0.73 added
+CSS Hands Default to HMN Button
+Disable Rumble When Controller is Unplugged
 
 
 
@@ -80,25 +82,6 @@ Consider maybe having PM style control editing, tied to nametags.
 
 
 
-
-
-	-==-
-
-
-Disable Rumble When Controller is Unplugged
-If a player has rumble enabled and then takes his controller out, the next person who plugs into that slot will not have rumble enabled.
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x373790 ---- 8081002C -> Branch
-
-3CC08045 60C6C380
-38800000 38A0000A
-39000000 7CE518AE
-2C0700FF 40820008
-7D0431AE 38840001
-38A5000C 2C040004
-4180FFE4 8081002C
-60000000 48000000
 
 
 	-==-
