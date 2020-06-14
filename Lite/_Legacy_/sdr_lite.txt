@@ -80,14 +80,6 @@ Omega Mushroom Kingdom: Rearanged level [Milun]
 On exploit, Game Mode to Stock, Stock Time Limit to 8, Stock count to 4, Friendly Fire On, and Score Display On
 If you don't select a nametag, instead of showing the character name, show "SDR 3.2 Lite" instead [_glook]
 
-TODO:
-----
-Rearchitect everything
-Release plan:
-Create a program that will automatically sort by Norcal and Gar PRs. Have it also attempt to separate by location, using a weighted system that takes the relative position in the PR and weighs it against the seed position. Possibly also have a window to show people on screen what their name tag looks like and what their position on NorcalPR/GarPR is, but only if they're in the top 100.
-Buglist:
- - Extraneous notifications after classic mode is over.
-
 Space calculation
 -----------------
 8045D850 Start of exploit

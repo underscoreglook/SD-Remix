@@ -10,10 +10,17 @@ Include some netplay specific codes built in
 Probably good to have UCF and other such stuff
 Probably should update to new versions of existing codes, like grab attrition and widescreen.
 Probably should get around to addressing the to do's in the codebase
-Other suggestions?
+Other suggestions from people?
+* Non-balance Bug fixes (See old todolist)
+* Updated features
+* New codes, like hide nametag on teleport and UCF by default.
+* New toggleable features like 20XX neutral spawns.
+* More debug menu presets, like maybe one with "Beta" character changes.
+* Reorganized debug menu.
+* Nice to have but a lot of work: Per player/nametag control customization)
 Look at other todolists
 Probably rework the debug screen.
-Save debug options in the memory card.
+Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
 Probably talk with the SDR team to get approval from whole team before making any changes.
 (Maybe also make a tool for creating Debug screen changes?)
 After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
@@ -29,17 +36,6 @@ The location on all versions are different, so depending on build target, this w
 This should be a command line tool in C#.
 Take changed character files and stages and compile the data differences to put in. Automatically add them to a list so that character loader and stage loader can work.
 
-My stuff:
-* Non-balance Bug fixes (See old todolist)
-* Updated features
-* New codes, like hide nametag on teleport and UCF by default.
-* New toggleable features like 20XX neutral spawns.
-* Save debug menu selections to memory card
-* More debug menu presets, like maybe one with "Beta" character changes.
-* Reorganized debug menu.
-* Nice to have but a lot of work: Per player/nametag control customization)
-
-
 Changes from 3.2.1
 ==================
 Whispy's Battlegrounds crash fixed
@@ -51,6 +47,7 @@ Random Stage setting now defaults to current alpha/omega toggle, and can be chan
 Updated 1.00 hitlag code to latest. (rice for codes)
 Get rid of special messages
 Dolphin no longer complains when entering debug menu.
+UCF 0.73 inserted
 
 
 
@@ -1855,74 +1852,6 @@ C216EA30 00000004 #Common/Winners Names are Gold on CSS/Remember Who LRA Started
 40820014 3C808046
 6084B6A0 88840001
 989E000C 00000000
-
-$Universal Controller Fix v0.73 (NTSC 1.02)
-C20C9A44 00000022 # UCF 0.73 Dashback
-A09F03E8 2C044000
-40820100 808DAEB4
-C03F0620 C05F2344
-EC2100B2 C044003C
-FC011040 4C411382
-408200E0 88BF0670
-2C050002 408000D4
-889F221F 54840739
-41A20008 480000C4
-3C80804C 60841F78
-88A40001 98A1FFF8
-4800003C 38A5FFFF
-2C050000 40800008
-38A50005 3C808046
-6084B108 1CA50030
-7C842A14 88BF000C
-1CA5000C 7C842A14
-88A40002 7CA50774
-4E800020 38A5FFFE
-4BFFFFC5 90A1FFF4
-88A1FFF8 4BFFFFB9
-8081FFF4 7CA42850
-7CA529D6 2C0515F9
-40810050 38000001
-901F2358 901F2340
-889F0007 2C04000A
-40A20038 80830010
-8084002C 80841ECC
-D0040018 80A40018
-3D803F80 7C056000
-41820010 38A00080
-98A40006 4800000C
-38A0007F 98A40006
-D01F002C 00000000
-C20998A4 0000001E # UCF 0.73 Shield Drop
-8063002C C023063C
-C0050314 FC010040
-408100D4 3C8042A0
-9081FFF4 3C803727
-9081FFF8 3C804330
-9081FFE4 C0030620
-38000000 FC000210
-C021FFF4 EC000072
-C021FFF8 EC000828
-FC00001E D801FFEC
-8081FFF0 38840002
-6C848000 9081FFE8
-C801FFE4 C8228B90
-EC000828 C021FFF4
-EC000824 2C000000
-40820014 38000001
-D001FFE0 C0030624
-4BFFFFAC C021FFE0
-EC210072 EC000032
-EC00082A C0228954
-FC000840 4C411382
-4082003C 88830670
-2C040003 40810030
-C005002C FC000050
-C0230624 FC000840
-4080001C 8061001C
-38630008 83E10014
-38210018 7C6803A6
-4E800020 7FC3F378
-8083002C 00000000
 
 
 
