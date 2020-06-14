@@ -50,6 +50,7 @@ Dolphin no longer complains when entering debug menu.
 UCF 0.73 added
 CSS Hands Default to HMN Button
 Disable Rumble When Controller is Unplugged
+L+R+A+START to Pause Game when Pause is Disabled
 
 
 
@@ -81,22 +82,7 @@ Consider maybe having PM style control editing, tied to nametags.
 
 
 
-
-
-
-	-==-
-
-
-L+R+A+START to Pause Game when Pause is Disabled (1.02) [Achilles]
-0416caa8 60000000
-0416cc28 60000000
-C216BDF0 00000006
-89DD24CA 55CEEFFF
-41820020 80030000
-70031160 2C031160
-4082000C 38001000
-48000008 38000000
-540004E6 00000000
+--------
 
 
 	-==-

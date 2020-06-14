@@ -261,7 +261,6 @@ If a player has rumble enabled and then takes his controller out, the next perso
 [Dan Salvato]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ------ 0x373790 ---- 8081002C -> Branch
-
 3CC08045 60C6C380
 38800000 38A0000A
 39000000 7CE518AE
@@ -270,3 +269,20 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 38A5000C 2C040004
 4180FFE4 8081002C
 60000000 48000000
+
+
+	-==-
+
+
+L+R+A+START to Pause Game when Pause is Disabled
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ------ 0x8016caa8 ---- 40820124 -> 60000000
+NTSC 1.02 ------ 0x8016cc28 ---- 40820154 -> 60000000
+NTSC 1.02 ------ 0x8016BDF0 ---- 540004E6 -> Branch
+89DD24CA 55CEEFFF
+41820020 80030000
+70031160 2C031160
+4082000C 38001000
+48000008 38000000
+540004E6 00000000
