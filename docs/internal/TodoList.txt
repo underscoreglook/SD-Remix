@@ -54,6 +54,8 @@ L+R+A+START to Pause Game when Pause is Disabled
 Rumble when character is selected
 DPad Down at CSS for Random Stage
 Fix alpha/omega stage list for Random stage from CSS (as opposed to SSS)
+DPad Left at CSS goes to rumble options screen
+DPad Right at CSS goes to debug menu
 
 
 POSSIBLE CODES
@@ -80,111 +82,6 @@ Consider maybe having PM style control editing, tied to nametags.
 =============
 = Code dump =
 =============
-
-
-
---------
-
-
-	-==-
-
-
-D-Pad Down at CSS (Vs. Mode) Loads Rumble Select Screen
-[Achilles, _glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x25FE30 ---- 880DB652 -> Branch    # 80263250
-# Back out of the CSS if pressed D-pad down
-3DE08047    # lis r15, 0x8047
-61EF9D30    # ori r15, r15, 0x9D30  # 80479D30
-89EF0000    # lbz r15, 0(r15)
-2C0F0002    # cmpwi r15, 0x2
-40820044    # bne- loc_0x54
-39E00050    # li r15, 0x50
-7DE903A6    # mtctr r15
-3E008048    # lis r16, 0x8048
-621007B4    # ori r16, r16, 0x7B4   # 804807B4
-3E208045    # lis r17, 0x8045
-6231AC4C    # ori r17, r17, 0xAC4C  # 8045AC4C
-# loc_0x2C:
-85F00004    # lwzu r15, 4(r16)      # 804807B8
-95F10004    # stwu r15, 4(r17)      # 8045AC50
-4200FFF8    # bdnz+ loc_0x2C
-54E0077B    # rlwinm. r0, r7, 0, 29, 29     # Check Dpad Down
-# 54E00739    # rlwinm. r0, r7, 0, 28, 28     # Check Dpad Up
-# 54E006F7    # rlwinm. r0, r7, 0, 27, 27     # Check Z press
-# 54E007BD    # rlwinm. r0, r7, 0, 30, 30     # Check Dpad Right
-# 54E007FF    # rlwinm. r0, r7, 0, 31, 31     # Check Dpad Left
-41820018    # beq- loc_0x54
-3DE0803F    # lis r15, 0x803F
-3A000001    # li r16, 0x1
-9A0F0A47    # stb r16, 2631(r15)    # 803F0A47	var1
-3A000002    # li r16, 0x2
-9A0DB656    # stb r16, -18858(r13)
-# loc_0x54:
-880DB652    # lbz r0, -18862(r13)
-00000000    # branch back
-1.02 ------ 0x229D1C ---- 546006F7 -> Branch    # 8022D13C
-# When options is loading
-3DE0803F    # lis r15, 0x803F
-8A0F0A47    # lbz r16, 2631(r15)    # 803F0A47	var1
-2C100001    # cmpwi r16, 0x1
-4082001C    # bne- loc_0x28
-3A000000    # li r16, 0x0
-9A0F0A47    # stb r16, 2631(r15)    # 803F0A47	var1
-3DE08022    # lis r15, 0x8022
-61EFD610    # ori r15, r15, 0xD610  # 8022D610
-7DE903A6    # mtctr r15
-4E800421    # bctrl
-# loc_0x28:
-546006F7    # rlwinm. r0, r3, 0, 27, 27
-00000000    # branch back
-1.02 ------ 0x22A1A0 ---- 546006F7 -> Branch    # 8022D5C0
-# When Vs Mode is clicked to go to options
-3DE0803F    # lis r15, 0x803F
-89EF0A47    # lbz r15, 2631(r15)    # 803F0A47	var1
-2C0F0001    # cmpwi r15, 0x1
-40820014    # bne- loc_0x20
-3DE08022    # lis r15, 0x8022
-61EFD190    # ori r15, r15, 0xD190  # 8022D190
-7DE903A6    # mtctr r15
-4E800421    # bctrl
-# loc_0x20:
-546006F7    # rlwinm. r0, r3, 0, 27, 27
-00000000    # branch back
-1.02 ------ 0x22A1A0 ---- 546006F7 -> Branch    # 8022D5C0
-# When Vs Mode is clicked, go to the debug menu
-3DE0803F    # lis r15, 0x803F
-89EF0A47    # lbz r15, 2631(r15)    # 803F0A47	var1
-2C0F0001    # cmpwi r15, 0x1
-40820038    # bne- loc_0x38
-3DE0803F    # lis r15, 0x803F
-38000000    # li r0, 0
-980F0A47    # stb r0, 2631(r15)     # 803F0A47	var1
-3DE0801A    # lis r15, 0x801A
-61EF4B9C    # ori r15, r15, 0x4B9C  # sub_801A4B9C (Return menu loc in r3)
-7DE903A6    # mtctr r15
-4E800421    # bctrl
-38000006    # li r0, 0x6            # Debug menu
-98030000    # stb r0, 0(r3)
-3DE0801A    # lis r15, 0x801A
-61EF4B60    # ori r15, r15, 0x4B60  # sub_801A4B60 (MenuController_ChangeScreen)
-7DE903A6    # mtctr r15
-4E800421    # bctrl
-# loc_0x38:
-546006F7    # rlwinm. r0, r3, 0, 27, 27
-00000000    # branch back
-
-
-
-
-
-
-
-
-
-
-
-
 $SDR Netplay Settings [Achilles, Dan Salvato, Magus, UnclePunch, tauKhan, Ptomerty, Cilan, Zauron, Datel, donny2112, Jorgasms, strikebowler585, Myougi]
 041A45A0 3C000202 #Boot to CSS [Dan Salvato, Achilles]
 041A45A4 901E0000
