@@ -226,6 +226,7 @@ PAL ------- 0x02D1B0 ---- 38000008 -> 38000000 ---- (li r0,8 -> li r0,0)
 Universal Controller Fix v0.73
 <http://www.20xx.me/ucf.html>
 [Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x800C9A44 ----- D01F002C -> Branch
 # UCF 0.73 Dashback
 A09F03E8 2C044000
@@ -294,3 +295,85 @@ C0230624 FC000840
 38210018 7C6803A6
 4E800020 7FC3F378
 8083002C 00000000
+
+
+	-==-
+
+
+Box Glitch Fix
+<https://smashboards.com/threads/bug-fixes.471624/post-23914512>
+[tauKhan]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x8004C98C ----- C00285F0 -> 41800090
+NTSC 1.02 ---- 0x8004C988 ----- 98030034 -> Branch
+98030034 C00285C4
+FC030040 C00285F0
+40800008 D0430008
+00000000
+
+
+	-==-
+
+
+Update TopN Location In ECB Calculation
+This updates character model locations before checks are made for environment collisions and other positional calculations. This can prevent weird looking stage clipping in some cases, especially for grabs.
+<https://smashboards.com/threads/bug-fixes.471624/post-23430430>
+[tauKhan]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8004250C ---- 3BC40000 -> Branch
+7C7F1B78 7C9E2378
+807F0000 80830028
+8063002C 800300B0
+90040038 800300B4
+9004003C 800300B8
+90040040 7C832378
+3D808037 618C32E8
+7D8903A6 4E800421
+7FE3FB78 00000000
+
+
+	-==-
+
+
+Break the Targets Intangibility Glitch Fix
+Fixes glitch that causes player to not receive intangibility after quitting Adventure Mode while the stage was transformed
+<https://smashboards.com/threads/bug-fixes.471624/post-23834249>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x801B65AC ---- 9003000C -> Branch
+9003000C 3C608046
+6063B488 388001C0
+3D808000 618CC160
+7D8903A6 4E800421
+60000000 00000000
+
+
+	-==-
+
+
+Fix Samus Extender Crash
+Disables extender grab box from appearing on problematic frames, which would otherwise cause a crash.
+<https://smashboards.com/threads/bug-fixes.471624/post-23238983>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x802B9D28 ---- 40820078 -> 48000078
+
+
+	-==-
+
+
+Freeze glitch fix
+<https://smashboards.com/threads/bug-fixes.471624/post-22930938>
+[tauKhan]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x801239A8 ---- 901F1A5C -> 60000000
+
+
+	-==-
+
+
+Invisible ceiling glitch fix
+<https://smashboards.com/threads/bug-fixes.471624/post-22930938>
+[tauKhan]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8006BB14 ---- D01E0004 -> D01D0004

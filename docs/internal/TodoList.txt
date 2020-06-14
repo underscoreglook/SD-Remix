@@ -57,6 +57,12 @@ Fix alpha/omega stage list for Random stage from CSS (as opposed to SSS)
 DPad Left at CSS goes to rumble options screen
 DPad Right at CSS goes to debug menu
 Hide Nametag When Invisible
+Box Glitch Fix [tauKhan]
+Update TopN Location In ECB Calculation [tauKhan]
+Break the Targets Intangibility Glitch Fix [UnclePunch]
+Fix Samus Extender Crash [UnclePunch]
+Freeze glitch fix [tauKhan]
+Invisible ceiling glitch fix [tauKhan]
 
 
 POSSIBLE CODES
@@ -141,23 +147,6 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 2C040001 40820008
 4E800020 7C0802A6
 60000000 48000000
-
-
-	-==-
-
-
-Break the Targets Intangibility Glitch Fix
-Fixes glitch that causes player to not receive intangibility after quitting Adventure Mode while the stage was transformed
-<https://smashboards.com/threads/bug-fixes.471624/post-23834249>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x801B65AC ---- 9003000C -> Branch
-
-9003000C 3C608046
-6063B488 388001C0
-3D808000 618CC160
-7D8903A6 4E800421
-60000000 00000000
 
 
 	-==-
@@ -942,27 +931,6 @@ D0882340 3CE08006
 4E800020 00000000
 
 
-
-	-==-
-
-
-Freeze glitch fix
-<https://smashboards.com/threads/bug-fixes.471624/post-22930938>
-[tauKhan]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x801239A8 ---- 901F1A5C -> 60000000
-
-
-	-==-
-
-
-Invisible ceiling glitch fix
-<https://smashboards.com/threads/bug-fixes.471624/post-22930938>
-[tauKhan]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8006BB14 ---- D01E0004 -> D01D0004
-
-
 	-==-
 
 
@@ -972,27 +940,6 @@ Phenomenon that affects Falcon and Ganon side-b ignoring projectiles
 [UnclePunch]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 --- 0x800796E0 ---- 3A400001 -> 60000000
-
-
-	-==-
-
-
-Update TopN Location In ECB Calculation
-This updates character model locations before checks are made for environment collisions and other positional calculations. This can prevent weird looking stage clipping in some cases, especially for grabs.
-<https://smashboards.com/threads/bug-fixes.471624/post-23430430>
-[tauKhan]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8004250C ---- 3BC40000 -> Branch
-
-7C7F1B78 7C9E2378
-807F0000 80830028
-8063002C 800300B0
-90040038 800300B4
-9004003C 800300B8
-90040040 7C832378
-3D808037 618C32E8
-7D8903A6 4E800421
-7FE3FB78 00000000
 
 
 	-==-
@@ -1253,17 +1200,6 @@ FC20081E D8210020
 907F222C 4800000C
 4E800021 41200000
 8001007C 00000000
-
-
-	-==-
-
-
-Fix Samus Extender Crash
-Disables extender grab box from appearing on problematic frames, which would otherwise cause a crash.
-<https://smashboards.com/threads/bug-fixes.471624/post-23238983>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x802B9D28 ---- 40820078 -> 48000078
 
 
 	-==-
