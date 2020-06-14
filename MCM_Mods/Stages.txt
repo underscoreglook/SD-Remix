@@ -209,7 +209,7 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
   0000 00 00  # ??  Unknown, maybe padding              <No Change>
 
 NTSC 1.02 ---- 0x258720 ------ 8804000B -> Branch
-# This is the actual code that reads the stage loader.
+# Load stage info when coming from SSS
 # We can use r4 to r12 without problems
 8804000B    # lbz r0, 0xB(r4)   # r0 is the stage id, don't touch it
 38800000    # li r4, 0          # Is Go/Gr toggle
@@ -242,6 +242,45 @@ A0850000    # lhz r4, 0(r5)     # Get alternate stage id
 lis r6, <<varShouldLoadAlternateStageFile>>@h
 ori r6, r6, <<varShouldLoadAlternateStageFile>>@l
 90860000    # stw r4, 0(r6)     # Store the Go/Gr toggle
+lis r6, <<varStageDolChangesEnabled>>@h
+ori r6, r6, <<varStageDolChangesEnabled>>@l
+90A60000    # stw r5, 0(r6)     # Store the DOL toggle
+00000000    # return
+
+NTSC 1.02 ---- 0x8025B87C ------ 7C000774 -> Branch
+# Load stage when coming from CSS (if we have stage selection on RANDOM)
+# We should otherwise use r5 to r12 without problems
+7C000774    # extsb r0, r0      # r0 is stage id, don't touch it
+38E00000    # li r7, 0          # Is Go/Gr toggle
+38A00000    # li r5, 0          # Is DOL toggle
+2C000002    # cmpwi r0, 2
+41800050    # blt RETURN
+2C000020    # cmpwi r0, 0x20
+41810048    # bgt RETURN
+# HANDLE_SSS_ID:    # Now we know it's one of the SSS stages
+lis r6, <<varIsAlphaOrOmega>>@h
+ori r6, r6, <<varIsAlphaOrOmega>>@l
+80C60000    # lwz r6, 0(r6)     # Get omega toggle
+2C060000    # cmpwi r6, 0
+41820034    # beq RETURN        # If alpha, skip (only Omega is changed)
+# HANDLE_OMEGA:
+7C070378    # mr r7, r0         # Move it to r7
+38E7FFFE    # subi r7, r7, 2    # Index for the stage table (table starts at ID 2)
+54E7103A    # slwi r7, r7, 2    # Multiply by 4 to get bytes offset
+lis r5, <<tblStageChanges>>@h
+ori r5, r5, <<tblStageChanges>>@l
+7CA72A14    # add r5, r7, r5    # r5 is now word for stage toggle
+A0E50000    # lhz r7, 0(r5)     # Get alternate stage id
+2C070000    # cmpwi r7, 0
+41820008    # beq NO_ALT
+7CE03B78    # mr r0, r7         # If there's an alt stage ID, set it
+# NO_ALT:
+88E50002    # lbz r7, 2(r5)     # Get if we should load Go dats
+88A50003    # lbz r5, 3(r5)     # Get if we should do DOL mods
+# RETURN:
+lis r6, <<varShouldLoadAlternateStageFile>>@h
+ori r6, r6, <<varShouldLoadAlternateStageFile>>@l
+90E60000    # stw r7, 0(r6)     # Store the Go/Gr toggle
 lis r6, <<varStageDolChangesEnabled>>@h
 ori r6, r6, <<varStageDolChangesEnabled>>@l
 90A60000    # stw r5, 0(r6)     # Store the DOL toggle
