@@ -51,6 +51,7 @@ UCF 0.73 added
 CSS Hands Default to HMN Button
 Disable Rumble When Controller is Unplugged
 L+R+A+START to Pause Game when Pause is Disabled
+Rumble when character is selected
 
 
 
@@ -83,32 +84,6 @@ Consider maybe having PM style control editing, tied to nametags.
 
 
 --------
-
-
-	-==-
-
-
-Rumble when character is selected
-[Dan Salvato]
-1.02
-C2260C3C 00000008
-7E639B78 800D8840
-7C801A14 88841CC0
-2C040000 41820024
-38800000 38A0000E
-38C00000 38ED9950
-3D808037 618C8430
-7D8903A6 4E800421
-880DB655 00000000
-C2260A58 00000008
-7E639B78 800D8840
-7C801A14 88841CC0
-2C040000 41820024
-38800000 38A0000E
-38C00000 38ED9950
-3D808037 618C8430
-7D8903A6 4E800421
-38000005 00000000
 
 
 	-==-
