@@ -51,16 +51,122 @@ ori r16,r16, <<varIsAlphaOrOmega>>@l
 
 
 Dynamic Lagless Fountain of Dreams
-TODO: This doesn't actually work that well. There's a new code that does a better job and we'll need to integrate that into this code
-[Dan Salvato, _glook]
+Uses the lagless FoD code but only enables it if there are enough players to lag (4 players)
+[Achilles, Myougi, Dan Salvato, _glook]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x25B56C ---- 981B0000 -> Branch
-981B0000 38800DE4 3C84803F 38C00E74 3CC6803F 38840024 8A640000 2D130003
-41AA0034 7D062000 40AAFFEC 3C80801C 6084B000 3E606000 92640bd4 92640f54
-92640f84 3E604800 3A730028 92640efc 4800003C 3C80801C 6084B000 3E604800
-3A730115 92640bd4 3E604182 3A730028 92640efc 3E604800 3A730BC5 92640f54
-3E604BFF 6273D775 92640f84 4BE530E4
+<varLaglessFodEnabled> ALL  # 0 if we only have 2 players or 1 if we have 3 or more players
+00000000
 
+NTSC 1.02 ---- 0x25B56C ---- 981B0000 -> Branch
+# This counts the number of players and toggles the variable on or off
+981B0000    # stb r0, 0(r27)        # The code at hook point
+38800DE4    # li r4, 0xDE4
+3C84803F    # subis r4, r4, 32705   # r4 = 803F0DE4
+38C00E74    # li r6, 0xE74
+3CC6803F    # subis r6, r6, 32705   # r6 = 803F0E74
+            # NEXT_SLOT:
+38840024    # addi r4, r4, 0x24
+8A640000    # lbz r19, 0(r4)
+2D130003    # cmpwi cr2, r19, 0x3
+41AA0014    # beq+ cr2, NORMAL
+7D062000    # cmpw cr2, r6, r4
+40AAFFEC    # bne- cr2, NEXT_SLOT
+            # LAGLESS:
+38C00001    # li r6, 0x1
+48000008    # b END
+            # NORMAL:
+38C00000    # li r6, 0x0
+            # END:
+lis r4, <<varLaglessFodEnabled>>@h
+ori r4, r4, <<varLaglessFodEnabled>>@l
+90C40000    # stw r6, 0(r4)
+00000000    # branch back
+NTSC 1.02 ---- 0x801CBB90 ---- 9421FFF8 -> Branch
+9421FFF8    # stwu r1, -8(r1)       # Code at hook point
+lis r6, <<varLaglessFodEnabled>>@h
+ori r6, r6, <<varLaglessFodEnabled>>@l
+80C60000    # lwz r6, 0(r6)
+2C060000    # cmpwi r6, 0
+41820024    # beq RETURN
+3CC0804A    # lis r6, 0x804A
+80C6ED78    # lwz r6, -0x1288(r6)
+3CA00002    # lis r5, 0x2
+60A5AE44    # ori r5, r5, 0xAE44
+7CA53050    # sub r5, r6, r5
+88C50000    # lbz r6, 0(r5)
+60C60004    # ori r6, r6, 0x4
+98C50000    # stb r6, 0(r5)
+            # RETURN:
+00000000    # branch back
+NTSC 1.02 ---- 0x801CBE98 ---- 38A00000 -> Branch
+lis r5, <<varLaglessFodEnabled>>@h
+ori r5, r5, <<varLaglessFodEnabled>>@l
+80A50000    # lwz r5, 0(r5)
+2C050000    # cmpwi r5, 0
+41820008    # beq PROCEED_AS_NORMAL
+b 0x801CBEA0    # Skip past the function call at 0x801CBE9C
+            # PROCEED_AS_NORMAL:
+38A00000    # li r5, 0
+00000000    # branch back
+NTSC 1.02 ---- 0x801CBEF0 ---- 80840030 -> Branch
+# Disable Reflections Part 1 (requires part 2)
+# original 801CBEF0 -> 60000000
+lis r3, <<varLaglessFodEnabled>>@h
+ori r3, r3, <<varLaglessFodEnabled>>@l
+80630000    # lwz r3, 0(r3)
+2C030001    # cmpwi r3, 1
+41820008    # beq END
+            # ORIGINAL_CODE:
+80840030    # lwz r4,0x30(r4)
+            # END:
+7FC3F378    # mr r3, r30    # Restore r3 to what it was
+00000000    # branch back
+NTSC 1.02 ---- 0x801CD23C ---- 80A3002C -> Branch
+# Disable Reflections Part 2 (requires part 1)
+# original 801CD250 -> 60000000
+lis r5, <<varLaglessFodEnabled>>@h
+ori r5, r5, <<varLaglessFodEnabled>>@l
+80A50000    # lwz r5, 0(r5)
+2C050000    # cmpwi r5, 0
+80A3002C    # lwz r5, 0x2C(r3)
+41820008    # beq PROCEED_AS_NORMAL
+b 0x801CD254    # Skip the function call
+            # PROCEED_AS_NORMAL:
+00000000    # branch back
+NTSC 1.02 ---- 0x801CBF50 ---- 7FC3F378 -> Branch
+# original replacement: 801CBF54 60000000
+lis r3, <<varLaglessFodEnabled>>@h
+ori r3, r3, <<varLaglessFodEnabled>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820008    # beq PROCEED_AS_NORMAL
+b 0x801CBF58
+            # PROCEED_AS_NORMAL:
+7FC3F378    # mr r3, r30    # Original Code
+00000000    # branch back
+NTSC 1.02 ---- 0x80390838 ---- 4BFFFE05 -> Branch
+# Don't render something on the fountain
+# Original Code 80390838 60000000
+lis r10, <<varLaglessFodEnabled>>@h
+ori r10, r10, <<varLaglessFodEnabled>>@l
+814A0000    # lwz r10, 0(r10)
+2C0A0001    # cmpwi r10, 1
+41820008    # beq END
+            # ORIGINAL_CODE:
+bl 0x8039063C
+            # END:
+00000000    # branch back
+NTSC 1.02 ---- 0x801CCDCC ---- 387F01D4 -> Branch
+# Original Code: 801CCDCC 480000B4
+lis r3, <<varLaglessFodEnabled>>@h
+ori r3, r3, <<varLaglessFodEnabled>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820008    # beq PROCEED_AS_NORMAL
+b 0x801CCE80    # Skip a bunch of code
+            # PROCEED_AS_NORMAL:
+387F01D4    # addi r3, r31, 0x1D4   # Original Code
+00000000    # branch back
 
 	-==-
 
@@ -747,8 +853,6 @@ ori r12, r12, <<varStageDolChangesEnabled>>@l
 
 
 Fountain of Dreams - Remove Side Platforms (SDR Toggleable)
-- Removes (Disable) the Side Platforms
-- Disables the Water Jets
 [Zauron]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0x1C9494 ------ 801B0014 -> Branch
@@ -766,16 +870,32 @@ ori r12, r12, <<varStageDolChangesEnabled>>@l
 801B0014    # lwz r0, 0x14(r27)
 # RETURN:
 00000000    # branch
--------------- 0x1C948C ------ EC0007FA -> Branch
+
+
+	-==-
+
+
+Fountain of Dreams - Disables the Water Jets (SDR Dol Toggled & Lagless FoD Toggled)
+[Zauron, _glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x801CC8AC ---- EC0007FA -> Branch
+# Enable/Disable water jets
+# First, check if dynamic lagless FoD is enabled
+lis r12, <<varLaglessFodEnabled>>@h
+ori r12, r12, <<varLaglessFodEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0001    # cmpwi r12, 1
+41820018    # beq DISABLE_JETS
+# Then, check if stage dol changes are enabled
 lis r12, <<varStageDolChangesEnabled>>@h
 ori r12, r12, <<varStageDolChangesEnabled>>@l
 818C0000    # lwz r12, 0(r12)
 2C0C0000    # cmpwi r12, 0
-4182000C    # beq ALPHA
-# OMEGA:
+4182000C    # beq ENABLE_JETS
+# DISABLE_JETS:
 FC000028    # fsub f0,f0,f0
 48000008    # b RETURN
-# ALPHA:
+# ENABLE_JETS:
 EC0007FA    # fmadds f0, f0, f31, f0
 # RETURN:
 00000000    # branch

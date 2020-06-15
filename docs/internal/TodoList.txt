@@ -63,51 +63,36 @@ Break the Targets Intangibility Glitch Fix [UnclePunch]
 Fix Samus Extender Crash [UnclePunch]
 Freeze glitch fix [tauKhan]
 Invisible ceiling glitch fix [tauKhan]
-
-
-POSSIBLE CODES
-==============
-These are possible new codes or updated codes
-https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/
-
-New version of revival platform colors
-https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
-
-Update to latest widescreen codes (at bottom of this file)
-
-Shy Guys drop food even if items are at off (1.02)[flieskiller]
-0428fb1c 4800000c
-I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
- as well, even if the food item is at off.
-
-Consider an easy way to get to Debug Menu from CSS (maybe Dpad button?)
-
-Consider maybe having PM style control editing, tied to nametags.
+Updated Dynamic Lagless FoD to latest actually working version [Achilles, Myougi, Dan Salvato, _glook]
 
 
 
 =============
 = Code dump =
 =============
-$SDR Netplay Settings [Achilles, Dan Salvato, Magus, UnclePunch, tauKhan, Ptomerty, Cilan, Zauron, Datel, donny2112, Jorgasms, strikebowler585, Myougi]
-041A45A0 3C000202 #Boot to CSS [Dan Salvato, Achilles]
-041A45A4 901E0000
-042641B0 38000001 #Faster CSS Load [UnclePunch]
+General>
+Presets: DISABLED, _GLOOK, CUSTOM
+Character>
+Mechanics>
+Other>
+Credits>
+Debug Menu>
 
-$Lagless FoD [Achilles, Myougi, Dan Salvato]
-C21CBB90 00000005
-9421FFF8 3CC0804A
-80C6ED78 3CA00002
-60A5AE44 7CA53050
-88C50000 60C60004
-98C50000 00000000
-041CC8AC FC000028
-041CBE9C 60000000
-041CBEF0 60000000
-041CBF54 60000000
-04390838 60000000
-041CD250 60000000
-041CCDCC 480000B4
+These are possible new codes or updated codes
+https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/
+
+New version of revival platform colors
+https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
+
+Shy Guys drop food even if items are at off (1.02)[flieskiller]
+0428fb1c 4800000c
+I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
+ as well, even if the food item is at off.
+
+$SDR Netplay Settings [Dan Salvato, Achilles, UnclePunch]
+041A45A0 3C000202 # Boot to CSS     [Dan Salvato, Achilles]
+041A45A4 901E0000
+042641B0 38000001 # Faster CSS Load [UnclePunch]
 
 
 	-==-

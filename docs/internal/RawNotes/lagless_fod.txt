@@ -235,6 +235,66 @@ C225E98C 00000012
 3E604BFF 6273D775
 926403B0 00000000
 
+981B0000    # stb r0, 0(r27)
+38800DE4    # li r4, 0xDE4
+3C84803F    # subis r4, r4, 32705   # r4 = 803F0DE4
+38C00E74    # li r6, 0xE74
+3CC6803F    # subis r6, r6, 32705   # r6 = 803F0E74
+            # NEXT_SLOT:
+38840024    # addi r4, r4, 0x24
+8A640000    # lbz r19, 0(r4)
+2D130003    # cmpwi cr2, r19, 0x3
+41AA0034    # beq+ cr2, NORMAL
+7D062000    # cmpw cr2, r6, r4
+40AAFFEC    # bne- cr2, NEXT_SLOT
+            # LAGLESS:
+3C80801C    # lis r4, 0x801C
+6084B000    # ori r4, r4, 0xB000
+3E606000    # lis r19, 0x6000
+92640bd4    # stw r19, 3028(r4)
+92640f54    # stw r19, 3924(r4)
+92640f84    # stw r19, 3972(r4)
+3E604800    # lis r19, 0x4800
+3A730028    # addi r19, r19, 0x28
+92640efc    # stw r19, 3836(r4)
+4800003C    # b END
+            # NORMAL:
+3C80801C    # lis r4, 0x801C
+6084B000    # ori r4, r4, 0xB000
+3E604800    # lis r19, 0x4800
+3A730115    # addi r19, r19, 0x115
+92640bd4    # stw r19, 3028(r4)
+3E604182    # lis r19, 0x4182
+3A730028    # addi r19, r19, 0x28
+92640efc    # stw r19, 3836(r4)
+3E604800    # lis r19, 0x4800
+3A730BC5    # addi r19, r19, 0xBC5
+92640f54    # stw r19, 3924(r4)
+3E604BFF    # lis r19, 0x4BFF
+6273D775    # ori r19, r19, 0xD775
+92640f84    # stw r19, 3972(r4)
+            # END:
+00000000    # branch back
+
+
+$Lagless FoD [Achilles, Myougi, Dan Salvato]
+C21CBB90 00000005
+9421FFF8 3CC0804A
+80C6ED78 3CA00002
+60A5AE44 7CA53050
+88C50000 60C60004
+98C50000 00000000
+
+041CC8AC FC000028
+041CBE9C 60000000
+041CBEF0 60000000
+041CBF54 60000000
+04390838 60000000
+041CD250 60000000
+041CCDCC 480000B4
+
+
+
 
 
 
