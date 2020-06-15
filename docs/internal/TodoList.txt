@@ -18,7 +18,7 @@ Other suggestions from people?
 * More debug menu presets, like maybe one with "Beta" character changes.
 * Reorganized debug menu.
 * Nice to have but a lot of work: Per player/nametag control customization)
-Look at other todolists
+Look at other todolists and finish converting badhacks
 Probably rework the debug screen.
 Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
 Probably talk with the SDR team to get approval from whole team before making any changes.
@@ -70,166 +70,169 @@ Updated Dynamic Lagless FoD to latest actually working version [Achilles, Myougi
 =============
 = Code dump =
 =============
+SDRE32.ini needs automatic toggles for:
+All General toggles
+All Presets
+If custom, Most mechanics items
+
+New debug menu should be in a folder, splitting various items in separate txt.
+
 General>
-Presets: DISABLED, _GLOOK, CUSTOM
-Character>
+    Widescreen (updated)
+    Stock platform colors
+    20XX neutral spawns
+    Always skip the result sceen and stock count
+Presets: DISABLED, _GLOOK, CUSTOM (need the updated banner color code, takes priority over individual toggles)
 Mechanics>
+    Disable Star KO
+    Ledge Invincibility: Dynamic
+    Wall Bracing: Enabled
+    Grab Infinite Removal
+    Throw Bug Fix
+    Detection Bubbles Continue Hurtbox Collision Check
+    Automatic L-Cancel
+Game Changes>
+    Handicap: Stock/Crew
+    Overtime: Tournament
+    Capped Points/Tennis: Enabled
+    Hot Potato Mr. Saturn Mode
+    Taunt Battle
+Character>
+    Marth colors match costume
+    Peach turnip: Default, Always 0-7
+    Peach infinite float
+    Nana Respawn Time: None, 60 secs, 20 secs, Instant
+    Solo Popo Up-B Buff
+    Samus Keeps Charge Shot When Hit During Up B
+    Falcon Raptor Boost enters Fall state
+    Falcon/Ganon - Grab Ledge with Side+B
+    Ganon Float
+    DK Skip DownB Startup
+    DK Hold B for DownB
+    GnW Hammer: Random, Modulo, Always 1-9
+    Bowser Up+B Mash for Height
+Items>
+    Food appears when items disabled
+    Disable Container Spawns
+    Containers spawn containers
+    Disable Capsule Explosions
+    Disable Barrel Explosions
+    Disable Box Explosions
 Other>
+    Shields: Normal/Infinite
+    Tap Jump: Enabled/disabled
+    Always Rain Bombs: Disabled/Enabled/Pokeballs
+    Random Hitbox Elements
 Credits>
 Debug Menu>
 
-These are possible new codes or updated codes
-https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/
 
-New version of revival platform colors
-https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
+==================================================================================
 
-Shy Guys drop food even if items are at off (1.02)[flieskiller]
-0428fb1c 4800000c
-I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
- as well, even if the food item is at off.
 
 $SDR Netplay Settings [Dan Salvato, Achilles, UnclePunch]
 041A45A0 3C000202 # Boot to CSS     [Dan Salvato, Achilles]
 041A45A4 901E0000
 042641B0 38000001 # Faster CSS Load [UnclePunch]
 
-
 	-==-
 
-
-Random Hitbox Elements - Every Non-projectile Attack
-All Non-projectile attacks will have a random effect, rather than their normal one.
-[Achilles]
-1.02
-C20715B0 00000009
-7C0F0378 38600010
-3C808038 60840580
-7C8903A6 4E800421
-2C030004 41A2FFE8
-2C030007 41A2FFE0
-2C030008 41A2FFD8
-2C03000B 41A2FFD0
-907E0030 7DE07B78
-28000009 00000000
-
-
-	-==-
-
-
-Disable Tap Jump
-Affects all players
-[Achilles]
+No Delay on Start at SSS
+<https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
+[UnclePunch]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800CBBC0 --- 7C0802A6 -> Branch
+1.02 ------ 0x2575F8 ---- 38000014 -> 38000001
 
-89FD06BE 2C0F0004
-40800008 4E800020
-7C0802A6 48000000
-
-1.02 ----- 0x800CB4E0 --- 7C0802A6 -> Branch
-
-2C040001 40820008
-4E800020 7C0802A6
-60000000 48000000
-
+"RANDOM" is Default Highlighted on Stage Select Screen (1.02) [Jorgasms]
+0425AA10 38E0001D
 
 	-==-
 
-
-16:9 Widescreen Support (Variation A)
-Includes the fullscreen flashing effect fix.
-This variation also fixes the position of magnifier bubbles, but also stretches the HUD.
-
-If using with Dolphin, you'll also need to change the setting, "Force 16:9" for the aspect ratio and make sure "Widescreen Hack" is OFF.
-
-See the notes in the link below for adjustments based on your display device:
-https://docs.google.com/document/d/1o_KEmsbKg4_qIm607FfewzIvChQYxayN4r1j3Uy6yX0/edit
-<https://smashboards.com/threads/16-9-widescreen-w-options-for-tv-monitor-dolphin.397929/>
-[Dan Salvato]
+No Delay on Start at CSS
+<https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
+[UnclePunch]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80021ABC --- 38600006 -> Branch
-
-39C00001 38600006
-60000000 48000000
-
----------- 0x802F3980 --- 387F0000 -> Branch
-
-39C00001 387F0000
-60000000 48000000
-
----------- 0x8036A4A8 --- C03F0034 -> Branch
-
-C03F0034 2C0E0001
-41820024 3C004080 # <- ____XXXX
-90010030 3C004040 # <- ____YYYY
-90010034 C0010030
-EC210032 C0010034
-EC210024 39C00000
-281E0000 48000000
-
-1.01 ------ 0x1E69C ---- 38600006 -> Branch
-
-39C00001 38600006
-60000000 48000000
-
------------ 0x2EFAD8 --- 387F0000 -> Branch
-
-39C00001 387F0000
-60000000 48000000
-
------------ 0x3663A8 ---- C03F0034 -> Branch
-
-C03F0034 2C0E0001
-41820024 3C004080 # <- ____XXXX
-90010030 3C004040 # <- ____YYYY
-90010034 C0010030
-EC210032 C0010034
-EC210024 39C00000
-281E0000 48000000
-
-1.00 ------ 0x1E61C ---- 38600006 -> Branch
-
-39C00001 38600006
-60000000 48000000
-
------------ 0x2EEE8C --- 387F0000 -> Branch
-
-39C00001 387F0000
-60000000 48000000
-
------------ 0x3651D4 ---- C03F0034 -> Branch
-
-C03F0034 2C0E0001
-41820024 3C004080 # <- ____XXXX
-90010030 3C004040 # <- ____YYYY
-90010034 C0010030
-EC210032 C0010034
-EC210024 39C00000
-281E0000 48000000
-
-PAL ------- 0x1EA34 ---- 38600006 -> Branch
-
-39C00001 38600006
-60000000 48000000
-
------------ 0x2F0B54 --- 387F0000 -> Branch
-
-39C00001 387F0000
-60000000 48000000
-
------------ 0x366F8C ---- C03F0034 -> Branch
-
-C03F0034 2C0E0001
-41820024 3C004080 # <- ____XXXX
-90010030 3C004040 # <- ____YYYY
-90010034 C0010030
-EC210032 C0010034
-EC210024 39C00000
-281E0000 48000000
-
+1.02 ------ 0x260D90 ---- 3800001E -> 38000001
 
 	-==-
+
+$Random Music [UnclePunch]
+041C26B0 38000032 #Random Stage Music [UnclePunch]
+
+
+==================================================================================
+
+https://smashboards.com/threads/changing-the-color-of-the-ready-to-fight-banner.403839/
+
+On top of getting new codes for getting the banner color, use the code below to show which preset we use.
+
+Display Time at Top Right of CSS (v1.1)
+Shows the current IRL time on the Character Select Screen.
+<https://smashboards.com/threads/display-time-at-top-right-of-css-1-1.450591/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8025C00C ---- 80010014 -> Branch
+
+2C05004C 4082000C
+3863FFDE 48000008
+38600000 9062FDB0
+80010014 00000000
+
+------------- 0x8026339C ---- 8001001C -> Branch
+
+8062FDB0 2C030000
+4182017C 3DC08000
+61CEAFBC 7DC903A6
+4E800421 38810014
+3DC08016 61CE92E8
+7DC903A6 4E800421
+38810014 48000125
+7CC802A6 88640004
+2C03000C 4080000C
+38A00000 4800000C
+3863FFF4 38A00001
+2C03000A 41800010
+3863FFF6 38E02001
+48000024 2C030000
+40820018 2C050000
+40820010 38E02001
+38600002 48000008
+38E02000 B0E60018
+38E00020 98E6001A
+9866001B 88640005
+2C030009 4081002C
+2C030013 4081002C
+2C03001D 40810030
+2C030027 40810034
+2C030031 40810038
+2C03003B 4081003C
+38E02000 4800003C
+38E02001 3863FFF6
+48000030 38E02002
+3863FFEC 48000024
+38E02003 3863FFE2
+48000018 38E02004
+3863FFD8 4800000C
+38E02005 3863FFCE
+B0E6001E 38E00020
+98E60020 98660021
+2C050000 4082000C
+38E0200A 48000008
+38E02019 B0E60022
+8062FDB0 7CC43378
+38A00028 3DC08000
+61CE31F4 7DC903A6
+4E800421 48000030
+4E800021 201C2037
+20322026 202E2036
+20EC1A1A 1A1A1A1A
+1A1A1A1A 20002008
+20E92004 20052019
+20160000 8001001C
+60000000 00000000
+
+
+==================================================================================
 
 
 16:9 Widescreen Support (Variation B)
@@ -238,8 +241,15 @@ This variation also fixes the position of magnifier bubbles, but also stretches 
 
 If using with Dolphin, you'll also need to change the setting, "Force 16:9" for the aspect ratio and make sure "Widescreen Hack" is OFF.
 
+16:9 for Dolphin: XXXX = 42B8, YYYY = 427C
+16:9 for Monitor: XXXX = 4438, YYYY = 440E
+16:9 for LCD TV: XXXX = 4080, YYYY = 4040
+4:3 for Dolphin: XXXX = 41B8, YYYY = 41A8
+
 See the notes in the link below for adjustments based on your display device:
 https://docs.google.com/document/d/1o_KEmsbKg4_qIm607FfewzIvChQYxayN4r1j3Uy6yX0/edit
+
+<https://smashboards.com/threads/16-9-widescreen-w-options-for-tv-monitor-dolphin.397929/>
 [Dan Salvato]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ----- 0x80021ABC --- 38600006 -> Branch
@@ -311,11 +321,172 @@ EC210024 39C00000
 	-==-
 
 
-No Delay on Start at SSS
-<https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
-[UnclePunch]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x2575F8 ---- 38000014 -> 38000001
+New version of revival platform colors
+https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
+
+
+	-==-
+
+
+$20XX Neutral Spawns [Achilles, Jorgasms]
+C2263058 00000030
+39E00000 3A000000
+3E408048 625307FD
+91F206D8 91F206DC
+8A3207C8 625206D7
+2C110001 4182004C
+39EF0001 8E930024
+2C140003 4182000C
+9A130004 3A100001
+2C0F0004 41A0FFE4
+48000130 39E00000
+3A0000FF 3E408048
+62520801 39EF0001
+9E120024 2C0F0004
+41A0FFF4 4800010C
+3E208048 623106DC
+39EF0001 3A520001
+8E930024 89D30008
+2C140003 41A2FFC0
+2C0E0000 40820010
+3A000000 8A910000
+48000024 2C0E0001
+40820010 3A000001
+8E910001 48000010
+3A000002 8E910002
+48000004 3A940001
+2C140003 40A0FF80
+9A910000 9A120000
+2C0F0004 41A0FF94
+39E00000 3E208048
+623106DB 3AA00000
+39EF0001 8E910001
+2C140001 40800008
+48000010 3AB50001
+2C150003 40A0FF40
+2C0F0003 41A0FFDC
+39E00000 3A310127
+39C000FF 3A8000FF
+39EF0001 8E110024
+2C0E00FF 40820010
+7E128378 39C00000
+4800002C 7C109000
+4082000C 39C00003
+4800001C 2C1400FF
+40820010 39C00001
+3A800000 48000008
+39C00002 99D1FFFC
+2C0F0004 41A0FFB4
+38840001 00000000
+C21C0A48 0000001A
+3DE0801B 61EFFFA8
+7C0F6000 418200BC
+3DC08048 A1CE0686
+3DE08049 61EFED70
+81EF0000 2C0E001F
+4082001C 3E00C242
+3E204242 3E404230
+3A600000 960F0598
+4800002C 2C0E001C
+40820040 3E00C23A
+62106666 3E20423D
+62318E70 3E404214
+3A600000 960F0854
+48000004 924F0004
+962F0040 924F0004
+962F0040 926F0004
+960F0040 926F0004
+2C0E0020 40820014
+3A000041 9E0F0650
+3A0000C1 9A0F0040
+2C0E0008 40820024
+3E004270 3E20C270
+3A400000 39EF4748
+960F4748 924F0004
+962F0040 924F0004
+7D8803A6 00000000
+
+20XX Neutral Spawn for Singles and Doubles
+More info here:
+https://smashboards.com/threads/forced-and-fixed-neutral-spawn-hack-singles-and-doubles.364075/
+[Achilles, Jorgasms]
+1.02
+C2263058 00000030
+39E00000 3A000000
+3E408048 625307FD
+91F206D8 91F206DC
+8A3207C8 625206D7
+2C110001 4182004C
+39EF0001 8E930024
+2C140003 4182000C
+9A130004 3A100001
+2C0F0004 41A0FFE4
+48000130 39E00000
+3A0000FF 3E408048
+62520801 39EF0001
+9E120024 2C0F0004
+41A0FFF4 4800010C
+3E208048 623106DC
+39EF0001 3A520001
+8E930024 89D30008
+2C140003 41A2FFC0
+2C0E0000 40820010
+3A000000 8A910000
+48000024 2C0E0001
+40820010 3A000001
+8E910001 48000010
+3A000002 8E910002
+48000004 3A940001
+2C140003 40A0FF80
+9A910000 9A120000
+2C0F0004 41A0FF94
+39E00000 3E208048
+623106DB 3AA00000
+39EF0001 8E910001
+2C140001 40800008
+48000010 3AB50001
+2C150003 40A0FF40
+2C0F0003 41A0FFDC
+39E00000 3A310127
+39C000FF 3A8000FF
+39EF0001 8E110024
+2C0E00FF 40820010
+7E128378 39C00000
+4800002C 7C109000
+4082000C 39C00003
+4800001C 2C1400FF
+40820010 39C00001
+3A800000 48000008
+39C00002 99D1FFFC
+2C0F0004 41A0FFB4
+38840001 00000000
+C21C0A48 0000001A
+3DE0801B 61EFFFA8
+7C0F6000 418200BC
+3DC08048 A1CE0686
+3DE08049 61EFED70
+81EF0000 2C0E001F
+4082001C 3E00C242
+3E204242 3E404230
+3A600000 960F0598
+4800002C 2C0E001C
+40820040 3E00C23A
+62106666 3E20423D
+62318E70 3E404214
+3A600000 960F0854
+48000004 924F0004
+962F0040 924F0004
+962F0040 926F0004
+960F0040 926F0004
+2C0E0020 40820014
+3A000041 9E0F0650
+3A0000C1 9A0F0040
+2C0E0008 40820024
+3E004270 3E20C270
+3A400000 39EF4748
+960F4748 924F0004
+962F0040 924F0004
+7D8803A6 00000000
 
 
 	-==-
@@ -436,6 +607,148 @@ EC010024 4808A354
 	-==-
 
 
+$Disable KO Stars
+0425D22C 3BA00000
+
+Disable Star KOs
+Deaths off of the top of the screen happen as they do on the side/bottom blastzones.
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x800d3258 --- 41820010 -> 60000000
+
+
+	-==-
+
+
+Ledge Invincibility Attrition
+This basically make ledge invincibility behave similarly to shields, in that after grabbing the ledge a few times in quick succession, subsequent grabs will reduces ledge invincibility. The ledge invincibility recovers over time, like shields, and is reset when you die, just like shields. (I figure this is a better solution that the one PM has, not only because I feel it feels more natural, but also because of things like the haxdash that can circumvent it. - _glook)
+Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-35#post-19218896
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8009A8AC --- 8084049C -> Branch
+
+7C671B78 8063002C
+8084049C 80A31068
+7CA62B78 38A50020
+2C050140 40A10008
+38A00140 90A31068
+7CC631D6 54C6A33E
+7C062000 41A0000C
+38800000 48000008
+7C862050 7CE33B78
+60000000 48000000
+
+1.02 ----- 0x8006A414 --- 807F1990 -> Branch
+
+807F198C 809F1988
+7C632378 2C030000
+40820018 807F1068
+2C030000 41A2000C
+3863FFFF 907F1068
+807F1990 48000000
+
+
+	-==-
+
+
+Wall Bracing
+Its main purpose is to get rid of wall infinites.
+If you are on the ground and you're moving into a wall (either by purposely walking/running into it or, more likely, if you're being shined into the wall), if you get hit by a non-launching attack, you can press the analog stick left or right to brace against the wall, which will make your feet leave the ground. The direction you press doesn't matter, and this was purposefully done to help with Smash DI (which is actually just a justification for my laziness. - _glook).
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8008DFAC --- 2C1C0003 -> Branch
+
+2C1C0003 41820030
+887D0724 70630004
+2C030004 40A20020
+807D0620 2C030000
+4082000C 38600001
+48000008 38600000
+2C030000 48000000
+
+
+	-==-
+
+
+Grab Infinite Removal v3
+This removes grab infinites by making any attack knock opponents out of a grab when the grip has run out. This keeps everything else about grabs the same except for the ability to extend grabs into infinity.
+
+This revision of the code ignores the following action states from grabber:
+0x0D9 - "CatchAttack" for all characters
+0x163 - Up+B catch for Captain Falcon and Ganondorf
+<https://smashboards.com/threads/grab-infinite-removal-code.412693/>
+[_glook, Punkline]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+NTSC 1.02 --- 0x8008EE48 ---- 2c000000 -> Branch
+807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
+4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
+C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
+
+PAL 1.00 ---- 0x8008F500 ---- 2c000000 -> Branch
+807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
+4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
+C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
+
+NTSC 1.01 --- 0x8008EC88 ---- 2c000000 -> Branch
+807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
+4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
+C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
+
+NTSC 1.00 --- 0x8008EBA0 ---- 2c000000 -> Branch
+807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
+4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
+C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
+
+
+	-==-
+
+
+Throw Bug Fix v2
+Fixes the hitstun differences between ports on throws, to make it so they all have the full amount of hitstun, i.e. the first frame of hitstun is never skipped.
+<https://smashboards.com/threads/throw-hitstun-bug-fix.444506/post-21603633>
+[Achilles]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8008E250 ---- 38C00000 -> Branch
+
+38C00000 8118002C
+80E818C4 8928000C
+7C093800 41800050
+80E80010 2C0700EF
+41800044 2C0700F3
+4181003C 3CE03F80
+90E20000 C0820000
+C0A82340 FC84282A
+D0882340 3CE08006
+60E793AC 7CE803A6
+4E800021 3CE08008
+60E7E260 7CE803A6
+4E800020 00000000
+
+
+	-==-
+
+
+Detection Bubbles Continue Hurtbox Collision Check
+Phenomenon that affects Falcon and Ganon side-b ignoring projectiles
+<https://smashboards.com/threads/bug-fixes.471624/post-22931202>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x800796E0 ---- 3A400001 -> 60000000
+
+
+	-==-
+
+
+Aerials are Automatically L-Cancelled
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace
+1.02 ------ 0x68200 ---- 41820010 -> 60000000
+
+
+	-==-
+
+
 Stock Control/Crew Battle Mode
 Essentially, this hack gets rid of the damage modifier for handicap and replaces it with controllable stocks so that one player can spawn with say 6 stocks and another can spawn with 4.
 
@@ -520,262 +833,6 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 9A4E1D20 8A4F006C
 9A4E2BB0 48000008
 98A3008E 48000000
-
-
-	-==-
-
-
-Disable Container Spawns
-Prevents capsules, boxes, barrels, and eggs from spawning randomly.
-[Punkline]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8026C784 --- 7C7C1B78 -> Branch
-
-609C0E34 7C03E040
-40820008 60830E50
-7C7C1B78 00000000
-
-
-	-==-
-
-
-Containers spawn containers
-Containers can contain more containers.
-[Punkline]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x269364 ---- 7C7C1B78 -> Branch
-
-609C0E50 7C03E040
-40820008 60830E34
-7C7C1B78 00000000
-
-
-	-==-
-
-
-Disable Capsule Explosions
-(Normal chance for explosion: 12.5%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8027CF8C --- 40820018 -> 48000018
-
-
-	-==-
-
-
-Disable Barrel Explosions
-(Normal chance for explosion: 10%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80288b28 --- 4080000C -> 60000000
-
-
-	-==-
-
-
-Disable Box Explosions
-(Normal chance for explosion: 10%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8028639c --- 38600000 -> 38600001
-
-
-	-==-
-
-
-Hot Potato Mr. Saturn mode
-If you are holding a Mr. Saturn when the seconds remaining in the match is a multiple of 5, you die. If you are hit with a Mr. Saturn while not holding another item, you are forced to catch it and are stunned for a second or so.
-[wParam]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x28059C ---- 7C0802A6 -> Branch
-
-7C0802A6 90010004
-9421FFE8 BFA10008
-7C7F1B78 80A3002C
-83C50CF4 2C1E0000
-4182004C 83BE002C
-811D1974 2C080000
-4082003C 7FE4FB78
-7FC3F378 3C608031
-60633618 7C6903A6
-4E800421 7FC3F378
-38800001 3C608034
-60631EF0 7C6903A6
-4E800421 3C804170
-909D1A4C 7FE3FB78
-BBA10008 8001001C
-38210018 7C0803A6
-7C0802A6 4827ED44
-
-1.02 ------ 0x66f40 ---- 7C0802A6 -> Branch
-
-80C3002C 80E61974
-2C070000 4182004C
-8107002C 81080010
-2C080007 4082003C
-3CC08047 80C6B6C8
-2C060000 4182002C
-38E00005 7D063BD6
-7D2839D6 7C093000
-40820018 3C608013
-60639264 7C6903A6
-4E800421 7C0802A6
-60000000 48065698
-
-
-	-==-
-
-
-Aerials are Automatically L-Cancelled
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace
-1.02 ------ 0x68200 ---- 41820010 -> 60000000
-
-
-	-==-
-
-
-Ledge Invincibility Attrition
-This basically make ledge invincibility behave similarly to shields, in that after grabbing the ledge a few times in quick succession, subsequent grabs will reduces ledge invincibility. The ledge invincibility recovers over time, like shields, and is reset when you die, just like shields. (I figure this is a better solution that the one PM has, not only because I feel it feels more natural, but also because of things like the haxdash that can circumvent it. - _glook)
-Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-35#post-19218896
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8009A8AC --- 8084049C -> Branch
-
-7C671B78 8063002C
-8084049C 80A31068
-7CA62B78 38A50020
-2C050140 40A10008
-38A00140 90A31068
-7CC631D6 54C6A33E
-7C062000 41A0000C
-38800000 48000008
-7C862050 7CE33B78
-60000000 48000000
-
-1.02 ----- 0x8006A414 --- 807F1990 -> Branch
-
-807F198C 809F1988
-7C632378 2C030000
-40820018 807F1068
-2C030000 41A2000C
-3863FFFF 907F1068
-807F1990 48000000
-
-
-	-==-
-
-
-Wall Bracing
-Its main purpose is to get rid of wall infinites.
-If you are on the ground and you're moving into a wall (either by purposely walking/running into it or, more likely, if you're being shined into the wall), if you get hit by a non-launching attack, you can press the analog stick left or right to brace against the wall, which will make your feet leave the ground. The direction you press doesn't matter, and this was purposefully done to help with Smash DI (which is actually just a justification for my laziness. - _glook).
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8008DFAC --- 2C1C0003 -> Branch
-
-2C1C0003 41820030
-887D0724 70630004
-2C030004 40A20020
-807D0620 2C030000
-4082000C 38600001
-48000008 38600000
-2C030000 48000000
-
-
-	-==-
-
-
-Disable Star KOs
-Deaths off of the top of the screen happen as they do on the side/bottom blastzones.
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800d3258 --- 41820010 -> 60000000
-
-
-	-==-
-
-
-20XX Neutral Spawn for Singles and Doubles
-More info here:
-https://smashboards.com/threads/forced-and-fixed-neutral-spawn-hack-singles-and-doubles.364075/
-[Achilles, Jorgasms]
-1.02
-C2263058 00000030
-39E00000 3A000000
-3E408048 625307FD
-91F206D8 91F206DC
-8A3207C8 625206D7
-2C110001 4182004C
-39EF0001 8E930024
-2C140003 4182000C
-9A130004 3A100001
-2C0F0004 41A0FFE4
-48000130 39E00000
-3A0000FF 3E408048
-62520801 39EF0001
-9E120024 2C0F0004
-41A0FFF4 4800010C
-3E208048 623106DC
-39EF0001 3A520001
-8E930024 89D30008
-2C140003 41A2FFC0
-2C0E0000 40820010
-3A000000 8A910000
-48000024 2C0E0001
-40820010 3A000001
-8E910001 48000010
-3A000002 8E910002
-48000004 3A940001
-2C140003 40A0FF80
-9A910000 9A120000
-2C0F0004 41A0FF94
-39E00000 3E208048
-623106DB 3AA00000
-39EF0001 8E910001
-2C140001 40800008
-48000010 3AB50001
-2C150003 40A0FF40
-2C0F0003 41A0FFDC
-39E00000 3A310127
-39C000FF 3A8000FF
-39EF0001 8E110024
-2C0E00FF 40820010
-7E128378 39C00000
-4800002C 7C109000
-4082000C 39C00003
-4800001C 2C1400FF
-40820010 39C00001
-3A800000 48000008
-39C00002 99D1FFFC
-2C0F0004 41A0FFB4
-38840001 00000000
-C21C0A48 0000001A
-3DE0801B 61EFFFA8
-7C0F6000 418200BC
-3DC08048 A1CE0686
-3DE08049 61EFED70
-81EF0000 2C0E001F
-4082001C 3E00C242
-3E204242 3E404230
-3A600000 960F0598
-4800002C 2C0E001C
-40820040 3E00C23A
-62106666 3E20423D
-62318E70 3E404214
-3A600000 960F0854
-48000004 924F0004
-962F0040 924F0004
-962F0040 926F0004
-960F0040 926F0004
-2C0E0020 40820014
-3A000041 9E0F0650
-3A0000C1 9A0F0040
-2C0E0008 40820024
-3E004270 3E20C270
-3A400000 39EF4748
-960F4748 924F0004
-962F0040 924F0004
-7D8803A6 00000000
 
 
 	-==-
@@ -894,334 +951,160 @@ C20343B4 00000004
 	-==-
 
 
-Throw Bug Fix v2
-Fixes the hitstun differences between ports on throws, to make it so they all have the full amount of hitstun, i.e. the first frame of hitstun is never skipped.
-<https://smashboards.com/threads/throw-hitstun-bug-fix.444506/post-21603633>
-[Achilles]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8008E250 ---- 38C00000 -> Branch
-
-38C00000 8118002C
-80E818C4 8928000C
-7C093800 41800050
-80E80010 2C0700EF
-41800044 2C0700F3
-4181003C 3CE03F80
-90E20000 C0820000
-C0A82340 FC84282A
-D0882340 3CE08006
-60E793AC 7CE803A6
-4E800021 3CE08008
-60E7E260 7CE803A6
-4E800020 00000000
+Capped Points/Tennis Mode
 
 
 	-==-
 
 
-Detection Bubbles Continue Hurtbox Collision Check
-Phenomenon that affects Falcon and Ganon side-b ignoring projectiles
-<https://smashboards.com/threads/bug-fixes.471624/post-22931202>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800796E0 ---- 3A400001 -> 60000000
-
-
-	-==-
-
-
-Grab Infinite Removal v3
-This removes grab infinites by making any attack knock opponents out of a grab when the grip has run out. This keeps everything else about grabs the same except for the ability to extend grabs into infinity.
-
-This revision of the code ignores the following action states from grabber:
-0x0D9 - "CatchAttack" for all characters
-0x163 - Up+B catch for Captain Falcon and Ganondorf
-<https://smashboards.com/threads/grab-infinite-removal-code.412693/>
-[_glook, Punkline]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-
-NTSC 1.02 --- 0x8008EE48 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-PAL 1.00 ---- 0x8008F500 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-NTSC 1.01 --- 0x8008EC88 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-NTSC 1.00 --- 0x8008EBA0 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-
-
-	-==-
-
-
-Captain Falcon/Ganondorf - Can Grab Ledge on Side-B
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800E3DFC ---- 8083002C -> Branch
-
-83E3002C 7FC3F378
-3DC0800E 61CE4D7C
-7DC903A6 4E800421
-7FC3F378 809E002C
-60000000 00000000
-
-
-
-	-==-
-
-
-Nana Respawns after 20 Seconds
-<https://smashboards.com/threads/sd-remix-3-2-full-lite-released.324620/post-21734645>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8006CA5C ---- 7C0802A6 -> Branch
-
-89C30067 2C0E000B
-4082003C A1C30072
-2C0E000B 40820030
-39C00001 A1E30020
-7DCE7A14 B1C30020
-2C0E04B0 41800018
-39E00008 99E3227F
-3DE0800B 61EFFD9C
-91E32200 7C0802A6
-60000000 00000000
-
-------------- 0x800320E8 ---- 806300B0 -> Branch
-
-81C300B4 2C0E0000
-41820020 A1EE0020
-2C0F04B0 40820014
-39E00000 B1EE0020
-7DC37378 48000008
-806300B0 00000000
-
-------------- 0x800BFE48 ---- 889F221F -> Branch
-
-89DF0007 2C0E000B
-40820024 A1DF0012
-2C0E000B 40820018
-A1FFFFC0 2C0F04B0
-4082000C 38800001
-48000008 889F221F
-60000000 00000000
-
-------------- 0x800D4FF4 ---- 7C0802A6 -> Branch
-
-81C30064 2C0E000A
-40820010 81C30008
-39E00000 B1EE0020
-7C0802A6 00000000
-
-
-
-	-==-
-
-
-Skip DK Down B Startup
-<https://smashboards.com/threads/misc-character-codes.446554/post-21699985>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x803C170C ---- 8010DC80 -> 8010de88
-
-
-	-==-
-
-
-DK Hold B for Down B
-<https://smashboards.com/threads/misc-character-codes.446554/post-21699985>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8010DDE0 ---- 80030668 -> 80030660
-
-
-	-==-
-
-
-Bowser can mash for height during aerial upB
-<https://smashboards.com/threads/misc-character-codes.446554/post-21776218>
-[rmn]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x80135E34 ---- 80010024 -> Branch
-
-48000010 4E800021
-3F99999A 3FB33333
-801F0668 540005AD
-41A20024 4BFFFFE9
-7C8802A6 C0240000
-C0440004 3C008007
-6000D508 7C0903A6
-4E800421 80010024
-60000000 00000000
-
-
-	-==-
-
-
-Ganon Float v1.0
-Features:
-
--Applies only to Ganondorf.
--Kills all vertical velocity.
--Allows for aerial movement.
--Can interrupt with jump or aerial attack starting on frame 13. Can also press down after frame 13 to start descending early.
--Descends after 30 frames.
--Landing goes to normal land.
-<https://smashboards.com/threads/ganon-float-v1-0.449465/>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800E2C00 ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-4082002C 881F1969
-2C000001 40820008
-4E800020 38000000
-901F0084 38000030
-901F2354 38000001
-981F1969 7C0802A6
-60000000 00000000
-
-------------- 0x800E31F4 ---- 7C0802A6 -> Branch
-
-801E0004 2C000019
-40820014 3DC0800C
-61CECD78 7DC903A6
-4E800420 7C0802A6
-60000000 00000000
-
-------------- 0x800E2E3C ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-40820090 3821FFFC
-7FA802A6 83E3002C
-7C7E1B78 807F2354
-2C030000 4182000C
-3863FFFF 907F2354
-2C030017 40810008
-48000054 7FC3F378
-3DC08008 61CECD68
-7DC903A6 4E800421
-2C030001 41820038
-7FC3F378 3DC0800C
-61CEB870 7DC903A6
-4E800421 2C030001
-4182001C 89DF065D
-2C0E0002 40820010
-39C00000 91DF2354
-48000004 38210004
-7FA803A6 4E800020
-7C0802A6 00000000
-
-------------- 0x800E3018 ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-408200B8 3821FFFC
-7C0802A6 90010000
-83E3002C 7C7E1B78
-3BDF0110 881F221A
-7FE3FB78 5400EFFF
-41820018 3DC08007
-61CED4E4 7DC903A6
-4E800421 48000020
-C03E005C 7FE3FB78
-C05E0060 3DC08007
-61CED494 7DC903A6
-4E800421 7FE3FB78
-3DC08007 61CED268
-7DC903A6 4E800421
-801F2354 2C000000
-40820024 C1DF0084
-3DC03DA3 61CED70A
-91C1FFFC C1E1FFFC
-EDCE782A D1DF0084
-48000010 38600000
-907F0084 48000004
-80010000 7C0803A6
-38210004 4E800020
-7C0802A6 00000000
-
-
-	-==-
-
-
-Mr. Game and Watch - Always Specific Hammer Value
-Default is 9. Check the text file library to change this.
-(Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-32#post-18703696)
-[Wooggle]
+Hot Potato Mr. Saturn mode
+If you are holding a Mr. Saturn when the seconds remaining in the match is a multiple of 5, you die. If you are hit with a Mr. Saturn while not holding another item, you are forced to catch it and are stunned for a second or so.
+[wParam]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8014C760 --- 7FC3002E -> 3BC00008
+1.02 ------ 0x28059C ---- 7C0802A6 -> Branch
 
-# To change the above code to give a different number (N), use '3BC0000X', where X = N - 1.
+7C0802A6 90010004
+9421FFE8 BFA10008
+7C7F1B78 80A3002C
+83C50CF4 2C1E0000
+4182004C 83BE002C
+811D1974 2C080000
+4082003C 7FE4FB78
+7FC3F378 3C608031
+60633618 7C6903A6
+4E800421 7FC3F378
+38800001 3C608034
+60631EF0 7C6903A6
+4E800421 3C804170
+909D1A4C 7FE3FB78
+BBA10008 8001001C
+38210018 7C0803A6
+7C0802A6 4827ED44
+
+1.02 ------ 0x66f40 ---- 7C0802A6 -> Branch
+
+80C3002C 80E61974
+2C070000 4182004C
+8107002C 81080010
+2C080007 4082003C
+3CC08047 80C6B6C8
+2C060000 4182002C
+38E00005 7D063BD6
+7D2839D6 7C093000
+40820018 3C608013
+60639264 7C6903A6
+4E800421 7C0802A6
+60000000 48065698
 
 
 	-==-
 
 
-GaW Modulo 10 Hammer
-GaW hammer number equals the rightmost digit of his current percent.
-<https://smashboards.com/threads/gaw-modulo-10-hammer.492028/>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8014C784 ---- 8001007C -> Branch
-
-48000041 7C6802A6
-C03F1830 C0430000
-3D808036 618C4340
-7D8903A6 4E800421
-FC20081E D8210020
-80610024 2C030000
-41820018 3863FFFF
-907F222C 4800000C
-4E800021 41200000
-8001007C 00000000
-
-
-	-==-
-
-
-Peach - Infinite Float
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8011BBC4 --- C01E000CD01F2230 -> 3DE04A0091FF2230
-
-
-	-==-
-
-
-Peach - Always Pull Specific Turnip
-The default for this code is Stitch Face, but it can be changed to any of the turnips.
-Check the text files in the library for notes on how to change it.
-[??]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x802BD410 --- 7CC83378 -> 39000007
-1.02 ----- 0x8011D090 --- 40820010 -> 48000010
-1.01 ----- 0x802BC988 --- 7CC83378 -> 39000007
-1.01 ----- 0x8011CE04 --- 40820010 -> 48000010
-1.00 ----- 0x802BBDA0 --- 38C60001 -> 39000007
-1.00 ------ 0x11CA54 ---- 7FE3FB78 -> 48000010
-
-# To change the turnip for the mod above, change the
-# 7 in "39000007" to one of the following numbers:
-
-# 0: Smile
-# 1: T Eyes
-# 2: Line Eyes
-# 3: Circle Eyes
-# 4: Upward Curve Eyes
-# 5: Wink
-# 6: Dot Eyes
-# 7: Stitch Face
+Taunt Battle (r2) [InternetExplorer]:
+C2261BE0 00000005
+3E208045 6231BF12
+8A310000 2C110003
+40820010 2C040001
+40820008 38840001
+9899000A 00000000
+C22617CC 00000005
+3E208045 6231BF12
+8A310000 2C110003
+4082000C 38000001
+48000008 540007FE
+60000000 00000000
+C2167C08 00000005
+3E208045 6231BF12
+8A310000 2C110003
+4082000C 38000000
+48000008 881E0002
+60000000 00000000
+C2167F70 00000005
+3E208045 6231BF12
+8A310000 2C110003
+4082000C 38000001
+48000008 881E000B
+60000000 00000000
+C2167F7C 00000005
+3E208045 6231BF12
+8A310000 2C110003
+4082000C 38000000
+48000008 881E0002
+60000000 00000000
+C20DED14 0000000D
+3E208045 6231BF12
+8A310000 2C110003
+40820050 887E067B
+809E008C 80BE0020
+7C042800 40820008
+48000018 2C030000
+4082000C 38600002
+48000008 38600000
+3CC0803C 60C66630
+2C030000 41820008
+38C60004 80E60000
+38E70001 90E60000
+7FE3FB78 00000000
+C20DEBD0 00000003
+8063008C 907E0020
+7FC3F378 7C0802A6
+60000000 00000000
+C2165A64 0000000E
+3E208045 6231BF12
+8A310000 2C110003
+40820054 3E20803C
+62316630 3E4080BD
+6252A4A0 82520000
+7F53D378 2C130000
+41820010 3A73FFFF
+82520008 4BFFFFF0
+8A72067B 2C130000
+41820008 3A310004
+80110000 3E208016
+62315AA4 7E2903A6
+4E800420 7C0601D6
+60000000 00000000
+C2036D70 00000003
+3BE00000 3C60803C
+60636630 93E30000
+93E30004 00000000
+C20DED40 00000013
+7C7F1B78 3E208045
+6231BF12 8A310000
+2C110003 4082007C
+887F067B 809F008C
+80BF0020 7C042800
+40820008 48000018
+2C030000 4082000C
+38600001 48000008
+38600000 2C030002
+40820008 38600001
+5463103A 38630518
+38800000 909F0518
+909F051C 909F0520
+909F0528 909F052C
+909F0530 909F0534
+3C804344 909F0524
+38800091 989F0564
+3C80437F 7C9F192E
+7FE3FB78 00000000
+C20D50CC 00000005
+3E208045 6231BF12
+8A310000 2C110003
+4082000C 38000096
+48000008 800505D0
+60000000 00000000
+C216C348 00000008
+3FC08045 63DEBF14
+881E0000 3FE0803C
+63FF6630 83BF0000
+7C1D0000 40800018
+83BF0004 7C1D0000
+4080000C 38600000
+48000008 38600002
+BB610024 00000000
+2845bf12 00FF0300
+004807c8 00000001
 
 
 	-==-
@@ -1317,13 +1200,86 @@ PAL ------ 0x80136CB4 --- 94650008 -> Branch
 	-==-
 
 
-DK Keeps Punch When Hit During Up B (Fixed)
-Should make his charge work as it does in the PAL version.
-<https://smashboards.com/threads/misc-character-codes.446554/post-21830983>
+Peach - Always Pull Specific Turnip
+The default for this code is Stitch Face, but it can be changed to any of the turnips.
+Check the text files in the library for notes on how to change it.
+[??]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x802BD410 --- 7CC83378 -> 39000007
+1.02 ----- 0x8011D090 --- 40820010 -> 48000010
+1.01 ----- 0x802BC988 --- 7CC83378 -> 39000007
+1.01 ----- 0x8011CE04 --- 40820010 -> 48000010
+1.00 ----- 0x802BBDA0 --- 38C60001 -> 39000007
+1.00 ------ 0x11CA54 ---- 7FE3FB78 -> 48000010
+
+# To change the turnip for the mod above, change the
+# 7 in "39000007" to one of the following numbers:
+
+# 0: Smile
+# 1: T Eyes
+# 2: Line Eyes
+# 3: Circle Eyes
+# 4: Upward Curve Eyes
+# 5: Wink
+# 6: Dot Eyes
+# 7: Stitch Face
+
+
+	-==-
+
+
+Peach - Infinite Float
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8011BBC4 --- C01E000CD01F2230 -> 3DE04A0091FF2230
+
+
+
+	-==-
+
+
+Nana Respawns after 20 Seconds
+<https://smashboards.com/threads/sd-remix-3-2-full-lite-released.324620/post-21734645>
 [UnclePunch]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8010FB68 ---- 900521DC -> 60000000
-------------- 0x8010FC48 ---- 900521DC -> 60000000
+NTSC 1.02 --- 0x8006CA5C ---- 7C0802A6 -> Branch
+
+89C30067 2C0E000B
+4082003C A1C30072
+2C0E000B 40820030
+39C00001 A1E30020
+7DCE7A14 B1C30020
+2C0E04B0 41800018
+39E00008 99E3227F
+3DE0800B 61EFFD9C
+91E32200 7C0802A6
+60000000 00000000
+
+------------- 0x800320E8 ---- 806300B0 -> Branch
+
+81C300B4 2C0E0000
+41820020 A1EE0020
+2C0F04B0 40820014
+39E00000 B1EE0020
+7DC37378 48000008
+806300B0 00000000
+
+------------- 0x800BFE48 ---- 889F221F -> Branch
+
+89DF0007 2C0E000B
+40820024 A1DF0012
+2C0E000B 40820018
+A1FFFFC0 2C0F04B0
+4082000C 38800001
+48000008 889F221F
+60000000 00000000
+
+------------- 0x800D4FF4 ---- 7C0802A6 -> Branch
+
+81C30064 2C0E000A
+40820010 81C30008
+39E00000 B1EE0020
+7C0802A6 00000000
 
 
 	-==-
@@ -1347,17 +1303,6 @@ NTSC 1.02 --- 0x8012A6B8 ---- 900521DC -> 60000000
 ------------- 0x8012A784 ---- 900521DC -> 60000000
 
 
-
-	-==-
-
-
-Cannot Escape Kirby Throws
-<https://smashboards.com/threads/disable-escaping-from-kirby-throws-and-kirbycide.454066/post-22748043>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800DE490 ---- 40820010 -> 48000010
-
-
 	-==-
 
 
@@ -1373,87 +1318,304 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 	-==-
 
 
-No Delay on Start at CSS
-<https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
-[UnclePunch]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x260D90 ---- 3800001E -> 38000001
-
-
-	-==-
-
-
-$Random Music [UnclePunch]
-041C26B0 38000032 #Random Stage Music [UnclePunch]
-
-
-	-==-
-
-
-Display Time at Top Right of CSS (v1.1)
-Shows the current IRL time on the Character Select Screen.
-<https://smashboards.com/threads/display-time-at-top-right-of-css-1-1.450591/>
+Captain Falcon/Ganondorf - Can Grab Ledge on Side-B
 [UnclePunch]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8025C00C ---- 80010014 -> Branch
+NTSC 1.02 --- 0x800E3DFC ---- 8083002C -> Branch
 
-2C05004C 4082000C
-3863FFDE 48000008
-38600000 9062FDB0
-80010014 00000000
-
-------------- 0x8026339C ---- 8001001C -> Branch
-
-8062FDB0 2C030000
-4182017C 3DC08000
-61CEAFBC 7DC903A6
-4E800421 38810014
-3DC08016 61CE92E8
+83E3002C 7FC3F378
+3DC0800E 61CE4D7C
 7DC903A6 4E800421
-38810014 48000125
-7CC802A6 88640004
-2C03000C 4080000C
-38A00000 4800000C
-3863FFF4 38A00001
-2C03000A 41800010
-3863FFF6 38E02001
-48000024 2C030000
-40820018 2C050000
-40820010 38E02001
-38600002 48000008
-38E02000 B0E60018
-38E00020 98E6001A
-9866001B 88640005
-2C030009 4081002C
-2C030013 4081002C
-2C03001D 40810030
-2C030027 40810034
-2C030031 40810038
-2C03003B 4081003C
-38E02000 4800003C
-38E02001 3863FFF6
-48000030 38E02002
-3863FFEC 48000024
-38E02003 3863FFE2
-48000018 38E02004
-3863FFD8 4800000C
-38E02005 3863FFCE
-B0E6001E 38E00020
-98E60020 98660021
-2C050000 4082000C
-38E0200A 48000008
-38E02019 B0E60022
-8062FDB0 7CC43378
-38A00028 3DC08000
-61CE31F4 7DC903A6
-4E800421 48000030
-4E800021 201C2037
-20322026 202E2036
-20EC1A1A 1A1A1A1A
-1A1A1A1A 20002008
-20E92004 20052019
-20160000 8001001C
+7FC3F378 809E002C
 60000000 00000000
+
+
+	-==-
+
+
+Ganon Float v1.0
+Features:
+
+-Applies only to Ganondorf.
+-Kills all vertical velocity.
+-Allows for aerial movement.
+-Can interrupt with jump or aerial attack starting on frame 13. Can also press down after frame 13 to start descending early.
+-Descends after 30 frames.
+-Landing goes to normal land.
+<https://smashboards.com/threads/ganon-float-v1-0.449465/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x800E2C00 ---- 7C0802A6 -> Branch
+
+801F0004 2C000019
+4082002C 881F1969
+2C000001 40820008
+4E800020 38000000
+901F0084 38000030
+901F2354 38000001
+981F1969 7C0802A6
+60000000 00000000
+
+------------- 0x800E31F4 ---- 7C0802A6 -> Branch
+
+801E0004 2C000019
+40820014 3DC0800C
+61CECD78 7DC903A6
+4E800420 7C0802A6
+60000000 00000000
+
+------------- 0x800E2E3C ---- 7C0802A6 -> Branch
+
+801F0004 2C000019
+40820090 3821FFFC
+7FA802A6 83E3002C
+7C7E1B78 807F2354
+2C030000 4182000C
+3863FFFF 907F2354
+2C030017 40810008
+48000054 7FC3F378
+3DC08008 61CECD68
+7DC903A6 4E800421
+2C030001 41820038
+7FC3F378 3DC0800C
+61CEB870 7DC903A6
+4E800421 2C030001
+4182001C 89DF065D
+2C0E0002 40820010
+39C00000 91DF2354
+48000004 38210004
+7FA803A6 4E800020
+7C0802A6 00000000
+
+------------- 0x800E3018 ---- 7C0802A6 -> Branch
+
+801F0004 2C000019
+408200B8 3821FFFC
+7C0802A6 90010000
+83E3002C 7C7E1B78
+3BDF0110 881F221A
+7FE3FB78 5400EFFF
+41820018 3DC08007
+61CED4E4 7DC903A6
+4E800421 48000020
+C03E005C 7FE3FB78
+C05E0060 3DC08007
+61CED494 7DC903A6
+4E800421 7FE3FB78
+3DC08007 61CED268
+7DC903A6 4E800421
+801F2354 2C000000
+40820024 C1DF0084
+3DC03DA3 61CED70A
+91C1FFFC C1E1FFFC
+EDCE782A D1DF0084
+48000010 38600000
+907F0084 48000004
+80010000 7C0803A6
+38210004 4E800020
+7C0802A6 00000000
+
+
+	-==-
+
+
+Skip DK Down B Startup
+<https://smashboards.com/threads/misc-character-codes.446554/post-21699985>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x803C170C ---- 8010DC80 -> 8010de88
+
+
+	-==-
+
+
+DK Hold B for Down B
+<https://smashboards.com/threads/misc-character-codes.446554/post-21699985>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8010DDE0 ---- 80030668 -> 80030660
+
+
+	-==-
+
+
+Mr. Game and Watch - Always Specific Hammer Value
+Default is 9. Check the text file library to change this.
+(Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-32#post-18703696)
+[Wooggle]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8014C760 --- 7FC3002E -> 3BC00008
+
+# To change the above code to give a different number (N), use '3BC0000X', where X = N - 1.
+
+
+	-==-
+
+
+GaW Modulo 10 Hammer
+GaW hammer number equals the rightmost digit of his current percent.
+<https://smashboards.com/threads/gaw-modulo-10-hammer.492028/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x8014C784 ---- 8001007C -> Branch
+
+48000041 7C6802A6
+C03F1830 C0430000
+3D808036 618C4340
+7D8903A6 4E800421
+FC20081E D8210020
+80610024 2C030000
+41820018 3863FFFF
+907F222C 4800000C
+4E800021 41200000
+8001007C 00000000
+
+
+	-==-
+
+
+Bowser can mash for height during aerial upB
+<https://smashboards.com/threads/misc-character-codes.446554/post-21776218>
+[rmn]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 --- 0x80135E34 ---- 80010024 -> Branch
+
+48000010 4E800021
+3F99999A 3FB33333
+801F0668 540005AD
+41A20024 4BFFFFE9
+7C8802A6 C0240000
+C0440004 3C008007
+6000D508 7C0903A6
+4E800421 80010024
+60000000 00000000
+
+
+	-==-
+
+
+Food appears when items disabled (1.02)[flieskiller]
+0428fb1c 4800000c
+I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
+ as well, even if the food item is at off.
+
+
+	-==-
+
+
+Disable Container Spawns
+Prevents capsules, boxes, barrels, and eggs from spawning randomly.
+[Punkline]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8026C784 --- 7C7C1B78 -> Branch
+
+609C0E34 7C03E040
+40820008 60830E50
+7C7C1B78 00000000
+
+
+	-==-
+
+
+Containers spawn containers
+Containers can contain more containers.
+[Punkline]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ------ 0x269364 ---- 7C7C1B78 -> Branch
+
+609C0E50 7C03E040
+40820008 60830E34
+7C7C1B78 00000000
+
+
+	-==-
+
+
+Disable Capsule Explosions
+(Normal chance for explosion: 12.5%)
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8027CF8C --- 40820018 -> 48000018
+
+
+	-==-
+
+
+Disable Barrel Explosions
+(Normal chance for explosion: 10%)
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80288b28 --- 4080000C -> 60000000
+
+
+	-==-
+
+
+Disable Box Explosions
+(Normal chance for explosion: 10%)
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8028639c --- 38600000 -> 38600001
+
+
+	-==-
+
+
+Shields: Normal/Infinite
+
+
+	-==-
+
+
+Disable Tap Jump
+Affects all players
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x800CBBC0 --- 7C0802A6 -> Branch
+
+89FD06BE 2C0F0004
+40800008 4E800020
+7C0802A6 48000000
+
+1.02 ----- 0x800CB4E0 --- 7C0802A6 -> Branch
+
+2C040001 40820008
+4E800020 7C0802A6
+60000000 48000000
+
+
+	-==-
+
+
+Always Rain Bombs: Disabled/Enabled/Pokeballs
+
+
+	-==-
+
+
+Random Hitbox Elements - Every Non-projectile Attack
+All Non-projectile attacks will have a random effect, rather than their normal one.
+[Achilles]
+1.02
+C20715B0 00000009
+7C0F0378 38600010
+3C808038 60840580
+7C8903A6 4E800421
+2C030004 41A2FFE8
+2C030007 41A2FFE0
+2C030008 41A2FFD8
+2C03000B 41A2FFD0
+907E0030 7DE07B78
+28000009 00000000
+
+
+
+
+
+
+
+
+
 
 
 
