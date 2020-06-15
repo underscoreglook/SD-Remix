@@ -138,7 +138,6 @@ NTSC 1.02 ---- 0x802FCCD8 ------ 281E0000 -> Branch
 
 
 Donkey Kong - Giant Punch cannot be lost during Up+B
-TODO: UnclePunch has a new version that makes this behave like in PAL, which is considered the "better" version, so consider replacing this
 [VietGeek]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.00 ------ 0x10C18C ---- 9004222C -> 60000000 ---- (stw r0,8748(r4) -> nop)
@@ -371,7 +370,6 @@ NTSC 1.02 ---- 0x13F504 ----- 38800155 -> 3880002A
 
 Kirby - Side throw mash timer
 nops the subtraction over time during the throw
-TODO: There is a "Cannot Escape Kirby Throws" code by UnclePunch, which we may consider using instead of this.
 [StandardToaster]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 NTSC 1.02 ---- 0xDB20C ------ EC010028 -> 60000000

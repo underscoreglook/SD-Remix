@@ -37,7 +37,7 @@ FAILED:
 ------
 Handicap is Stock Control and Crew Battle Mode [Jorgasm]
 
-TODO:
+TODOLIST:
 ----
 Fix Japanese portrait colors
 Fix SSS Alpha/Omega color toggle
