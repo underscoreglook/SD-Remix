@@ -226,22 +226,6 @@ NTSC 1.02 ---- 0x18E53C -----
 	-==-
 
 
-Change banner color at CSS (SDR Statically linked)
-[Dan Salvato]
-NTSC 1.02 ---- 0x367BE4 ------ 7D8803A6 -> 480918C0
--------------- 0x803FC8C4 ------
-00000000 00000000 00000000 803FC7EC 00000000 00000000 00000000 00000000
-00000000 00000002 803009E0 803FC804 803FB538 804D6DC8 00000000 42080000
-00000000 00000008
-->
-807D000C 2C03001F 40820034 2C04000C 41820018 2C04000D 41820018 2C04000E
-41820018 4800001C 3880000C 48000014 3880000D 4800000C 3880000E 48000004
-7D8803A6 4BF6E700
-
-
-	-==-
-
-
 Flush Cache on Scene Change
 When scene changes, the Dolphin cache should flush (so any on the fly code changes apply).
 SDR Note: This is a bit of a hack, as code shouldn't really be rewritten on the fly. So we shouldn't need this after we re-write all of our toggles to toggle based off variables instead.

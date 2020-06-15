@@ -73,8 +73,7 @@ Part 2
 803FC834: Hold Start @ Results Screen 1
 803FC87C: Hold Start @ Results Screen 2
 803FC8B0: Hold Start @ Results Screen 3
-803FC8C4: Change banner Color at CSS
-803FC90C: > ** FREE SPACE OMG **
+803FC8C4: > ** FREE SPACE OMG **
 803FDC20: *** END ***
 
 
