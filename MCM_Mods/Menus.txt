@@ -256,6 +256,15 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 	-==-
 
 
+"RANDOM" is Default Highlighted on Stage Select Screen
+[Jorgasms]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x8025AA10 --- 38E0001E -> 38E0001D
+
+
+	-==-
+
+
 Disable Rumble When Controller is Unplugged
 If a player has rumble enabled and then takes his controller out, the next person who plugs into that slot will not have rumble enabled.
 [Dan Salvato]

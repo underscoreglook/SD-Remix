@@ -129,39 +129,6 @@ Debug Menu>
 
 ==================================================================================
 
-
-$SDR Netplay Settings [Dan Salvato, Achilles, UnclePunch]
-041A45A0 3C000202 # Boot to CSS     [Dan Salvato, Achilles]
-041A45A4 901E0000
-042641B0 38000001 # Faster CSS Load [UnclePunch]
-
-	-==-
-
-No Delay on Start at SSS
-<https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
-[UnclePunch]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x2575F8 ---- 38000014 -> 38000001
-
-"RANDOM" is Default Highlighted on Stage Select Screen (1.02) [Jorgasms]
-0425AA10 38E0001D
-
-	-==-
-
-No Delay on Start at CSS
-<https://smashboards.com/threads/no-delay-on-pressing-start-at-css-and-sss.448419/>
-[UnclePunch]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x260D90 ---- 3800001E -> 38000001
-
-	-==-
-
-$Random Music [UnclePunch]
-041C26B0 38000032 #Random Stage Music [UnclePunch]
-
-
-==================================================================================
-
 https://smashboards.com/threads/changing-the-color-of-the-ready-to-fight-banner.403839/
 
 On top of getting new codes for getting the banner color, use the code below to show which preset we use.
