@@ -1,13 +1,6 @@
-Short term:
-----------
-Try to figure out what all the changes to the menu files are, and fill in the assets folder based on that.
-Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
-Add SD Remix Lite to this repo
-
 End Goal, Netplay build:
 -----------------------
-Include some netplay specific codes built in
-Probably good to have UCF and other such stuff
+Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
 Probably should update to new versions of existing codes, like grab attrition and widescreen.
 Probably should get around to addressing the to do's in the codebase
 Other suggestions from people?
@@ -64,6 +57,7 @@ Fix Samus Extender Crash [UnclePunch]
 Freeze glitch fix [tauKhan]
 Invisible ceiling glitch fix [tauKhan]
 Updated Dynamic Lagless FoD to latest actually working version [Achilles, Myougi, Dan Salvato, _glook]
+"RANDOM" is Default Highlighted on Stage Select Screen [Jorgams]
 
 
 
