@@ -549,3 +549,89 @@ ori r12, r12, <<tblCssBannerColors>>@l
 3860001F    # li r3, 0x1F
             # RETURN:
 00000000    # branch back
+
+
+	-==-
+
+
+Display Custom Text at top right of CSS (in game mode display)
+Bosed on Display Time at Top Right of CSS (v1.1), see Smashboards link
+Since stock is the only mode that is played for serious, we only display with stock mode.
+Also, it displays as normal if there's nothing to display.
+The text to write must be 5 dwords, including the terminating character.
+<https://smashboards.com/threads/display-time-at-top-right-of-css-1-1.450591/>
+[UnclePunch, _glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varCssGameModeCustomText> NTSC 1.02
+00000000    # Defaults to nothing
+
+<strCssGameModeReplacement> NTSC 1.02  # "Stocks!      " (null replacement starts at 0x14)
+201C 2037  2032 2026  202E 2036  20EC 1A 1A
+1A1A1A1A 00000000 00000000
+00000000 00000000 00000000
+
+NTSC 1.02 --- 0x8025C00C ---- 80010014 -> Branch
+# Check the game mode. Inject @ 8025c00c (end of CSS_LoadRules)
+2C05004C    # cmpwi r5,0x4c
+40820024    # bne NO_CUSTOM_TEXT
+# Is stock mode
+lis r5, <<varCssGameModeCustomText>>@h
+ori r5, r5, <<varCssGameModeCustomText>>@l
+80A50000    # lwz r5, 0(r5)
+2C050000    # cmpwi r5, 0
+38A0004C    # li r5, 0x4C
+4182000C    # beq NO_CUSTOM_TEXT
+            # ENABLE_CUSTOM_TEXT:
+3863FFDE    # subi r3,r3,0x22
+48000008    # b STORE
+            # NO_CUSTOM_TEXT:
+38600000    # li r3,0x0
+            # STORE:
+9062FDB0    # stw r3,-0x250(rtoc)
+            # END:
+80010014    # lwz r0, 0x0014 (sp)    # Thing at branch
+00000000    # branch back
+
+------------- 0x8026339C ---- 8001001C -> Branch
+# Actually write the text. Inject @ 8026339c (end of CSS_LoadButtonInputs)
+# Can use r14 and r5, r6, r7
+            # IS_STOCK_MODE:
+8062FDB0    # lwz r3,-0x250(rtoc)
+2C030000    # cmpwi r3,0x0
+41820068    # beq PROCEED_AS_NORMAL
+
+            # Check if custom text
+lis r3, <<varCssGameModeCustomText>>@h
+ori r3, r3, <<varCssGameModeCustomText>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820054    # beq PROCEED_AS_NORMAL
+
+# Get and set the text to write
+lis r6, <<strCssGameModeReplacement>>@h
+ori r6, r6, <<strCssGameModeReplacement>>@l
+38A00004    # li r5, 4         # Set loop var to r5
+            # COPY_TEXT:
+80E30000    # lwz r7, 0(r3)     # Load string dword
+90E60014    # stw r7, 0x14(r6)     # Store string dword
+38630004    # addi r3, r3, 4
+38C60004    # addi r6, r6, 4
+2C070000    # cmpwi r7, 0
+41820010    # beq copyToRulesFrame
+38A5FFFF    # subi r5, r5, 1
+2C050000    # cmpwi r5, 0
+4181FFE0    # bgt COPY_TEXT
+
+            # copyToRulesFrame:
+8062FDB0    # lwz r3,-0x250(rtoc)            #destination
+lis r4, <<strCssGameModeReplacement>>@h
+ori r4, r4, <<strCssGameModeReplacement>>@l  #source
+38A00028    # li r5, 0x28
+3DC08000    # lis r14,0x8000
+61CE31F4    # ori r14,r14,0x31F4
+7DC903A6    # mtctr r14
+4E800421    # bctrl     # branch to memcpy, 0x800031f4
+
+            # PROCEED_AS_NORMAL:
+8001001C    # lwz r0, 0x001C (sp)
+00000000    # branch back
