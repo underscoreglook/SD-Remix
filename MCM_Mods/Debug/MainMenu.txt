@@ -1,0 +1,229 @@
+SD Remix Options Menu Entries
+This replaces the entries in the debug menu with SD Remix specific items.
+0x3F74E0 is the actual overwrite of debug menu items
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x3F74E0 -----
+00000000 00000000 803EA6C8 00000000 00000000 00000000 00000000 00000000
+00000001 803001DC 803FA454 00000000 00000000 00000000 00000000 00000000
+00000001 80301420 803FA468 00000000 00000000 00000000 00000000 00000000
+00000002 80300218 803FA474 804D5888 803FA258 00000000 40000000 00000000
+00000002 80300248 803FA480 804D5880 803FA25C 00000000 40000000 00000000
+00000002 00000000 803FA48C 803FA440 804D4A08 00000000 40A00000 00000000
+00000003 00000000 803FA498 00000000 804D4AF8 00000000 3F800000 3F800000
+00000003 00000000 803FA4A8 00000000 804D6B88 00000000 3F800000 3F800000
+00000001 80300290 803FA4B8 00000000 00000000 00000000 00000000 00000000
+00000001 803002FC 803FA4CC 00000000 00000000 00000000 00000000 00000000
+00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ ->
+# Entry 0: Title
+    00000000                                        # Disabled Type
+    00000000                                        # n/a
+    .long <<strSdRemixOptions>>                     # Label: "< SD REMIX OPTIONS >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Submenu "General Options >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strGeneralOptionsSub>>                  # Label: "General Options >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgGeneralOptsSubMenu>>              # General Options Submenu Data
+    00000000 00000000                               # n/a
+# Entry 2: String table, "TOGGLES: " [DISABLED, ENABLED, MELEE+ ENABLED ONLY]
+    00000002                                        # String Table
+    .long <<funDbgChangeTogglesState>>              # When new string chosen, this extra code is run
+    .long <<strTogglesLabel>>                       # Label: "Toggles:"
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled, Melee+ Only]
+    .long <<varTogglesState>>                       # Variable
+    00000000                                        # n/a
+    40400000                                        # Num Items in table: 3.f
+    00000000                                        # n/a
+# Entry 3: Submenu "Melee+ Toggles >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strMeleePlusTogglesSub>>                # Label: "Melee+ Toggles >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgMeleePlusTogglesSubMenu>>         # Melee+ Toggles Submenu Data
+    00000000 00000000                               # n/a
+# Entry 4: Submenu "Other Toggles >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strOtherTogglesSub>>                    # Label: "Other Toggles >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgOtherTogglesSubMenu>>             # Other Toggles Submenu Data
+    00000000 00000000                               # n/a
+# Entry 5: Menu "Credits >"
+    00000001                                        # Press-able
+    803002FC                                        # Function to go to "Mode Team Test" full menu
+    .long <<strCreditsSub>>                         # Label: "Credits >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 6: Menu "Debug Menu >"
+    00000001                                        # Press-able
+    803001DC                                        # Function to go to "Versus Mode" full menu
+    .long <<strDebugMenuSub>>                       # Label: "Debug Menu >"
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# END OF LIST (NOTE, there are actually 3 more entries in Melee's debug menu. Space for 3 more entries at least.
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+# END OF LIST (absolute)
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+SDR Options Menu Strings
+[_glook]
+<strSdRemixOptions>  NTSC 1.02          # "< SD REMIX OPTIONS >"
+3C 20 53 44 20 52 45 4D 49 58 20 4F 50 54 49 4F 4E 53 20 3E 00 00 00 00
+
+<strGeneralOptionsSub>  NTSC 1.02       # "General Options >"
+47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
+
+<strTogglesLabel>  NTSC 1.02            # "Toggles:"
+54 6F 67 67 6C 65 73 3A 00 00 00 00
+
+<strMeleePlusTogglesSub>  NTSC 1.02     # "Melee+ Toggles >"
+4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
+
+<strOtherTogglesSub>  NTSC 1.02         # "Other Toggles >"
+4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
+
+<strCreditsSub>  NTSC 1.02              # "Credits >"
+43 72 65 64 69 74 73 20 3E 00 00 00
+
+<strDebugMenuSub>  NTSC 1.02            # "Debug Menu >"
+44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
+
+<strMeleePlusEnabledOnly>  NTSC 1.02    # "Melee+ Enabled Only"
+4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 20 4F 6E 6C 79 00
+
+<strTildeMeleePlusEnabled>  NTSC 1.02   # "~Melee+ Enabled"
+7E 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 00
+
+<strEnabled> NTSC 1.02                  # "Enabled"
+456e6162 6c656400
+
+<strDisabled> NTSC 1.02                 # "Disabled"
+44 69 73 61 62 6C 65 64 00 00 00 00
+
+<strNormal> NTSC 1.02                   # "Normal"
+4E6F726D 616C0000
+
+<arrEnableDisabledMelee> NTSC 1.02
+.long <<strDisabled>>
+.long <<strEnabled>>
+.long <<strMeleePlusEnabledOnly>>
+
+
+	-==-
+
+
+SDR Options Presets Change function
+Function that runs every time the presets option gets changed.
+varTogglesState is which preset is currently selected, should be used as the string table variable.
+funDbgChangeTogglesState updates the CSS banner and the interactive states of various toggles submenu items. It also goes through the submenus and toggles items on or off based on preset.
+[_glook]
+<varTogglesState> NTSC 1.02
+0000 0000   # 0 for all disabled, 1 for allowed, 2 for Melee+ Preset
+
+<funDbgChangeTogglesState> NTSC 1.02
+  mflr r0
+  stw r0,0x4(sp)
+  stwu sp,-0x8(sp)
+  addi sp, sp, -0xC
+  stw r29, 0(sp)
+  stw r30, 4(sp)
+  stw r31, 8(sp)
+  # The master toggle var is in r10
+  lis r3, <<varTogglesState>>@h
+  ori r3, r3, <<varTogglesState>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 1
+  beq ENABLED
+  bgt MELEE_PLUS
+
+  DISABLED:
+  # Change the color of the banner
+  lis r3, <<varCssBannerColor>>@h
+  ori r3, r3, <<varCssBannerColor>>@l
+  li r4, 0
+  stw r4, 0(r3)
+  # Disable the menu options
+  lis r4, 0x803F
+  ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
+  li r3, 0
+  stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 0, or disabled
+  stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 0, or disabled
+  lis r3, <<strMeleePlusTogglesSub>>@h
+  ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
+  stw r3, 0x68(r4)                            # Set the label of 4th item to this string
+  b RETURN
+
+  ENABLED:
+  # Change the color of the banner
+  lis r3, <<varCssBannerColor>>@h
+  ori r3, r3, <<varCssBannerColor>>@l
+  li r4, 7
+  stw r4, 0(r3)
+  # Enable the menu options
+  lis r4, 0x803F
+  ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
+  li r3, 1
+  stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 1, or enabled
+  stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 1, or enabled
+  lis r3, <<strMeleePlusTogglesSub>>@h
+  ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
+  stw r3, 0x68(r4)                            # Set the label of 4th item to this string
+  b RETURN
+
+  MELEE_PLUS:
+  # Change the color of the banner
+  lis r3, <<varCssBannerColor>>@h
+  ori r3, r3, <<varCssBannerColor>>@l
+  li r4, 1
+  stw r4, 0(r3)
+  # Disable the menu options, show Melee+
+  lis r4, 0x803F
+  ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address
+  li r3, 0
+  stw r3, 0x60(r4)    # Set 4th item (Melee+ Toggles), to 0, or disabled
+  stw r3, 0x80(r4)    # Set 5th item (Other toggles), to 0, or disabled
+  lis r3, <<strTildeMeleePlusEnabled>>@h
+  ori r3, r3, <<strTildeMeleePlusEnabled>>@l
+  stw r3, 0x68(r4)    # Set the label of 4th item to this string
+
+  RETURN:
+  # Run all of the save functions
+  lis r30, <<tblDbgMeleePlusTogglesSubMenu>>@h
+  ori r30, r30, <<tblDbgMeleePlusTogglesSubMenu>>@l
+  li r31, 0	# Loop var
+  TRAVERSE_MENU_TABLE:
+  mr r29, r30
+  ANALYZE_MENU_ITEM:
+  lwz r3, 0(r29)
+  cmpwi r3, 0x9
+  beq NEXT_TABLE
+  lwz r3, 4(r29)
+  cmpwi r3, 0
+  beq NEXT_ITEM
+  mtctr r3
+  bctrl
+  NEXT_ITEM:
+  addi r29, r29, 0x20
+  b ANALYZE_MENU_ITEM
+  NEXT_TABLE:
+  lis r30, <<tblDbgOtherTogglesSubMenu>>@h
+  ori r30, r30, <<tblDbgOtherTogglesSubMenu>>@l
+  addi r31, r31, 1
+  cmpwi r31, 2            # We have two submenu tables to get through (set manually)
+  blt TRAVERSE_MENU_TABLE
+  # End loop
+  li r3,0
+  lwz r29, 0(sp)
+  lwz r30, 4(sp)
+  lwz r31, 8(sp)
+  lwz r0,0x18(sp)
+  addi sp,sp,0x14
+  mtlr r0
+  blr

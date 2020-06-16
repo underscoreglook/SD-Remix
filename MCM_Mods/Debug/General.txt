@@ -1,0 +1,67 @@
+Custom Debug Submenu Engine
+This allows for hackers to specify debug submenus, similar to submenus that exist.
+See https://smashboards.com/threads/custom-debug-submenu-engine-for-devs-only.398050/
+[Dan Salvato]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<funDebugSubmenu> NTSC 1.02
+7C0802A6    # mflr r0
+90010004    # stw r0, 4(r1)
+2C040004    # cmpwi r4, 0x4
+41820008    # beq SKIP_LOAD_REG4    # Under certain circumstances, r4 can be 0x4, so skip in this case
+80840014    # lwz r4, 20(r4)
+# SKIP_LOAD_REG4:
+9421FFF8    # stwu r1, -8(r1)
+3CA08030    # lis r5, 0x8030
+60A51C80    # ori r5, r5, 0x1C80
+3D80802F    # lis r12, 0x802F
+618CFD94    # ori r12, r12, 0xFD94
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+38600000    # li r3, 0x0
+8001000C    # lwz r0, 12(r1)
+38210008    # addi r1, r1, 0x8
+7C0803A6    # mtlr r0
+4E800020    # blr
+
+
+	-==-
+
+
+Fix Melee's Debug Menu entries (that we still use)
+We still use some of Melee's debug menus (mostly for debug testing). Some of our menu changes clobber built in data that are still used by some of these things, so we need to re-implement them, and change the addresses.
+They're typically strings and string tobles.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strTop> ALL
+54 4F 50 00                 # "TOP"
+
+<strTime> ALL
+54 69 6D 65 00 00 00 00     # "Time"
+
+<strStock> ALL
+53 74 6F 63 6B 00 00 00     # "Stock"
+
+<strCoin> ALL
+43 6F 69 6E 00 00 00 00     # "Coin"
+
+<strEndless> ALL
+45 6E 64 6C 65 73 73 00     # "Endless"
+
+<arrRuleItems> NTSC 1.02    # [default melee rule items for first 5..., TOP string duplicated here]
+804D58D0 804D58D8 804D58E0 804D58E4 804D58EC
+.long <<strTop>>
+
+<arrGameModes> NTSC 1.02    # Game Modes
+.long <<strTime>>
+.long <<strStock>>
+.long <<strCoin>>
+.long <<strEndless>>
+
+NTSC 1.02 ---- 0x3F7914 ------      # Replace pointer to Game Mode string table (old one invalid)
+803FA844
+->
+.long <<arrGameModes>>
+-------------- 0x3F79D4 ------      # Point to new string table (old one is invalid)
+803FA860
+->
+.long <<arrRuleItems>>
