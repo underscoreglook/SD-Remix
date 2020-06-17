@@ -1,67 +1,180 @@
-Custom Debug Submenu Engine
-This allows for hackers to specify debug submenus, similar to submenus that exist.
-See https://smashboards.com/threads/custom-debug-submenu-engine-for-devs-only.398050/
-[Dan Salvato]
+Debug Menu: General Options Submenu
+The functions, strings, and data for the submenu "General Options".
+[_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-<funDebugSubmenu> NTSC 1.02
-7C0802A6    # mflr r0
-90010004    # stw r0, 4(r1)
-2C040004    # cmpwi r4, 0x4
-41820008    # beq SKIP_LOAD_REG4    # Under certain circumstances, r4 can be 0x4, so skip in this case
-80840014    # lwz r4, 20(r4)
-# SKIP_LOAD_REG4:
-9421FFF8    # stwu r1, -8(r1)
-3CA08030    # lis r5, 0x8030
-60A51C80    # ori r5, r5, 0x1C80
-3D80802F    # lis r12, 0x802F
-618CFD94    # ori r12, r12, 0xFD94
-7D8903A6    # mtctr r12
-4E800421    # bctrl
-38600000    # li r3, 0x0
-8001000C    # lwz r0, 12(r1)
-38210008    # addi r1, r1, 0x8
-7C0803A6    # mtlr r0
-4E800020    # blr
+
+<varTogglePlatformColors> ALL
+0000 0000
+
+<strGeneralOptionsTitle> ALL            # "< General Options >"
+3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00
+
+<strStockPlatformColorOpt> ALL          # "Stock platform colors: "
+53746F63 6B20706C 6174666F 726D2063 6F6C6F72 733A2000
+
+<funDbgToggleStockPlatformColor> NTSC 1.02
+# TODO, DEAL WITH THE BACKHACKS HERE
+  lis r3, <<varTogglePlatformColors>>@h
+  ori r3, r3, <<varTogglePlatformColors>>@l
+  lwz r3, 0(r3)
+  cmpwi r3, 0x0
+  bne- ENABLE
+DISABLE:
+  lis r4, 0x800D
+  ori r4, r4, 0x5008        # BADHACK 800D5008     Default 7C7E1B78
+  lis r3, 0x7C7E
+  ori r3, r3, 0x1B78
+  stw r3, 0(r4)
+  b RETURN
+ENABLE:
+  lis r4, 0x800D
+  ori r4, r4, 0x5008        # BADHACK 800D5008     Branch
+  lis r3, 0x4832
+  ori r3, r3, 0x53E0
+  stw r3, 0(r4)
+RETURN:
+  li r3, 0x0
+  blr
+
+<tblDbgGeneralOptsSubMenu> NTSC 1.02
+# Entry 0: Menu Title
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strGeneralOptionsTitle>>                # Label/Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Widescreen Option
+    00000002                                        # String Table
+    00000000                                        # Called when value changes
+    .long <<strWidescreenOpt>>                      # Label
+    .long <<arrWidescreenOptions>>                  # [Disabled, Enabled]
+    .long <<varWidescreenOption>>                   # Variable
+    00000000                                        # n/a
+    40800000                                        # 4 item table
+    00000000                                        # n/a
+# Entry 2: Stock Platform Colors
+    00000002                                        # String Table
+    .long <<funDbgToggleStockPlatformColor>>        # Toggle function
+    .long <<strStockPlatformColorOpt>>              # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varTogglePlatformColors>>               # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 
 	-==-
 
 
-Fix Melee's Debug Menu entries (that we still use)
-We still use some of Melee's debug menus (mostly for debug testing). Some of our menu changes clobber built in data that are still used by some of these things, so we need to re-implement them, and change the addresses.
-They're typically strings and string tobles.
+Widescreen debug related items
+Strings with widescreen items
 [_glook]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-<strTop> ALL
-54 4F 50 00                 # "TOP"
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<strWidescreenOpt> NTSC 1.02            # "Widescreen:"
+57696465 73637265 656E3A00
 
-<strTime> ALL
-54 69 6D 65 00 00 00 00     # "Time"
+<strDolphin> NTSC 1.02  "Dolphin"
+446f6c70 68696e00
 
-<strStock> ALL
-53 74 6F 63 6B 00 00 00     # "Stock"
+<strMonitor> NTSC 1.02  "Monitor"
+4d6f6e69 746f7200
 
-<strCoin> ALL
-43 6F 69 6E 00 00 00 00     # "Coin"
+<strLCDTV> NTSC 1.02  "LCD TV"
+4c434420 54560000
 
-<strEndless> ALL
-45 6E 64 6C 65 73 73 00     # "Endless"
+<arrWidescreenOptions> NTSC 1.02        # Disabled, Dolphin, Monitor, LCD TV
+.long <<strDisabled>>
+.long <<strDolphin>>
+.long <<strMonitor>>
+.long <<strLCDTV>>
 
-<arrRuleItems> NTSC 1.02    # [default melee rule items for first 5..., TOP string duplicated here]
-804D58D0 804D58D8 804D58E0 804D58E4 804D58EC
-.long <<strTop>>
 
-<arrGameModes> NTSC 1.02    # Game Modes
-.long <<strTime>>
-.long <<strStock>>
-.long <<strCoin>>
-.long <<strEndless>>
+	-==-
 
-NTSC 1.02 ---- 0x3F7914 ------      # Replace pointer to Game Mode string table (old one invalid)
-803FA844
-->
-.long <<arrGameModes>>
--------------- 0x3F79D4 ------      # Point to new string table (old one is invalid)
-803FA860
-->
-.long <<arrRuleItems>>
+
+16:9 Widescreen Support (Variation B) [Toggleable]
+Includes the fullscreen flashing effect fix.
+This variation also fixes the position of magnifier bubbles, but also stretches the HUD.
+
+If using with Dolphin, you'll also need to change the setting, "Force 16:9" for the aspect ratio and make sure "Widescreen Hack" is OFF.
+
+16:9 for Dolphin: XXXX = 42B8, YYYY = 427C
+16:9 for Monitor: XXXX = 4438, YYYY = 440E
+16:9 for LCD TV: XXXX = 4080, YYYY = 4040
+4:3 for Dolphin: XXXX = 41B8, YYYY = 41A8
+
+See the notes in the link below for adjustments based on your display device:
+https://docs.google.com/document/d/1o_KEmsbKg4_qIm607FfewzIvChQYxayN4r1j3Uy6yX0/edit
+
+Extended to be toggleable. Update <<varWidescreenOption> to one of:
+0 - Normal 4:3
+1 - for Dolphin
+2 - for Monitor
+3 - For LCD TV
+
+<https://smashboards.com/threads/16-9-widescreen-w-options-for-tv-monitor-dolphin.397929/>
+[Dan Salvato, _glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varWidescreenOption> ALL
+00000000    # This is the index into tblWidescreenValues (1 indexed)
+
+<ttblWidescreenValues> ALL
+# Values to use in the codes. First half word is the "X" val, second half word is "Y" val
+42B8427C    # 16:9 for Dolphin
+4438440E    # 16:9 for Monitor
+40804040    # 16:9 for LCD TV
+
+1.02 ----- 0x80021ABC --- 38600006 -> Branch
+lis r3, <<varWidescreenOption>>@h
+ori r3, r3, <<varWidescreenOption>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820008    # beq RETURN
+            # WIDESCREEN_ENABLED:
+39C00001    # li r14, 0x1
+            # RETURN:
+38600006    # li r3, 0x6        # Code at hook point
+00000000    # Branch back
+
+1.02 ----- 0x802F3980 --- 387F0000 -> Branch
+lis r3, <<varWidescreenOption>>@h
+ori r3, r3, <<varWidescreenOption>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820008    # beq RETURN
+            # WIDESCREEN_ENABLED:
+39C00001    # li r14, 0x1
+            # RETURN:
+387F0000    # addi r3, r31, 0x0 # Code at hook point
+00000000    # Branch back
+
+1.02 ----- 0x8036A4A8 --- C03F0034 -> Branch
+C03F0034    # lfs f1, 52(r31)   # Code at hook point
+lis r3, <<varWidescreenOption>>@h
+ori r3, r3, <<varWidescreenOption>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+4182004C    # beq PROCEED_AS_NORMAL
+2C0E0001    # cmpwi r14, 0x1
+41820040    # beq- FINISH_WIDESCREEN
+lis r14, <<ttblWidescreenValues>>@h
+ori r14, r14, <<ttblWidescreenValues>>@l
+3863FFFF    # subi r3, r3, 1      # Subtract to get index into table
+5463103A    # slwi r3, r3, 2	    # Multiply by 4 to get byte offset
+7DCE1A14    # add r14, r14, r3    # Get address of item
+A00E0000    # lhz r0, 0(r14)      # Get the "X" value
+5400801E    # slwi r0, r0, 16     # Shift into top 16 bits
+90010030    # stw r0, 48(r1)
+A00E0002    # lhz r0, 2(r14)      # Get the "X" value
+5400801E    # slwi r0, r0, 16     # Shift into top 16 bits
+90010034    # stw r0, 52(r1)
+C0010030    # lfs f0, 48(r1)
+EC210032    # fmuls f1, f1, f0
+C0010034    # lfs f0, 52(r1)
+EC210024    # fdivs f1, f1, f0
+            # FINISH_WIDESCREEN:
+39C00000    # li r14, 0x0
+            # PROCEED_AS_NORMAL:
+281E0000    # cmplwi r30, 0     # Reset the comparison
+00000000    # Branch back
