@@ -62,6 +62,7 @@ CSS Banner color change should work on Dolphin [Dan Salvato, _glook]
 Display Custom Text in stock mode when using options preset [UnclePunch, _glook]
 Update widescreen code to new version [Dan Salvato]
 Neutral Spawns to options menu [Achilles, Jorgasms]
+Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
 
 
 =============
@@ -78,7 +79,7 @@ General>
     *** Widescreen (updated)
     *** Stock platform colors
     *** 20XX neutral spawns
-    Always skip the result sceen and stock count
+    *** Always skip the result sceen and Star count
     L Cancel % in Results Screen (revised 2/11/15)
 Presets: DISABLED, _GLOOK, CUSTOM (need the updated banner color code, takes priority over individual toggles)
 Mechanics>
@@ -127,68 +128,6 @@ Debug Menu>
 
 ==================================================================================
 
-
-
-	-==-
-
-
-Always Skip the Result Screen, and Stock Count = Placement
-- Game skips the result screen after a match, and changes the stars for the amount of stocks taken to the placement of the player in the last match.
-If you quit out of a match it will show who had the stock-lead at the moment.
-The only time it doesn't skip it is after the sudden death if a timed match ends in a draw.
-Warning: when using this code you will NOT unlock anything you would normally after a match (new stages/characters etc), only use it together with save files where you have already unlocked everything.
-[Sham Rock]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-PAL ------- 0x1A18C0 ---- 3803FFFF -> Branch
-
-3803FFFF 2C000004
-40820060 2C0B0020
-41820058 3A400000
-3E808046 6294AB60
-3EA0804C 62B579EF
-8E1400A8 8A340001
-2C10004E 4080000C
-9E350001 4800000C
-3A310001 9E350001
-3A520001 2C120004
-41A0FFD8 3A000000
-3A200000 3A800000
-3AA00000 38000000
-60000000 481A0858
-
-1.02 ------ 0x1a0d3c ---- 3803ffff -> Branch
-
-3803FFFF 2C000004
-40820060 2C0B0020
-41820058 3A400000
-3E808047 62949D58
-3EA0804D 62B5672F
-8E1400A8 8A340001
-2C10004E 4080000C
-9E350001 4800000C
-3A310001 9E350001
-3A520001 2C120004
-41A0FFD8 3A000000
-3A200000 3A800000
-3AA00000 38000000
-60000000 4819FCD4
-
-1.00 ------ 0x19FFf4 ---- 3803FFFF -> Branch
-
-3803FFFF 2C000004
-40820060 2C0B0020
-41820058 3A400000
-3E808047 62947D90
-3EA0804D 62B545AF
-8E1400A8 8A340001
-2C10004E 4080000C
-9E350001 4800000C
-3A310001 9E350001
-3A520001 2C120004
-41A0FFD8 3A000000
-3A200000 3A800000
-3AA00000 38000000
-60000000 4819EF8C
 
 
 	-==-

@@ -12,6 +12,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strNeutralSpawnOpt> ALL          # "Neutral Spawn: "
 4e657574 72616c20 53706177 6e3a2000
 
+<strSkipResultsScreenOpt> ALL          # "Skip results screen: "
+536b6970 20726573 756c7473 20736372 65656e3a 20000000
+
 <tblDbgGeneralOptsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -42,6 +45,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strNeutralSpawnOpt>>                    # Label
     .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
     .long <<varNeutralSpawnsEnabled>>               # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: Skip results screen
+    00000002                                        # String Table
+    00000000                                        # Toggle function
+    .long <<strSkipResultsScreenOpt>>               # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varSkipResultsScreen>>                  # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
@@ -207,7 +219,7 @@ ori r3, r3, <<varStockPlatformColorsEnabled>>@l
 
 
 20XX Neutral Spawn for Singles and Doubles (Toggleable)
-
+Overwrite <<varNeutralSpawnsEnabled>> to 1 to enable.
 <https://smashboards.com/threads/forced-and-fixed-neutral-spawn-hack-singles-and-doubles.364075/>
 [Achilles, Jorgasms]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
@@ -252,3 +264,33 @@ ori r15, r15, <<varNeutralSpawnsEnabled>>@l
 # RETURN:
 7D8803A6    # Hook point code
 00000000    # Branch back
+
+
+	-==-
+
+
+Always Skip the Result Screen, and Star Count = Placement (Toggleable)
+- Game skips the result screen after a match, and changes the stars for the amount of stocks taken to the placement of the player in the last match.
+If you quit out of a match it will show who had the stock-lead at the moment.
+The only time it doesn't skip it is after the sudden death if a timed match ends in a draw.
+Warning: when using this code you will NOT unlock anything you would normally after a match (new stages/characters etc), only use it together with save files where you have already unlocked everything.
+Set <<varSkipResultsScreen>> to 1 to enable.
+[Sham Rock]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varSkipResultsScreen> NTSC 1.02
+00000000
+
+1.02 ------ 0x1a0d3c ---- 3803ffff -> Branch
+3803FFFF    # Code at hook point
+lis r9, <<varSkipResultsScreen>>@h
+ori r9, r9, <<varSkipResultsScreen>>@l
+81290000    # lwz r9, 0(r9)
+2C090000    # cmpwi r9, 0
+41820068    # beq RETURN
+# Actual code
+2C000004 40820060 2C0B0020 41820058 3A400000 3E808047 62949D58 3EA0804D
+62B5672F 8E1400A8 8A340001 2C10004E 4080000C 9E350001 4800000C 3A310001
+9E350001 3A520001 2C120004 41A0FFD8 3A000000 3A200000 3A800000 3AA00000
+38000000
+# RETURN:
+00000000
