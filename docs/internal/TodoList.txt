@@ -75,7 +75,7 @@ New debug menu should be in a folder, splitting various items in separate txt.
 
 General>
     *** Widescreen (updated)
-    Stock platform colors
+    *** Stock platform colors
     20XX neutral spawns
     Always skip the result sceen and stock count
     L Cancel % in Results Screen (revised 2/11/15)
@@ -125,13 +125,6 @@ Debug Menu>
 
 
 ==================================================================================
-
-New version of revival platform colors
-https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864/
-
-
-	-==-
-
 
 $20XX Neutral Spawns [Achilles, Jorgasms]
 C2263058 00000030

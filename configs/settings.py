@@ -100,7 +100,7 @@ customCodeRegions = OrderedDict([
 	('NTSC 1.02|SDR Unused Debug Mode Regions', [
 		(0x2FD338, 0x2FD370),	# 0x38
 		(0x2FD3A8, 0x2FE788),	# 0x13E0
-		# (0x3F73E8, 0x3F74E0),	# Currently used for stock dependent revival Platform Colors, BADHACK
+		(0x3F73E8, 0x3F74E0),	# 0xF8
 		(0x3F9420, 0x3F94CC),	# 0xAC
 		(0x3F97F0, 0x3FAC20),	# 0x1430
 	]),  # Total space: 0x???? (Changes based on what we do

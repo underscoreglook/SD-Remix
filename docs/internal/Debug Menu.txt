@@ -64,7 +64,7 @@ Debug menu free space
 803007C8: > ** FREE SPACE OMG **    0x13E0
 80301BA8: *** END ***
 Part 2
-803FA3E8: Stock Dependent Revival Platform Colors + 0x18 padding    TODO: Get rid of BADHACKs
+803FA3E8: > ** FREE SPACE OMG **
 803FA4E0: XX Don't Use XX
 803FC420: > ** FREE SPACE OMG**     0xAC
 803FC4CC: XX Don't Use XX
