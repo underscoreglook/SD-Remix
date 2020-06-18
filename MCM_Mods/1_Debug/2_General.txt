@@ -39,16 +39,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
-# Entry 3: 20XX Neutral Spawn
-    00000002                                        # String Table
-    00000000                                        # Toggle function
-    .long <<strNeutralSpawnOpt>>                    # Label
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
-    .long <<varNeutralSpawnsEnabled>>               # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
-# Entry 4: Skip results screen
+# Entry 3: Skip results screen
     00000002                                        # String Table
     00000000                                        # Toggle function
     .long <<strSkipResultsScreenOpt>>               # Label
@@ -212,57 +203,6 @@ ori r3, r3, <<varStockPlatformColorsEnabled>>@l
 92300D18
             # END:
 7FC3F378    # mr r3,r30     # Set r3 back
-00000000    # Branch back
-
-
-	-==-
-
-
-20XX Neutral Spawn for Singles and Doubles (Toggleable)
-Overwrite <<varNeutralSpawnsEnabled>> to 1 to enable.
-<https://smashboards.com/threads/forced-and-fixed-neutral-spawn-hack-singles-and-doubles.364075/>
-[Achilles, Jorgasms]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-<varNeutralSpawnsEnabled> NTSC 1.02
-00000000
-
-NTSC 1.02 ---- 0x80263058 ----- 38840001 -> Branch
-lis r9, <<varNeutralSpawnsEnabled>>@h
-ori r9, r9, <<varNeutralSpawnsEnabled>>@l
-81290000    # lwz r9, 0(r9)
-2C090000    # cmpwi r9, 0
-4182017C    # beq RETURN
-39E00000 3A000000 3E408048 625307FD 91F206D8 91F206DC 8A3207C8 625206D7
-2C110001 4182004C 39EF0001 8E930024 2C140003 4182000C 9A130004 3A100001
-2C0F0004 41A0FFE4 48000130 39E00000 3A0000FF 3E408048 62520801 39EF0001
-9E120024 2C0F0004 41A0FFF4 4800010C 3E208048 623106DC 39EF0001 3A520001
-8E930024 89D30008 2C140003 41A2FFC0 2C0E0000 40820010 3A000000 8A910000
-48000024 2C0E0001 40820010 3A000001 8E910001 48000010 3A000002 8E910002
-48000004 3A940001 2C140003 40A0FF80 9A910000 9A120000 2C0F0004 41A0FF94
-39E00000 3E208048 623106DB 3AA00000 39EF0001 8E910001 2C140001 40800008
-48000010 3AB50001 2C150003 40A0FF40 2C0F0003 41A0FFDC 39E00000 3A310127
-39C000FF 3A8000FF 39EF0001 8E110024 2C0E00FF 40820010 7E128378 39C00000
-4800002C 7C109000 4082000C 39C00003 4800001C 2C1400FF 40820010 39C00001
-3A800000 48000008 39C00002 99D1FFFC 2C0F0004 41A0FFB4
-# RETURN:
-38840001    # addi r4, r4, 0x1  # Hook point code
-00000000    # Branch back
-
-NTSC 1.02 ---- 0x801C0A48 ----- 7D8803A6 -> Branch
-lis r15, <<varNeutralSpawnsEnabled>>@h
-ori r15, r15, <<varNeutralSpawnsEnabled>>@l
-81EF0000    # lwz r15, 0(r15)
-2C0F0000    # cmpwi r15, 0
-418200CC    # beq RETURN
-3DE0801B 61EFFFA8 7C0F6000 418200BC 3DC08048 A1CE0686 3DE08049 61EFED70
-81EF0000 2C0E001F 4082001C 3E00C242 3E204242 3E404230 3A600000 960F0598
-4800002C 2C0E001C 40820040 3E00C23A 62106666 3E20423D 62318E70 3E404214
-3A600000 960F0854 48000004 924F0004 962F0040 924F0004 962F0040 926F0004
-960F0040 926F0004 2C0E0020 40820014 3A000041 9E0F0650 3A0000C1 9A0F0040
-2C0E0008 40820024 3E004270 3E20C270 3A400000 39EF4748 960F4748 924F0004
-962F0040 924F0004
-# RETURN:
-7D8803A6    # Hook point code
 00000000    # Branch back
 
 
