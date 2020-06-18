@@ -6,6 +6,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strGeneralOptionsTitle> ALL            # "< General Options >"
 3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00
 
+<strGeneralOptionsDesc> ALL            # "These are not affected by presets"
+54686573 65206172 65206e6f 74206166 66656374 65642062 79207072 65736574 73000000
+
 <strStockPlatformColorOpt> ALL          # "Stock platform colors: "
 53746F63 6B20706C 6174666F 726D2063 6F6C6F72 733A2000
 
@@ -20,6 +23,11 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # Disabled
     00000000                                        # n/a
     .long <<strGeneralOptionsTitle>>                # Label/Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 0 part 2: Note about menu
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strGeneralOptionsDesc>>                 # Label/Title
     00000000 00000000 00000000 00000000 00000000    # n/a
 # Entry 1: Widescreen Option
     00000002                                        # String Table

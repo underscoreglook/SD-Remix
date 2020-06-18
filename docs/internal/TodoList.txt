@@ -76,12 +76,13 @@ If custom, Most mechanics items
 New debug menu should be in a folder, splitting various items in separate txt.
 
 General>
+    *** These are not affected by presets
     *** Widescreen (updated)
     *** Stock platform colors
     *** Always skip the result sceen and Star count
     L Cancel % in Results Screen (revised 2/11/15)
 Presets: DISABLED, _GLOOK, CUSTOM (need the updated banner color code, takes priority over individual toggles)
-Presets toggles explanations>
+Presets explanations>
     DISABLED
         All except general toggles are disabled
     CUSTOM
