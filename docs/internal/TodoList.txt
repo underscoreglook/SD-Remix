@@ -14,10 +14,19 @@ Other suggestions from people?
 Look at other todolists and finish converting badhacks
 Probably rework the debug screen.
 Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
+    See https://smashboards.com/threads/shrinking-max-number-of-tags-and-tag-storage-location.405120/
+    or https://smashboards.com/threads/memory-card-variables.483420/
 Probably talk with the SDR team to get approval from whole team before making any changes.
 (Maybe also make a tool for creating Debug screen changes?)
 After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
 Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
+
+Codes that are interesting but requires testing and character changes:
+https://smashboards.com/threads/brawl-style-363-deg-autolink-angle.449129/
+https://smashboards.com/threads/add-frames-of-armor-knockback-resistance-to-action-states.448063/
+
+For doing character overviews:
+https://smashboards.com/threads/press-x-y-to-frame-advance.480440/
 
 SD Remix Lite
 -------------
@@ -65,6 +74,12 @@ Neutral Spawns to options menu [Achilles, Jorgasms]
 Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
 
 
+New codes by default:
+https://smashboards.com/threads/gecko-code-cpu-random-teching-and-di.354786/
+https://smashboards.com/threads/music-plays-at-20-volume-when-all-controllers-are-idle-for-1-minute.450078/
+https://smashboards.com/threads/standalone-css-color-modification.450087/ Unique color scheme for SD Remix
+
+
 =============
 = Code dump =
 =============
@@ -72,6 +87,7 @@ SDRE32.ini needs automatic toggles for:
 All General toggles
 All Presets
 If custom, Most mechanics items
+Always lagless FOD (for netplay)
 
 New debug menu should be in a folder, splitting various items in separate txt.
 
@@ -117,6 +133,12 @@ Presets explanations>
         Marth colors match costume
         Food appears when items disabled
         DK Hold B for DownB
+        https://smashboards.com/threads/c-stick-up-smash-during-run.415771
+        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
+        https://smashboards.com/threads/various-shield-drop-codes.447375/
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
+        https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
+        https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     NEW MECHANICS
         <Mostly for adding new game mechanics>
         20XX neutral spawns
@@ -128,10 +150,20 @@ Presets explanations>
         Wall Bracing: Enabled
         Grab Infinite Removal
         Throw Bug Fix
+        https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
+        https://smashboards.com/threads/c-stick-up-smash-during-run.415771
+        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
+        https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
+        https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
+        https://smashboards.com/threads/tech-grab.459113/
+        https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
     SD DOUBLE REMIX
         <New Mechanics + character changes>
         Everything from New Mechanics
+        Detection Bubbles Continue Hurtbox Collision Check
         Marth colors match costume
+        https://smashboards.com/threads/roy-sword-trails.449229/
         Nana Respawn Time = None, 60 secs
         Solo Popo Up-B Buff
         Falcon/Ganon - Grab Ledge with Side+B
@@ -140,39 +172,108 @@ Presets explanations>
         GnW Hammer: Modulo
         Bowser Up+B Mash for Height
         Food appears when items disabled
-Game Changes>
-    20XX neutral spawns
-    Handicap: Stock/Crew
-    Overtime: Tournament
-    Capped Points/Tennis: Enabled
+        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
+        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
+        https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
+     SDDR & BRAWLKLES
+        SD Double Remix plus brawl techniques
+        https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
+        https://smashboards.com/threads/dacus.419467/
+        https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
+        https://smashboards.com/threads/l-brawl-airdodge-r-melee-airdodge.449247/
+        https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
+        https://smashboards.com/threads/grab-items-with-airdodge.499655/
+        https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
+Mechanics>
+    Game>
+        20XX neutral spawns
+        Handicap: Stock/Crew
+        Overtime: Tournament
+        Capped Points/Tennis: Enabled
+        Disable Star KO
+    Controls>
+        Tap Jump: Enabled/disabled  https://smashboards.com/threads/turn-off-tap-jump-toggle.447578/
+        https://smashboards.com/threads/c-stick-up-smash-during-run.415771
+        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
+        https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/ [casual]
+        https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
+        https://smashboards.com/threads/short-hop-macro-x-y.476502/
+        https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
+    Balance>
+        Throw Bug Fix
+        Detection Bubbles Continue Hurtbox Collision Check
+        https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
+        https://smashboards.com/threads/tech-grab.459113/
+        https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
+    Melee>
+        Ledge Invincibility: Disabled, Dynamic, Limit
+            https://smashboards.com/threads/ledge-grab-limit.475802/
+        Wall Bracing: Enabled
+        Grab Infinite Removal
+        https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
+    Brawl & Sequels>
+        Automatic L-Cancel
+        https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
+        https://smashboards.com/threads/dacus.419467/
+        https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
+        https://smashboards.com/threads/l-brawl-airdodge-r-melee-airdodge.449247/
+        https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
+        https://smashboards.com/threads/grab-items-with-airdodge.499655/
+        https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
+    Other>
+        https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/
+        https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/
+        https://smashboards.com/threads/reverse-aerial-moves.446842/
+        https://smashboards.com/threads/airdash.426124/
+        https://smashboards.com/threads/air-grabs.447884/
+        Shields: Normal/Infinite
+        Random Hitbox Elements
+Character>
+    Handle this and potentially add to presets: https://smashboards.com/threads/misc-character-codes.446554/
+    https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
+    https://smashboards.com/threads/standalone-transformation-codes.452675/
+    Marth colors match costume
+    Peach>
+        Peach turnip: Default, Always 0-7
+        Peach infinite float
+        https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
+    Ice Climbers>
+        https://smashboards.com/threads/grab-infinite-removal-code.412693/ [IC Buffs]
+        Nana Respawn Time: None, 60 secs, 20 secs, Instant
+        Solo Popo Up-B Buff
+        https://smashboards.com/threads/nana-and-popo-can-share-ledge.453939/
+    Samus>
+        Samus Keeps Charge Shot When Hit During Up B
+        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
+    Falcondorf>
+        Falcon Raptor Boost enters Fall state
+        Falcon/Ganon - Grab Ledge with Side+B
+        Ganon Float
+    https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
+    https://smashboards.com/threads/links-shield-blocks-melee-attacks-other-shield-codes.450150/
+    Donkey Kong>
+        DK Skip DownB Startup
+        DK Hold B for DownB
+    https://smashboards.com/threads/press-b-to-explode-yoshi-egg-and-teleport-v1-1.448803/
+    https://smashboards.com/threads/roy-sword-trails.449229/
+    https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
+    GnW Hammer: Random, Modulo, Always 1-9
+    Bowser Up+B Mash for Height
+    Kirby>
+        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
+        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
+Game Modes>
+    https://smashboards.com/threads/big-head-mode.505030/
     Hot Potato Mr. Saturn Mode
     Taunt Battle
     Always Rain Bombs: Disabled/Enabled/Pokeballs
-    Random Hitbox Elements
-Mechanics>
-    Disable Star KO
-    Ledge Invincibility: Dynamic
-    Wall Bracing: Enabled
-    Grab Infinite Removal
-    Throw Bug Fix
-    Detection Bubbles Continue Hurtbox Collision Check
-    Automatic L-Cancel
-    Shields: Normal/Infinite
-    Tap Jump: Enabled/disabled
-Character>
-    Marth colors match costume
-    Peach turnip: Default, Always 0-7
-    Peach infinite float
-    Nana Respawn Time: None, 60 secs, 20 secs, Instant
-    Solo Popo Up-B Buff
-    Samus Keeps Charge Shot When Hit During Up B
-    Falcon Raptor Boost enters Fall state
-    Falcon/Ganon - Grab Ledge with Side+B
-    Ganon Float
-    DK Skip DownB Startup
-    DK Hold B for DownB
-    GnW Hammer: Random, Modulo, Always 1-9
-    Bowser Up+B Mash for Height
+    https://smashboards.com/threads/its-the-most-innovative-melee-ive-seen-in-years.432226/ [superhot mode]
+    https://smashboards.com/threads/king-of-the-hill-friendlies-gametype.400011/
+    https://smashboards.com/threads/berserk-mode.447864/
+    https://smashboards.com/threads/game-mode-one-stock-rotations-v1-1.480903/
+    https://smashboards.com/threads/game-mode-chess-melee-standalone-1-1.480845/
+    https://smashboards.com/threads/turbo-mode-replaces-single-button-mode-v1-3-20xx-4-07-compatible.449823/
 Items>
     Food appears when items disabled
     Disable Container Spawns
@@ -180,6 +281,7 @@ Items>
     Disable Capsule Explosions
     Disable Barrel Explosions
     Disable Box Explosions
+    https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
 Credits>
 Debug Menu>
 
