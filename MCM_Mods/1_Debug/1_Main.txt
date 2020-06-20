@@ -44,8 +44,8 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPresetsInfoSub> NTSC 1.02           # "Presets Info>"
 50726573 65747320 696e666f 203e0000
 
-<strMeleePlusTogglesSub>  NTSC 1.02     # "Melee+ Toggles >"
-4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
+<strMechanicsSub>  NTSC 1.02            # "Mechanics >"
+4d656368 616e6963 73203e00
 
 <strOtherTogglesSub>  NTSC 1.02         # "Other Toggles >"
 4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
@@ -97,12 +97,12 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000 00000000                               # n/a
     .long <<tblDbgPresetsInfoSubMenu>>             # Other Toggles Submenu Data
     00000000 00000000                               # n/a
-# Entry OLD: Submenu "Melee+ Toggles >"
+# Entry OLD: Submenu "Mechanics >"
     00000001                                        # Press-able
     .long <<funDebugSubmenu>>                       # Call submenu
-    .long <<strMeleePlusTogglesSub>>                # Label: "Melee+ Toggles >"
+    .long <<strMechanicsSub>>                       # Label
     00000000 00000000                               # n/a
-    .long <<tblDbgMeleePlusTogglesSubMenu>>         # Melee+ Toggles Submenu Data
+    .long <<tblDbgMechanicsSubMenu>>                # Melee+ Toggles Submenu Data
     00000000 00000000                               # n/a
 # Entry OLD: Submenu "Other Toggles >"
     00000001                                        # Press-able

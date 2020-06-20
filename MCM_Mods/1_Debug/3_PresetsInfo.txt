@@ -77,6 +77,17 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 	-==-
 
 
+Preset Info Strings
+Common strings for various debug tables
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<str20XXNeutralSpawn> NTSC 1.02
+4e657574 72616c20 53706177 6e730000
+
+
+	-==-
+
+
 Preset Tournament Info Menu Table
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
@@ -89,7 +100,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
     .long <<strPresetTournamentTitle>>              # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1:
+# Entry 1: 20XX Neutral Spawns
+    00000000 00000000                              # n/a
+    .long <<str20XXNeutralSpawn>>                  # Label
+    00000000 00000000 00000000 00000000 00000000   # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -109,7 +123,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
     .long <<strPresetSeriousTitle>>                 # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1:
+# Entry 1: 20XX Neutral Spawns
+    00000000 00000000                              # n/a
+    .long <<str20XXNeutralSpawn>>                  # Label
+    00000000 00000000 00000000 00000000 00000000   # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -129,7 +146,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
     .long <<strPresetCasualTitle>>                 # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1:
+# Entry 1: 20XX Neutral Spawns
+    00000000 00000000                              # n/a
+    .long <<str20XXNeutralSpawn>>                  # Label
+    00000000 00000000 00000000 00000000 00000000   # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -149,7 +169,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
     .long <<strPresetNewMechanicsTitle>>            # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1:
+# Entry 1: 20XX Neutral Spawns
+    00000000 00000000                              # n/a
+    .long <<str20XXNeutralSpawn>>                  # Label
+    00000000 00000000 00000000 00000000 00000000   # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -163,13 +186,19 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPresetSddrTitle> ALL
 3c204e65 77204d65 6368616e 69637320 2b204368 61722043 68616e67 6573203e 00000000
 
+<strAllFromNewMechanics> ALL
+416c6c20 66726f6d 204e6577 204d6563 68616e69 63730000
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
     00000000                                        # n/a
     .long <<strPresetSddrTitle>>                    # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1:
+# Entry 1: All From New Mechanics
+    00000000 00000000
+    .long <<strAllFromNewMechanics>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -183,12 +212,18 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPresetSdBrTitle> ALL
 3c205344 44522077 2f204272 61776c20 54656368 203e0000
 
+<strAllFromSDDR> ALL
+416c6c20 66726f6d 20534444 52000000
+
 <tblDbgPresetSdBrInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
     00000000                                        # n/a
     .long <<strPresetSdBrTitle>>                    # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1:
+# Entry 1: All From SDDR
+    00000000 00000000
+    .long <<strAllFromSDDR>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
