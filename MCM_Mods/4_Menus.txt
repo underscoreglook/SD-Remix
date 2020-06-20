@@ -648,3 +648,41 @@ NTSC 1.02 --- 0x8037793C ---- 7C600279 -> Branch
 B1F0000A 39E00019 B1EE0002 39E00001
 99F00008 48000014 4E800021 00000000
 00000000 00000000 7C600279 00000000
+
+
+	-==-
+
+
+CSS Colors
+Changed with the SD Remix colors.
+If you want to change the colors, edit <arrCssColors>
+<https://smashboards.com/threads/standalone-css-color-modification.450087/>
+[UnclePunch]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<arrCssColors> ALL
+00000088    # Background        733BA8CC
+733BA8CC    # Top Frame         733BA8CC
+2030C0CC    # Bottom Frame      2030C0CC
+FFFFFFFF    # Rule Frame        SD Remix uses this to for presets
+
+NTSC 1.02 --- 0x80266980 ---- 906DB634 -> Branch
+906DB634    # stw r3, -18892(r13)   # Code at hook point
+lis r5, <<arrCssColors>>@h
+ori r5, r5, <<arrCssColors>>@l
+80650000    # lwz r3, 0(r5)
+3C8080BE    # lis r4, 0x80BE
+6084D06C    # ori r4, r4, 0xD06C
+90640000    # stw r3, 0(r4)
+80650004    # lwz r3, 4(r5)
+3C8080F3    # lis r4, 0x80F3
+6084572C    # ori r4, r4, 0x572C
+90640000    # stw r3, 0(r4)
+80650008    # lwz r3, 8(r5)
+3C8080F3    # lis r4, 0x80F3
+608455AC    # ori r4, r4, 0x55AC
+90640000    # stw r3, 0(r4)
+8065000C    # lwz r3, 12(r5)
+3C8080F3    # lis r4, 0x80F3
+6084566C    # ori r4, r4, 0x566C
+90640000    # stw r3, 0(r4)
+00000000    # branch back

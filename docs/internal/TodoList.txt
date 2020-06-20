@@ -75,10 +75,7 @@ Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
 L Cancel % in Results Screen (revised 2/11/15)
 Fix broken random stage unlock and score display
 Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
-
-
-New codes by default:
-https://smashboards.com/threads/standalone-css-color-modification.450087/ Unique color scheme for SD Remix
+CSS Color customization, including rules frame changing based on preset [UnclePunch]
 
 
 =============
@@ -185,7 +182,6 @@ Mechanics>
         Handicap: Stock/Crew
         Overtime: Tournament
         Capped Points/Tennis: Enabled
-        Disable Star KO
     Controls>
         Tap Jump: Enabled/disabled  https://smashboards.com/threads/turn-off-tap-jump-toggle.447578/
         https://smashboards.com/threads/c-stick-up-smash-during-run.415771
@@ -196,6 +192,7 @@ Mechanics>
         https://smashboards.com/threads/short-hop-macro-x-y.476502/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     Balance>
+        Disable Star KO
         Throw Bug Fix
         Detection Bubbles Continue Hurtbox Collision Check
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/

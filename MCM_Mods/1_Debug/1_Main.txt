@@ -227,6 +227,12 @@ funDbgChangeTogglesState updates the CSS banner and the interactive states of va
   ori r3, r3, <<varCssGameModeCustomText>>@l
   li r4, 0
   stw r4, 0(r3)
+  # Change rule frame color
+  lis r3, <<arrCssColors>>@h
+  ori r3, r3, <<arrCssColors>>@l
+  lis r4, 0xFFFF
+  ori r4, r4, 0xFFFF
+  stw r4, 0xC(r3)
   # Change the color of the banner
   lis r3, <<varCssBannerColor>>@h
   ori r3, r3, <<varCssBannerColor>>@l
@@ -250,6 +256,12 @@ funDbgChangeTogglesState updates the CSS banner and the interactive states of va
   lis r4, <<ustrCustom>>@h
   ori r4, r4, <<ustrCustom>>@l
   stw r4, 0(r3)
+  # Change rule frame color
+  lis r3, <<arrCssColors>>@h
+  ori r3, r3, <<arrCssColors>>@l
+  lis r4, 0x00FF
+  ori r4, r4, 0x00FF
+  stw r4, 0xC(r3)
   # Change the color of the banner
   lis r3, <<varCssBannerColor>>@h
   ori r3, r3, <<varCssBannerColor>>@l
@@ -273,6 +285,12 @@ funDbgChangeTogglesState updates the CSS banner and the interactive states of va
   lis r4, <<ustrMeleePlus>>@h
   ori r4, r4, <<ustrMeleePlus>>@l
   stw r4, 0(r3)
+  # Change rule frame color
+  lis r3, <<arrCssColors>>@h
+  ori r3, r3, <<arrCssColors>>@l
+  lis r4, 0xFF00
+  ori r4, r4, 0xFFFF
+  stw r4, 0xC(r3)
   # Change the color of the banner
   lis r3, <<varCssBannerColor>>@h
   ori r3, r3, <<varCssBannerColor>>@l
