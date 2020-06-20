@@ -24,9 +24,11 @@ PAL ------- 0x161E78 ---- A0BF0000 -> 38A007FF ---- (lhz r5,0(r31) -> li r5,2047
 	-==-
 
 
-Unlock Score Display
+Unlock random stage select & score display always
 [_glook]
-NTSC 1.02 ---- 0x17023C ----- 4180000C -> 60000000
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x8015EE14 ----- 540307FE -> 38600001    # Random stage select
+NTSC 1.02 ---- 0x8015EE4C ----- 540307BC -> 38600001    # Score display
 
 
 	-==-

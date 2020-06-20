@@ -72,6 +72,8 @@ Display Custom Text in stock mode when using options preset [UnclePunch, _glook]
 Update widescreen code to new version [Dan Salvato]
 Neutral Spawns to options menu [Achilles, Jorgasms]
 Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
+L Cancel % in Results Screen (revised 2/11/15)
+Fix broken random stage unlock and score display
 
 
 New codes by default:
@@ -292,58 +294,6 @@ Debug Menu>
 
 	-==-
 
-
-L Cancel % in Results Screen (revised 2/11/15)
-- Shows the player's L-cancel success rate in the end of game stats page.
-[Wooggle]
-Version -- DOL Offset ------ Hex to Replace -------
-1.02 ------ 0x3D79C ----- 90030C68 -> 60000000
------------ 0x8A1E0 ----- 3880FFFF -> Branch
-
-8A830678 3DC08000
-61CE45D4 1EB40008
-7DCEAA14 81EE0000
-39EF0001 91EE0000
-3A0EFFFC 82300000
-7E717BD6 3E408045
-62523DA4 1EB40E90
-7E52AA14 92720000
-3880FFFF 4808A2F8
-
------------ 0x8A284 ----- EC010024 -> Branch
-
-8A830678 3DC08000
-61CE45D4 1EB40008
-7DCEAA14 81EE0000
-3A0EFFFC 82300000
-3A310064 92300000
-7E717BD6 3E408045
-62523DA4 1EB40E90
-7E52AA14 92720000
-EC010024 4808A354
-
------------ 0x174E04 ---- 80030008 -> Branch
-
-3DC08000 61CE45D0
-39E00000 91EE0000
-91EE0004 91EE0008
-91EE000C 91EE0010
-91EE0014 91EE0018
-91EE001C 3DC080C6
-61CE1DB8 3DE01620
-61EF151A 91EE0000
-3DE0200C 61EF2024
-91EE0004 3DE02031
-61EF2026 91EE0008
-3DE02028 61EF202F
-91EE000C 3DE01A21
-61EF0300 91EE0010
-39E00000 91EE0014
-91EE0018 91EE001C
-80030008 48174E08
-
-
-	-==-
 
 # Entry 3: 20XX Neutral Spawn
     00000002                                        # String Table

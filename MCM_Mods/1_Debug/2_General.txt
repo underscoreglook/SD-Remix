@@ -18,6 +18,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strSkipResultsScreenOpt> ALL          # "Skip results screen: "
 536b6970 20726573 756c7473 20736372 65656e3a 20000000
 
+<strLCancelOnResultsOpt> ALL          # "Show L-Cancel % On Results Screen: "
+53686f77 204c2d43 616e6365 6c204f6e 20526573 756c7473 20536372 65656e3a 20000000
+
 <tblDbgGeneralOptsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -53,6 +56,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strSkipResultsScreenOpt>>               # Label
     .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
     .long <<varSkipResultsScreen>>                  # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: L Cancel % on results screen
+    00000002                                        # String Table
+    00000000                                        # Toggle function
+    .long <<strLCancelOnResultsOpt>>                # Label
+    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<varShowLCancelOnResultsScreen>>         # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
@@ -242,3 +254,117 @@ ori r9, r9, <<varSkipResultsScreen>>@l
 38000000
 # RETURN:
 00000000
+
+
+	-==-
+
+
+L Cancel % in Results Screen (revised 2/11/15) (Toggleable)
+- Shows the player's L-cancel success rate in the end of game stats page.
+<<varShowLCancelOnResultsScreen>> is the toggle.
+[Wooggle]
+Version -- DOL Offset ------ Hex to Replace -------
+<varShowLCancelOnResultsScreen> ALL
+00000000
+
+<funLCancelPercentOnResultsScreen3> NTSC 1.02
+3DC08000 61CE45D0
+39E00000 91EE0000
+91EE0004 91EE0008
+91EE000C 91EE0010
+91EE0014 91EE0018
+91EE001C 3DC080C6
+61CE1DB8 3DE01620
+61EF151A 91EE0000
+3DE0200C 61EF2024
+91EE0004 3DE02031
+61EF2026 91EE0008
+3DE02028 61EF202F
+91EE000C 3DE01A21
+61EF0300 91EE0010
+39E00000 91EE0014
+91EE0018 91EE001C
+80030008
+b 0x80178228
+
+1.02 ------ 0x3D79C ----- 90030C68 -> Branch
+7D6903A6    # mtctr r11     # Store r11
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+7D6902A6    # mfctr r11     # Restore r11
+41820008    # beq RETURN
+90030C68    # Code at injection point
+            # RETURN:
+00000000    # Branch Back
+
+<funLCancelPercentOnResultsScreen1> NTSC 1.02
+8A830678 3DC08000
+61CE45D4 1EB40008
+7DCEAA14 81EE0000
+39EF0001 91EE0000
+3A0EFFFC 82300000
+7E717BD6 3E408045
+62523DA4 1EB40E90
+7E52AA14 92720000
+3880FFFF
+b 0x8008D604
+1.02 ------ 0x8008D600 ----- 3880FFFF -> Branch
+7D6903A6    # mtctr r11     # Store r11
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+7D6902A6    # mfctr r11     # Restore r11
+beq <funLCancelPercentOnResultsScreen1>
+00000000    # Branch Back
+
+<funLCancelPercentOnResultsScreen2> NTSC 1.02
+8A830678 3DC08000
+61CE45D4 1EB40008
+7DCEAA14 81EE0000
+3A0EFFFC 82300000
+3A310064 92300000
+7E717BD6 3E408045
+62523DA4 1EB40E90
+7E52AA14 92720000
+EC010024
+b 0x8008D6A8
+1.02 ------ 0x8008D6A4 ----- EC010024 -> Branch
+7D6903A6    # mtctr r11     # Store r11
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+7D6902A6    # mfctr r11     # Restore r11
+beq <funLCancelPercentOnResultsScreen2>
+00000000    # Branch Back
+
+
+	-==-
+
+
+Combined hook for L cancel percent and hold start to force game out of results screen
+[Wooggle, rice]
+Version -- DOL Offset ------ Hex to Replace -------
+1.02 ------ 0x80178224 ---- 80030008 -> Branch
+# Hold Start to force game out of results screen
+3DE08047 61EF9DF8
+3A000044 7E0083D6
+3A200000 1E5000A8
+7E2F932E 1E7100A8
+7E4F9A2E 2C12003C # 3C = 60 frames = 1 second
+4180000C 38001000
+48000014 3A310001
+2C110004 41A0FFE0
+80030008
+# Percentage on results screen
+7D6903A6    # mtctr r11     # Store r11
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+7D6902A6    # mfctr r11     # Restore r11
+beq <funLCancelPercentOnResultsScreen3>
+00000000    # Branch Back
