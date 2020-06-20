@@ -90,19 +90,12 @@ Always lagless FOD (for netplay)
 
 New debug menu should be in a folder, splitting various items in separate txt.
 
-Presets: DISABLED, _GLOOK, CUSTOM (need the updated banner color code, takes priority over individual toggles)
 Presets explanations>
-    DISABLED
-        All except general toggles are disabled
-    CUSTOM
-        You can pick your own options from the menus
     TOURNAMENT
-        <Settings that make tournament play easier>
         20XX neutral spawns
         Handicap = Stock/Crew
         Overtime = Tournament
     SERIOUS
-        <Settings to attempt to help serious play>
         20XX neutral spawns
         Handicap = Stock/Crew
         Overtime = Tournament
@@ -114,7 +107,6 @@ Presets explanations>
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        <Settings that attempt to help casual play>
         20XX neutral spawns
         Handicap = Stock/Crew
         Capped Points = Enabled
@@ -133,7 +125,6 @@ Presets explanations>
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     NEW MECHANICS
-        <Mostly for adding new game mechanics>
         20XX neutral spawns
         Handicap: Stock/Crew
         Overtime: Tournament
@@ -152,7 +143,6 @@ Presets explanations>
         https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
     SD DOUBLE REMIX
-        <New Mechanics + character changes>
         Everything from New Mechanics
         Detection Bubbles Continue Hurtbox Collision Check
         Marth colors match costume
@@ -169,7 +159,6 @@ Presets explanations>
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
      SDDR & BRAWLKLES
-        SD Double Remix plus brawl techniques
         https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
         https://smashboards.com/threads/dacus.419467/
         https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/

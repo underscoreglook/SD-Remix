@@ -32,6 +32,33 @@ This replaces the entries in the debug menu with SD Remix specific items.
 0x3F74E0 is the actual overwrite of debug menu items
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strSdRemixOptions>  NTSC 1.02          # "< SD REMIX OPTIONS >"
+3C 20 53 44 20 52 45 4D 49 58 20 4F 50 54 49 4F 4E 53 20 3E 00 00 00 00
+
+<strGeneralOptionsSub>  NTSC 1.02       # "General Options >"
+47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
+
+<strPresetLabel>  NTSC 1.02            # "Preset: "
+50726573 65743a00
+
+<strPresetsInfoSub> NTSC 1.02           # "Presets Info>"
+50726573 65747320 696e666f 203e0000
+
+<strMeleePlusTogglesSub>  NTSC 1.02     # "Melee+ Toggles >"
+4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
+
+<strOtherTogglesSub>  NTSC 1.02         # "Other Toggles >"
+4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
+
+<strCreditsSub>  NTSC 1.02              # "Credits >"
+43 72 65 64 69 74 73 20 3E 00 00 00
+
+<strDebugMenuSub>  NTSC 1.02            # "Debug Menu >"
+44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
+
+<strTildeMeleePlusEnabled>  NTSC 1.02   # "~Melee+ Enabled"
+7E 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 00
+
 NTSC 1.02 ---- 0x3F74E0 -----
 00000000 00000000 803EA6C8 00000000 00000000 00000000 00000000 00000000
 00000001 803001DC 803FA454 00000000 00000000 00000000 00000000 00000000
@@ -66,32 +93,38 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000                                        # n/a
     41000000                                        # Num Items in table: 8.f
     00000000                                        # n/a
-# Entry 3: Submenu "Melee+ Toggles >"
+# Entry 3: Submenu "Presets Info >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strPresetsInfoSub>>                     # Label: "Other Toggles >"
+    00000000 00000000                               # n/a
+    .long <<tblDbgPresetsInfoSubMenu>>             # Other Toggles Submenu Data
+    00000000 00000000                               # n/a
+# Entry OLD: Submenu "Melee+ Toggles >"
     00000001                                        # Press-able
     .long <<funDebugSubmenu>>                       # Call submenu
     .long <<strMeleePlusTogglesSub>>                # Label: "Melee+ Toggles >"
     00000000 00000000                               # n/a
     .long <<tblDbgMeleePlusTogglesSubMenu>>         # Melee+ Toggles Submenu Data
     00000000 00000000                               # n/a
-# Entry 4: Submenu "Other Toggles >"
+# Entry OLD: Submenu "Other Toggles >"
     00000001                                        # Press-able
     .long <<funDebugSubmenu>>                       # Call submenu
     .long <<strOtherTogglesSub>>                    # Label: "Other Toggles >"
     00000000 00000000                               # n/a
     .long <<tblDbgOtherTogglesSubMenu>>             # Other Toggles Submenu Data
     00000000 00000000                               # n/a
-# Entry 5: Menu "Credits >"
+# Entry 8: Menu "Credits >"
     00000001                                        # Press-able
     803002FC                                        # Function to go to "Mode Team Test" full menu
     .long <<strCreditsSub>>                         # Label: "Credits >"
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 6: Menu "Debug Menu >"
+# Entry 9: Menu "Debug Menu >"
     00000001                                        # Press-able
     803001DC                                        # Function to go to "Versus Mode" full menu
     .long <<strDebugMenuSub>>                       # Label: "Debug Menu >"
     00000000 00000000 00000000 00000000 00000000    # n/a
 # END OF LIST (NOTE, there are actually 3 more entries in Melee's debug menu. Space for 3 more entries at least.
-    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 # END OF LIST (absolute)
@@ -144,32 +177,8 @@ NTSC 1.02 ---- 0x3F7914 ------      # Replace pointer to Game Mode string table 
 	-==-
 
 
-SDR Options Menu Strings
+SDR Options Menu General Strings
 [_glook]
-<strSdRemixOptions>  NTSC 1.02          # "< SD REMIX OPTIONS >"
-3C 20 53 44 20 52 45 4D 49 58 20 4F 50 54 49 4F 4E 53 20 3E 00 00 00 00
-
-<strGeneralOptionsSub>  NTSC 1.02       # "General Options >"
-47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
-
-<strPresetLabel>  NTSC 1.02            # "Preset: "
-50726573 65743a00
-
-<strMeleePlusTogglesSub>  NTSC 1.02     # "Melee+ Toggles >"
-4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
-
-<strOtherTogglesSub>  NTSC 1.02         # "Other Toggles >"
-4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
-
-<strCreditsSub>  NTSC 1.02              # "Credits >"
-43 72 65 64 69 74 73 20 3E 00 00 00
-
-<strDebugMenuSub>  NTSC 1.02            # "Debug Menu >"
-44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
-
-<strTildeMeleePlusEnabled>  NTSC 1.02   # "~Melee+ Enabled"
-7E 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 00
-
 <strEnabled> NTSC 1.02                  # "Enabled"
 456e6162 6c656400
 
@@ -248,11 +257,11 @@ Also includes strings and arrays related to it
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
   li r3, 0
-  stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 0, or disabled
-  stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 0, or disabled
+  stw r3, 0x80(r4)                            # Set 4th item (Melee+ Toggles), to 0, or disabled
+  stw r3, 0xA0(r4)                            # Set 5th item (Other toggles), to 0, or disabled
   lis r3, <<strMeleePlusTogglesSub>>@h
   ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
-  stw r3, 0x68(r4)                            # Set the label of 4th item to this string
+  stw r3, 0x88(r4)                            # Set the label of 4th item to this string
   b RETURN
 
   ENABLED:
@@ -260,11 +269,11 @@ Also includes strings and arrays related to it
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
   li r3, 1
-  stw r3, 0x60(r4)                            # Set 4th item (Melee+ Toggles), to 1, or enabled
-  stw r3, 0x80(r4)                            # Set 5th item (Other toggles), to 1, or enabled
+  stw r3, 0x80(r4)                            # Set 4th item (Melee+ Toggles), to 1, or enabled
+  stw r3, 0xA0(r4)                            # Set 5th item (Other toggles), to 1, or enabled
   lis r3, <<strMeleePlusTogglesSub>>@h
   ori r3, r3, <<strMeleePlusTogglesSub>>@l    # Ptr to str "Melee+ Toggles >"
-  stw r3, 0x68(r4)                            # Set the label of 4th item to this string
+  stw r3, 0x88(r4)                            # Set the label of 4th item to this string
   b RETURN
 
   MELEE_PLUS:
@@ -272,11 +281,11 @@ Also includes strings and arrays related to it
   lis r4, 0x803F
   ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address
   li r3, 0
-  stw r3, 0x60(r4)    # Set 4th item (Melee+ Toggles), to 0, or disabled
-  stw r3, 0x80(r4)    # Set 5th item (Other toggles), to 0, or disabled
+  stw r3, 0x80(r4)    # Set 4th item (Melee+ Toggles), to 0, or disabled
+  stw r3, 0xA0(r4)    # Set 5th item (Other toggles), to 0, or disabled
   lis r3, <<strTildeMeleePlusEnabled>>@h
   ori r3, r3, <<strTildeMeleePlusEnabled>>@l
-  stw r3, 0x68(r4)    # Set the label of 4th item to this string
+  stw r3, 0x88(r4)    # Set the label of 4th item to this string
 
   RETURN:
   # Run all of the save functions
