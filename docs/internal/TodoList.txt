@@ -76,6 +76,7 @@ L Cancel % in Results Screen (revised 2/11/15)
 Fix broken random stage unlock and score display
 Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
 CSS Color customization, including rules frame changing based on preset [UnclePunch]
+Extend presets, and update colors and rules text, and refactor code to update colors and text
 
 
 =============
@@ -289,7 +290,7 @@ Debug Menu>
     00000002                                        # String Table
     00000000                                        # Toggle function
     .long <<strNeutralSpawnOpt>>                    # Label
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
     .long <<varNeutralSpawnsEnabled>>               # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table

@@ -57,14 +57,14 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000 00000000                               # n/a
     .long <<tblDbgGeneralOptsSubMenu>>              # General Options Submenu Data
     00000000 00000000                               # n/a
-# Entry 2: String table, "TOGGLES: " [DISABLED, ENABLED, MELEE+ ENABLED ONLY]
+# Entry 2: String table, Presets
     00000002                                        # String Table
     .long <<funDbgChangeTogglesState>>              # When new string chosen, this extra code is run
-    .long <<strTogglesLabel>>                       # Label: "Toggles:"
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled, Melee+ Only]
-    .long <<varTogglesState>>                       # Variable
+    .long <<strPresetLabel>>                        # Label: "Presets: "
+    .long <<arrPresets>>                            # String Table
+    .long <<varOptionsPreset>>                      # Variable
     00000000                                        # n/a
-    40400000                                        # Num Items in table: 3.f
+    41000000                                        # Num Items in table: 8.f
     00000000                                        # n/a
 # Entry 3: Submenu "Melee+ Toggles >"
     00000001                                        # Press-able
@@ -152,8 +152,8 @@ SDR Options Menu Strings
 <strGeneralOptionsSub>  NTSC 1.02       # "General Options >"
 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00 00 00
 
-<strTogglesLabel>  NTSC 1.02            # "Toggles:"
-54 6F 67 67 6C 65 73 3A 00 00 00 00
+<strPresetLabel>  NTSC 1.02            # "Preset: "
+50726573 65743a00
 
 <strMeleePlusTogglesSub>  NTSC 1.02     # "Melee+ Toggles >"
 4D 65 6C 65 65 2B 20 54 6F 67 67 6C 65 73 20 3E 00 00 00 00
@@ -167,9 +167,6 @@ SDR Options Menu Strings
 <strDebugMenuSub>  NTSC 1.02            # "Debug Menu >"
 44 65 62 75 67 20 4D 65 6E 75 20 3E 00 00 00 00
 
-<strMeleePlusEnabledOnly>  NTSC 1.02    # "Melee+ Enabled Only"
-4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 20 4F 6E 6C 79 00
-
 <strTildeMeleePlusEnabled>  NTSC 1.02   # "~Melee+ Enabled"
 7E 4D 65 6C 65 65 2B 20 45 6E 61 62 6C 65 64 00
 
@@ -182,28 +179,53 @@ SDR Options Menu Strings
 <strNormal> NTSC 1.02                   # "Normal"
 4E6F726D 616C0000
 
-<arrEnableDisabledMelee> NTSC 1.02
+<arrEnabledDisabled> NTSC 1.02
 .long <<strDisabled>>
 .long <<strEnabled>>
-.long <<strMeleePlusEnabledOnly>>
+
+<strTournament> ALL                     # "Tournament"
+546F7572 6E616D65 6E740000
 
 
 	-==-
 
 
-SDR Options Presets Change function
+SDR Options Presets Change And Data
 Function that runs every time the presets option gets changed.
-varTogglesState is which preset is currently selected, should be used as the string table variable.
+varOptionsPreset is which preset is currently selected, should be used as the string table variable.
 funDbgChangeTogglesState updates the CSS banner and the interactive states of various toggles submenu items. It also goes through the submenus and toggles items on or off based on preset.
+Also includes strings and arrays related to it
 [_glook]
-<varTogglesState> NTSC 1.02
-0000 0000   # 0 for all disabled, 1 for allowed, 2 for Melee+ Preset
+<varOptionsPreset> ALL
+00000000
 
-<ustrMeleePlus> NTSC 1.02
-2016 2028  202f 2028  2028 20fb  00000000
+<strCustom> ALL
+43757374 6f6d0000
 
-<ustrCustom> NTSC 1.02
-200c 2038  2036 2037  2032 2030  00000000
+<strSerious> ALL
+53657269 6f757300
+
+<strCasual> ALL
+43617375 616c0000
+
+<strMechanics> ALL
+4d656368 616e6963 73000000
+
+<strSDDoubleRemix> ALL
+53442044 6f75626c 65205265 6d697800
+
+<strSDDRAndBrawl> ALL
+53444452 20772f20 42726177 6c000000
+
+<arrPresets> NTSC 1.02
+.long <<strDisabled>>
+.long <<strCustom>>
+.long <<strTournament>>
+.long <<strSerious>>
+.long <<strCasual>>
+.long <<strMechanics>>
+.long <<strSDDoubleRemix>>
+.long <<strSDDRAndBrawl>>
 
 <funDbgChangeTogglesState> NTSC 1.02
   mflr r0
@@ -214,30 +236,14 @@ funDbgChangeTogglesState updates the CSS banner and the interactive states of va
   stw r30, 4(sp)
   stw r31, 8(sp)
   # The master toggle var is in r10
-  lis r3, <<varTogglesState>>@h
-  ori r3, r3, <<varTogglesState>>@l
+  lis r3, <<varOptionsPreset>>@h
+  ori r3, r3, <<varOptionsPreset>>@l
   lwz r3, 0(r3)
   cmpwi r3, 1
   beq ENABLED
   bgt MELEE_PLUS
 
   DISABLED:
-  # Change CSS Game mode text
-  lis r3, <<varCssGameModeCustomText>>@h
-  ori r3, r3, <<varCssGameModeCustomText>>@l
-  li r4, 0
-  stw r4, 0(r3)
-  # Change rule frame color
-  lis r3, <<arrCssColors>>@h
-  ori r3, r3, <<arrCssColors>>@l
-  lis r4, 0xFFFF
-  ori r4, r4, 0xFFFF
-  stw r4, 0xC(r3)
-  # Change the color of the banner
-  lis r3, <<varCssBannerColor>>@h
-  ori r3, r3, <<varCssBannerColor>>@l
-  li r4, 0
-  stw r4, 0(r3)
   # Disable the menu options
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
@@ -250,23 +256,6 @@ funDbgChangeTogglesState updates the CSS banner and the interactive states of va
   b RETURN
 
   ENABLED:
-  # Change CSS Game mode text
-  lis r3, <<varCssGameModeCustomText>>@h
-  ori r3, r3, <<varCssGameModeCustomText>>@l
-  lis r4, <<ustrCustom>>@h
-  ori r4, r4, <<ustrCustom>>@l
-  stw r4, 0(r3)
-  # Change rule frame color
-  lis r3, <<arrCssColors>>@h
-  ori r3, r3, <<arrCssColors>>@l
-  lis r4, 0x00FF
-  ori r4, r4, 0x00FF
-  stw r4, 0xC(r3)
-  # Change the color of the banner
-  lis r3, <<varCssBannerColor>>@h
-  ori r3, r3, <<varCssBannerColor>>@l
-  li r4, 7
-  stw r4, 0(r3)
   # Enable the menu options
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
@@ -279,23 +268,6 @@ funDbgChangeTogglesState updates the CSS banner and the interactive states of va
   b RETURN
 
   MELEE_PLUS:
-  # Change CSS Game mode text
-  lis r3, <<varCssGameModeCustomText>>@h
-  ori r3, r3, <<varCssGameModeCustomText>>@l
-  lis r4, <<ustrMeleePlus>>@h
-  ori r4, r4, <<ustrMeleePlus>>@l
-  stw r4, 0(r3)
-  # Change rule frame color
-  lis r3, <<arrCssColors>>@h
-  ori r3, r3, <<arrCssColors>>@l
-  lis r4, 0xFF00
-  ori r4, r4, 0xFFFF
-  stw r4, 0xC(r3)
-  # Change the color of the banner
-  lis r3, <<varCssBannerColor>>@h
-  ori r3, r3, <<varCssBannerColor>>@l
-  li r4, 1
-  stw r4, 0(r3)
   # Disable the menu options, show Melee+
   lis r4, 0x803F
   ori r4, r4, 0xA4E0  # 803FA4E0, The Main Debug Menu entry table start address

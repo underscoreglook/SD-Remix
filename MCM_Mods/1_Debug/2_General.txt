@@ -45,7 +45,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000002                                        # String Table
     00000000                                        # Toggle function
     .long <<strStockPlatformColorOpt>>              # Label
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
     .long <<varStockPlatformColorsEnabled>>         # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
@@ -54,7 +54,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000002                                        # String Table
     00000000                                        # Toggle function
     .long <<strSkipResultsScreenOpt>>               # Label
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
     .long <<varSkipResultsScreen>>                  # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
@@ -63,7 +63,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000002                                        # String Table
     00000000                                        # Toggle function
     .long <<strLCancelOnResultsOpt>>                # Label
-    .long <<arrEnableDisabledMelee>>                # [Disabled, Enabled]
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
     .long <<varShowLCancelOnResultsScreen>>         # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
