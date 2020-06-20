@@ -74,11 +74,10 @@ Neutral Spawns to options menu [Achilles, Jorgasms]
 Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
 L Cancel % in Results Screen (revised 2/11/15)
 Fix broken random stage unlock and score display
+Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
 
 
 New codes by default:
-https://smashboards.com/threads/gecko-code-cpu-random-teching-and-di.354786/
-https://smashboards.com/threads/music-plays-at-20-volume-when-all-controllers-are-idle-for-1-minute.450078/
 https://smashboards.com/threads/standalone-css-color-modification.450087/ Unique color scheme for SD Remix
 
 
@@ -93,12 +92,6 @@ Always lagless FOD (for netplay)
 
 New debug menu should be in a folder, splitting various items in separate txt.
 
-General>
-    *** These are not affected by presets
-    *** Widescreen (updated)
-    *** Stock platform colors
-    *** Always skip the result sceen and Star count
-    L Cancel % in Results Screen (revised 2/11/15)
 Presets: DISABLED, _GLOOK, CUSTOM (need the updated banner color code, takes priority over individual toggles)
 Presets explanations>
     DISABLED
