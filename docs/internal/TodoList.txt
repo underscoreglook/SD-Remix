@@ -77,6 +77,7 @@ Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch
 CSS Color customization, including rules frame changing based on preset [UnclePunch]
 Extend presets, and update colors and rules text, and refactor code to update colors and text
 20XX Neutral Spawns [Achilles, Jorgasms]
+Moved Stock Control/Crew Battle Mode from BADHACKS [Jorgasms]
 
 
 =============
@@ -92,10 +93,8 @@ New debug menu should be in a folder, splitting various items in separate txt.
 
 Presets explanations>
     TOURNAMENT
-        Handicap = Stock/Crew
         Overtime = Tournament
     SERIOUS
-        Handicap = Stock/Crew
         Overtime = Tournament
         Capped Points = Enabled
         Disable Star KO = Enabled
@@ -105,7 +104,6 @@ Presets explanations>
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        Handicap = Stock/Crew
         Capped Points = Enabled
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
@@ -122,7 +120,6 @@ Presets explanations>
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     NEW MECHANICS
-        Handicap: Stock/Crew
         Overtime: Tournament
         Capped Points/Tennis: Enabled
         Disable Star KO
@@ -163,7 +160,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Game>
-        Handicap: Stock/Crew
         Overtime: Tournament
         Capped Points/Tennis: Enabled
     Controls>
@@ -406,95 +402,6 @@ Aerials are Automatically L-Cancelled
 [Dan Salvato]
 Version -- DOL Offset ------ Hex to Replace
 1.02 ------ 0x68200 ---- 41820010 -> 60000000
-
-
-	-==-
-
-
-Stock Control/Crew Battle Mode
-Essentially, this hack gets rid of the damage modifier for handicap and replaces it with controllable stocks so that one player can spawn with say 6 stocks and another can spawn with 4.
-
-When handicap is set to "ON" you can set custom stocks per player (1 stock - 9 stocks).
-
-When handicap is set to "AUTO" you can set custom stock per player (1 stock - 9 stocks) just like when handicap is "ON." However, upon re-entering the character select screen, your handicap will be set to the amount of stocks you had at the end of the game. If you had zero stocks (as in you lost), the game will set your stock to the current stock setting (any stock amount higher than nine will be set nine). This allows for easy crew battles. You can still change the stocks manually if needed (rage quits etc.).
-[Jorgasms]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80036bb4 --- 9803008E -> 60000000
-1.02 ----- 0x80266678 --- 3803FFFF -> Branch
-
-3DC0803F 61CEA3E6
-89CE0000 2C0E0000
-4182008C 3DC08045
-39CE310E 3DE08048
-39EF0828 3E008045
-6210BF14 8A100000
-2C100009 40810008
-3A000009 8A2E0000
-2C110000 4182000C
-9A2F0000 48000008
-9A0F0000 8A2E0E90
-2C110000 4182000C
-9A2F0024 48000008
-9A0F0024 8A2E1D20
-2C110000 4182000C
-9A2F0048 48000008
-9A0F0048 8A2E2BB0
-2C110000 4182000C
-9A2F006C 48000008
-9A0F006C 3803FFFF
-60000000 48000000
-
-1.02 ----- 0x801A57DC --- 38BEFFF8 -> Branch
-
-3E008048 621006E0
-3A200009 9A300000
-9A300024 9A300048
-9A30006C 38BEFFF8
-60000000 48000000
-
-1.02 ----- 0x80230D54 --- 88030005 -> Branch
-
-88030005 3DC0803F
-61CEA3E6 3DE08045
-61EFBF15 3A000001
-89CE0000 2C0E00FF
-4082000C 9A0F0000
-38000001 48000000
-
-1.02 ----- 0x8022F76C --- 881C0004 -> Branch
-
-881C0004 3DC0803F
-61CEA3E6 3E008045
-6210BF15 8A300000
-2C110001 40820014
-38000002 39E000FF
-99EE0000 4800000C
-39E00000 99EE0000
-60000000 48000000
-
-1.02 ----- 0x8022F6BC --- 881C0004 -> Branch
-
-881C0004 3DC0803F
-61CEA3E6 3E008045
-6210BF15 8A300000
-2C110001 40820014
-38000002 39E000FF
-99EE0000 4800000C
-39E00000 99EE0000
-60000000 48000000
-
-1.02 ----- 0x80033CC4 --- 98A3008E -> Branch
-
-3DC08045 61CEBF15
-89CE0000 2C0E0002
-40820038 3DC08045
-39CE310E 3DE08048
-39EF0828 8A4F0000
-9A4E0000 8A4F0024
-9A4E0E90 8A4F0048
-9A4E1D20 8A4F006C
-9A4E2BB0 48000008
-98A3008E 48000000
 
 
 	-==-

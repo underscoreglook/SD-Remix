@@ -237,9 +237,6 @@ TODO: All of these toggles rely on overwriting code on the fly. Not only does th
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
-<varToggleHandicap> ALL
-0000 0000
-
 <varToggleLedgeAttrition> ALL
 0000 0000
 
@@ -251,9 +248,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
 <strMeleePlusTitle> ALL                 # "< Melee+ >"
 3C204D65 6C65652B 203E0000
-
-<strHandicapOpt> ALL                    # "Handicap: "
-48616E64 69636170 3A200000
 
 <strOvertimeOpt> ALL                    # "Overtime: "
 4F766572 74696D65 3A200000
@@ -267,16 +261,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strCappedPointsOpt> ALL                # "Capped Points: "
 43617070 65642050 6F696E74 733A2000
 
-<strDamageRatio> ALL                    # "Damage Ratio"
-44616D61 67652052 6174696F 00000000
-
-<strStockCrew> ALL                      # "Stock/Crew"
-53746F63 6B2F4372 65770000
-
-<arrHandicapOpts> ALL
-.long <<strDamageRatio>>
-.long <<strStockCrew>>
-
 <arrOvertimeOpts> ALL
 .long <<strNormal>>
 .long <<strTournament>>
@@ -287,96 +271,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <arrLedgeAttritionOpts> ALL
 .long <<strNormal>>
 .long <<strDynamic>>
-
-<funDbgToggleHandicapStock> NTSC 1.02
-loc_0x0:
-  lis r3, <<varOptionsPreset>>@h
-  ori r3, r3, <<varOptionsPreset>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x1
-  blt- DISABLED
-  bgt- ENABLE
-  lis r3, <<varToggleHandicap>>@h
-  ori r3, r3, <<varToggleHandicap>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x0
-  bne- ENABLE
-DISABLED:
-  lis r4, 0x8003
-  ori r4, r4, 0x6BB4    # BADHACK 80036BB4     Default 9803008E
-  lis r3, 0x9803
-  ori r3, r3, 0x8E
-  stw r3, 0(r4)
-  lis r4, 0x8026        # BADHACK 80266678     Default 3803FFFF
-  ori r4, r4, 0x6678
-  lis r3, 0x3803
-  ori r3, r3, 0xFFFF
-  stw r3, 0(r4)
-  lis r4, 0x801A        # BADHACK 801A57DC     Default 38BEFFF8
-  ori r4, r4, 0x57DC
-  lis r3, 0x38BE
-  ori r3, r3, 0xFFF8
-  stw r3, 0(r4)
-  lis r4, 0x8023        # BADHACK 80230D54     Default 88030005
-  ori r4, r4, 0xD54
-  lis r3, 0x8803
-  ori r3, r3, 0x5
-  stw r3, 0(r4)
-  lis r4, 0x8022        # BADHACK 8022F76C     Default 881C0004
-  ori r4, r4, 0xF76C
-  lis r3, 0x881C
-  ori r3, r3, 0x4
-  stw r3, 0(r4)
-  lis r4, 0x8022        # BADHACK 8022F6BC     Default 881C0004
-  ori r4, r4, 0xF6BC
-  lis r3, 0x881C
-  ori r3, r3, 0x4
-  stw r3, 0(r4)
-  lis r4, 0x8003        # BADHACK 80033CC4     Default 98A3008E
-  ori r4, r4, 0x3CC4
-  lis r3, 0x98A3
-  ori r3, r3, 0x8E
-  stw r3, 0(r4)
-  b loc_0x148
-ENABLE:
-  lis r4, 0x8003        # BADHACK 80036BB4     Noop 60000000
-  ori r4, r4, 0x6BB4
-  lis r3, 0x6000
-  ori r3, r3, 0x0
-  stw r3, 0(r4)
-  lis r4, 0x8026        # BADHACK 80266678     Branch
-  ori r4, r4, 0x6678
-  lis r3, 0x4BF2
-  ori r3, r3, 0xAC4C
-  stw r3, 0(r4)
-  lis r4, 0x801A        # BADHACK 801A57DC     Branch
-  ori r4, r4, 0x57DC
-  lis r3, 0x4BFE
-  ori r3, r3, 0xBB8C
-  stw r3, 0(r4)
-  lis r4, 0x8023        # BADHACK 80230D54     Branch
-  ori r4, r4, 0xD54
-  lis r3, 0x4BF6
-  ori r3, r3, 0x638
-  stw r3, 0(r4)
-  lis r4, 0x8022        # BADHACK 8022F76C     Branch
-  ori r4, r4, 0xF76C
-  lis r3, 0x4BF6
-  ori r3, r3, 0x1C50
-  stw r3, 0(r4)
-  lis r4, 0x8022        # BADHACK 8022F6BC     Branch
-  ori r4, r4, 0xF6BC
-  lis r3, 0x4BF6
-  ori r3, r3, 0x1D3C
-  stw r3, 0(r4)
-  lis r4, 0x8003        # BADHACK 80033CC4     Branch
-  ori r4, r4, 0x3CC4
-  lis r3, 0x4815
-  ori r3, r3, 0xD770
-  stw r3, 0(r4)
-loc_0x148:
-  li r3, 0x0
-  blr
 
 <funDbgToggleLedgeInvincibility> NTSC 1.02
   lis r3, <<varOptionsPreset>>@h
@@ -481,15 +375,6 @@ loc_0x58:
     00000000                                        # n/a
     .long <<strMeleePlusTitle>>                     # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1: Handicap is either stock or damage ratio
-    00000002                                        # String Table
-    .long <<funDbgToggleHandicapStock>>             # Toggle function
-    .long <<strHandicapOpt>>                        # Label
-    .long <<arrHandicapOpts>>                       # Options
-    .long <<varToggleHandicap>>                     # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
 # Entry 2: Tournament Overtime or normal overtime
     00000002                                        # String Table
     .long <<funDbgToggleOvertimeAndBombRain>>       # Toggle function

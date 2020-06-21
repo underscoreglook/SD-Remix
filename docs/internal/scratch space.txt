@@ -1,0 +1,100 @@
+<funHandicapIsStocksPart3> NTSC 1.02
+3DC0803F 61CEA3E6
+3DE08045 61EFBF15
+3A000001 89CE0000
+2C0E00FF 4082000C
+9A0F0000 38000001
+b 0x80230D58
+1.02 ----- 0x80230D54 --- 88030005 -> Branch
+88030005    # Code at injection point
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart3>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart3>
+            # NORMAL:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart4> NTSC 1.02
+3DC0803F
+61CEA3E6 3E008045
+6210BF15 8A300000
+2C110001 40820014
+38000002 39E000FF
+99EE0000 4800000C
+39E00000 99EE0000
+b 0x8022F770
+1.02 ----- 0x8022F76C --- 881C0004 -> Branch
+881C0004    # Code at injection point
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart4>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart4>
+            # NORMAL:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart5> NTSC 1.02
+3DC0803F
+61CEA3E6 3E008045
+6210BF15 8A300000
+2C110001 40820014
+38000002 39E000FF
+99EE0000 4800000C
+39E00000 99EE0000
+b 0x8022F6C0
+1.02 ----- 0x8022F6BC --- 881C0004 -> Branch
+881C0004    # Code at injection point
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart5>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart5>
+            # NORMAL:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart6> NTSC 1.02
+3DC08045 61CEBF15
+89CE0000 2C0E0002
+40820038 3DC08045
+39CE310E 3DE08048
+39EF0828 8A4F0000
+9A4E0000 8A4F0024
+9A4E0E90 8A4F0048
+9A4E1D20 8A4F006C
+9A4E2BB0 48000008
+98A3008E
+b 0x80033CC8
+1.02 ----- 0x80033CC4 --- 98A3008E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart6>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart6>
+            # NORMAL:
+98A3008E    # Code at injection point
+00000000    # Branch Back
