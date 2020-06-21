@@ -216,6 +216,17 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 Hold start to force game out of result screen_V2 +B goes back from ready state (core)
 Also requires a code in the general section
 [rice]
+1.02 ------ 0x80178224 ---- 80030008 -> Branch
+# Hold Start to force game out of results screen
+3DE08047 61EF9DF8
+3A000044 7E0083D6
+3A200000 1E5000A8
+7E2F932E 1E7100A8
+7E4F9A2E 2C12003C # 3C = 60 frames = 1 second
+4180000C 38001000
+48000014 3A310001
+2C110004 41A0FFE0
+80030008 00000000
 1.02 ------ 0x801782F8 ---- 80030008 -> Branch
 3DE08047 61EF9DF8
 3A000044 7E0083D6

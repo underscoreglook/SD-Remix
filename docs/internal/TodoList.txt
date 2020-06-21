@@ -28,8 +28,6 @@ https://smashboards.com/threads/add-frames-of-armor-knockback-resistance-to-acti
 For doing character overviews:
 https://smashboards.com/threads/press-x-y-to-frame-advance.480440/
 
-BUG: Dair with kirby causes a bug
-
 SD Remix Lite
 -------------
 Create compiler.
@@ -74,7 +72,6 @@ Display Custom Text in stock mode when using options preset [UnclePunch, _glook]
 Update widescreen code to new version [Dan Salvato]
 Neutral Spawns to options menu [Achilles, Jorgasms]
 Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
-L Cancel % in Results Screen (revised 2/11/15)
 Fix broken random stage unlock and score display
 Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
 CSS Color customization, including rules frame changing based on preset [UnclePunch]
