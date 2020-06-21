@@ -78,6 +78,7 @@ CSS Color customization, including rules frame changing based on preset [UnclePu
 Extend presets, and update colors and rules text, and refactor code to update colors and text
 20XX Neutral Spawns [Achilles, Jorgasms]
 Moved Stock Control/Crew Battle Mode from BADHACKS [Jorgasms]
+L Cancel % in Results Screen (revised 2/11/15)
 
 
 =============
