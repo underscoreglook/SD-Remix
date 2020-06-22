@@ -10,7 +10,6 @@ Other suggestions from people?
 * New toggleable features like 20XX neutral spawns.
 * More debug menu presets, like maybe one with "Beta" character changes.
 * Reorganized debug menu.
-* Nice to have but a lot of work: Per player/nametag control customization)
 Look at other todolists and finish converting badhacks
 Probably rework the debug screen.
 Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
@@ -81,6 +80,7 @@ Moved Stock Control/Crew Battle Mode from BADHACKS [Jorgasms]
 L Cancel % in Results Screen (revised 2/11/15)
 Fix percents not breaking ties in tournament overtime (and move it from badhacks) [_glook]
 Moved Capped Points/Tennis Mode away from badhacks
+Per controller tap jump [fileskiller, achilles]
 
 
 =============
@@ -159,7 +159,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Controls>
-        Tap Jump: Enabled/disabled  https://smashboards.com/threads/turn-off-tap-jump-toggle.447578/
         https://smashboards.com/threads/c-stick-up-smash-during-run.415771
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode

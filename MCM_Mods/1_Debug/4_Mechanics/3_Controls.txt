@@ -1,0 +1,149 @@
+Debug Menu: Mechanics > Controls > Tap Jumps Submenu
+The functions, strings, and data for the submenu "Mechanics > Controls > Tap Jumps".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<tblDbgMechanicsControlsTapJumpsSubMenu> NTSC 1.02
+# Entry 1: Player 1
+    00000002                                        # String Table
+    00000000
+    .long <<strPlayer1Opt>>                         # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<arrP1TapJumpEnabled>>                   # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 2: Player 2
+    00000002                                        # String Table
+    00000000
+    .long <<strPlayer2Opt>>                         # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<arrP2TapJumpEnabled>>                   # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Player 3
+    00000002                                        # String Table
+    00000000
+    .long <<strPlayer3Opt>>                         # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<arrP3TapJumpEnabled>>                   # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: Player 4
+    00000002                                        # String Table
+    00000000
+    .long <<strPlayer4Opt>>                         # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<arrP4TapJumpEnabled>>                   # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Enable or disable tap jumps for player ports
+<<arrTapJumpEnabled>> has all of the tap jump states
+<https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/post-20654480>
+[flieskiller, Achilles1515]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<arrP1TapJumpEnabled> ALL
+00000001
+
+<arrP2TapJumpEnabled> ALL
+00000001
+
+<arrP3TapJumpEnabled> ALL
+00000001
+
+<arrP4TapJumpEnabled> ALL
+00000001
+
+<funTapJumpFromAir> NTSC 1.02
+lbz r16, 0x0678 (r24) #r16 = player ID
+cmpwi r16, 1
+blt PLAYER1
+beq PLAYER2
+cmpwi r16, 2
+beq PLAYER3
+b PLAYER4
+PLAYER1:
+lis r16, <<arrP1TapJumpEnabled>>@h
+ori r16, r16, <<arrP1TapJumpEnabled>>@l
+b CHECK_TAP_JUMP_SETTING
+PLAYER2:
+lis r16, <<arrP2TapJumpEnabled>>@h
+ori r16, r16, <<arrP2TapJumpEnabled>>@l
+b CHECK_TAP_JUMP_SETTING
+PLAYER3:
+lis r16, <<arrP3TapJumpEnabled>>@h
+ori r16, r16, <<arrP3TapJumpEnabled>>@l
+b CHECK_TAP_JUMP_SETTING
+PLAYER4:
+lis r16, <<arrP4TapJumpEnabled>>@h
+ori r16, r16, <<arrP4TapJumpEnabled>>@l
+CHECK_TAP_JUMP_SETTING:
+lwz r16, 0(r16)
+cmpwi r16, 1
+beq TAPJUMPON
+lbz r15, 0x06BE (r29)
+cmpwi r15, 4 #check if the jump is from control stick or X/Y
+bge TAPJUMPON
+b 0x800cba9c
+TAPJUMPON:
+lwz r0, 0x0004(r30) # normal line
+b 0x800CBA34
+1.02 ----- 0x800CBA30 --- 801E0004 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funTapJumpFromAir>
+801E0004    # Code at injection point
+00000000    # Branch Back
+
+<funTapJumpFromGround> NTSC 1.02
+lbz r16, 0x0678 (r24) #r16 = player ID
+cmpwi r16, 1
+blt PLAYER1
+beq PLAYER2
+cmpwi r16, 2
+beq PLAYER3
+b PLAYER4
+PLAYER1:
+lis r16, <<arrP1TapJumpEnabled>>@h
+ori r16, r16, <<arrP1TapJumpEnabled>>@l
+b CHECK_TAP_JUMP_SETTING
+PLAYER2:
+lis r16, <<arrP2TapJumpEnabled>>@h
+ori r16, r16, <<arrP2TapJumpEnabled>>@l
+b CHECK_TAP_JUMP_SETTING
+PLAYER3:
+lis r16, <<arrP3TapJumpEnabled>>@h
+ori r16, r16, <<arrP3TapJumpEnabled>>@l
+b CHECK_TAP_JUMP_SETTING
+PLAYER4:
+lis r16, <<arrP4TapJumpEnabled>>@h
+ori r16, r16, <<arrP4TapJumpEnabled>>@l
+CHECK_TAP_JUMP_SETTING:
+lwz r16, 0(r16)
+cmpwi r16, 1
+beq TAPJUMPON
+cmpwi r4,1 #check if the jump is from control stick or X/Y
+bne TAPJUMPON
+blr #don't execute the function
+TAPJUMPON:
+mflr 0 # normal line
+b 0x800CB4E4
+1.02 ----- 0x800CB4E0 --- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funTapJumpFromGround>
+7C0802A6    # Code at injection point
+00000000    # Branch Back

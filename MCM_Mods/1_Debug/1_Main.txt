@@ -192,6 +192,18 @@ SDR Options Menu General Strings
 <strTournament> ALL                     # "Tournament"
 546F7572 6E616D65 6E740000
 
+<strPlayer1Opt> ALL
+506c6179 65722031 3a000000
+
+<strPlayer2Opt> ALL
+506c6179 65722032 3a000000
+
+<strPlayer3Opt> ALL
+506c6179 65722033 3a000000
+
+<strPlayer4Opt> ALL
+506c6179 65722034 3a000000
+
 
 	-==-
 

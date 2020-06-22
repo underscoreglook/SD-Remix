@@ -540,11 +540,18 @@ b 0x80178228
 3DE08047 61EF9DF8
 3A000044 7E0083D6
 3A200000 1E5000A8
-7E2F932E 1E7100A8
-7E4F9A2E 2C12003C # 3C = 60 frames = 1 second
-4180000C 38001000
-48000014 3A310001
-2C110004 41A0FFE0
+7E2F932E
+            # CHECK_NEXT_PLAYER:
+1E7100A8    # mulli r19, r17, 0xA8
+7E4F9A2E    # lhzx r18, r15, r19
+2C12003C    # cmpwi r18, 0x3C   # 3C = 60 frames = 1 second
+4180000C    # blt- GO_TO_NEXT_PLAYER
+38001000    # li r0, 0x1000
+48000028    # b RETURN
+            # GO_TO_NEXT_PLAYER:
+3A310001    # addi r17, r17, 0x1
+2C110004    # cmpwi r17, 0x4
+41A0FFE0    # blt- CHECK_NEXT_PLAYER
 # Percentage on results screen
 lis r15, <<varShowLCancelOnResultsScreen>>@h
 ori r15, r15, <<varShowLCancelOnResultsScreen>>@l
