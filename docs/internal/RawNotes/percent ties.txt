@@ -267,7 +267,9 @@ cmpwi r4, 0x3		# playerType ?= NONE
 beq FFA_CONTINUE	# If None, go to next item
 lbz r4, 1(r18)		# Get the placement/ranking of player
 slwi r4, r4, 0x10   # Put in upper half
-lhz r5, 0x60(r17)	# Get percentage
+lwz r5, 0xB0(r17)	# Get player entity
+lwz r5, 0x2C(r5)	# Get Player Char Data
+lwz r5, 0x2074(r5)	# Get percentage as int
 or r4, r4, r5		# Place in lower half of word
 slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
 add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes

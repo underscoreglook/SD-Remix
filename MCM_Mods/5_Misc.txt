@@ -379,3 +379,36 @@ Invisible ceiling glitch fix
 [tauKhan]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 --- 0x8006BB14 ---- D01E0004 -> D01D0004
+
+
+	-==-
+
+
+Bomb Rain toggling
+If tournament overtime is enabled, disable bomb rain.
+Otherwise, the "Always rain bombs" and "always rain pokeballs" will both enable this
+[_glook, Achilles]
+1.02 ----- 0x801C0EB0 --- 2C0304B0 -> Branch
+# Disable or enable Bomb Rain
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820034    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+4182002C    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820018    # bne DISABLE  # Disable Bomb Rain
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820010    # beq NORMAL    # If 0, do normal stuff
+            # DISABLE:
+39600000    # li r11, 0
+2C0B0001    # cmpwi r11, 1    # The ble branch at return point will always succeed
+48000008    # b RETURN
+            # NORMAL:
+2C0304B0    # cmpwi r3, 0x4B0   # Comparison at injection point
+            # RETURN:
+00000000    # Branch Back

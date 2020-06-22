@@ -48,6 +48,13 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 .long <<strDamageRatio>>
 .long <<strStock>>
 
+<strOvertimeOpt> ALL                    # "Overtime:"
+4f766572 74696d65 3a000000
+
+<arrOvertimeOpts> ALL
+.long <<strNormal>>
+.long <<strTournament>>
+
 <tblDbgMechanicsGameSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -69,6 +76,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strHandicapOpt>>                        # Label
     .long <<arrHandicapOpts>>                       # Options
     .long <<varHandicapIsStocks>>                   # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Tournament Style Overtime
+    00000002                                        # String Table
+    00000000
+    .long <<strOvertimeOpt>>                        # Label
+    .long <<arrOvertimeOpts>>                       # Options
+    .long <<varTournamentStyleOvertimeEnabled>>     # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
@@ -333,4 +349,185 @@ ori r11, r11, <<varHandicapIsStocks>>@l
 beq <funHandicapIsStocksPart6>
             # NORMAL:
 98A3008E    # Code at injection point
+00000000    # Branch Back
+
+
+	-==-
+
+
+
+
+Tournament Style Overtime (Integrated with Options menu)
+Ties by percent in regulation and makes sudden death mode 3 minutes.
+Requires the 2_general code: "Always Skip the Result Screen or Break ties by percent"
+<https://smashboards.com/threads/tournament-style-overtime-for-ssbm-v1-2.403898/>
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varTournamentStyleOvertimeEnabled> ALL
+00000000
+
+<funEnableTimerInSuddenDeathAndNextSceneIsSuddenDeath> NTSC 1.02
+3CA08046 60A5DB6E 88650000 2C030000
+41A20024 38600004 3CA08047 60A59D35
+98650000 38600032 3CA08046 60A5DB68
+98650000 38BF24C0 881E0000
+b 0x8016DD3C
+1.02 ----- 0x8016DD38 --- 881E0000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funEnableTimerInSuddenDeathAndNextSceneIsSuddenDeath>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funEnableTimerInSuddenDeathAndNextSceneIsSuddenDeath>
+            # NORMAL:
+881E0000    # Code at injection point
+00000000    # Branch Back
+
+<funSetSuddenDeathTimerTo180Secs> NTSC 1.02
+3C608046 6063DB6E 88630000 2C030000
+41A20008 380000B4 901F0028
+b 0x8016DDD0
+1.02 ----- 0x8016DDCC --- 901F0028 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funSetSuddenDeathTimerTo180Secs>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funSetSuddenDeathTimerTo180Secs>
+            # NORMAL:
+901F0028    # Code at injection point
+00000000    # Branch Back
+
+<funSetSuddenDeathRealPercentTo0> NTSC 1.02
+3C608046 6063DB6E 88630000 2C030000 41A20010 38600000
+907B1830 48000008 D01B1830
+b 0x80067E7C
+1.02 ----- 0x80067E78 --- D01B1830 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funSetSuddenDeathRealPercentTo0>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funSetSuddenDeathRealPercentTo0>
+            # NORMAL:
+D01B1830    # Code at injection point
+00000000    # Branch Back
+
+<funSetSuddenDeathDisplayPercentTo0> NTSC 1.02
+3C608046 6063DB6E 88630000 2C030000
+41A20008 3BC00000 7FDD032E
+b 0x800343B8
+1.02 ----- 0x800343B4 --- 7FDD032E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funSetSuddenDeathDisplayPercentTo0>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funSetSuddenDeathDisplayPercentTo0>
+            # NORMAL:
+7FDD032E    # Code at injection point
+00000000    # Branch Back
+
+1.02 ----- 0x80165dc4 --- 38040001 -> Branch
+# Disable Port 1 Priority
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820020    # bne DISABLE_PORT_PRIORITY
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq DISABLE_PORT_PRIORITY
+            # NORMAL:
+38040001    # Code at injection point
+48000008    # b RETURN
+            # DISABLE_PORT_PRIORITY:
+38040000    # Disable Port Priority
+            # RETURN:
+00000000    # Branch Back
+
+1.02 ----- 0x80165e0c --- 38040001 -> Branch
+# Disable Port 2 Priority
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820020    # bne DISABLE_PORT_PRIORITY
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq DISABLE_PORT_PRIORITY
+            # NORMAL:
+38040001    # Code at injection point
+48000008    # b RETURN
+            # DISABLE_PORT_PRIORITY:
+38040000    # Disable Port Priority
+            # RETURN:
+00000000    # Branch Back
+
+1.02 ----- 0x80165e54 --- 38040001 -> Branch
+# Disable Port 3 Priority
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820020    # bne DISABLE_PORT_PRIORITY
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq DISABLE_PORT_PRIORITY
+            # NORMAL:
+38040001    # Code at injection point
+48000008    # b RETURN
+            # DISABLE_PORT_PRIORITY:
+38040000    # Disable Port Priority
+            # RETURN:
 00000000    # Branch Back

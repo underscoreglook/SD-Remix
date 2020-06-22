@@ -79,6 +79,7 @@ Extend presets, and update colors and rules text, and refactor code to update co
 20XX Neutral Spawns [Achilles, Jorgasms]
 Moved Stock Control/Crew Battle Mode from BADHACKS [Jorgasms]
 L Cancel % in Results Screen (revised 2/11/15)
+Fix percents not breaking ties in tournament overtime (and move it from badhacks) [_glook]
 
 
 =============
@@ -93,10 +94,7 @@ Always lagless FOD (for netplay)
 New debug menu should be in a folder, splitting various items in separate txt.
 
 Presets explanations>
-    TOURNAMENT
-        Overtime = Tournament
     SERIOUS
-        Overtime = Tournament
         Capped Points = Enabled
         Disable Star KO = Enabled
         Throw Bug Fix
@@ -121,7 +119,6 @@ Presets explanations>
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     NEW MECHANICS
-        Overtime: Tournament
         Capped Points/Tennis: Enabled
         Disable Star KO
         Ledge Invincibility: Dynamic
@@ -161,7 +158,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Game>
-        Overtime: Tournament
         Capped Points/Tennis: Enabled
     Controls>
         Tap Jump: Enabled/disabled  https://smashboards.com/threads/turn-off-tap-jump-toggle.447578/
@@ -403,119 +399,6 @@ Aerials are Automatically L-Cancelled
 [Dan Salvato]
 Version -- DOL Offset ------ Hex to Replace
 1.02 ------ 0x68200 ---- 41820010 -> 60000000
-
-
-	-==-
-!
-
-Tournament Style Overtime
-Ties by percent in regulation and makes sudden death mode 3 minutes.
-Video demo here: https://youtu.be/uIDf3GBwotM
-(There's a thread for this, which has had multiple versions, so check there first before applying)
-[_glook]
-1.02
-C21A415C 00000048
-3803FFFF 2C000003
-40820230 2C0B0020
-41820228 3821FFEC
-3C80FFFF 6084FFFF
-90810000 90810004
-90810008 9081000C
-90810010 3A800000
-3AA00000 3E208045
-62313080 3E408047
-62529E00 3E00803F
-62100E06 3C808048
-608407C8 88840000
-2C040001 4182004C
-80910008 2C040003
-41820028 88920001
-5484801E A0B10060
-7C842B78 56A5103A
-7CA50A14 90850004
-7EB409AE 3A940001
-3A310E90 3A5200A8
-3AB50001 2C150004
-4082FFC0 4800005C
-80910008 2C040003
-41820038 88D00000
-54C5103A 7CA50A14
-80850004 2C040000
-40800014 7CD409AE
-3A940001 88920001
-5484801E A0D10060
-7C843214 90850004
-3A100024 3A310E90
-3A5200A8 3AB50001
-2C150004 4082FFAC
-3AA00000 7E41AA14
-8A520000 2C1200FF
-4182005C 7EB4AB78
-2C140000 4182003C
-7E21A214 8A31FFFF
-5646103A 5625103A
-7CC60A14 7CA50A14
-80C60004 80A50004
-7C062800 40A00014
-7E01A214 9A300000
-3A94FFFF 4BFFFFC4
-7E81A214 9A540000
-3AB50001 2C150004
-4082FF9C 38600005
-38000004 3A400000
-3E20FFFF 6231FFFF
-3A000000 7CC18214
-88C60000 2C0600FF
-41820088 54C5103A
-7CA50A14 80A50004
-7C112800 40A20018
-2C120000 40A20018
-38600004 38000003
-4800000C 7CB12B78
-7E128378 3E808048
-629407C8 8A940000
-2C140000 41A20020
-3CA08047 60A59DC8
-1CC6000C 7CC62A14
-9A460000 9A460001
-4800001C 3CA08047
-60A59E00 1CC600A8
-7CC62A14 9A460001
-9A460002 3A100001
-2C100004 4082FF70
-38210014 3A000000
-3A200000 3A400000
-3A800000 3AA00000
-60000000 00000000
-C216DD38 00000008
-3CA08046 60A5DB6E
-88650000 2C030000
-41A20024 38600004
-3CA08047 60A59D35
-98650000 38600032
-3CA08046 60A5DB68
-98650000 38BF24C0
-881E0000 00000000
-C216DDCC 00000004
-3C608046 6063DB6E
-88630000 2C030000
-41A20008 380000B4
-901F0028 00000000
-C2067E78 00000005
-3C608046 6063DB6E
-88630000 2C030000
-41A20010 38600000
-907B1830 48000008
-D01B1830 00000000
-C20343B4 00000004
-3C608046 6063DB6E
-88630000 2C030000
-41A20008 3BC00000
-7FDD032E 00000000
-041C0EB4 48000094
-04165dc4 38040000
-04165e0c 38040000
-04165e54 38040000
 
 
 	-==-

@@ -47,7 +47,6 @@ elsewhere) ("+" Means it's stuck there for now, but we should move it out eventu
 Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of BADHACKs and restore this section in settings.py)
 --------------------------------------------------
 18DCC0: * nothing here *
-18E064: + Overtime (See BADHACKS: "Tournament Overtime")
 18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
 18E3C4: + Wall bracing (See BADHACKS: "Wall Bracing")
 18E3FC: + Capped Points (See BADHACKS: "Capped (Tennis) Mode"

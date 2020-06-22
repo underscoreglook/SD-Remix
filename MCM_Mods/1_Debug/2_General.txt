@@ -221,7 +221,7 @@ ori r3, r3, <<varStockPlatformColorsEnabled>>@l
 	-==-
 
 
-Always Skip the Result Screen, and Star Count = Placement (Toggleable)
+Always Skip the Result Screen, and Star Count = Placement (Toggleable) or Break ties by percent
 - Game skips the result screen after a match, and changes the stars for the amount of stocks taken to the placement of the player in the last match.
 If you quit out of a match it will show who had the stock-lead at the moment.
 The only time it doesn't skip it is after the sudden death if a timed match ends in a draw.
@@ -232,8 +232,206 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 <varSkipResultsScreen> NTSC 1.02
 00000000
 
-1.02 ------ 0x1a0d3c ---- 3803ffff -> Branch
+
+<funBreakTiesByPercent> NTSC 1.02
+addi r0, r3, -1
+cmpwi r0,3
+bne- RETURN
+cmpwi r11,32
+beq- RETURN
+
+addi sp, sp, -0x14 	# This will hold stack data
+# First word (@ sp) is the placementOrder array, which is 4 bytes
+# Next four words are the tiebreakers, which is (oldPlacement << 16) | percent
+lis r4, 0xFFFF
+ori r4, r4, 0xFFFF
+stw r4, 0(sp)
+stw r4, 4(sp)
+stw r4, 8(sp)
+stw r4, 0xC(sp)
+stw r4, 0x10(sp)
+
+# Do the init loops
+li r20, 0	# placementIndex
+li r21, 0	# playerNum
+lis r17, 0x8045  # This is player block
+ori r17, r17, 0x3080  # Separated by E90 per player
+lis r18, 0x8047  # This is results screen data
+ori r18, r18, 0x9E00  # Separated by 0xA8
+lis r16, 0x803F  # This is team colors
+ori r16, r16, 0x0E06  # Separated by 0x24
+lis r4, 0x8048
+ori r4, r4, 0x07C8
+lbz r4, 0(r4)	# r4 is whether it is teams battle
+cmpwi r4, 0x01  # Is this a team battle?
+beq TEAM_LOOP
+
+FFA_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq FFA_CONTINUE	# If None, go to next item
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+lwz r5, 0xB0(r17)	# Get player entity
+lwz r5, 0x2C(r5)	# Get Player Char Data
+lwz r5, 0x2074(r5)	# Get percentage as int
+or r4, r4, r5		# Place in lower half of word
+slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
+add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes
+stw r4, 4(r5)       # tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+stbx r21, r20, sp	# placementOrder[placementIndex] = playerNum
+addi r20, r20, 1	# placementIndex++
+FFA_CONTINUE:
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ FFA_LOOP
+b INIT_LOOP_END
+
+TEAM_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq TEAM_CONTINUE	# If NONE, go to next item
+lbz r6, 0(r16)		# r6 = teamNum
+slwi r5, r6, 2		# get addr of tieBreaker[teamNum]
+add r5, r5, sp
+lwz r4, 4(r5)		# r4 = tieBreaker[teamNum]
+cmpwi r4, 0
+bge- TEAM_EXISTING  # if tieBreaker[teamNum] >= 0, it exists. If -1, it doesn't exist, and we must create it
+stbx r6, r20, sp	# placementOrder[placementIndex] = teamNum
+addi r20, r20, 1	# placementIndex++
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+TEAM_EXISTING:
+lhz r6, 0x60(r17)	# Get percentage of player
+add r4, r4, r6      # tieBreaker[teamNum] += getPercentage(playerNum)
+stw r4, 4(r5)       # Store it back into tieBreaker array
+TEAM_CONTINUE:
+addi r16, r16, 0x24
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ TEAM_LOOP
+
+INIT_LOOP_END:
+
+# Insertion sort time!
+li r21, 0			# r21 is i
+INSERTSTART:
+add r18, sp, r21
+lbz r18, 0(r18)		# r18 is currPlayer
+cmpwi r18, 0x00FF
+beq- END_INSERT		# if currPlayer == -1, stop insertion sort
+mr r20, r21			# r20 is j
+SORTLOOP:
+cmpwi r20, 0
+beq- BREAKSORTLOOP	# if (j==0) break
+add r17, sp, r20	# r17 = *(placementOrder[j])
+lbz r17, -1(r17)	# r17 is prevPlayer
+# Compare tieBreaker[currPlayer] with tieBreaker[prevPlayer]
+slwi r6, r18, 2
+slwi r5, r17, 2
+add r6, r6, sp		# r6 is *(tieBreaker[currPlayer]) - 4
+add r5, r5, sp		# r5 is *(tieBreaker[prevPlayer]) - 4
+lwz r6, 4(r6)		# r6 is tieBreaker[currPlayer]
+lwz r5, 4(r5)		# r5 is tieBreaker[prevPlayer]
+cmpw r6, r5
+bge+ BREAKSORTLOOP
+add r16, sp, r20     # r16 = *(placementOrder[j])
+stb r17, 0(r16)      # placementOrder[j] = prevPlayer
+addi r20, r20, -1    # j--
+b SORTLOOP
+BREAKSORTLOOP:
+add r20, sp, r20
+stb r18, 0(r20)       # placementOrder[j] = currPlayer
+addi r21, r21, 1
+cmpwi r21, 4
+bne+ INSERTSTART
+END_INSERT:
+
+li r3, 0x5	# Next screen is results screen
+li r0, 0x4	# r0 also needs to be set to go to results screen
+
+# Go through and set the placements
+li r18, 0		# r18 = currPlacing
+lis r17, 0xFFFF		# r17 = lastTieBreaker
+ori r17, r17, 0xFFFF		# r17 = lastTieBreaker
+li r16, 0		# r16 is i
+PLACING_START:
+add r6, sp, r16	# r6 = *(placementOrder[i])
+lbz r6, 0(r6)	# r6 = playerNum
+cmpwi r6, 0x00FF
+beq- PLACING_END
+slwi r5, r6, 2
+add r5, r5, sp	# r5 = *(tieBreaker[playerNum]) - 4
+lwz r5, 4(r5)	# r5 = tieBreaker[playerNum]
+cmpw r17, r5
+bne+ UPDATE_PLACING
+cmpwi r18, 0
+bne+ SET_PLACEMENT
+li r3, 0x4            # Next screen is sudden death
+li r0, 0x3            # r0 also needs to be set
+b SET_PLACEMENT
+UPDATE_PLACING:
+mr r17, r5
+mr r18, r16		# currPlacing = i
+SET_PLACEMENT:
+lis r20, 0x8048
+ori r20, r20, 0x07C8
+lbz r20, 0(r20)	# r20 is whether it is teams battle
+cmpwi r20, 0	# is it a teams battle?
+beq+ PLACING_NOT_TEAMS
+lis r5, 0x8047
+ori r5, r5, 0x9DC8
+mulli r6, r6, 0xC
+add r6, r6, r5
+stb r18, 0(r6)
+stb r18, 1(r6)
+b PLACING_CONT
+PLACING_NOT_TEAMS:
+lis r5, 0x8047
+ori r5, r5, 0x9E00	# r5 is the base placement address
+mulli r6, r6, 0xA8	# playerNum *= 0xA8
+add r6, r6, r5		# r6 = getPlacementAddress(playerNum)
+stb r18, 1(r6)
+stb r18, 2(r6)
+PLACING_CONT:
+addi r16, r16, 1
+cmpwi r16, 4
+bne+ PLACING_START
+PLACING_END:
+
+addi sp, sp, 0x14 # Clear the stack
+# Clear some used registers
+li r16, 0
+li r17, 0
+li r18, 0
+li r20, 0
+li r21, 0
+RETURN:
+b 0x801A4160
+
+1.02 ------ 0x801A415C ---- 3803ffff -> Branch
 3803FFFF    # Code at hook point
+# First, check for breaking ties by percent
+lis r9, <<varOptionsPreset>>@h
+ori r9, r9, <<varOptionsPreset>>@l
+81290000    # lwz r9, 0(r9)
+2C090000    # cmpwi r9, 0
+41820028    # beq NORMAL
+2C090004    # cmpwi r9, 4
+41820020    # beq NORMAL
+2C090001    # cmpwi r9, 1
+bne <funBreakTiesByPercent>
+lis r9, <<varTournamentStyleOvertimeEnabled>>@h
+ori r9, r9, <<varTournamentStyleOvertimeEnabled>>@l
+81290000    # lwz r9, 0(r9)
+2C090001    # cmpwi r9, 1
+beq <funBreakTiesByPercent>
+            # NORMAL:
+# Last, check if we should skip results screen
 lis r9, <<varSkipResultsScreen>>@h
 ori r9, r9, <<varSkipResultsScreen>>@l
 81290000    # lwz r9, 0(r9)

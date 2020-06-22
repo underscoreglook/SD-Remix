@@ -59,7 +59,7 @@ customCodeRegions = OrderedDict([
 
 	# The following regions are used for the multiplayer tournament mode (which of course will no longer be functional if you use this space). 
 	# If you use this space, you may want to add a code that prevents people from accessing this mode so that the game doesn't crash when someone tries to use it.
-	# TODO: There's still BACHACKs left here. so this is commented out and replaced with one that works
+	# TODO: There's still BADHACKs left here. so this is commented out and replaced with one that works
 	#( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18DCC0, 0x197B30 ) ] ), 	# Total space: 0x9E70
 	( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18E584, 0x197B30 ) ] ), 	# Total space: ????
 	( 'NTSC 1.01|Tournament Mode Region', [ ( 0x18D674, 0x1974E4 ) ] ), 	# Total space: 0x9E70
