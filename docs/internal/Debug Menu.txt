@@ -49,7 +49,7 @@ Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of BADHACKs an
 18DCC0: * nothing here *
 18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
 18E3C4: + Wall bracing (See BADHACKS: "Wall Bracing")
-18E3FC: + Capped Points (See BADHACKS: "Capped (Tennis) Mode"
+18E3FC: * nothing here *
 18E510: + Tap Jump (SEE BADHACKS: "Disable Tap Jump")
 18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
 18F510: * End *

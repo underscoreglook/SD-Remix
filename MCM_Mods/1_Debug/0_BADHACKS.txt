@@ -142,9 +142,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <varWallBracing> ALL
 0000 0000
 
-<varCappedPoints> ALL
-0000 0000
-
 <strMeleePlusTitle> ALL                 # "< Melee+ >"
 3C204D65 6C65652B 203E0000
 
@@ -153,9 +150,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
 <strWallBracingOpt> ALL                 # "Wall Bracing: "
 57616C6C 20427261 63696E67 3A200000
-
-<strCappedPointsOpt> ALL                # "Capped Points: "
-43617070 65642050 6F696E74 733A2000
 
 <strDynamic> ALL
 44796E61 6D696300
@@ -232,35 +226,6 @@ loc_0x58:
   li r3, 0x0
   blr
 
-<funDbgToggleCappedPoints> NTSC 1.02
-  lis r3, <<varOptionsPreset>>@h
-  ori r3, r3, <<varOptionsPreset>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x1
-  blt- loc_0x2C
-  bgt- loc_0x44
-  lis r3, <<varCappedPoints>>@h
-  ori r3, r3, <<varCappedPoints>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x0
-  bne- loc_0x44
-loc_0x2C:
-  lis r4, 0x8016
-  ori r4, r4, 0xCDAC    # BADHACK 8016CDAC     Default 88030005
-  lis r3, 0x8803
-  ori r3, r3, 0x5
-  stw r3, 0(r4)
-  b loc_0x58
-loc_0x44:
-  lis r4, 0x8016
-  ori r4, r4, 0xCDAC    # BADHACK 8016CDAC     Branch
-  lis r3, 0x4802
-  ori r3, r3, 0x4A70
-  stw r3, 0(r4)
-loc_0x58:
-  li r3, 0x0
-  blr
-
 <tblDbgMeleePlusTogglesSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -282,15 +247,6 @@ loc_0x58:
     .long <<strWallBracingOpt>>                     # Label
     .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
     .long <<varWallBracing>>                        # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
-# Entry 5: Capped Points/Tennis mode
-    00000002                                        # String Table
-    .long <<funDbgToggleCappedPoints>>              # Toggle function
-    .long <<strCappedPointsOpt>>                    # Label
-    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
-    .long <<varCappedPoints>>                       # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a

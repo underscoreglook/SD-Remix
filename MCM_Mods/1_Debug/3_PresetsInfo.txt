@@ -90,6 +90,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strTournamentOvertime> NTSC 1.02
 546f7572 6e616d65 6e74204f 76657274 696d6500
 
+<strCappedPoints> NTSC 1.02
+43617070 65642050 6f696e74 73000000
+
 
 	-==-
 
@@ -149,6 +152,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strTournamentOvertime>>
     00000000 00000000 00000000 00000000 00000000
+# Entry 4: Capped Points
+    00000000 00000000
+    .long <<strCappedPoints>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -175,6 +182,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 2: Handicaps is stocks
     00000000 00000000
     .long <<strHandicapIsStock>>
+    00000000 00000000 00000000 00000000 00000000
+# Entry 3: Capped Points
+    00000000 00000000
+    .long <<strCappedPoints>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -206,6 +217,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 3: Tournament Overtime
     00000000 00000000
     .long <<strTournamentOvertime>>
+    00000000 00000000 00000000 00000000 00000000
+# Entry 4: Capped Points
+    00000000 00000000
+    .long <<strCappedPoints>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

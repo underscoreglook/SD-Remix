@@ -55,6 +55,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 .long <<strNormal>>
 .long <<strTournament>>
 
+<strCappedPointsOpt> ALL                # "Capped Points: "
+43617070 65642050 6F696E74 733A2000
+
 <tblDbgMechanicsGameSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -85,6 +88,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strOvertimeOpt>>                        # Label
     .long <<arrOvertimeOpts>>                       # Options
     .long <<varTournamentStyleOvertimeEnabled>>     # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: Capped Points/Tennis Mode
+    00000002                                        # String Table
+    00000000
+    .long <<strCappedPointsOpt>>                    # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varCappedPointsEnabled>>                # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
@@ -530,4 +542,47 @@ ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
             # DISABLE_PORT_PRIORITY:
 38040000    # Disable Port Priority
             # RETURN:
+00000000    # Branch Back
+
+
+	-==-
+
+
+Capped Points/Tennis Mode
+Treats the Stock Match Time Limit as a points cap in Time mode and a coin cap in Coin Mode (coin cap is the minutes set times 100).
+It ends the match immediately once one of the players has reached the point or coin limit/cap.
+Setting Stock Match Time Limit to None turns this off, so you can still play normally if you want to
+<https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/post-19212332>
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<varCappedPointsEnabled> ALL
+00000000
+
+<funCappedPointsMode> NTSC 1.02
+88030005 3C808045 6084BF18 88840000 2C040000 418200FC 3CA08045 60A5BF12
+88A50000 2C050002 40A2000C 1C840064 48000018 2C050000 40A200D8 3CE08045
+60E7BF1C 88E70000 38A00000 3CC08045 60C63080 81060008 2C080003 41820070
+2C040064 41A00014 81060090 7C082000 40800070 48000058 39000000 81260070
+7D084A14 81260074 7D084A14 81260078 7D084A14 8126007C 7D084A14 81260068
+7D094050 A126008C 2C070001 4182000C 41810010 48000010 7D084A14 48000008
+7D094050 7C082000 40800018 38A50001 38C60E90 2C050004 4082FF7C 48000034
+38800032 3CA08046 60A5DB68 98850000 38800000 3CA08046 60A5B6C8 90850000
+3880003A 3CA08046 60A5B6CC B0850000
+b 0x8016CDB0
+1.02 ----- 0x8016CDAC --- 88030005 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0002    # cmpwi r11, 2
+bgt <funCappedPointsMode>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varCappedPointsEnabled>>@h
+ori r11, r11, <<varCappedPointsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funCappedPointsMode>
+            # NORMAL:
+88030005    # Code at injection point
 00000000    # Branch Back
