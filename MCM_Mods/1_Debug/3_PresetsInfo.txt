@@ -93,6 +93,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strCappedPoints> NTSC 1.02
 43617070 65642050 6f696e74 73000000
 
+<strUsmashInRun> ALL
+43737469 636b2055 70205275 6e000000
+
 
 	-==-
 
@@ -169,9 +172,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPresetCasualTitle> ALL
 3c204c65 73732073 7472696e 67656e74 20706c61 79203e00
 
-<strUsmashInRun> ALL
-43737469 636b2055 70205275 6e000000
-
 <tblDbgPresetCasualInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
@@ -228,6 +228,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 4: Capped Points
     00000000 00000000
     .long <<strCappedPoints>>
+    00000000 00000000 00000000 00000000 00000000
+# Entry 5: UpSmash w/ C-stick in run
+    00000000 00000000
+    .long <<strUsmashInRun>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

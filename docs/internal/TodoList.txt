@@ -127,7 +127,6 @@ Presets explanations>
         Grab Infinite Removal
         Throw Bug Fix
         https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
-        https://smashboards.com/threads/c-stick-up-smash-during-run.415771
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
         https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
