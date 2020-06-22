@@ -155,6 +155,7 @@ beq <funTapJumpFromGround>
 Interrupt_AS_Run Includes Interrupt_USmash (integrated)
 Normal: You can upsmash from run if you jump then upsmash, can't use cstick for this
 This code: Cstick will do a jump cancelled up smash
+<https://smashboards.com/threads/c-stick-up-smash-during-run.415771/>
 [Achilles]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <varUsmashDuringRunEnabled> ALL
@@ -170,6 +171,8 @@ NTSC 1.02 ---- 0x800CA888 ----- 7FC3F378 -> Branch
 lis r11, <<varOptionsPreset>>@h
 ori r11, r11, <<varOptionsPreset>>@l
 816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+beq <funUsmashDuringRun>
 2C0B0001    # cmpwi r11, 1
 40820018    # bne NORMAL
 lis r11, <<varUsmashDuringRunEnabled>>@h

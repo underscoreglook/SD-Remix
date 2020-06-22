@@ -107,6 +107,11 @@ Presets explanations>
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
+        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
+        https://smashboards.com/threads/various-shield-drop-codes.447375/
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
+        https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
+        https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
         Grab Infinite Removal
@@ -115,12 +120,6 @@ Presets explanations>
         Marth colors match costume
         Food appears when items disabled
         DK Hold B for DownB
-        https://smashboards.com/threads/c-stick-up-smash-during-run.415771
-        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
-        https://smashboards.com/threads/various-shield-drop-codes.447375/
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
-        https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
-        https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     NEW MECHANICS
         Disable Star KO
         Ledge Invincibility: Dynamic
@@ -160,11 +159,11 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Controls>
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/ [casual]
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/ [casual]
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
-        https://smashboards.com/threads/short-hop-macro-x-y.476502/
+            https://smashboards.com/threads/short-hop-macro-x-y.476502/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     Balance>
         Disable Star KO

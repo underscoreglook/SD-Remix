@@ -128,7 +128,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 54617020 4a756d70 73203e00
 
 <strUsmashInRunOpt> ALL
-55736d61 73682049 6e205275 6e3a0000
+43737469 636b2055 70205275 6e3a0000
 
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
