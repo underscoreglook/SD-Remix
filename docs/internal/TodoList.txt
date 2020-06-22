@@ -81,6 +81,7 @@ L Cancel % in Results Screen (revised 2/11/15)
 Fix percents not breaking ties in tournament overtime (and move it from badhacks) [_glook]
 Moved Capped Points/Tennis Mode away from badhacks
 Per controller tap jump [fileskiller, achilles]
+Add cstick to jump cancel upsmash [Achilles]
 
 
 =============
@@ -159,7 +160,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Controls>
-        https://smashboards.com/threads/c-stick-up-smash-during-run.415771
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
         https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/ [casual]

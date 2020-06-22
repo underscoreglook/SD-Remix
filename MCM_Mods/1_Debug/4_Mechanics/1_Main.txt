@@ -127,6 +127,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strTapJumpsSub> ALL
 54617020 4a756d70 73203e00
 
+<strUsmashInRunOpt> ALL
+55736d61 73682049 6e205275 6e3a0000
+
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -139,5 +142,14 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<tblDbgMechanicsControlsTapJumpsSubMenu>>    # Submenu table
     00000000 00000000
+# Entry 2: Upsmash with Cstick in run
+    00000002                                        # String Table
+    00000000
+    .long <<strUsmashInRunOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varUsmashDuringRunEnabled>>             # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

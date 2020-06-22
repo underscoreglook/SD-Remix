@@ -147,3 +147,36 @@ ori r11, r11, <<varOptionsPreset>>@l
 beq <funTapJumpFromGround>
 7C0802A6    # Code at injection point
 00000000    # Branch Back
+
+
+	-==-
+
+
+Interrupt_AS_Run Includes Interrupt_USmash (integrated)
+Normal: You can upsmash from run if you jump then upsmash, can't use cstick for this
+This code: Cstick will do a jump cancelled up smash
+[Achilles]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varUsmashDuringRunEnabled> ALL
+00000000
+
+<funUsmashDuringRun> NTSC 1.02
+3C608008 6063C830 7C6803A6 7FC3F378
+4E800021 2C030000 3C60800C 6063A944
+7C6903A6 41820008 4E800420
+7FC3F378    # Code at hook location
+b 0x800CA88C
+NTSC 1.02 ---- 0x800CA888 ----- 7FC3F378 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varUsmashDuringRunEnabled>>@h
+ori r11, r11, <<varUsmashDuringRunEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funUsmashDuringRun>
+            # NORMAL:
+7FC3F378    # Code at injection point
+00000000    # branch back
