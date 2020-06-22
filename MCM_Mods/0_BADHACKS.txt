@@ -45,19 +45,6 @@ NTSC 1.02 ---- 0x18E3C4 -----
 	-==-
 
 
-Disable Tap Jump (SDR Statically placed @ 80191930)
-Affects all players
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x18E510 -----
-387F0000 38800010 481E0665 801E0000 2C00000C 418200EC 40800010 2C00000B 40800018 480000DC 2C00000F
-->
-89FD06BE 2C0F0004 40800008 4E800020 7C0802A6 4BF3A280 2C040001 40820008 4E800020 7C0802A6 4BF39B8C
-
-
-	-==-
-
-
 Random Hitbox Elements - Every Non-projectile Attack (SDR Statically placed @ 8019195C)
 All Non-projectile attacks will have a random effect, rather than their normal one.
 [Achilles]

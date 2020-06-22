@@ -102,14 +102,13 @@ Presets explanations>
     SERIOUS
         Disable Star KO = Enabled
         Throw Bug Fix
-        Marth colors match costume
         Disable Capsule Explosions
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
         Ledge Invincibility: Dynamic
@@ -121,15 +120,16 @@ Presets explanations>
         Food appears when items disabled
         DK Hold B for DownB
     NEW MECHANICS
+        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
         Disable Star KO
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
         Grab Infinite Removal
         Throw Bug Fix
+        Marth colors match costume
         https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
         https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
@@ -159,19 +159,18 @@ Presets explanations>
 Mechanics>
     Controls>
         https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/ [casual]
-        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
-        https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
             https://smashboards.com/threads/short-hop-macro-x-y.476502/
+        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
+        https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
-    Balance>
+    Melee>
         Disable Star KO
         Throw Bug Fix
         Detection Bubbles Continue Hurtbox Collision Check
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
         https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
-    Melee>
         Ledge Invincibility: Disabled, Dynamic, Limit
             https://smashboards.com/threads/ledge-grab-limit.475802/
         Wall Bracing: Enabled
