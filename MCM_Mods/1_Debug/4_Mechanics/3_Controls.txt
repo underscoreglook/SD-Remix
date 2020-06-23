@@ -344,3 +344,56 @@ beq <funShortHopIsY>
             # NORMAL:
 801F2340    # Code at injection point
 00000000    # branch back
+
+
+	-==-
+
+
+Charge Smash Attacks with C-Stick
+<https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varChargeWithCStick> ALL
+00000000
+
+<funChargeWithCStickPart1> NTSC 1.02
+89DF065D 2C0E000F 41800014 3DC0800D
+61CEF114 7DC903A6 4E800420 801F065C
+b 0x800DF10C
+NTSC 1.02 ---- 0x800DF108 ----- 801F065C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+bge <funChargeWithCStickPart1>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varChargeWithCStick>>@h
+ori r11, r11, <<varChargeWithCStick>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funChargeWithCStickPart1>
+            # NORMAL:
+801F065C    # Code at injection point
+00000000    # branch back
+
+<funChargeWithCStickPart2> NTSC 1.02
+89DF065D 2C0E000F 41800014 3DC0800D
+61CEF1B0 7DC903A6 4E800420 801F065C
+b 0x800DF180
+NTSC 1.02 ---- 0x800DF17C ----- 801F065C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+bge <funChargeWithCStickPart2>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varChargeWithCStick>>@h
+ori r11, r11, <<varChargeWithCStick>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funChargeWithCStickPart2>
+            # NORMAL:
+801F065C    # Code at injection point
+00000000    # branch back

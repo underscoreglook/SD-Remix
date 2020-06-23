@@ -107,7 +107,6 @@ Presets explanations>
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
         Ledge Invincibility: Dynamic
@@ -126,7 +125,6 @@ Presets explanations>
         Throw Bug Fix
         Marth colors match costume
         https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
-        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
         https://smashboards.com/threads/tech-grab.459113/
@@ -156,7 +154,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Controls>
-        https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     Melee>

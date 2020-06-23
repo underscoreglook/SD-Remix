@@ -154,6 +154,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 .long <<strX>>
 .long <<strY>>
 
+<strChangeWithCstickOpt> ALL
+43686172 67652077 2f204353 7469636b 3a000000
+
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -191,7 +194,16 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<arrShorthopButtonOpts>>                 # Options
     .long <<varShortHopButton>>                     # Variable
     00000000                                        # n/a
-    40400000                                        # 4 item table
+    40400000                                        # 3 item table
+    00000000                                        # n/a
+# Entry 5: Charge with C-Stick
+    00000002                                        # String Table
+    00000000
+    .long <<strChangeWithCstickOpt>>                # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varChargeWithCStick>>                   # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
     00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
