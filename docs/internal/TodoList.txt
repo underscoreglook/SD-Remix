@@ -82,6 +82,7 @@ Fix percents not breaking ties in tournament overtime (and move it from badhacks
 Moved Capped Points/Tennis Mode away from badhacks
 Per controller tap jump [fileskiller, achilles]
 Add cstick to jump cancel upsmash [Achilles]
+Add extended short hop window [tauKhan]
 
 
 =============
@@ -106,7 +107,6 @@ Presets explanations>
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
         https://smashboards.com/threads/various-shield-drop-codes.447375/
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
@@ -120,7 +120,6 @@ Presets explanations>
         Food appears when items disabled
         DK Hold B for DownB
     NEW MECHANICS
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/
         Disable Star KO
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
@@ -158,7 +157,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Controls>
-        https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/ [casual]
         https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/
             https://smashboards.com/threads/short-hop-macro-x-y.476502/
         https://smashboards.com/threads/charge-smash-attacks-with-c-stick.447579/
@@ -251,6 +249,51 @@ Debug Menu>
 
 
 ==================================================================================
+<varZZZZZZZZZ> ALL
+00000000
+
+
+# Normal code injection
+<funZZZZZZZZZ> NTSC 1.02
+b 0x80YYYYYY+4
+NTSC 1.02 ---- 0x80YYYYYY ----- XXXXXXXX -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+bge <funZZZZZZZZZ>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varZZZZZZZZZ>>@h
+ori r11, r11, <<varZZZZZZZZZ>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funZZZZZZZZZ>
+            # NORMAL:
+XXXXXXXX    # Code at injection point
+00000000    # branch back
+
+# Single Code replacement
+NTSC 1.02 ---- 0x80YYYYYY ----- XXXXXXXX -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800028    # bge NEW_ACTION_LABEL
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varZZZZZZZZZ>>@h
+ori r11, r11, <<varZZZZZZZZZ>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq NEW_ACTION_LABEL
+            # NORMAL:
+XXXXXXXX    # Code at injection point
+48000008    # b RETURN
+            # NEW_ACTION_LABEL
+WWWWWWWW    # Do the new thing
+            # RETURN:
+00000000    # branch back
 
 
 

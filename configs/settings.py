@@ -61,7 +61,12 @@ customCodeRegions = OrderedDict([
 	# If you use this space, you may want to add a code that prevents people from accessing this mode so that the game doesn't crash when someone tries to use it.
 	# TODO: There's still BADHACKs left here. so this is commented out and replaced with one that works
 	#( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18DCC0, 0x197B30 ) ] ), 	# Total space: 0x9E70
-	( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18E584, 0x197B30 ) ] ), 	# Total space: ????
+	( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18E584, 0x197B30 ) ] ), 	# Total space: ????  Get rid of me
+	# 18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
+	# 18E3C4: + Wall bracing (See BADHACKS: "Wall Bracing")
+	# 18E3FC: * nothing here *
+	# 18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
+	# 18F510: * End *
 	( 'NTSC 1.01|Tournament Mode Region', [ ( 0x18D674, 0x1974E4 ) ] ), 	# Total space: 0x9E70
 	( 'NTSC 1.00|Tournament Mode Region', [ ( 0x18CDC0, 0x196DE4 ) ] ), 	# Total space: 0xA024
 	( 'PAL 1.00|Tournament Mode Region', [ ( 0x18E804, 0x1986A0 ) ] ), 		# Total space: 0x9E9C

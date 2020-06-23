@@ -44,14 +44,6 @@ Running list of free space in debug section (we don't let MCM overwrite it becau
 menus in some regards and also overwrites the menus directly so we don't have to store the new main menu data
 elsewhere) ("+" Means it's stuck there for now, but we should move it out eventually)
 ================================================================================================================
-Tournament Mode, 0x1854 bytes, at 18DCC0 to 18F510 (TODO: Get rid of BADHACKs and restore this section in settings.py)
---------------------------------------------------
-18DCC0: * nothing here *
-18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
-18E3C4: + Wall bracing (See BADHACKS: "Wall Bracing")
-18E3FC: * nothing here *
-18E53C: + Random Hitbox Element (See BADHACKS: "Random Hitbox Elements")
-18F510: * End *
 
 Debug menu free space
 -------------------

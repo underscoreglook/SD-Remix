@@ -96,6 +96,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strUsmashInRun> ALL
 43737469 636b2055 70205275 6e000000
 
+<strExtendedSHWindow>
+45787465 6e646564 20534820 57696e64 6f770000
+
 
 	-==-
 
@@ -194,6 +197,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strUsmashInRun>>
     00000000 00000000 00000000 00000000 00000000
+# Entry 5: Extended Shorthop Window
+    00000000 00000000
+    .long <<strExtendedSHWindow>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -232,6 +239,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 5: UpSmash w/ C-stick in run
     00000000 00000000
     .long <<strUsmashInRun>>
+    00000000 00000000 00000000 00000000 00000000
+# Entry 6: Extended Shorthop Window
+    00000000 00000000
+    .long <<strExtendedSHWindow>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

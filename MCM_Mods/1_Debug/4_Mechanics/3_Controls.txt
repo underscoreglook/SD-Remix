@@ -183,3 +183,107 @@ beq <funUsmashDuringRun>
             # NORMAL:
 7FC3F378    # Code at injection point
 00000000    # branch back
+
+
+	-==-
+
+
+Extended SH Jump Input Release Window
+Jump height is determined on the first aerial frame of grounded jump like in Project M.
+So if you perform a grounded jump with fox, releasing jump input by frame 4 is sufficient to short hop, instead of having to release the button by frame 3.
+Otherwise jump physics still work like in melee, and control stick influence to horizontal speed still depends on the input received for the last frame of jumpsquat
+<https://smashboards.com/threads/extended-short-hop-jump-input-release-window.450652/>
+[tauKhan]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varEnableExtendedShorthopWindow>
+00000000
+
+NTSC 1.02 ---- 0x800CB2CC ----- 4BFFFE45 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800028    # bge EXTENDED_SHORTHOP_WINDOW
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varEnableExtendedShorthopWindow>>@h
+ori r11, r11, <<varEnableExtendedShorthopWindow>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq EXTENDED_SHORTHOP_WINDOW
+            # NORMAL:
+bl 0x800CB110    # Code at injection point
+48000008    # b RETURN
+            # EXTENDED_SHORTHOP_WINDOW
+60000000    # Do the new thing
+            # RETURN:
+00000000    # branch back
+
+NTSC 1.02 ---- 0x800CB168 ----- C03F0620 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800028    # bge EXTENDED_SHORTHOP_WINDOW
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varEnableExtendedShorthopWindow>>@h
+ori r11, r11, <<varEnableExtendedShorthopWindow>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq EXTENDED_SHORTHOP_WINDOW
+            # NORMAL:
+C03F0620    # Code at injection point
+48000008    # b RETURN
+            # EXTENDED_SHORTHOP_WINDOW
+C03F0628    # Do the new thing
+            # RETURN:
+00000000    # branch back
+
+NTSC 1.02 ---- 0x800CB1F8 ----- 981F0671 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800028    # bge EXTENDED_SHORTHOP_WINDOW
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varEnableExtendedShorthopWindow>>@h
+ori r11, r11, <<varEnableExtendedShorthopWindow>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq EXTENDED_SHORTHOP_WINDOW
+            # NORMAL:
+981F0671    # Code at injection point
+48000008    # b RETURN
+            # EXTENDED_SHORTHOP_WINDOW
+98010028    # Do the new thing
+            # RETURN:
+00000000    # branch back
+
+<funExtendedShorthopWindow> NTSC 1.02
+83E3002C A09F03E8 2C040000 40820068
+7FE4FB78 3D80800C 618CB640 9421FFE0
+93E1001C 48000014 7FE802A6 93E10024
+7D8803A6 4E800020 4BFFFFF1 807F0000
+3821FFF8 C02294DC 38800001 3D80800C
+618CB110 7D8903A6 4E800421 38210008
+889F0671 2C040000 4182000C 8881FFF8
+989F0671 7FC3F378
+b 0x800CB350
+NTSC 1.02 ---- 0x800CB34C ----- 83E3002C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+bge <funExtendedShorthopWindow>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varEnableExtendedShorthopWindow>>@h
+ori r11, r11, <<varEnableExtendedShorthopWindow>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funExtendedShorthopWindow>
+            # NORMAL:
+83E3002C    # Code at injection point
+00000000    # branch back

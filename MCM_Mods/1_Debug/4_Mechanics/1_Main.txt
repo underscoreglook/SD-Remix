@@ -130,6 +130,16 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strUsmashInRunOpt> ALL
 43737469 636b2055 70205275 6e3a0000
 
+<strShorthopWindowOpt> ALL
+53686f72 74686f70 2057696e 646f773a 00000000
+
+<strExtended> ALL
+45787465 6e646564 00000000
+
+<arrShorthopWindowOpts> ALL
+.long <<strNormal>>
+.long <<strExtended>>
+
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -148,6 +158,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strUsmashInRunOpt>>                     # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varUsmashDuringRunEnabled>>             # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Extended Shorthop window
+    00000002                                        # String Table
+    00000000
+    .long <<strShorthopWindowOpt>>                  # Label
+    .long <<arrShorthopWindowOpts>>                 # Options
+    .long <<varEnableExtendedShorthopWindow>>       # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
