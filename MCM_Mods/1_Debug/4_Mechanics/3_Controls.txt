@@ -431,3 +431,34 @@ beq <funShieldDropWithDpad>
 00000000    # branch back
 
 
+	-==-
+
+
+Wavedash Out of JumpSquat Rivals of Aether Style
+<https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varWavedashOutOfJumpsquat> ALL
+00000000
+
+<funWavedashOutOfJumpsquat> NTSC 1.02
+83DF002C 801E0668 54000675 4182007C C03E0624 C0029898 FC010040 4081001C
+7FE3FB78 3D808009 618C9A9C 7D8903A6 4E800421 48000054 7FC3F378 3D808007
+618CD9D4 7D8903A6 4E800421 3D808032 618C6240 7D8903A6 4E800421 806DAEB4
+C0030338 EC000072 C023033C EC010032 D01E0080 7FE3FB78 3D808009 618C9D70
+7D8903A6 4E800421 80010024
+b 0x800CB69C
+NTSC 1.02 ---- 0x800CB698 ----- 80010024 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varWavedashOutOfJumpsquat>>@h
+ori r11, r11, <<varWavedashOutOfJumpsquat>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funWavedashOutOfJumpsquat>
+            # NORMAL:
+80010024    # Code at injection point
+00000000    # branch back

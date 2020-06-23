@@ -160,6 +160,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strShieldDropWithDpadDown> ALL
 5368696c 65642044 726f7020 772f2044 70616420 446f776e 3a000000
 
+<strJumpsquatWavedashOpt> ALL
+4a756d70 73717561 74205761 76656461 73683a00
+
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -214,6 +217,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strShieldDropWithDpadDown>>             # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varShieldDropWithDpad>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 7: Jumpsquat Wavedash
+    00000002                                        # String Table
+    00000000
+    .long <<strJumpsquatWavedashOpt>>               # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varWavedashOutOfJumpsquat>>             # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
