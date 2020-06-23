@@ -107,7 +107,6 @@ Presets explanations>
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        https://smashboards.com/threads/various-shield-drop-codes.447375/
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
@@ -154,7 +153,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Controls>
-        https://smashboards.com/threads/various-shield-drop-codes.447375/ for casual mode
         https://smashboards.com/threads/wavedash-out-of-jumpsquat-roa-style.454197/
     Melee>
         Disable Star KO

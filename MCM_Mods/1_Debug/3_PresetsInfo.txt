@@ -178,6 +178,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPresetCasualTitle> ALL
 3c204c65 73732073 7472696e 67656e74 20706c61 79203e00
 
+<strShieldDropWithDpad> ALL
+5368696c 65642044 726f7020 772f2044 70616420 446f776e 00000000
+
 <tblDbgPresetCasualInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
@@ -207,6 +210,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 6: Change With C Stick
     00000000 00000000
     .long <<strChargeWithCStick>>
+    00000000 00000000 00000000 00000000 00000000
+# Entry 7: Shield Drop w/ Dpad Down
+    00000000 00000000
+    .long <<strShieldDropWithDpad>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

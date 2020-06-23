@@ -397,3 +397,37 @@ beq <funChargeWithCStickPart2>
             # NORMAL:
 801F065C    # Code at injection point
 00000000    # branch back
+
+
+	-==-
+
+
+Press down on D-Pad to Shield Drop
+<https://smashboards.com/threads/various-shield-drop-codes.447375/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varShieldDropWithDpad> ALL
+00000000
+
+<funShieldDropWithDpad> NTSC 1.02
+89DF066B 2C0E0004 40820018 7FC3F378
+3DC08009 61CEA228 7DC903A6 4E800420 7C0802A6
+b 0x8009A084
+NTSC 1.02 ---- 0x8009A080 ----- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+beq <funShieldDropWithDpad>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varShieldDropWithDpad>>@h
+ori r11, r11, <<varShieldDropWithDpad>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funShieldDropWithDpad>
+            # NORMAL:
+7C0802A6    # Code at injection point
+00000000    # branch back
+
+
