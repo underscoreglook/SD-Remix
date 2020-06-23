@@ -140,6 +140,20 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 .long <<strNormal>>
 .long <<strExtended>>
 
+<strShorthopButtonOpt> ALL
+53686f72 74686f70 20427574 746f6e3a 00000000
+
+<strX> ALL
+58000000
+
+<strY> ALL
+59000000
+
+<arrShorthopButtonOpts> ALL
+.long <<strDisabled>>
+.long <<strX>>
+.long <<strY>>
+
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -169,6 +183,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<varEnableExtendedShorthopWindow>>       # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: Shorthop Button
+    00000002                                        # String Table
+    00000000
+    .long <<strShorthopButtonOpt>>                  # Label
+    .long <<arrShorthopButtonOpts>>                 # Options
+    .long <<varShortHopButton>>                     # Variable
+    00000000                                        # n/a
+    40400000                                        # 4 item table
     00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

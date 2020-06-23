@@ -287,3 +287,60 @@ beq <funExtendedShorthopWindow>
             # NORMAL:
 83E3002C    # Code at injection point
 00000000    # branch back
+
+
+	-==-
+
+
+Short Hop Button
+Has dedicated button for short hop and full hop
+<https://smashboards.com/threads/seperate-short-and-long-hop-buttons.447835/>
+[UnclePunch]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varShortHopButton> ALL
+00000000    # 0 = Disabled, 1 = X, 2 = Y
+
+<funShortHopButtonCommon> NTSC 1.02
+83F8002C 801F0668 901F2354 8001000C
+b 0x800CB51C
+NTSC 1.02 ---- 0x800CB518 ----- 8001000C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varShortHopButton>>@h
+ori r11, r11, <<varShortHopButton>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bge <funShortHopButtonCommon>
+            # NORMAL:
+8001000C    # Code at injection point
+00000000    # branch back
+
+<funShortHopIsX> NTSC 1.02
+81DF2354 55C0056B 40820010 55C00529
+40820010 48000014 38000001 48000010
+38000000 48000008 801F2340
+b 0x800CB174
+<funShortHopIsY> NTSC 1.02
+81DF2354 55C0056B 40820010 55C00529
+40820010 48000014 38000000 48000010
+38000001 48000008 801F2340
+b 0x800CB174
+NTSC 1.02 ---- 0x800CB170 ----- 801F2340 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varShortHopButton>>@h
+ori r11, r11, <<varShortHopButton>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funShortHopIsX>
+2C0B0002    # cmpwi r11, 2
+beq <funShortHopIsY>
+            # NORMAL:
+801F2340    # Code at injection point
+00000000    # branch back
