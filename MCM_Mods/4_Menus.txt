@@ -107,7 +107,7 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 
 
 	-==-
-
+! This conflicts with Slippi Netcode
 
 Extended Name Entry
 English alphabet name tags can be up to 8 characters in length.
