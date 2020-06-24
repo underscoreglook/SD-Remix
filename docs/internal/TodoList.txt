@@ -83,6 +83,10 @@ Moved Capped Points/Tennis Mode away from badhacks
 Per controller tap jump [fileskiller, achilles]
 Add cstick to jump cancel upsmash [Achilles]
 Add extended short hop window [tauKhan]
+X/Y dedicated short hop buttons [UnclePunch]
+Charge with c-stick [UnclePunch]
+Shield drop with dpad down [UnclePunch]
+Wavedash out of jumpsquat [UnclePunch]
 
 
 =============
@@ -124,7 +128,6 @@ Presets explanations>
         Marth colors match costume
         https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
-        https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
     < SD DOUBLE REMIX
         Detection Bubbles Continue Hurtbox Collision Check
@@ -142,6 +145,7 @@ Presets explanations>
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
      << SDDR & BRAWLKLES
+        https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
         https://smashboards.com/threads/dacus.419467/
         https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
@@ -155,7 +159,6 @@ Mechanics>
         Throw Bug Fix
         Detection Bubbles Continue Hurtbox Collision Check
         https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
-        https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
         Ledge Invincibility: Disabled, Dynamic, Limit
             https://smashboards.com/threads/ledge-grab-limit.475802/
@@ -172,6 +175,7 @@ Mechanics>
         https://smashboards.com/threads/grab-items-with-airdodge.499655/
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
     Other>
+        https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/
         https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/
         https://smashboards.com/threads/reverse-aerial-moves.446842/
