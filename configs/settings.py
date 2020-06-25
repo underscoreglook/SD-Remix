@@ -59,9 +59,10 @@ customCodeRegions = OrderedDict([
 
 	# The following regions are used for the multiplayer tournament mode (which of course will no longer be functional if you use this space). 
 	# If you use this space, you may want to add a code that prevents people from accessing this mode so that the game doesn't crash when someone tries to use it.
+	# Slippi uses the tournament mode region to inject its codes, so leave some space for it
 	# TODO: There's still BADHACKs left here. so this is commented out and replaced with one that works
 	#( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18DCC0, 0x197B30 ) ] ), 	# Total space: 0x9E70
-	( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18E584, 0x197B30 ) ] ), 	# Total space: ????  Get rid of me
+	#( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18E584, 0x197B30 ) ] ), 	# Total space: ????  Get rid of me
 	# 18E348: + Ledge invincibility (See BADHACKS: "Ledge Invincibility Attrition")
 	# 18E3C4: + Wall bracing (See BADHACKS: "Wall Bracing")
 	# 18E3FC: * nothing here *
@@ -102,13 +103,15 @@ customCodeRegions = OrderedDict([
 
 	# The regions below are used for the game's vanilla Debug Menu, which of course will no longer be functional if you use this space.
 	# The Debug Mode itself (DbLevel) may still work to some extent, but you would at least need a new method to enter it.
-	('NTSC 1.02|SDR Unused Debug Mode Regions', [
+	('NTSC 1.02|SDR Debug Mode Regions', [	# Normal space: 0x3f7124, 0x3fac20
 		(0x2FD338, 0x2FD370),	# 0x38
 		(0x2FD3A8, 0x2FE788),	# 0x13E0
+	]),  # Total space: 0x????
+	('NTSC 1.02|Unused Debug Mode Regions', [  # Normal space: 0x3f7124, 0x3fac20
 		(0x3F73E8, 0x3F74E0),	# 0xF8
 		(0x3F9420, 0x3F94CC),	# 0xAC
 		(0x3F97F0, 0x3FAC20),	# 0x1430
-	]),  # Total space: 0x???? (Changes based on what we do
+	]),  # Total space: 0x????
 
 	# These are unused areas containing text likely used for debugging the game, and have been tested to be safe for overwriting.
 	# However, they will disable the use of the OSReport mod.

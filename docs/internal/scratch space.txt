@@ -1,0 +1,17 @@
+
+044DEC18 01000000 #Common/Preload Stadium Transformations/Toggle/PsPreloadToggleEnable.asm
+
+In normal spot:
+Invalid read: 0xe0189dc0, PC = 0x803fd738
+
+In new spot (only tournament mode):
+Invalid read from 0x60295338, 0x80196504
+
+
+
+
+
+
+
+
+

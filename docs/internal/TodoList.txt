@@ -27,6 +27,13 @@ https://smashboards.com/threads/add-frames-of-armor-knockback-resistance-to-acti
 For doing character overviews:
 https://smashboards.com/threads/press-x-y-to-frame-advance.480440/
 
+For getting compatability with slippi, look at the asm codes
+https://github.com/project-slippi/slippi-ssbm-asm
+https://github.com/project-slippi/slippi-ssbm-asm/blob/master/netplay.json
+https://github.com/JLaferri
+ASM is not available.
+Next thing to try is if I can get everything to work built into the ISO so it works without any codes toggled (except for normal lag reduction, which should be fine).
+
 SD Remix Lite
 -------------
 Create compiler.
