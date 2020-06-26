@@ -105,6 +105,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strKoStarsDisabled> ALL
 4b4f2053 74617273 20446973 61626c65 64000000
 
+<strThrowBugFix> ALL
+5468726f 77204275 67204669 78000000
+
+
 	-==-
 
 
@@ -171,6 +175,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strKoStarsDisabled>>
     00000000 00000000 00000000 00000000 00000000
+# Throw Bug Fix
+    00000000 00000000
+    .long <<strThrowBugFix>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -220,6 +228,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 7: Shield Drop w/ Dpad Down
     00000000 00000000
     .long <<strShieldDropWithDpad>>
+    00000000 00000000 00000000 00000000 00000000
+# Throw Bug Fix
+    00000000 00000000
+    .long <<strThrowBugFix>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -271,6 +283,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # KO Stars Disabled
     00000000 00000000
     .long <<strKoStarsDisabled>>
+    00000000 00000000 00000000 00000000 00000000
+# Throw Bug Fix
+    00000000 00000000
+    .long <<strThrowBugFix>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

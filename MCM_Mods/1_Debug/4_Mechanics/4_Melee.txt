@@ -24,3 +24,36 @@ ori r11, r11, <<varKoStars>>@l
 b 0x800d3268    # NORMAL:
 00000000    # RETURN:
 
+
+	-==-
+
+
+Throw Bug Fix v2
+Fixes the hitstun differences between ports on throws, to make it so they all have the full amount of hitstun, i.e. the first frame of hitstun is never skipped.
+<https://smashboards.com/threads/throw-hitstun-bug-fix.444506/post-21603633>
+[Achilles]
+<varThrowBugFixEnabled> ALL
+00000000
+
+<funThrowBugFixPart1> NTSC 1.02
+38C00000 8118002C 80E818C4 8928000C 7C093800 41800050 80E80010 2C0700EF
+41800044 2C0700F3 4181003C 3CE03F80 90E20000 C0820000 C0A82340 FC84282A
+D0882340 3CE08006 60E793AC 7CE803A6 4E800021 3CE08008 60E7E260 7CE803A6 4E800020
+b 0x8008E254
+NTSC 1.02 ---- 0x8008E250 ---- 38C00000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0003    # cmpwi r11, 3
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varThrowBugFixEnabled>>@h
+ori r11, r11, <<varThrowBugFixEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funThrowBugFixPart1>    # NEW_CODE:
+48000008    # b RETURN
+38C00000    # NORMAL:
+00000000    # RETURN:

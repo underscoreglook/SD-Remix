@@ -105,7 +105,6 @@ Presets:
     Disabled    Custom  Tourney Serious Casual  Mechs   SDDR    SDDR+Brawl
 Presets explanations>
     SERIOUS
-        Throw Bug Fix
         Disable Capsule Explosions
         Disable Barrel Explosions
         Disable Box Explosions
@@ -113,7 +112,6 @@ Presets explanations>
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
         Grab Infinite Removal
-        Throw Bug Fix
         Automatic L-Cancel
         Marth colors match costume
         Food appears when items disabled
@@ -122,7 +120,6 @@ Presets explanations>
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
         Grab Infinite Removal
-        Throw Bug Fix
         Marth colors match costume
         https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
@@ -152,7 +149,6 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Melee>
-        Throw Bug Fix
         Detection Bubbles Continue Hurtbox Collision Check
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
         Ledge Invincibility: Disabled, Dynamic, Limit
@@ -365,31 +361,6 @@ NTSC 1.00 --- 0x8008EBA0 ---- 2c000000 -> Branch
 807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
 4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
 C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-
-	-==-
-
-
-Throw Bug Fix v2
-Fixes the hitstun differences between ports on throws, to make it so they all have the full amount of hitstun, i.e. the first frame of hitstun is never skipped.
-<https://smashboards.com/threads/throw-hitstun-bug-fix.444506/post-21603633>
-[Achilles]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8008E250 ---- 38C00000 -> Branch
-
-38C00000 8118002C
-80E818C4 8928000C
-7C093800 41800050
-80E80010 2C0700EF
-41800044 2C0700F3
-4181003C 3CE03F80
-90E20000 C0820000
-C0A82340 FC84282A
-D0882340 3CE08006
-60E793AC 7CE803A6
-4E800021 3CE08008
-60E7E260 7CE803A6
-4E800020 00000000
 
 
 	-==-

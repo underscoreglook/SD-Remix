@@ -256,6 +256,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strKoStarsOpt> ALL
 4b4f2053 74617273 3a000000
 
+<strThrowBugFixOpt> ALL
+5468726f 77204275 67204669 783a0000
+
 <tblDbgMechanicsMeleeSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -267,6 +270,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strKoStarsOpt>>                         # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varKoStars>>                            # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Throw Bug Fix v2
+    00000002                                        # String Table
+    00000000
+    .long <<strThrowBugFixOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varThrowBugFixEnabled>>                 # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
