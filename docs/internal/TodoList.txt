@@ -105,7 +105,6 @@ Presets:
     Disabled    Custom  Tourney Serious Casual  Mechs   SDDR    SDDR+Brawl
 Presets explanations>
     SERIOUS
-        Disable Star KO = Enabled
         Throw Bug Fix
         Disable Capsule Explosions
         Disable Barrel Explosions
@@ -120,14 +119,12 @@ Presets explanations>
         Food appears when items disabled
         DK Hold B for DownB
     NEW MECHANICS
-        Disable Star KO
         Ledge Invincibility: Dynamic
         Wall Bracing: Enabled
         Grab Infinite Removal
         Throw Bug Fix
         Marth colors match costume
         https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
-        https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
     < SD DOUBLE REMIX
         Detection Bubbles Continue Hurtbox Collision Check
@@ -155,10 +152,8 @@ Presets explanations>
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
     Melee>
-        Disable Star KO
         Throw Bug Fix
         Detection Bubbles Continue Hurtbox Collision Check
-        https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
         https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
         Ledge Invincibility: Disabled, Dynamic, Limit
             https://smashboards.com/threads/ledge-grab-limit.475802/
@@ -286,20 +281,6 @@ XXXXXXXX    # Code at injection point
 WWWWWWWW    # Do the new thing
             # RETURN:
 00000000    # branch back
-
-
-
-	-==-
-
-
-$Disable KO Stars
-0425D22C 3BA00000
-
-Disable Star KOs
-Deaths off of the top of the screen happen as they do on the side/bottom blastzones.
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800d3258 --- 41820010 -> 60000000
 
 
 	-==-

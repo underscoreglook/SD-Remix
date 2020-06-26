@@ -11,6 +11,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strControlsSub> ALL
 436f6e74 726f6c73 203e0000
 
+<strMeleeSub> ALL
+4d656c65 65203e00
+
 <tblDbgMechanicsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -30,6 +33,13 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strControlsSub>>                        # Label
     00000000 00000000
     .long <<tblDbgMechanicsControlsSubMenu>>        # Submenu table
+    00000000 00000000
+# Entry 3: Melee Submenu
+    00000001                                        # String Table
+    .long <<funDebugSubmenu>>                       # Function
+    .long <<strMeleeSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgMechanicsMeleeSubMenu>>           # Submenu table
     00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -226,6 +236,37 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strJumpsquatWavedashOpt>>               # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varWavedashOutOfJumpsquat>>             # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Debug Menu: Mechanics > Melee Submenu
+The functions, strings, and data for the submenu "Mechanics > Melee".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strMeleeTitle> ALL
+3c204d65 6c656520 3e000000
+
+<strKoStarsOpt> ALL
+4b4f2053 74617273 3a000000
+
+<tblDbgMechanicsMeleeSubMenu> NTSC 1.02
+# Entry 0: Menu Title
+    00000000 00000000
+    .long <<strMeleeTitle>>                         # Label
+    00000000 00000000 00000000 00000000 00000000
+# Entry 1: Disable KO Stars
+    00000002                                        # String Table
+    00000000
+    .long <<strKoStarsOpt>>                         # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varKoStars>>                            # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a

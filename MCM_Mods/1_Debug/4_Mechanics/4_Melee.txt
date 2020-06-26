@@ -1,0 +1,26 @@
+Disable KO Stars
+Deaths off of the top of the screen happen as they do on the side/bottom blastzones.
+[Dan Salvato]
+<varKoStars> ALL
+00000001
+
+NTSC 1.02 ---- 0x800d3258 ---- 41820010 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0005    # cmpwi r11, 5
+40800028    # bge NEW_CODE
+2C0B0003    # cmpwi r11, 3
+41820020    # beq NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varKoStars>>@h
+ori r11, r11, <<varKoStars>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+b 0x800d3268    # NORMAL:
+00000000    # RETURN:
+
