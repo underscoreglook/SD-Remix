@@ -57,3 +57,35 @@ b <funThrowBugFixPart1>    # NEW_CODE:
 48000008    # b RETURN
 38C00000    # NORMAL:
 00000000    # RETURN:
+
+
+	-==-
+
+
+When over 75%, each 2 additional percents make meteor cancel 1 frame later
+<https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/>
+[flieskiller]
+<varMeteorCancelNerfEnabled> ALL
+00000000
+
+<funMeteorCancelNerfPart1> NTSC 1.02
+800307F0 C21F1830 3E204296 92220020 C2220020 FC108840 4180002C EE108828
+3E204000 62310000 92220020 C2220020 EE108824 FE00801E DA020020 82020024 7C100214
+b 0x8008D82C
+NTSC 1.02 ---- 0x8008D828 ---- 800307F0 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0005    # cmpwi r11, 5
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varMeteorCancelNerfEnabled>>@h
+ori r11, r11, <<varMeteorCancelNerfEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funMeteorCancelNerfPart1>    # NEW_CODE:
+48000008    # b RETURN
+800307F0    # NORMAL:
+00000000    # RETURN:

@@ -259,6 +259,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strThrowBugFixOpt> ALL
 5468726f 77204275 67204669 783a0000
 
+<strMeteorCancelByDmgOpt> ALL
+4d657465 6f722043 616e6365 6c204279 20446d67 3a000000
+
 <tblDbgMechanicsMeleeSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -279,6 +282,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strThrowBugFixOpt>>                     # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varThrowBugFixEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# When over 75%, each 2 additional percents make meteor cancel 1 frame later
+    00000002                                        # String Table
+    00000000
+    .long <<strMeteorCancelByDmgOpt>>               # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varMeteorCancelNerfEnabled>>            # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a

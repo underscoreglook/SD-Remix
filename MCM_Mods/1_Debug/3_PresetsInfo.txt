@@ -246,6 +246,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPresetNewMechanicsTitle> ALL
 3c204d65 6c65652d 6c696b65 2047616d 65706c61 79203e00
 
+<strMeteorCancelByDmg> ALL
+4d657465 6f722043 616e6365 6c204279 20446d67 00000000
+
 <tblDbgPresetMechanicsInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
@@ -287,6 +290,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Throw Bug Fix
     00000000 00000000
     .long <<strThrowBugFix>>
+    00000000 00000000 00000000 00000000 00000000
+# Meteor Cancel By Percent
+    00000000 00000000
+    .long <<strMeteorCancelByDmg>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
