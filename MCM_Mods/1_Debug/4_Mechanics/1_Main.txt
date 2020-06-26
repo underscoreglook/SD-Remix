@@ -14,6 +14,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strMeleeSub> ALL
 4d656c65 65203e00
 
+<strSequelsSub> ALL
+53657175 656c7320 3e000000
+
 <tblDbgMechanicsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -40,6 +43,13 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strMeleeSub>>                           # Label
     00000000 00000000
     .long <<tblDbgMechanicsMeleeSubMenu>>           # Submenu table
+    00000000 00000000
+# Entry 4: Sequels Submenu
+    00000001                                        # String Table
+    .long <<funDebugSubmenu>>                       # Function
+    .long <<strSequelsSub>>                         # Label
+    00000000 00000000
+    .long <<tblDbgMechanicsSequelsSubMenu>>         # Submenu table
     00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -332,3 +342,130 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Debug Menu: Mechanics > Sequels Submenu
+The functions, strings, and data for the submenu "Mechanics > Sequels".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<tblDbgMechanicsSequelsSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strSequelsTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Auto L-Cancel
+    00000002                                        # String Table
+    00000000
+    .long <<strAutoLCancelOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varAutoLCancelEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Reverse Aerial Rush
+    00000002                                        # String Table
+    00000000
+    .long <<strRarOpt>>                             # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varReverseAerialRushEnabled>>           # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# DACUS
+    00000002                                        # String Table
+    .long <<funSetDacusData>>
+    .long <<strDacusOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varDACUSEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Brawl-style B Reverse
+    00000002                                        # String Table
+    00000000
+    .long <<strBReverseOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varBReverseEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# L = Brawl Airdodge
+    00000002                                        # String Table
+    00000000
+    .long <<strLBrawlAirdodgeOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varLBrawlAirdodgeEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Grab Items With Airdodge
+    00000002                                        # String Table
+    00000000
+    .long <<strGrabItemAirdodgeOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varAirdodgeItemEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Ledge Grab Buffs
+    00000002                                        # String Table
+    00000000
+    .long <<strLedgeGrabBuffsOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varCharLedgeGrabsEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Perfect Shield ala Smash Ultimate
+    00000002                                        # String Table
+    00000000
+    .long <<strPerfectShieldOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varPerfectShieldEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Tech Grabs
+    00000002                                        # String Table
+    00000000
+    .long <<strTechGrabsOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varTechGrabEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strSequelsTitle> ALL
+3c204d65 6c656520 3e000000
+
+<strAutoLCancelOpt> ALL
+4175746f 204c4361 6e63656c 3a000000
+
+<strRarOpt> ALL
+52657665 72736520 41657269 616c2052 7573683a 00000000
+
+<strDacusOpt> ALL
+44414355 533a0000
+
+<strBReverseOpt> ALL
+422d5265 76657273 653a0000
+
+<strLBrawlAirdodgeOpt> ALL
+4c204272 61776c20 41697264 6f646765 3a000000
+
+<strGrabItemAirdodgeOpt> ALL
+47726162 20497465 6d204169 72646f64 67653a00
+
+<strLedgeGrabBuffsOpt> ALL
+4c656467 65204772 61622042 75666673 3a000000
+
+<strPerfectShieldOpt> ALL
+50657266 65637420 53686965 6c643a00
+
+<strTechGrabsOpt> ALL
+54656368 20477261 62733a00

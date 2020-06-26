@@ -279,7 +279,10 @@ Also includes strings and arrays related to it
   cmpwi r3, 0
   bgt -0x10 # TOOGLE_LOOP   # Run until number of menu items is out    # This compiles incorrectly
 
-  # End loop
+  # End loop, call all sub options functions (if any)
+  bl <funSetDacusData>
+
+  # Return
   li r3,0
   lwz r29, 0(sp)
   lwz r30, 4(sp)

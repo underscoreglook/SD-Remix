@@ -204,6 +204,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strShieldDropWithDpad> ALL
 5368696c 65642044 726f7020 772f2044 70616420 446f776e 00000000
 
+<strAutoLCancel> ALL
+4175746f 204c4361 6e63656c 00000000
+
 <tblDbgPresetCasualInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
@@ -253,6 +256,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Grab Infinite Removal v3
     00000000 00000000
     .long <<strGrabInfiniteRemove>>
+    00000000 00000000 00000000 00000000 00000000
+# Auto L-Cancel
+    00000000 00000000
+    .long <<strAutoLCancel>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -370,6 +377,27 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strAllFromSDDR> ALL
 416c6c20 66726f6d 20534444 52000000
 
+<strRar> ALL
+52657665 72736520 41657269 616c2052 75736800
+
+<strDacus> ALL
+44414355 53000000
+
+<strBReverse> ALL
+422d5265 76657273 65000000
+
+<strGrabItemAirdodge> ALL
+47726162 20497465 6d204169 72646f64 67650000
+
+<strLedgeGrabBuffs> ALL
+4c656467 65204772 61622042 75666673 00000000
+
+<strPerfectShield> ALL
+50657266 65637420 53686965 6c640000
+
+<strTechGrabs> ALL
+54656368 20477261 62730000
+
 <tblDbgPresetSdBrInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
@@ -379,6 +407,34 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Entry 1: All From SDDR
     00000000 00000000
     .long <<strAllFromSDDR>>
+    00000000 00000000 00000000 00000000 00000000
+# Reverse Aerial Rush
+    00000000 00000000
+    .long <<strRar>>
+    00000000 00000000 00000000 00000000 00000000
+# DACUS
+    00000000 00000000
+    .long <<strDacus>>
+    00000000 00000000 00000000 00000000 00000000
+# Brawl-style B Reverse
+    00000000 00000000
+    .long <<strBReverse>>
+    00000000 00000000 00000000 00000000 00000000
+# Grab Items With Airdodge
+    00000000 00000000
+    .long <<strGrabItemAirdodge>>
+    00000000 00000000 00000000 00000000 00000000
+# Ledge Grab Buffs
+    00000000 00000000
+    .long <<strLedgeGrabBuffs>>
+    00000000 00000000 00000000 00000000 00000000
+# Perfect Shield ala Smash Ultimate
+    00000000 00000000
+    .long <<strPerfectShield>>
+    00000000 00000000 00000000 00000000 00000000
+# Tech Grabs
+    00000000 00000000
+    .long <<strTechGrabs>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

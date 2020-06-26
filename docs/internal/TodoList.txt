@@ -93,7 +93,15 @@ When over 75%, each 2 additional percents make meteor cancel 1 frame later [flie
 Ledge Invincibility Attrition moved out of BADHACKS
 Wall bracing moved out of BADHACKS
 Adds Grab Infinite Removal v3 toggle [_glook, Punkline]
-
+Auto L-Cancel added [Dan Salvato]
+Reverse Aerial Rush [Achilles]
+DACUS [tatata]
+Brawl-style B Reverse [UnclePunch]
+Add L = Brawl Airdodge [UnclePunch]
+Grab Items With Airdodge [UnclePunch]
+Up+B Ledge Grab Buffs for Ness, Zelda, and Mewtwo [rmn]
+Perfect Shield ala Smash Ultimate [UnclePunch]
+Tech Grabs [Punkline]
 
 =============
 = Code dump =
@@ -104,17 +112,19 @@ All Presets
 If custom, Most mechanics items
 Always lagless FOD (for netplay)
 
+Change brawl button from L to definable (L or R), per player
+
 Presets explanations>
     SERIOUS
         Disable Capsule Explosions
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        Automatic L-Cancel
         Marth colors match costume
+        https://smashboards.com/threads/roy-sword-trails.449229/
         Food appears when items disabled
         DK Hold B for DownB
-    < SD DOUBLE REMIX
+    SD DOUBLE REMIX
         Marth colors match costume
         https://smashboards.com/threads/roy-sword-trails.449229/
         Nana Respawn Time = None, 60 secs
@@ -128,27 +138,8 @@ Presets explanations>
         https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
-     << SDDR & BRAWLKLES
-        https://smashboards.com/threads/tech-grab.459113/
-        https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
-        https://smashboards.com/threads/dacus.419467/
-        https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
-        https://smashboards.com/threads/l-brawl-airdodge-r-melee-airdodge.449247/
-        https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
-        https://smashboards.com/threads/grab-items-with-airdodge.499655/
-        https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
-    Brawl/Sequels >
-        Automatic L-Cancel
-        https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
-        https://smashboards.com/threads/dacus.419467/
-        https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
-        https://smashboards.com/threads/l-brawl-airdodge-r-melee-airdodge.449247/
-        https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
-        https://smashboards.com/threads/grab-items-with-airdodge.499655/
-        https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
     Other >
-        https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/
         https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/
         https://smashboards.com/threads/reverse-aerial-moves.446842/
@@ -259,15 +250,6 @@ XXXXXXXX    # Code at injection point
 WWWWWWWW    # Do the new thing
             # RETURN:
 00000000    # branch back
-
-
-	-==-
-
-
-Aerials are Automatically L-Cancelled
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace
-1.02 ------ 0x68200 ---- 41820010 -> 60000000
 
 
 	-==-

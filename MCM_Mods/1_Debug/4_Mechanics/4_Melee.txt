@@ -132,6 +132,8 @@ NTSC 1.02 ---- 0x8006A414 ---- 807F1990 -> Branch
 lis r11, <<varOptionsPreset>>@h
 ori r11, r11, <<varOptionsPreset>>@l
 816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800020    # bge NEW_CODE
 2C0B0001    # cmpwi r11, 1
 40820020    # bne NORMAL
 lis r11, <<varLedgeInvincibilityAttritionEnabled>>@h
