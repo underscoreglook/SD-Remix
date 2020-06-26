@@ -108,6 +108,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strThrowBugFix> ALL
 5468726f 77204275 67204669 78000000
 
+<strLedgeAttrition> ALL
+4c656467 65204174 74726974 696f6e00
+
+<strWallBracing> ALL
+57616C6C 20427261 63696E67 00000000
+
+<strGrabInfiniteRemove> ALL
+47726162 20496e66 696e6974 65205265 6d6f7665 64000000
+
 
 	-==-
 
@@ -233,6 +242,18 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strThrowBugFix>>
     00000000 00000000 00000000 00000000 00000000
+# Ledge Invincibility Attrition
+    00000000 00000000
+    .long <<strLedgeAttrition>>
+    00000000 00000000 00000000 00000000 00000000
+# Wall Bracing
+    00000000 00000000
+    .long <<strWallBracing>>
+    00000000 00000000 00000000 00000000 00000000
+# Grab Infinite Removal v3
+    00000000 00000000
+    .long <<strGrabInfiniteRemove>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -294,6 +315,18 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Meteor Cancel By Percent
     00000000 00000000
     .long <<strMeteorCancelByDmg>>
+    00000000 00000000 00000000 00000000 00000000
+# Ledge Invincibility Attrition
+    00000000 00000000
+    .long <<strLedgeAttrition>>
+    00000000 00000000 00000000 00000000 00000000
+# Wall Bracing
+    00000000 00000000
+    .long <<strWallBracing>>
+    00000000 00000000 00000000 00000000 00000000
+# Grab Infinite Removal v3
+    00000000 00000000
+    .long <<strGrabInfiniteRemove>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

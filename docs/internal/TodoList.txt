@@ -90,6 +90,9 @@ Wavedash out of jumpsquat [UnclePunch]
 Disable KO Stars [Dan Salvato]
 Throw Bug Fix v2 [Achilles]
 When over 75%, each 2 additional percents make meteor cancel 1 frame later [flieskiller]
+Ledge Invincibility Attrition moved out of BADHACKS
+Wall bracing moved out of BADHACKS
+Adds Grab Infinite Removal v3 toggle [_glook, Punkline]
 
 
 =============
@@ -101,29 +104,16 @@ All Presets
 If custom, Most mechanics items
 Always lagless FOD (for netplay)
 
-New debug menu should be in a folder, splitting various items in separate txt.
-
-Presets:
-    0           1       2       3       4       5       6       7
-    Disabled    Custom  Tourney Serious Casual  Mechs   SDDR    SDDR+Brawl
 Presets explanations>
     SERIOUS
         Disable Capsule Explosions
         Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
-        Ledge Invincibility: Dynamic
-        Wall Bracing: Enabled
-        Grab Infinite Removal
         Automatic L-Cancel
         Marth colors match costume
         Food appears when items disabled
         DK Hold B for DownB
-    NEW MECHANICS
-        Ledge Invincibility: Dynamic
-        Wall Bracing: Enabled
-        Grab Infinite Removal
-        Marth colors match costume
     < SD DOUBLE REMIX
         Marth colors match costume
         https://smashboards.com/threads/roy-sword-trails.449229/
@@ -148,12 +138,7 @@ Presets explanations>
         https://smashboards.com/threads/grab-items-with-airdodge.499655/
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
 Mechanics>
-    Melee>
-        Ledge Invincibility: Disabled, Dynamic, Limit
-            https://smashboards.com/threads/ledge-grab-limit.475802/
-        Wall Bracing: Enabled
-        Grab Infinite Removal
-    Brawl & Sequels>
+    Brawl/Sequels >
         Automatic L-Cancel
         https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
         https://smashboards.com/threads/dacus.419467/
@@ -162,7 +147,7 @@ Mechanics>
         https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
         https://smashboards.com/threads/grab-items-with-airdodge.499655/
         https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
-    Other>
+    Other >
         https://smashboards.com/threads/tech-grab.459113/
         https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/
         https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/
@@ -275,89 +260,6 @@ WWWWWWWW    # Do the new thing
             # RETURN:
 00000000    # branch back
 
-
-	-==-
-
-
-Ledge Invincibility Attrition
-This basically make ledge invincibility behave similarly to shields, in that after grabbing the ledge a few times in quick succession, subsequent grabs will reduces ledge invincibility. The ledge invincibility recovers over time, like shields, and is reset when you die, just like shields. (I figure this is a better solution that the one PM has, not only because I feel it feels more natural, but also because of things like the haxdash that can circumvent it. - _glook)
-Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-35#post-19218896
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8009A8AC --- 8084049C -> Branch
-
-7C671B78 8063002C
-8084049C 80A31068
-7CA62B78 38A50020
-2C050140 40A10008
-38A00140 90A31068
-7CC631D6 54C6A33E
-7C062000 41A0000C
-38800000 48000008
-7C862050 7CE33B78
-60000000 48000000
-
-1.02 ----- 0x8006A414 --- 807F1990 -> Branch
-
-807F198C 809F1988
-7C632378 2C030000
-40820018 807F1068
-2C030000 41A2000C
-3863FFFF 907F1068
-807F1990 48000000
-
-
-	-==-
-
-
-Wall Bracing
-Its main purpose is to get rid of wall infinites.
-If you are on the ground and you're moving into a wall (either by purposely walking/running into it or, more likely, if you're being shined into the wall), if you get hit by a non-launching attack, you can press the analog stick left or right to brace against the wall, which will make your feet leave the ground. The direction you press doesn't matter, and this was purposefully done to help with Smash DI (which is actually just a justification for my laziness. - _glook).
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8008DFAC --- 2C1C0003 -> Branch
-
-2C1C0003 41820030
-887D0724 70630004
-2C030004 40A20020
-807D0620 2C030000
-4082000C 38600001
-48000008 38600000
-2C030000 48000000
-
-
-	-==-
-
-
-Grab Infinite Removal v3
-This removes grab infinites by making any attack knock opponents out of a grab when the grip has run out. This keeps everything else about grabs the same except for the ability to extend grabs into infinity.
-
-This revision of the code ignores the following action states from grabber:
-0x0D9 - "CatchAttack" for all characters
-0x163 - Up+B catch for Captain Falcon and Ganondorf
-<https://smashboards.com/threads/grab-infinite-removal-code.412693/>
-[_glook, Punkline]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-
-NTSC 1.02 --- 0x8008EE48 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-PAL 1.00 ---- 0x8008F500 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-NTSC 1.01 --- 0x8008EC88 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-NTSC 1.00 --- 0x8008EBA0 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
 
 	-==-
 

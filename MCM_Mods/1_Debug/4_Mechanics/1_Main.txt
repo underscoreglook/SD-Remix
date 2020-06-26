@@ -262,6 +262,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strMeteorCancelByDmgOpt> ALL
 4d657465 6f722043 616e6365 6c204279 20446d67 3a000000
 
+<strLedgeAttritionOpt> ALL
+4c656467 65204174 74726974 696f6e3a 00000000
+
+<strWallBracingOpt> ALL                 # "Wall Bracing:"
+57616C6C 20427261 63696E67 3A000000
+
+<strGrabInfiniteRemoveOpt> ALL
+47726162 20496e66 696e6974 65205265 6d6f7665 3a000000
+
 <tblDbgMechanicsMeleeSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -291,6 +300,33 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strMeteorCancelByDmgOpt>>               # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varMeteorCancelNerfEnabled>>            # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Ledge Invincibility Attrition
+    00000002                                        # String Table
+    00000000
+    .long <<strLedgeAttritionOpt>>                  # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varLedgeInvincibilityAttritionEnabled>> # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Wall Bracing
+    00000002                                        # String Table
+    00000000
+    .long <<strWallBracingOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varWallBracingEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Grab Infinite Removal v3
+    00000002                                        # String Table
+    00000000
+    .long <<strGrabInfiniteRemoveOpt>>              # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varGrabInfiniteRemoved>>                # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
