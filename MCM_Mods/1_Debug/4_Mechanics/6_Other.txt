@@ -1,0 +1,501 @@
+Smash Attacks Out of Dash
+<https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/>
+[UnclePunch]
+<varSmashOutOfDashEnabled> ALL
+00000000
+
+<funSmashOutOfDashPart1> NTSC 1.02
+3821FFFC 7C0802A6 90010000 7C7E1B78 3DC08008 61CEBFC4 7DC903A6 4E800421
+2C030001 4182003C 7FC3F378 3DC08008 61CEC830 7DC903A6 4E800421 2C030001
+41820020 7FC3F378 3DC08008 61CECB44 7DC903A6 4E800421 2C030001 48000004
+7FC3F378 80010000 7C0803A6 38210004 7C0802A6
+b 0x800CA540
+NTSC 1.02 ---- 0x800CA53C ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSmashOutOfDashEnabled>>@h
+ori r11, r11, <<varSmashOutOfDashEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funSmashOutOfDashPart1>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Enable retreating glide toss
+In Melee the first 6 frames of a roll can be interrupted with an item throw. However, the item will always be thrown in the direction the roll is moving. This has been referred to as a "glide toss" and is rarely used. (I think this tech or something similar is in Brawl but I'm honestly not sure how it works there.) This code allows you to input either a forward or backward item throw during the roll interrupt window. Note that in Melee rolls can only be interrupted by item throws using the A or Z buttons, not the C-stick.
+<https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/>
+[rmn]
+<varRetreatingGlideTossEnabled> ALL
+00000000
+
+<funRetreatingGlideTossPart1> NTSC 1.02
+C03F0620 3C003E8F 60005C29 9001FFFC C041FFFC FC000A10 FC001040 40800008
+C022A1C4 C05F002C EC220072 C002A1C4 FC010040
+blt 0x800956BC
+b 0x800956B0
+NTSC 1.02 ---- 0x800956AC ---- 2C0000E9 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varRetreatingGlideTossEnabled>>@h
+ori r11, r11, <<varRetreatingGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funRetreatingGlideTossPart1>    # NEW_CODE:
+48000008    # b RETURN
+2C0000E9    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Aerial Glide Toss
+The first 3 frames of an airdodge can be interrupted by an item throw (C-stick or A/Z button). When doing so, velocity is reset to what it was before the airdodge began. This second code replaces this behavior such that instead, momentum is partially conserved from the airdodge into the item throw. This is similar to the AGT tech seen in Project M (but in Melee airdodges don't catch items, so I hope you're good at Z-catching!)
+<https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/>
+[rmn]
+<varAerialGlideTossEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80099c84 ---- 80610010 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAerialGlideTossEnabled>>@h
+ori r11, r11, <<varAerialGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C03F0080    # NEW_CODE:
+48000008    # b RETURN
+80610010    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80099c88 ---- 80010014 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAerialGlideTossEnabled>>@h
+ori r11, r11, <<varAerialGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C05F0084    # NEW_CODE:
+48000008    # b RETURN
+80010014    # NORMAL:
+00000000    # RETURN:
+
+<funAerialGlideTossPart1> NTSC 1.02
+3C003F00 9001FFFC C001FFFC EC210032 60000000
+b 0x80099C90
+NTSC 1.02 ---- 0x80099C8C ---- 907F0080 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAerialGlideTossEnabled>>@h
+ori r11, r11, <<varAerialGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAerialGlideTossPart1>    # NEW_CODE:
+48000008    # b RETURN
+907F0080    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80099c90 ---- 901F0084 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAerialGlideTossEnabled>>@h
+ori r11, r11, <<varAerialGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+EC420032    # NEW_CODE:
+48000008    # b RETURN
+901F0084    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80099c94 ---- 80010018 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAerialGlideTossEnabled>>@h
+ori r11, r11, <<varAerialGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+D03F0080    # NEW_CODE:
+48000008    # b RETURN
+80010018    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80099c98 ---- 901F0088 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAerialGlideTossEnabled>>@h
+ori r11, r11, <<varAerialGlideTossEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+D05F0084    # NEW_CODE:
+48000008    # b RETURN
+901F0088    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Reverse Aerial Moves
+This code allows you to reverse your aerial attacks mid air. It's essentially a port of the code that allows you to reverse B (e.g. Sheik Reverse Needle Cancel) and applies it to aerial attacks as well. Just like special moves, you have 14 frames to use the attack after moving the analog stick in the opposite direction
+<https://smashboards.com/threads/reverse-aerial-moves.446842/>
+[UnclePunch]
+<varReverseAerialMovesEnabled> ALL
+00000000
+
+<funReverseAerialMovesPart1> NTSC 1.02
+38A00014 887F0676 7C032800 40800048 C0028BE4 C03F002C FC000800 40820014
+881F2228 540007FE 2C000001 4182001C C0028BE8 FC000800 4082001C 881F2228
+540007FF 40820010 FC000850 D01F002C 48000004 7FC3F378 60000000
+b 0x8008CDE4
+NTSC 1.02 ---- 0x8008CDE0 ---- 7FC3F378 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varReverseAerialMovesEnabled>>@h
+ori r11, r11, <<varReverseAerialMovesEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funReverseAerialMovesPart1>    # NEW_CODE:
+48000008    # b RETURN
+7FC3F378    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Air Dodge replaced by Air Boost
+[flieskiller]
+<varAirBoostEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80099BE4 ---- 4BFD5655 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020  # bne NORMAL
+lis r11, <<varAirBoostEnabled>>@h
+ori r11, r11, <<varAirBoostEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+38600000    # li r3, 0  # Air boost enabled
+48000014    # b RETURN
+            # NORMAL:
+3D608006    # lis r11, 0x8006
+616BF238    # ori r11, r11, 0xF238
+7D6903A6    # mtctr r11
+4E800420    # bctrl
+00000000    # RETURN:
+
+
+	-==-
+
+
+Air Grabs v3
+<https://smashboards.com/threads/air-grabs.447884/>
+[UnclePunch]
+<varAirGrabsEnabled> ALL
+00000000
+
+<funAirGrabsPart1> NTSC 1.02
+7C7E1B78 7F03C378 3DC0800D 61CE8990 7DC903A6 4E800421 2C030001 4082004C
+81F8002C 3DC08008 61CED5B4 91CF21A4 3DC0800C 61CEB2F8 91CF21A0 81CDAEB4
+C1CE0034 C1EF0620 C20F002C EE0F0432 FC107040 4C401382 4082000C 38600001
+906F18F4 C0429854 7FC3F378 80010024 60000000
+b 0x8008CDF8
+NTSC 1.02 ---- 0x8008CDF4 ---- 80010024 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart1>    # NEW_CODE:
+48000008    # b RETURN
+80010024    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart2> NTSC 1.02
+8083002C 80A400E0 2C050000 418200BC 9421FFBC BE810008 7C0802A6 90010040
+7C7E1B78 7C9F2378 3DC08008 61CE1D0C 7DC903A6 4E800421 2C030000 41820078
+7FE3FB78 3DC08007 61CED7FC 7DC903A6 4E800421 7FC3F378 809F0010 3CA00C4C
+60A5508E 38C00000 C03F0894 C0428AE4 C0628AE4 3DC08006 61CE93AC 7DC903A6
+4E800421 7FE3FB78 38800001 3CA0800D 60A59CE8 3CC0800D 60C68BFC 3CE0800D
+60E7AADC 3DC08007 61CEE2D0 7DC903A6 4E800421 80010040 7C0803A6 BA810008
+38210044 4E800020 7C0802A6
+b 0x800D8E0C
+NTSC 1.02 ---- 0x800D8E08 ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart2>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart3> NTSC 1.02
+8083002C 80A400E0 2C050000 41820088 9421FFBC BE810008 7C0802A6 90010040
+7C7E1B78 7C9F2378 3DC08008 61CE1D0C 7DC903A6 4E800421 2C030000 41820044
+7FE3FB78 3DC08007 61CED7FC 7DC903A6 4E800421 7FC3F378 809F0010 38A00008
+38C00000 C03F0894 C0428AE4 C0628AE4 3DC08006 61CE93AC 7DC903A6 4E800421
+80010040 7C0803A6 BA810008 38210044 4E800020 7C0802A6 60000000
+b 0x800D9FE0
+NTSC 1.02 ---- 0x800D9FDC ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart3>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart4> NTSC 1.02
+81DF00E0 2C0E0001 4082001C 3DC0800D 61CE9FDC 91DF21A8 3DC08012 61CEDC50
+91DF21A4 3C60800E 60000000
+b 0x800D9E48
+NTSC 1.02 ---- 0x800D9E44 ---- 3C60800E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart4>    # NEW_CODE:
+48000008    # b RETURN
+3C60800E    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart5> NTSC 1.02
+81DF00E0 2C0E0001 4082001C 3DC0800D 61CE9FDC 91DF21A8 3DC08012 61CEDC50
+91DF21A4 3C60800E 60000000
+b 0x800DA218
+NTSC 1.02 ---- 0x800DA214 ---- 3C60800E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart5>    # NEW_CODE:
+48000008    # b RETURN
+3C60800E    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart6> NTSC 1.02
+81DF00E0 2C0E0001 4082001C 3DC0800D 61CE9FDC 91DF21A8 3DC08012 61CEDC50
+91DF21A4 3C60800E 60000000
+b 0x800DA2E4
+NTSC 1.02 ---- 0x800DA2E0 ---- 3C60800E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart6>    # NEW_CODE:
+48000008    # b RETURN
+3C60800E    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart7> NTSC 1.02
+81DF00E0 2C0E0001 4082001C 3DC0800D 61CE9FDC 91DF21A8 3DC08012 61CEDC50
+91DF21A4 3C60800E 60000000
+b 0x800DA4E4
+NTSC 1.02 ---- 0x800DA4E0 ---- 38600001 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart7>    # NEW_CODE:
+48000008    # b RETURN
+38600001    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart8> NTSC 1.02
+2C030000 41820050 81DF00E0 2C0E0001 40820044 89DF0007 2C0E0004 40820020
+81DF0010 2C0E00DD 4182002C 2C0E00DC 41820024 2C0E00DB 4182001C 3DC0800D
+61CE9FDC 91DF21A8 3DC08012 61CEDC50 91DF21A4 2C030000 60000000
+b 0x800DA384
+NTSC 1.02 ---- 0x800DA380 ---- 2C030000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart8>    # NEW_CODE:
+48000008    # b RETURN
+2C030000    # NORMAL:
+00000000    # RETURN:
+
+<funAirGrabsPart9> NTSC 1.02
+807E002C 806300E0 2C030000 41820018 7FE3FB78 3DC08009 61CEBC58 7DC903A6
+4E800421 3DC0800D 61CED918 7DC903A6 4E800420
+b 0x800DD910
+NTSC 1.02 ---- 0x800DD90C ---- 4800000C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varAirGrabsEnabled>>@h
+ori r11, r11, <<varAirGrabsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funAirGrabsPart9>    # NEW_CODE:
+48000008    # b RETURN
+4800000C    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Infinite Shields
+[Achilles]
+<varInfiniteShieldsEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x8006D2D4 ---- D01E1998 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varInfiniteShieldsEnabled>>@h
+ori r11, r11, <<varInfiniteShieldsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+D01E1998    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80092630 ---- D01F1998 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varInfiniteShieldsEnabled>>@h
+ori r11, r11, <<varInfiniteShieldsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+D01F1998    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Random Hitbox Elements - Every Non-projectile Attack
+[Achilles]
+<varRandomHitboxElementsEnabled> ALL
+00000000
+
+<funRandomHitboxElementsPart1> NTSC 1.02
+7C0F0378 38600010 3C808038 60840580 7C8903A6 4E800421 2C030004 41A2FFE8
+2C030007 41A2FFE0 2C030008 41A2FFD8 2C03000B 41A2FFD0 907E0030 7DE07B78 28000009
+b 0x800715B4
+NTSC 1.02 ---- 0x800715B0 ---- 28000009 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varRandomHitboxElementsEnabled>>@h
+ori r11, r11, <<varRandomHitboxElementsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funRandomHitboxElementsPart1>    # NEW_CODE:
+48000008    # b RETURN
+28000009    # NORMAL:
+00000000    # RETURN:

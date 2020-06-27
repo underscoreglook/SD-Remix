@@ -17,6 +17,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strSequelsSub> ALL
 53657175 656c7320 3e000000
 
+<strOtherSub> ALL
+4f746865 72203e00
+
 <tblDbgMechanicsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -50,6 +53,13 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strSequelsSub>>                         # Label
     00000000 00000000
     .long <<tblDbgMechanicsSequelsSubMenu>>         # Submenu table
+    00000000 00000000
+# Entry 5: Other Submenu
+    00000001                                        # String Table
+    .long <<funDebugSubmenu>>                       # Function
+    .long <<strOtherSub>>                         # Label
+    00000000 00000000
+    .long <<tblDbgMechanicsOtherSubMenu>>         # Submenu table
     00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -183,6 +193,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strJumpsquatWavedashOpt> ALL
 4a756d70 73717561 74205761 76656461 73683a00
 
+<strCstickDashAttackOpt> ALL
+43537469 636b2044 61736820 41747461 636b3a00
+
 <tblDbgMechanicsControlsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000
@@ -246,6 +259,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     .long <<strJumpsquatWavedashOpt>>               # Label
     .long <<arrEnabledDisabled>>                    # Options
     .long <<varWavedashOutOfJumpsquat>>             # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# C-Stick During Run == Dash Attack
+    00000002                                        # String Table
+    00000000
+    .long <<strCstickDashAttackOpt>>               # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varCStickDashAttackEnabled>>             # Variable
     00000000                                        # n/a
     40000000                                        # 2 item table
     00000000                                        # n/a
@@ -469,3 +491,125 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
 <strTechGrabsOpt> ALL
 54656368 20477261 62733a00
+
+
+	-==-
+
+
+Debug Menu: Mechanics > Other Submenu
+The functions, strings, and data for the submenu "Mechanics > Other".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<tblDbgMechanicsOtherSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strOtherTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Smash Attacks Out of Dash
+    00000002                                        # String Table
+    00000000
+    .long <<strSmashOutOfDashOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varSmashOutOfDashEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# retreating glide toss
+    00000002                                        # String Table
+    00000000
+    .long <<strRetreatingGlideTossOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varRetreatingGlideTossEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Aerial Glide Toss
+    00000002                                        # String Table
+    00000000
+    .long <<strAerialGlideTossOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varAerialGlideTossEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Reverse Aerial Moves
+    00000002                                        # String Table
+    00000000
+    .long <<strReverseAerialMovesOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varReverseAerialMovesEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Air Dodge replaced by Air Boost
+    00000002                                        # String Table
+    00000000
+    .long <<strAirBoostOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varAirBoostEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Air Grab
+    00000002                                        # String Table
+    00000000
+    .long <<strAirGrabOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varAirGrabsEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Infinite Shields
+    00000002                                        # String Table
+    00000000
+    .long <<strShieldsOpt>>                     # Label
+    .long <<arrShieldStrings>>                    # Options
+    .long <<varInfiniteShieldsEnabled>>                 # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Random Hitbox Element
+    00000002                                        # String Table
+    00000000
+    .long <<strRandomHitboxElementOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varRandomHitboxElementsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strOtherTitle> ALL
+3c204f74 68657220 3e000000
+
+<strSmashOutOfDashOpt> ALL
+536d6173 68204f75 74206f66 20446173 683a0000
+
+<strRetreatingGlideTossOpt> ALL
+52657472 65617420 476c6964 6520546f 73733a00
+
+<strAerialGlideTossOpt> ALL
+41657269 616c2047 6c696465 20546f73 733a0000
+
+<strReverseAerialMovesOpt> ALL
+52657665 72736520 41657269 616c204d 6f766573 3a000000
+
+<strAirBoostOpt> ALL
+41697220 426f6f73 743a0000
+
+<strAirGrabOpt> ALL
+41697220 47726162 3a000000
+
+<strInfinite> ALL                   # "Infinite"
+496E6669 6E697465 00000000
+
+<arrShieldStrings> ALL
+.long <<strNormal>>
+.long <<strInfinite>>
+
+<strShieldsOpt> ALL                 # "Shields:"
+53686965 6C64733A 00000000
+
+<strRandomHitboxElementOpt> ALL     # "Random Hitbox Element:"
+52616E64 6F6D2048 6974626F 7820456C 656D656E 743A0000

@@ -117,6 +117,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strGrabInfiniteRemove> ALL
 47726162 20496e66 696e6974 65205265 6d6f7665 64000000
 
+<strCstickDashAttack> ALL
+43537469 636b2044 61736820 41747461 636b0000
+
 
 	-==-
 
@@ -261,6 +264,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strAutoLCancel>>
     00000000 00000000 00000000 00000000 00000000
+# CStick Dash Attack
+    00000000 00000000
+    .long <<strCstickDashAttack>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -334,6 +341,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Grab Infinite Removal v3
     00000000 00000000
     .long <<strGrabInfiniteRemove>>
+    00000000 00000000 00000000 00000000 00000000
+# CStick Dash Attack
+    00000000 00000000
+    .long <<strCstickDashAttack>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

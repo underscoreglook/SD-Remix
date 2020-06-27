@@ -9,6 +9,27 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <varToggleBombRain> ALL
 0000 0000
 
+<strAlwaysRainBombsOpt> ALL         # "Always Rain Bombs: "
+416C7761 79732052 61696E20 426F6D62 733A2000
+
+<strPokeballs> ALL                  # "Pokeballs"
+506F6B65 62616C6C 73000000
+
+<arrBombRain> ALL
+.long <<strDisabled>>
+.long <<strEnabled>>
+.long <<strPokeballs>>
+
+# Entry 3: Bomb Rain
+#    00000002                                        # String Table
+#    .long <<funDbgToggleOvertimeAndBombRain>>       # Toggle function
+#    .long <<strAlwaysRainBombsOpt>>                 # Label
+#    .long <<arrBombRain>>                           # [Normal, Bomb, Pokeballs]
+#    .long <<varToggleBombRain>>                     # Variable
+#    00000000                                        # n/a
+#    40400000                                        # 3 item table
+#    00000000                                        # n/a
+
 <funDbgToggleOvertimeAndBombRain> NTSC 1.02
 # r10 is set to master toggle
   lis r10, <<varOptionsPreset>>@h
@@ -136,141 +157,26 @@ TODO: All of these toggles rely on overwriting code on the fly. Not only does th
 [_glook]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 
-<varToggleShield> ALL
-0000 0000
-
-<varToggleRandomElement> ALL
-0000 0000
-
-<strOthersTitle> ALL                # "< Others >"
-3C204F74 68657273 203E0000
-
-<strShieldsOpt> ALL                 # "Shields: "
-53686965 6C64733A 20000000
-
-<strAlwaysRainBombsOpt> ALL         # "Always Rain Bombs: "
-416C7761 79732052 61696E20 426F6D62 733A2000
-
-<strRandomHitboxElementOpt> ALL     # "Random Hitbox Element: "
-52616E64 6F6D2048 6974626F 7820456C 656D656E 743A2000
-
-<strInfinite> ALL                   # "Infinite"
-496E6669 6E697465 00000000
-
-<arrShieldStrings> ALL
-.long <<strNormal>>
-.long <<strInfinite>>
-
-<strPokeballs> ALL                  # "Pokeballs"
-506F6B65 62616C6C 73000000
-
-<arrBombRain> ALL
-.long <<strDisabled>>
-.long <<strEnabled>>
-.long <<strPokeballs>>
-
-<funDbgToggleInfiniteShields> NTSC 1.02
-loc_0x0:
-  lis r3, <<varOptionsPreset>>@h
-  ori r3, r3, <<varOptionsPreset>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x1
-  bne- loc_0x28
-  lis r3, <<varToggleShield>>@h
-  ori r3, r3, <<varToggleShield>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x0
-  bne- loc_0x54
-loc_0x28:
-  lis r4, 0x8006
-  ori r4, r4, 0xD2D4    # BADHACK 8006D2D4     Default D01E1998
-  lis r3, 0xD01E
-  ori r3, r3, 0x1998
-  stw r3, 0(r4)
-  lis r4, 0x8009        # BADHACK 80092630     Default D01F1998
-  ori r4, r4, 0x2630
-  lis r3, 0xD01F
-  ori r3, r3, 0x1998
-  stw r3, 0(r4)
-  b loc_0x7C
-loc_0x54:
-  lis r4, 0x8006
-  ori r4, r4, 0xD2D4    # BADHACK 8006D2D4     60000000
-  lis r3, 0x6000
-  ori r3, r3, 0x0
-  stw r3, 0(r4)
-  lis r4, 0x8009        # BADHACK 80092630     60000000
-  ori r4, r4, 0x2630
-  lis r3, 0x6000
-  ori r3, r3, 0x0
-  stw r3, 0(r4)
-loc_0x7C:
-  li r3, 0x0
-  blr
-
-<funDbgToggleHitboxElement> NTSC 1.02
-loc_0x0:
-  lis r3, <<varOptionsPreset>>@h
-  ori r3, r3, <<varOptionsPreset>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x1
-  bne- loc_0x28
-  lis r3, <<varToggleRandomElement>>@h
-  ori r3, r3, <<varToggleRandomElement>>@l
-  lwz r3, 0(r3)
-  cmpwi r3, 0x0
-  bne- loc_0x40
-loc_0x28:
-  lis r4, 0x8007
-  ori r4, r4, 0x15B0    # BADHACK 800715B0     default 28000009
-  lis r3, 0x2800
-  ori r3, r3, 0x9
-  stw r3, 0(r4)
-  b loc_0x54
-loc_0x40:
-  lis r4, 0x8007
-  ori r4, r4, 0x15B0    # BADHACK 800715B0     branch
-  lis r3, 0x4812
-  ori r3, r3, 0x3AC
-  stw r3, 0(r4)
-loc_0x54:
-  li r3, 0x0
-  blr
-
 <tblDbgOtherTogglesSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000 00000000                               # Disabled
-    .long <<strOthersTitle>>                        # Label
+    .long <<strOtherTitle>>                        # Label
     00000000 00000000 00000000 00000000 00000000    # n/a
-# Entry 1: Infinite Shields
-    00000002                                        # String Table
-    .long <<funDbgToggleInfiniteShields>>           # Toggle function
-    .long <<strShieldsOpt>>                         # Label
-    .long <<arrShieldStrings>>                      # [Normal, Infinite]
-    .long <<varToggleShield>>                       # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
-# Entry 3: Bomb Rain
-#    00000002                                        # String Table
-#    .long <<funDbgToggleOvertimeAndBombRain>>       # Toggle function
-#    .long <<strAlwaysRainBombsOpt>>                 # Label
-#    .long <<arrBombRain>>                           # [Normal, Bomb, Pokeballs]
-#    .long <<varToggleBombRain>>                     # Variable
-#    00000000                                        # n/a
-#    40400000                                        # 3 item table
-#    00000000                                        # n/a
-# Entry 4: Random Hitbox Element
-    00000002                                        # String Table
-    .long <<funDbgToggleHitboxElement>>             # Toggle function
-    .long <<strRandomHitboxElementOpt>>             # Label
-    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
-    .long <<varToggleRandomElement>>                # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Flush Cache on Scene Change
+When scene changes, the Dolphin cache should flush (so any on the fly code changes apply).
+SDR Note: This is a bit of a hack, as code shouldn't really be rewritten on the fly. So we shouldn't need this after we re-write all of our toggles to toggle based off variables instead.
+[Dan Salvato]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1A1750 ------ 4E800020 -> Branch
+3C608000 3C80003C 3D808000 618C543C
+7D8903A6 4E800420 48000000
 
 
 	-==-

@@ -103,6 +103,16 @@ Up+B Ledge Grab Buffs for Ness, Zelda, and Mewtwo [rmn]
 Perfect Shield ala Smash Ultimate [UnclePunch]
 Tech Grabs [Punkline]
 
+CStick can be use to dash attack [UnclePunch]
+Smash Attacks Out of Dash [UnclePunch]
+Enable retreating glide toss [rmn]
+Aerial Glide Toss [rmn]
+Reverse Aerial Moves [UnclePunch]
+Air Dodge replaced by Air Boost [flieskiller]
+Air Grabs v3 [UnclePunch]
+Infinite Shields move from BADHACKS
+Random Hitbox Elements moved from BADHACKS
+
 =============
 = Code dump =
 =============
@@ -138,15 +148,6 @@ Presets explanations>
         https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
-Mechanics>
-    Other >
-        https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/
-        https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/
-        https://smashboards.com/threads/reverse-aerial-moves.446842/
-        https://smashboards.com/threads/airdash.426124/
-        https://smashboards.com/threads/air-grabs.447884/
-        Shields: Normal/Infinite
-        Random Hitbox Elements
 Character>
     Handle this and potentially add to presets: https://smashboards.com/threads/misc-character-codes.446554/
     https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
@@ -859,52 +860,7 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 	-==-
 
 
-Shields: Normal/Infinite
-
-
-	-==-
-
-
-Disable Tap Jump
-Affects all players
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800CBBC0 --- 7C0802A6 -> Branch
-
-89FD06BE 2C0F0004
-40800008 4E800020
-7C0802A6 48000000
-
-1.02 ----- 0x800CB4E0 --- 7C0802A6 -> Branch
-
-2C040001 40820008
-4E800020 7C0802A6
-60000000 48000000
-
-
-	-==-
-
-
 Always Rain Bombs: Disabled/Enabled/Pokeballs
-
-
-	-==-
-
-
-Random Hitbox Elements - Every Non-projectile Attack
-All Non-projectile attacks will have a random effect, rather than their normal one.
-[Achilles]
-1.02
-C20715B0 00000009
-7C0F0378 38600010
-3C808038 60840580
-7C8903A6 4E800421
-2C030004 41A2FFE8
-2C030007 41A2FFE0
-2C030008 41A2FFD8
-2C03000B 41A2FFD0
-907E0030 7DE07B78
-28000009 00000000
 
 
 

@@ -462,3 +462,34 @@ beq <funWavedashOutOfJumpsquat>
             # NORMAL:
 80010024    # Code at injection point
 00000000    # branch back
+
+
+	-==-
+
+
+C-Stick during Run = Dash Attack
+<https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/>
+[UnclePunch]
+<varCStickDashAttackEnabled> ALL
+00000000
+
+<funCStickDashAttackPart1> NTSC 1.02
+89DF0669 2C0E0010 41800014 3DC08008 61CEB4D4 7DC903A6 4E800420 7C0802A6 60000000
+b 0x800CA960
+NTSC 1.02 ---- 0x800ca95c ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varCStickDashAttackEnabled>>@h
+ori r11, r11, <<varCStickDashAttackEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funCStickDashAttackPart1>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:

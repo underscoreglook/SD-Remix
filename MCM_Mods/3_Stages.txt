@@ -183,6 +183,17 @@ NTSC 1.02 ---- 0x802199FC ---- 480D8699 -> Branch
 	-==-
 
 
+Don't infinite loop Snag The Trophies stage in single player mode
+Hacky bug fix. Just stops the branches at these locations. No idea what this does.
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.02 ---- 0x216394 ------ 4182FFE0 -> 60000000
+-------------- 0x2581B8 ------ 481350C5 -> 60000000
+
+
+	-==-
+
+
 Toggle between Alpha/Omega on SSS
 If on the Stage Selection Screen, you can press L to switch to the "Alpha" toggle and R to switch to the "Omega" toggle. It then reloads the stage selection screen so the change can be evident.
 When switching, it also plays a sound effect unique to reloading the page.
