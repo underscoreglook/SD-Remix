@@ -1,0 +1,479 @@
+20XX Neutral Spawn for Singles and Doubles (Toggleable)
+Overwrite <<varNeutralSpawnsEnabled>> to 1 to enable.
+<https://smashboards.com/threads/forced-and-fixed-neutral-spawn-hack-singles-and-doubles.364075/>
+[Achilles, Jorgasms]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varNeutralSpawnsEnabled> NTSC 1.02
+00000000
+
+<funNeutralSpawnPart1> NTSC 1.02
+39E00000 3A000000 3E408048 625307FD 91F206D8 91F206DC 8A3207C8 625206D7
+2C110001 4182004C 39EF0001 8E930024 2C140003 4182000C 9A130004 3A100001
+2C0F0004 41A0FFE4 48000130 39E00000 3A0000FF 3E408048 62520801 39EF0001
+9E120024 2C0F0004 41A0FFF4 4800010C 3E208048 623106DC 39EF0001 3A520001
+8E930024 89D30008 2C140003 41A2FFC0 2C0E0000 40820010 3A000000 8A910000
+48000024 2C0E0001 40820010 3A000001 8E910001 48000010 3A000002 8E910002
+48000004 3A940001 2C140003 40A0FF80 9A910000 9A120000 2C0F0004 41A0FF94
+39E00000 3E208048 623106DB 3AA00000 39EF0001 8E910001 2C140001 40800008
+48000010 3AB50001 2C150003 40A0FF40 2C0F0003 41A0FFDC 39E00000 3A310127
+39C000FF 3A8000FF 39EF0001 8E110024 2C0E00FF 40820010 7E128378 39C00000
+4800002C 7C109000 4082000C 39C00003 4800001C 2C1400FF 40820010 39C00001
+3A800000 48000008 39C00002 99D1FFFC 2C0F0004 41A0FFB4 38840001
+b 0x8026305C
+NTSC 1.02 ---- 0x80263058 ----- 38840001 -> Branch
+lis r9, <<varOptionsPreset>>@h
+ori r9, r9, <<varOptionsPreset>>@l
+81290000    # lwz r9, 0(r9)
+2C090001    # cmpwi r9, 1
+bgt <funNeutralSpawnPart1>
+41800018    # blt RETURN
+# If custom, check toggle
+lis r9, <<varNeutralSpawnsEnabled>>@h
+ori r9, r9, <<varNeutralSpawnsEnabled>>@l
+81290000    # lwz r9, 0(r9)
+2C090001    # cmpwi r9, 1
+beq <funNeutralSpawnPart1>
+# RETURN:
+38840001    # addi r4, r4, 0x1  # Hook point code
+00000000    # Branch back
+
+<funNeutralSpawnPart2> NTSC 1.02
+3DE0801B 61EFFFA8 7C0F6000 418200BC 3DC08048 A1CE0686 3DE08049 61EFED70
+81EF0000 2C0E001F 4082001C 3E00C242 3E204242 3E404230 3A600000 960F0598
+4800002C 2C0E001C 40820040 3E00C23A 62106666 3E20423D 62318E70 3E404214
+3A600000 960F0854 48000004 924F0004 962F0040 924F0004 962F0040 926F0004
+960F0040 926F0004 2C0E0020 40820014 3A000041 9E0F0650 3A0000C1 9A0F0040
+2C0E0008 40820024 3E004270 3E20C270 3A400000 39EF4748 960F4748 924F0004
+962F0040 924F0004 7D8803A6
+b 0x801C0A4C
+NTSC 1.02 ---- 0x801C0A48 ----- 7D8803A6 -> Branch
+lis r15, <<varOptionsPreset>>@h
+ori r15, r15, <<varOptionsPreset>>@l
+81EF0000    # lwz r15, 0(r15)
+2C0F0001    # cmpwi r15, 1
+bgt <funNeutralSpawnPart2>
+41800018    # blt RETURN
+# If custom, check toggle
+lis r15, <<varNeutralSpawnsEnabled>>@h
+ori r15, r15, <<varNeutralSpawnsEnabled>>@l
+81EF0000    # lwz r15, 0(r15)
+2C0F0001    # cmpwi r15, 1
+beq <funNeutralSpawnPart2>
+# RETURN:
+7D8803A6    # Hook point code
+00000000    # Branch back
+
+
+	-==-
+
+
+Stock Control/Crew Battle Mode (SDR Options integrated)
+Essentially, this hack gets rid of the damage modifier for handicap and replaces it with controllable stocks so that one player can spawn with say 6 stocks and another can spawn with 4.
+When handicap is set to "ON" you can set custom stocks per player (1 stock - 9 stocks).
+When handicap is set to "AUTO" you can set custom stock per player (1 stock - 9 stocks) just like when handicap is "ON." However, upon re-entering the character select screen, your handicap will be set to the amount of stocks you had at the end of the game. If you had zero stocks (as in you lost), the game will set your stock to the current stock setting (any stock amount higher than nine will be set nine). This allows for easy crew battles. You can still change the stocks manually if needed (rage quits etc.).
+[Jorgasms]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varHandicapIsStocks> ALL
+00000000
+
+1.02 ----- 0x80036bb4 --- 9803008E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+41810020    # bgt RETURN
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+41820008    # beq RETURN
+            # NORMAL:
+9803008E    # Code at injection point
+            # RETURN:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart1> NTSC 1.02
+3DC0803F 61CEA3E6
+89CE0000 2C0E0000
+4182008C 3DC08045
+39CE310E 3DE08048
+39EF0828 3E008045
+6210BF14 8A100000
+2C100009 40810008
+3A000009 8A2E0000
+2C110000 4182000C
+9A2F0000 48000008
+9A0F0000 8A2E0E90
+2C110000 4182000C
+9A2F0024 48000008
+9A0F0024 8A2E1D20
+2C110000 4182000C
+9A2F0048 48000008
+9A0F0048 8A2E2BB0
+2C110000 4182000C
+9A2F006C 48000008
+9A0F006C 3803FFFF
+b 0x8026667C
+1.02 ----- 0x80266678 --- 3803FFFF -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart1>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart1>
+            # NORMAL:
+3803FFFF    # Code at injection point
+00000000    # Branch Back
+
+<funHandicapIsStocksPart2> NTSC 1.02
+3E008048 621006E0
+3A200009 9A300000
+9A300024 9A300048
+9A30006C 38BEFFF8
+b 0x801A57E0
+1.02 ----- 0x801A57DC --- 38BEFFF8 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart2>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart2>
+            # NORMAL:
+38BEFFF8    # Code at injection point
+00000000    # Branch Back
+
+<funHandicapIsStocksPart3> NTSC 1.02
+3DC0803F 61CEA3E6
+3DE08045 61EFBF15
+3A000001 89CE0000
+2C0E00FF 4082000C
+9A0F0000 38000001
+b 0x80230D58
+1.02 ----- 0x80230D54 --- 88030005 -> Branch
+88030005    # Code at injection point
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart3>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart3>
+            # NORMAL:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart4> NTSC 1.02
+3DC0803F
+61CEA3E6 3E008045
+6210BF15 8A300000
+2C110001 40820014
+38000002 39E000FF
+99EE0000 4800000C
+39E00000 99EE0000
+b 0x8022F770
+1.02 ----- 0x8022F76C --- 881C0004 -> Branch
+881C0004    # Code at injection point
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart4>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart4>
+            # NORMAL:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart5> NTSC 1.02
+3DC0803F
+61CEA3E6 3E008045
+6210BF15 8A300000
+2C110001 40820014
+38000002 39E000FF
+99EE0000 4800000C
+39E00000 99EE0000
+b 0x8022F6C0
+1.02 ----- 0x8022F6BC --- 881C0004 -> Branch
+881C0004    # Code at injection point
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart5>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart5>
+            # NORMAL:
+00000000    # Branch Back
+
+<funHandicapIsStocksPart6> NTSC 1.02
+3DC08045 61CEBF15
+89CE0000 2C0E0002
+40820038 3DC08045
+39CE310E 3DE08048
+39EF0828 8A4F0000
+9A4E0000 8A4F0024
+9A4E0E90 8A4F0048
+9A4E1D20 8A4F006C
+9A4E2BB0 48000008
+98A3008E
+b 0x80033CC8
+1.02 ----- 0x80033CC4 --- 98A3008E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+bgt <funHandicapIsStocksPart6>
+41800018    # blt NORMAL
+lis r11, <<varHandicapIsStocks>>@h
+ori r11, r11, <<varHandicapIsStocks>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funHandicapIsStocksPart6>
+            # NORMAL:
+98A3008E    # Code at injection point
+00000000    # Branch Back
+
+
+	-==-
+
+
+
+
+Tournament Style Overtime (Integrated with Options menu)
+Ties by percent in regulation and makes sudden death mode 3 minutes.
+Requires the 2_general code: "Always Skip the Result Screen or Break ties by percent"
+<https://smashboards.com/threads/tournament-style-overtime-for-ssbm-v1-2.403898/>
+[_glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varTournamentStyleOvertimeEnabled> ALL
+00000000
+
+<funEnableTimerInSuddenDeathAndNextSceneIsSuddenDeath> NTSC 1.02
+3CA08046 60A5DB6E 88650000 2C030000
+41A20024 38600004 3CA08047 60A59D35
+98650000 38600032 3CA08046 60A5DB68
+98650000 38BF24C0 881E0000
+b 0x8016DD3C
+1.02 ----- 0x8016DD38 --- 881E0000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funEnableTimerInSuddenDeathAndNextSceneIsSuddenDeath>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funEnableTimerInSuddenDeathAndNextSceneIsSuddenDeath>
+            # NORMAL:
+881E0000    # Code at injection point
+00000000    # Branch Back
+
+<funSetSuddenDeathTimerTo180Secs> NTSC 1.02
+3C608046 6063DB6E 88630000 2C030000
+41A20008 380000B4 901F0028
+b 0x8016DDD0
+1.02 ----- 0x8016DDCC --- 901F0028 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funSetSuddenDeathTimerTo180Secs>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funSetSuddenDeathTimerTo180Secs>
+            # NORMAL:
+901F0028    # Code at injection point
+00000000    # Branch Back
+
+<funSetSuddenDeathRealPercentTo0> NTSC 1.02
+3C608046 6063DB6E 88630000 2C030000 41A20010 38600000
+907B1830 48000008 D01B1830
+b 0x80067E7C
+1.02 ----- 0x80067E78 --- D01B1830 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funSetSuddenDeathRealPercentTo0>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funSetSuddenDeathRealPercentTo0>
+            # NORMAL:
+D01B1830    # Code at injection point
+00000000    # Branch Back
+
+<funSetSuddenDeathDisplayPercentTo0> NTSC 1.02
+3C608046 6063DB6E 88630000 2C030000
+41A20008 3BC00000 7FDD032E
+b 0x800343B8
+1.02 ----- 0x800343B4 --- 7FDD032E -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+bne <funSetSuddenDeathDisplayPercentTo0>
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funSetSuddenDeathDisplayPercentTo0>
+            # NORMAL:
+7FDD032E    # Code at injection point
+00000000    # Branch Back
+
+1.02 ----- 0x80165dc4 --- 38040001 -> Branch
+# Disable Port 1 Priority
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820020    # bne DISABLE_PORT_PRIORITY
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq DISABLE_PORT_PRIORITY
+            # NORMAL:
+38040001    # Code at injection point
+48000008    # b RETURN
+            # DISABLE_PORT_PRIORITY:
+38040000    # Disable Port Priority
+            # RETURN:
+00000000    # Branch Back
+
+1.02 ----- 0x80165e0c --- 38040001 -> Branch
+# Disable Port 2 Priority
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820020    # bne DISABLE_PORT_PRIORITY
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq DISABLE_PORT_PRIORITY
+            # NORMAL:
+38040001    # Code at injection point
+48000008    # b RETURN
+            # DISABLE_PORT_PRIORITY:
+38040000    # Disable Port Priority
+            # RETURN:
+00000000    # Branch Back
+
+1.02 ----- 0x80165e54 --- 38040001 -> Branch
+# Disable Port 3 Priority
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820028    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820020    # bne DISABLE_PORT_PRIORITY
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq DISABLE_PORT_PRIORITY
+            # NORMAL:
+38040001    # Code at injection point
+48000008    # b RETURN
+            # DISABLE_PORT_PRIORITY:
+38040000    # Disable Port Priority
+            # RETURN:
+00000000    # Branch Back
+
+
+	-==-
+
+
+Capped Points/Tennis Mode
+Treats the Stock Match Time Limit as a points cap in Time mode and a coin cap in Coin Mode (coin cap is the minutes set times 100).
+It ends the match immediately once one of the players has reached the point or coin limit/cap.
+Setting Stock Match Time Limit to None turns this off, so you can still play normally if you want to
+<https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/post-19212332>
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<varCappedPointsEnabled> ALL
+00000000
+
+<funCappedPointsMode> NTSC 1.02
+88030005 3C808045 6084BF18 88840000 2C040000 418200FC 3CA08045 60A5BF12
+88A50000 2C050002 40A2000C 1C840064 48000018 2C050000 40A200D8 3CE08045
+60E7BF1C 88E70000 38A00000 3CC08045 60C63080 81060008 2C080003 41820070
+2C040064 41A00014 81060090 7C082000 40800070 48000058 39000000 81260070
+7D084A14 81260074 7D084A14 81260078 7D084A14 8126007C 7D084A14 81260068
+7D094050 A126008C 2C070001 4182000C 41810010 48000010 7D084A14 48000008
+7D094050 7C082000 40800018 38A50001 38C60E90 2C050004 4082FF7C 48000034
+38800032 3CA08046 60A5DB68 98850000 38800000 3CA08046 60A5B6C8 90850000
+3880003A 3CA08046 60A5B6CC B0850000
+b 0x8016CDB0
+1.02 ----- 0x8016CDAC --- 88030005 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0002    # cmpwi r11, 2
+bgt <funCappedPointsMode>
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varCappedPointsEnabled>>@h
+ori r11, r11, <<varCappedPointsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funCappedPointsMode>
+            # NORMAL:
+88030005    # Code at injection point
+00000000    # Branch Back

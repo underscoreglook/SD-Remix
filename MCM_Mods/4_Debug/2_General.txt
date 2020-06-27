@@ -1,0 +1,562 @@
+Debug Menu: General Options Submenu
+The functions, strings, and data for the submenu "General Options".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<strGeneralOptionsTitle> ALL            # "< General Options >"
+3C 20 47 65 6E 65 72 61 6C 20 4F 70 74 69 6F 6E 73 20 3E 00
+
+<strGeneralOptionsDesc> ALL            # "These are not affected by presets"
+54686573 65206172 65206e6f 74206166 66656374 65642062 79207072 65736574 73000000
+
+<strStockPlatformColorOpt> ALL          # "Stock platform colors: "
+53746F63 6B20706C 6174666F 726D2063 6F6C6F72 733A2000
+
+<strNeutralSpawnOpt> ALL          # "Neutral Spawn: "
+4e657574 72616c20 53706177 6e3a2000
+
+<strSkipResultsScreenOpt> ALL          # "Skip results screen: "
+536b6970 20726573 756c7473 20736372 65656e3a 20000000
+
+<strLCancelOnResultsOpt> ALL          # "Show L-Cancel % On Results Screen: "
+53686f77 204c2d43 616e6365 6c204f6e 20526573 756c7473 20536372 65656e3a 20000000
+
+<strWidescreenOpt> NTSC 1.02            # "Widescreen:"
+57696465 73637265 656E3A00
+
+<strDolphin> NTSC 1.02  "Dolphin"
+446f6c70 68696e00
+
+<strMonitor> NTSC 1.02  "Monitor"
+4d6f6e69 746f7200
+
+<strLCDTV> NTSC 1.02  "LCD TV"
+4c434420 54560000
+
+<arrWidescreenOptions> NTSC 1.02        # Disabled, Dolphin, Monitor, LCD TV
+.long <<strDisabled>>
+.long <<strDolphin>>
+.long <<strMonitor>>
+.long <<strLCDTV>>
+
+<tblDbgGeneralOptsSubMenu> NTSC 1.02
+# Entry 0: Menu Title
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strGeneralOptionsTitle>>                # Label/Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 0 part 2: Note about menu
+    00000000                                        # Disabled
+    00000000                                        # n/a
+    .long <<strGeneralOptionsDesc>>                 # Label/Title
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# Entry 1: Widescreen Option
+    00000002                                        # String Table
+    00000000                                        # Called when value changes
+    .long <<strWidescreenOpt>>                      # Label
+    .long <<arrWidescreenOptions>>                  # [Disabled, Enabled]
+    .long <<varWidescreenOption>>                   # Variable
+    00000000                                        # n/a
+    40800000                                        # 4 item table
+    00000000                                        # n/a
+# Entry 2: Stock Platform Colors
+    00000002                                        # String Table
+    00000000                                        # Toggle function
+    .long <<strStockPlatformColorOpt>>              # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varStockPlatformColorsEnabled>>         # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 3: Skip results screen
+    00000002                                        # String Table
+    00000000                                        # Toggle function
+    .long <<strSkipResultsScreenOpt>>               # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varSkipResultsScreen>>                  # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Entry 4: L Cancel % on results screen
+    00000002                                        # String Table
+    00000000                                        # Toggle function
+    .long <<strLCancelOnResultsOpt>>                # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varShowLCancelOnResultsScreen>>         # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+16:9 Widescreen Support (Variation B) [Toggleable]
+Includes the fullscreen flashing effect fix.
+This variation also fixes the position of magnifier bubbles, but also stretches the HUD.
+
+If using with Dolphin, you'll also need to change the setting, "Force 16:9" for the aspect ratio and make sure "Widescreen Hack" is OFF.
+
+16:9 for Dolphin: XXXX = 42B8, YYYY = 427C
+16:9 for Monitor: XXXX = 4438, YYYY = 440E
+16:9 for LCD TV: XXXX = 4080, YYYY = 4040
+4:3 for Dolphin: XXXX = 41B8, YYYY = 41A8
+
+See the notes in the link below for adjustments based on your display device:
+https://docs.google.com/document/d/1o_KEmsbKg4_qIm607FfewzIvChQYxayN4r1j3Uy6yX0/edit
+
+Extended to be toggleable. Update <<varWidescreenOption> to one of:
+0 - Normal 4:3
+1 - for Dolphin
+2 - for Monitor
+3 - For LCD TV
+
+<https://smashboards.com/threads/16-9-widescreen-w-options-for-tv-monitor-dolphin.397929/>
+[Dan Salvato, _glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varWidescreenOption> ALL
+00000000    # This is the index into tblWidescreenValues (1 indexed)
+
+<ttblWidescreenValues> ALL
+# Values to use in the codes. First half word is the "X" val, second half word is "Y" val
+42B8427C    # 16:9 for Dolphin
+4438440E    # 16:9 for Monitor
+40804040    # 16:9 for LCD TV
+
+1.02 ----- 0x80021ABC --- 38600006 -> Branch
+lis r3, <<varWidescreenOption>>@h
+ori r3, r3, <<varWidescreenOption>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820008    # beq RETURN
+            # WIDESCREEN_ENABLED:
+39C00001    # li r14, 0x1
+            # RETURN:
+38600006    # li r3, 0x6        # Code at hook point
+00000000    # Branch back
+
+1.02 ----- 0x802F3980 --- 387F0000 -> Branch
+lis r3, <<varWidescreenOption>>@h
+ori r3, r3, <<varWidescreenOption>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+41820008    # beq RETURN
+            # WIDESCREEN_ENABLED:
+39C00001    # li r14, 0x1
+            # RETURN:
+387F0000    # addi r3, r31, 0x0 # Code at hook point
+00000000    # Branch back
+
+1.02 ----- 0x8036A4A8 --- C03F0034 -> Branch
+C03F0034    # lfs f1, 52(r31)   # Code at hook point
+lis r3, <<varWidescreenOption>>@h
+ori r3, r3, <<varWidescreenOption>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+4182004C    # beq PROCEED_AS_NORMAL
+2C0E0001    # cmpwi r14, 0x1
+41820040    # beq- FINISH_WIDESCREEN
+lis r14, <<ttblWidescreenValues>>@h
+ori r14, r14, <<ttblWidescreenValues>>@l
+3863FFFF    # subi r3, r3, 1      # Subtract to get index into table
+5463103A    # slwi r3, r3, 2	    # Multiply by 4 to get byte offset
+7DCE1A14    # add r14, r14, r3    # Get address of item
+A00E0000    # lhz r0, 0(r14)      # Get the "X" value
+5400801E    # slwi r0, r0, 16     # Shift into top 16 bits
+90010030    # stw r0, 48(r1)
+A00E0002    # lhz r0, 2(r14)      # Get the "X" value
+5400801E    # slwi r0, r0, 16     # Shift into top 16 bits
+90010034    # stw r0, 52(r1)
+C0010030    # lfs f0, 48(r1)
+EC210032    # fmuls f1, f1, f0
+C0010034    # lfs f0, 52(r1)
+EC210024    # fdivs f1, f1, f0
+            # FINISH_WIDESCREEN:
+39C00000    # li r14, 0x0
+            # PROCEED_AS_NORMAL:
+281E0000    # cmplwi r30, 0     # Reset the comparison
+00000000    # Branch back
+
+
+	-==-
+
+
+Stock Dependent Revival Platform Colors (Toggleable)
+The coloring of the revival platform changes based on how many stocks a player has remaining.
+4 stocks left (via a minigame or something...) = purple
+3 stocks left = green platform
+2 stocks left = orange platform
+1 stock left = red platform (as in, danger....you're about to lose)
+
+Set <<varStockPlatformColorsEnabled>> to 1 to turn this on.
+<https://smashboards.com/threads/stock-dependent-revival-platform-colors.403864>
+[achilles]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<varStockPlatformColorsEnabled> NTSC 1.02
+00000000
+
+NTSC 1.02 ---- 0x800D5008 ----- 7C7E1B78 -> Branch
+7C7E1B78    # mr r30, r3
+lis r3, <<varStockPlatformColorsEnabled>>@h
+ori r3, r3, <<varStockPlatformColorsEnabled>>@l
+80630000    # lwz r3, 0(r3)
+2C030000    # cmpwi r3, 0
+418200E8    # beq END
+# Main bulk of the code
+3FE08016 63FFB094 7FE803A6 4E800021 2C030001 408200D0 3C60801A 60634340
+7C6803A6 3C608047 60639D30 88630000 4E800021 2C030001 418200AC 7FC3F378
+3E608045 626FBF12 8A0F0002 2C100004 40820094 3E00804D 821064FC 626F310E
+8BE3006C 1DDF0E90 7DEE78AE 2C0F0001 41820050 2C0F0003 41820020 2C0F0002
+4182002C 3E20BAB0 6231FFFF 3E408000 625280FF 4800003C 3E2000FF 623100FF
+3E400059 625200FF 48000028 3E20FF99 623100FF 3E409F5F 625200FF 48000014
+3E20FF00 623100FF 3E409000 625200FF 92300AC4 92500AF0 92300B90 92300CE0
+92300D18
+            # END:
+7FC3F378    # mr r3,r30     # Set r3 back
+00000000    # Branch back
+
+
+	-==-
+
+
+Always Skip the Result Screen, and Star Count = Placement (Toggleable) or Break ties by percent
+- Game skips the result screen after a match, and changes the stars for the amount of stocks taken to the placement of the player in the last match.
+If you quit out of a match it will show who had the stock-lead at the moment.
+The only time it doesn't skip it is after the sudden death if a timed match ends in a draw.
+Warning: when using this code you will NOT unlock anything you would normally after a match (new stages/characters etc), only use it together with save files where you have already unlocked everything.
+Set <<varSkipResultsScreen>> to 1 to enable.
+[Sham Rock]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+<varSkipResultsScreen> NTSC 1.02
+00000000
+
+
+<funBreakTiesByPercent> NTSC 1.02
+addi r0, r3, -1
+cmpwi r0,3
+bne- RETURN
+cmpwi r11,32
+beq- RETURN
+
+addi sp, sp, -0x14 	# This will hold stack data
+# First word (@ sp) is the placementOrder array, which is 4 bytes
+# Next four words are the tiebreakers, which is (oldPlacement << 16) | percent
+lis r4, 0xFFFF
+ori r4, r4, 0xFFFF
+stw r4, 0(sp)
+stw r4, 4(sp)
+stw r4, 8(sp)
+stw r4, 0xC(sp)
+stw r4, 0x10(sp)
+
+# Do the init loops
+li r20, 0	# placementIndex
+li r21, 0	# playerNum
+lis r17, 0x8045  # This is player block
+ori r17, r17, 0x3080  # Separated by E90 per player
+lis r18, 0x8047  # This is results screen data
+ori r18, r18, 0x9E00  # Separated by 0xA8
+lis r16, 0x803F  # This is team colors
+ori r16, r16, 0x0E06  # Separated by 0x24
+lis r4, 0x8048
+ori r4, r4, 0x07C8
+lbz r4, 0(r4)	# r4 is whether it is teams battle
+cmpwi r4, 0x01  # Is this a team battle?
+beq TEAM_LOOP
+
+FFA_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq FFA_CONTINUE	# If None, go to next item
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+lwz r5, 0xB0(r17)	# Get player entity
+lwz r5, 0x2C(r5)	# Get Player Char Data
+lwz r5, 0x2074(r5)	# Get percentage as int
+or r4, r4, r5		# Place in lower half of word
+slwi r5, r21, 2     # Get addr of tieBreaker[playerNum]
+add r5, r5, sp      # r5 is now address of tieBreaker[playerNum] minus 4 bytes
+stw r4, 4(r5)       # tieBreaker[playerNum] = (getPlacement(playerNum) << 16) | getPercentage(playerNum);
+stbx r21, r20, sp	# placementOrder[placementIndex] = playerNum
+addi r20, r20, 1	# placementIndex++
+FFA_CONTINUE:
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ FFA_LOOP
+b INIT_LOOP_END
+
+TEAM_LOOP:
+lwz r4, 8(r17)		# Get if player is playing
+cmpwi r4, 0x3		# playerType ?= NONE
+beq TEAM_CONTINUE	# If NONE, go to next item
+lbz r6, 0(r16)		# r6 = teamNum
+slwi r5, r6, 2		# get addr of tieBreaker[teamNum]
+add r5, r5, sp
+lwz r4, 4(r5)		# r4 = tieBreaker[teamNum]
+cmpwi r4, 0
+bge- TEAM_EXISTING  # if tieBreaker[teamNum] >= 0, it exists. If -1, it doesn't exist, and we must create it
+stbx r6, r20, sp	# placementOrder[placementIndex] = teamNum
+addi r20, r20, 1	# placementIndex++
+lbz r4, 1(r18)		# Get the placement/ranking of player
+slwi r4, r4, 0x10   # Put in upper half
+TEAM_EXISTING:
+lhz r6, 0x60(r17)	# Get percentage of player
+add r4, r4, r6      # tieBreaker[teamNum] += getPercentage(playerNum)
+stw r4, 4(r5)       # Store it back into tieBreaker array
+TEAM_CONTINUE:
+addi r16, r16, 0x24
+addi r17, r17, 0xE90
+addi r18, r18, 0xA8
+addi r21, r21, 1	# playerNum++
+cmpwi r21, 4
+bne+ TEAM_LOOP
+
+INIT_LOOP_END:
+
+# Insertion sort time!
+li r21, 0			# r21 is i
+INSERTSTART:
+add r18, sp, r21
+lbz r18, 0(r18)		# r18 is currPlayer
+cmpwi r18, 0x00FF
+beq- END_INSERT		# if currPlayer == -1, stop insertion sort
+mr r20, r21			# r20 is j
+SORTLOOP:
+cmpwi r20, 0
+beq- BREAKSORTLOOP	# if (j==0) break
+add r17, sp, r20	# r17 = *(placementOrder[j])
+lbz r17, -1(r17)	# r17 is prevPlayer
+# Compare tieBreaker[currPlayer] with tieBreaker[prevPlayer]
+slwi r6, r18, 2
+slwi r5, r17, 2
+add r6, r6, sp		# r6 is *(tieBreaker[currPlayer]) - 4
+add r5, r5, sp		# r5 is *(tieBreaker[prevPlayer]) - 4
+lwz r6, 4(r6)		# r6 is tieBreaker[currPlayer]
+lwz r5, 4(r5)		# r5 is tieBreaker[prevPlayer]
+cmpw r6, r5
+bge+ BREAKSORTLOOP
+add r16, sp, r20     # r16 = *(placementOrder[j])
+stb r17, 0(r16)      # placementOrder[j] = prevPlayer
+addi r20, r20, -1    # j--
+b SORTLOOP
+BREAKSORTLOOP:
+add r20, sp, r20
+stb r18, 0(r20)       # placementOrder[j] = currPlayer
+addi r21, r21, 1
+cmpwi r21, 4
+bne+ INSERTSTART
+END_INSERT:
+
+li r3, 0x5	# Next screen is results screen
+li r0, 0x4	# r0 also needs to be set to go to results screen
+
+# Go through and set the placements
+li r18, 0		# r18 = currPlacing
+lis r17, 0xFFFF		# r17 = lastTieBreaker
+ori r17, r17, 0xFFFF		# r17 = lastTieBreaker
+li r16, 0		# r16 is i
+PLACING_START:
+add r6, sp, r16	# r6 = *(placementOrder[i])
+lbz r6, 0(r6)	# r6 = playerNum
+cmpwi r6, 0x00FF
+beq- PLACING_END
+slwi r5, r6, 2
+add r5, r5, sp	# r5 = *(tieBreaker[playerNum]) - 4
+lwz r5, 4(r5)	# r5 = tieBreaker[playerNum]
+cmpw r17, r5
+bne+ UPDATE_PLACING
+cmpwi r18, 0
+bne+ SET_PLACEMENT
+li r3, 0x4            # Next screen is sudden death
+li r0, 0x3            # r0 also needs to be set
+b SET_PLACEMENT
+UPDATE_PLACING:
+mr r17, r5
+mr r18, r16		# currPlacing = i
+SET_PLACEMENT:
+lis r20, 0x8048
+ori r20, r20, 0x07C8
+lbz r20, 0(r20)	# r20 is whether it is teams battle
+cmpwi r20, 0	# is it a teams battle?
+beq+ PLACING_NOT_TEAMS
+lis r5, 0x8047
+ori r5, r5, 0x9DC8
+mulli r6, r6, 0xC
+add r6, r6, r5
+stb r18, 0(r6)
+stb r18, 1(r6)
+b PLACING_CONT
+PLACING_NOT_TEAMS:
+lis r5, 0x8047
+ori r5, r5, 0x9E00	# r5 is the base placement address
+mulli r6, r6, 0xA8	# playerNum *= 0xA8
+add r6, r6, r5		# r6 = getPlacementAddress(playerNum)
+stb r18, 1(r6)
+stb r18, 2(r6)
+PLACING_CONT:
+addi r16, r16, 1
+cmpwi r16, 4
+bne+ PLACING_START
+PLACING_END:
+
+addi sp, sp, 0x14 # Clear the stack
+# Clear some used registers
+li r16, 0
+li r17, 0
+li r18, 0
+li r20, 0
+li r21, 0
+RETURN:
+b 0x801A4160
+
+1.02 ------ 0x801A415C ---- 3803ffff -> Branch
+3803FFFF    # Code at hook point
+# First, check for breaking ties by percent
+lis r9, <<varOptionsPreset>>@h
+ori r9, r9, <<varOptionsPreset>>@l
+81290000    # lwz r9, 0(r9)
+2C090000    # cmpwi r9, 0
+41820028    # beq NORMAL
+2C090004    # cmpwi r9, 4
+41820020    # beq NORMAL
+2C090001    # cmpwi r9, 1
+bne <funBreakTiesByPercent>
+lis r9, <<varTournamentStyleOvertimeEnabled>>@h
+ori r9, r9, <<varTournamentStyleOvertimeEnabled>>@l
+81290000    # lwz r9, 0(r9)
+2C090001    # cmpwi r9, 1
+beq <funBreakTiesByPercent>
+            # NORMAL:
+# Last, check if we should skip results screen
+lis r9, <<varSkipResultsScreen>>@h
+ori r9, r9, <<varSkipResultsScreen>>@l
+81290000    # lwz r9, 0(r9)
+2C090000    # cmpwi r9, 0
+41820068    # beq RETURN
+# Actual code
+2C000004 40820060 2C0B0020 41820058 3A400000 3E808047 62949D58 3EA0804D
+62B5672F 8E1400A8 8A340001 2C10004E 4080000C 9E350001 4800000C 3A310001
+9E350001 3A520001 2C120004 41A0FFD8 3A000000 3A200000 3A800000 3AA00000
+38000000
+# RETURN:
+00000000
+
+
+	-==-
+
+
+L Cancel % in Results Screen (revised 2/11/15) (Toggleable)
+- Shows the player's L-cancel success rate in the end of game stats page.
+<<varShowLCancelOnResultsScreen>> is the toggle.
+<https://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/post-18563167>
+[Wooggle]
+Version -- DOL Offset ------ Hex to Replace -------
+<varShowLCancelOnResultsScreen> ALL
+00000000
+
+1.02 ------ 0x3D79C ----- 90030C68 -> Branch
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+41820008    # beq RETURN
+90030C68    # Code at injection point
+            # RETURN:
+00000000    # Branch Back
+
+<funLCancelPercentOnResultsScreen1> NTSC 1.02
+8A830678 3DC08000
+61CE45D4 1EB40008
+7DCEAA14 81EE0000
+39EF0001 91EE0000
+3A0EFFFC 82300000
+7E717BD6 3E408045
+62523DA4 1EB40E90
+7E52AA14 92720000
+3880FFFF
+b 0x8008D604
+1.02 ------ 0x8008D600 ----- 3880FFFF -> Branch
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funLCancelPercentOnResultsScreen1>
+3880FFFF    # Code at injection point
+00000000    # Branch Back
+
+<funLCancelPercentOnResultsScreen2> NTSC 1.02
+8A830678 3DC08000
+61CE45D4 1EB40008
+7DCEAA14 81EE0000
+3A0EFFFC 82300000
+3A310064 92300000
+7E717BD6 3E408045
+62523DA4 1EB40E90
+7E52AA14 92720000
+EC010024
+b 0x8008D6A8
+1.02 ------ 0x8008D6A4 ----- EC010024 -> Branch
+lis r11, <<varShowLCancelOnResultsScreen>>@h
+ori r11, r11, <<varShowLCancelOnResultsScreen>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+beq <funLCancelPercentOnResultsScreen2>
+EC010024    # code at injection paint
+00000000    # Branch Back
+
+
+	-==-
+
+
+Combined hook for L cancel percent and hold start to force game out of results screen
+[Wooggle, rice]
+Version -- DOL Offset ------ Hex to Replace -------
+
+<funLCancelPercentOnResultsScreen3> NTSC 1.02
+3DC08000 61CE45D0
+39E00000 91EE0000
+91EE0004 91EE0008
+91EE000C 91EE0010
+91EE0014 91EE0018
+91EE001C 3DC080C6
+61CE1DB8 3DE01620
+61EF151A 91EE0000
+3DE0200C 61EF2024
+91EE0004 3DE02031
+61EF2026 91EE0008
+3DE02028 61EF202F
+91EE000C 3DE01A21
+61EF0300 91EE0010
+39E00000 91EE0014
+91EE0018 91EE001C
+80030008    # lwz r0,8(r3)      # Code at injection point
+b 0x80178228
+1.02 ------ 0x80178224 ---- 80030008 -> Branch
+# Hold Start to force game out of results screen
+3DE08047 61EF9DF8
+3A000044 7E0083D6
+3A200000 1E5000A8
+7E2F932E
+            # CHECK_NEXT_PLAYER:
+1E7100A8    # mulli r19, r17, 0xA8
+7E4F9A2E    # lhzx r18, r15, r19
+2C12003C    # cmpwi r18, 0x3C   # 3C = 60 frames = 1 second
+4180000C    # blt- GO_TO_NEXT_PLAYER
+38001000    # li r0, 0x1000
+48000028    # b RETURN
+            # GO_TO_NEXT_PLAYER:
+3A310001    # addi r17, r17, 0x1
+2C110004    # cmpwi r17, 0x4
+41A0FFE0    # blt- CHECK_NEXT_PLAYER
+# Percentage on results screen
+lis r15, <<varShowLCancelOnResultsScreen>>@h
+ori r15, r15, <<varShowLCancelOnResultsScreen>>@l
+81EF0000    # lwz r15, 0(r15)
+2C0F0001    # cmpwi r15, 1
+beq <funLCancelPercentOnResultsScreen3>
+80030008    # lwz r0,8(r3)      # Code at injection point
+00000000    # Branch Back

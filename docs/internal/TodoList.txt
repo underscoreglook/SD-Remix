@@ -120,6 +120,13 @@ Superfox [SinsOfApathy]
 Giant Melee is One Stock Rotation [UnclePunch]
 Super Sudden Death is Chess Mode [Achilles, UnclePunch]
 Single Button Mode is Turbo Mode [UnclePunch]
+Food appears when items disabled [flieskiller]
+Disable Container Spawns [Punkline]
+Containers spawn containers [Punkline]
+Disable Capsule Explosions [Achilles]
+Disable Barrel Explosions [Achilles]
+Disable Box Explosions [Achilles]
+
 
 =============
 = Code dump =
@@ -134,15 +141,14 @@ Change brawl button from L to definable (L or R), per player
 
 Presets explanations>
     SERIOUS
-        Disable Capsule Explosions
-        Disable Barrel Explosions
         Disable Box Explosions
     CASUAL
+        Food appears when items disabled
         Marth colors match costume
         https://smashboards.com/threads/roy-sword-trails.449229/
-        Food appears when items disabled
         DK Hold B for DownB
     SD DOUBLE REMIX
+        Food appears when items disabled
         Marth colors match costume
         https://smashboards.com/threads/roy-sword-trails.449229/
         Nana Respawn Time = None, 60 secs
@@ -152,14 +158,16 @@ Presets explanations>
         DK Hold B for DownB
         GnW Hammer: Modulo
         Bowser Up+B Mash for Height
-        Food appears when items disabled
         https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
+Items>
+    https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
 Character>
     Handle this and potentially add to presets: https://smashboards.com/threads/misc-character-codes.446554/
-    https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
-    https://smashboards.com/threads/standalone-transformation-codes.452675/
+    General >
+        https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
+        https://smashboards.com/threads/standalone-transformation-codes.452675/
     Marth colors match costume
     Peach>
         Peach turnip: Default, Always 0-7
@@ -190,14 +198,6 @@ Character>
     Kirby>
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
-Items>
-    Food appears when items disabled
-    Disable Container Spawns
-    Containers spawn containers
-    Disable Capsule Explosions
-    Disable Barrel Explosions
-    Disable Box Explosions
-    https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
 Credits>
 Debug Menu>
 
@@ -637,65 +637,7 @@ C0440004 3C008007
 	-==-
 
 
-Food appears when items disabled (1.02)[flieskiller]
-0428fb1c 4800000c
-I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
- as well, even if the food item is at off.
-
-
-	-==-
-
-
-Disable Container Spawns
-Prevents capsules, boxes, barrels, and eggs from spawning randomly.
-[Punkline]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8026C784 --- 7C7C1B78 -> Branch
-
-609C0E34 7C03E040
-40820008 60830E50
-7C7C1B78 00000000
-
-
-	-==-
-
-
-Containers spawn containers
-Containers can contain more containers.
-[Punkline]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x269364 ---- 7C7C1B78 -> Branch
-
-609C0E50 7C03E040
-40820008 60830E34
-7C7C1B78 00000000
-
-
-	-==-
-
-
-Disable Capsule Explosions
-(Normal chance for explosion: 12.5%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8027CF8C --- 40820018 -> 48000018
-
-
-	-==-
-
-
-Disable Barrel Explosions
-(Normal chance for explosion: 10%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80288b28 --- 4080000C -> 60000000
-
-
-	-==-
-
-
 Disable Box Explosions
-(Normal chance for explosion: 10%)
 [Achilles]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ----- 0x8028639c --- 38600000 -> 38600001
