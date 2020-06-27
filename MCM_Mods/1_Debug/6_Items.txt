@@ -1,0 +1,15 @@
+Debug Menu: Items Submenu
+The functions, strings, and data for the submenu "Items".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<strItemsTitle> ALL
+3c204974 656d7320 3e000000
+
+<tblDbgItemsSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strItemsTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

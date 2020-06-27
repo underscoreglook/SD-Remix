@@ -1,0 +1,15 @@
+Debug Menu: Characters Submenu
+The functions, strings, and data for the submenu "Characters".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<strCharactersTitle> ALL
+3c204368 61726163 74657273 203e0000
+
+<tblDbgCharacterSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strCharactersTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

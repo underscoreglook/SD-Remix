@@ -481,6 +481,11 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 # END:
 546006F7    # rlwinm. r0, r3, 0, 27, 27
 00000000    # branch back
+NTSC 1.02 ---- 0x1A1750 ------ 4E800020 -> Branch
+# Flush Cache on Scene Change, for some reason required on Dolphin
+# [Dan Salvato]
+3C608000 3C80003C 3D808000 618C543C
+7D8903A6 4E800420 48000000
 
 
 	-==-

@@ -47,8 +47,14 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strMechanicsSub>  NTSC 1.02            # "Mechanics >"
 4d656368 616e6963 73203e00
 
-<strOtherTogglesSub>  NTSC 1.02         # "Other Toggles >"
-4F 74 68 65 72 20 54 6F 67 67 6C 65 73 20 3E 00
+<strCharactersSub>  NTSC 1.02
+43686172 61637465 7273203e 00000000
+
+<strGameModesSub>  NTSC 1.02
+47616d65 204d6f64 6573203e 00000000
+
+<strItemsSub> NTSC 1.02
+4974656d 73203e00
 
 <strCreditsSub>  NTSC 1.02              # "Credits >"
 43 72 65 64 69 74 73 20 3E 00 00 00
@@ -97,19 +103,33 @@ NTSC 1.02 ---- 0x3F74E0 -----
     00000000 00000000                               # n/a
     .long <<tblDbgPresetsInfoSubMenu>>             # Other Toggles Submenu Data
     00000000 00000000                               # n/a
-# Entry OLD: Submenu "Mechanics >"
+# Entry 4: Submenu "Mechanics >"
     00000001                                        # Press-able
     .long <<funDebugSubmenu>>                       # Call submenu
     .long <<strMechanicsSub>>                       # Label
     00000000 00000000                               # n/a
     .long <<tblDbgMechanicsSubMenu>>                # Melee+ Toggles Submenu Data
     00000000 00000000                               # n/a
-# Entry OLD: Submenu "Other Toggles >"
+# Entry 5: Submenu "Characters >"
     00000001                                        # Press-able
     .long <<funDebugSubmenu>>                       # Call submenu
-    .long <<strOtherTogglesSub>>                    # Label: "Other Toggles >"
+    .long <<strCharactersSub>>                      # Label
     00000000 00000000                               # n/a
-    .long <<tblDbgOtherTogglesSubMenu>>             # Other Toggles Submenu Data
+    .long <<tblDbgCharacterSubMenu>>                # Submenu Data
+    00000000 00000000                               # n/a
+# Entry 6: Submenu "Game Modes >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strGameModesSub>>                       # Label
+    00000000 00000000                               # n/a
+    .long <<tblDbgGameModesSubMenu>>                # Submenu Data
+    00000000 00000000                               # n/a
+# Entry 7: Submenu "Items >"
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strItemsSub>>                           # Label
+    00000000 00000000                               # n/a
+    .long <<tblDbgItemsSubMenu>>                    # Submenu Data
     00000000 00000000                               # n/a
 # Entry 8: Menu "Credits >"
     00000001                                        # Press-able
@@ -121,9 +141,6 @@ NTSC 1.02 ---- 0x3F74E0 -----
     803001DC                                        # Function to go to "Versus Mode" full menu
     .long <<strDebugMenuSub>>                       # Label: "Debug Menu >"
     00000000 00000000 00000000 00000000 00000000    # n/a
-# END OF LIST (NOTE, there are actually 3 more entries in Melee's debug menu. Space for 3 more entries at least.
-    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 # END OF LIST (absolute)
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -271,7 +288,7 @@ Also includes strings and arrays related to it
   lis r4, 0x803F
   ori r4, r4, 0xA4E0                          # 803FA4E0, The Main Debug Menu entry table start address
   addi r4, r4, 0x80                           # 0x80 is offset to first menu item that toggles
-  li r3, 2                                    # Number of menu items to toggle
+  li r3, 4                                    # Number of menu items to toggle
   TOOGLE_LOOP:
   stw r29, 0(r4)                              # Toggle On or Off, depending on r29
   addi r4, r4, 0x20                           # Size of menu entry

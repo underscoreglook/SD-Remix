@@ -20,6 +20,8 @@ Probably talk with the SDR team to get approval from whole team before making an
 After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
 Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
 
+https://smashboards.com/threads/king-of-the-hill-friendlies-gametype.400011/
+
 Codes that are interesting but requires testing and character changes:
 https://smashboards.com/threads/brawl-style-363-deg-autolink-angle.449129/
 https://smashboards.com/threads/add-frames-of-armor-knockback-resistance-to-action-states.448063/
@@ -102,7 +104,6 @@ Grab Items With Airdodge [UnclePunch]
 Up+B Ledge Grab Buffs for Ness, Zelda, and Mewtwo [rmn]
 Perfect Shield ala Smash Ultimate [UnclePunch]
 Tech Grabs [Punkline]
-
 CStick can be use to dash attack [UnclePunch]
 Smash Attacks Out of Dash [UnclePunch]
 Enable retreating glide toss [rmn]
@@ -112,6 +113,13 @@ Air Dodge replaced by Air Boost [flieskiller]
 Air Grabs v3 [UnclePunch]
 Infinite Shields move from BADHACKS
 Random Hitbox Elements moved from BADHACKS
+Big Head Mode [UnclePunch]
+Item Rain (bob omb, Pokeballs) moved from BADHACKS
+Berserk Mode [UnclePunch]
+Superfox [SinsOfApathy]
+Giant Melee is One Stock Rotation [UnclePunch]
+Super Sudden Death is Chess Mode [Achilles, UnclePunch]
+Single Button Mode is Turbo Mode [UnclePunch]
 
 =============
 = Code dump =
@@ -182,17 +190,6 @@ Character>
     Kirby>
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
-Game Modes>
-    https://smashboards.com/threads/big-head-mode.505030/
-    Hot Potato Mr. Saturn Mode
-    Taunt Battle
-    Always Rain Bombs: Disabled/Enabled/Pokeballs
-    https://smashboards.com/threads/its-the-most-innovative-melee-ive-seen-in-years.432226/ [superhot mode]
-    https://smashboards.com/threads/king-of-the-hill-friendlies-gametype.400011/
-    https://smashboards.com/threads/berserk-mode.447864/
-    https://smashboards.com/threads/game-mode-one-stock-rotations-v1-1.480903/
-    https://smashboards.com/threads/game-mode-chess-melee-standalone-1-1.480845/
-    https://smashboards.com/threads/turbo-mode-replaces-single-button-mode-v1-3-20xx-4-07-compatible.449823/
 Items>
     Food appears when items disabled
     Disable Container Spawns
@@ -251,159 +248,6 @@ XXXXXXXX    # Code at injection point
 WWWWWWWW    # Do the new thing
             # RETURN:
 00000000    # branch back
-
-
-	-==-
-
-
-Hot Potato Mr. Saturn mode
-If you are holding a Mr. Saturn when the seconds remaining in the match is a multiple of 5, you die. If you are hit with a Mr. Saturn while not holding another item, you are forced to catch it and are stunned for a second or so.
-[wParam]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x28059C ---- 7C0802A6 -> Branch
-
-7C0802A6 90010004
-9421FFE8 BFA10008
-7C7F1B78 80A3002C
-83C50CF4 2C1E0000
-4182004C 83BE002C
-811D1974 2C080000
-4082003C 7FE4FB78
-7FC3F378 3C608031
-60633618 7C6903A6
-4E800421 7FC3F378
-38800001 3C608034
-60631EF0 7C6903A6
-4E800421 3C804170
-909D1A4C 7FE3FB78
-BBA10008 8001001C
-38210018 7C0803A6
-7C0802A6 4827ED44
-
-1.02 ------ 0x66f40 ---- 7C0802A6 -> Branch
-
-80C3002C 80E61974
-2C070000 4182004C
-8107002C 81080010
-2C080007 4082003C
-3CC08047 80C6B6C8
-2C060000 4182002C
-38E00005 7D063BD6
-7D2839D6 7C093000
-40820018 3C608013
-60639264 7C6903A6
-4E800421 7C0802A6
-60000000 48065698
-
-
-	-==-
-
-
-Taunt Battle (r2) [InternetExplorer]:
-C2261BE0 00000005
-3E208045 6231BF12
-8A310000 2C110003
-40820010 2C040001
-40820008 38840001
-9899000A 00000000
-C22617CC 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000001
-48000008 540007FE
-60000000 00000000
-C2167C08 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000000
-48000008 881E0002
-60000000 00000000
-C2167F70 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000001
-48000008 881E000B
-60000000 00000000
-C2167F7C 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000000
-48000008 881E0002
-60000000 00000000
-C20DED14 0000000D
-3E208045 6231BF12
-8A310000 2C110003
-40820050 887E067B
-809E008C 80BE0020
-7C042800 40820008
-48000018 2C030000
-4082000C 38600002
-48000008 38600000
-3CC0803C 60C66630
-2C030000 41820008
-38C60004 80E60000
-38E70001 90E60000
-7FE3FB78 00000000
-C20DEBD0 00000003
-8063008C 907E0020
-7FC3F378 7C0802A6
-60000000 00000000
-C2165A64 0000000E
-3E208045 6231BF12
-8A310000 2C110003
-40820054 3E20803C
-62316630 3E4080BD
-6252A4A0 82520000
-7F53D378 2C130000
-41820010 3A73FFFF
-82520008 4BFFFFF0
-8A72067B 2C130000
-41820008 3A310004
-80110000 3E208016
-62315AA4 7E2903A6
-4E800420 7C0601D6
-60000000 00000000
-C2036D70 00000003
-3BE00000 3C60803C
-60636630 93E30000
-93E30004 00000000
-C20DED40 00000013
-7C7F1B78 3E208045
-6231BF12 8A310000
-2C110003 4082007C
-887F067B 809F008C
-80BF0020 7C042800
-40820008 48000018
-2C030000 4082000C
-38600001 48000008
-38600000 2C030002
-40820008 38600001
-5463103A 38630518
-38800000 909F0518
-909F051C 909F0520
-909F0528 909F052C
-909F0530 909F0534
-3C804344 909F0524
-38800091 989F0564
-3C80437F 7C9F192E
-7FE3FB78 00000000
-C20D50CC 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000096
-48000008 800505D0
-60000000 00000000
-C216C348 00000008
-3FC08045 63DEBF14
-881E0000 3FE0803C
-63FF6630 83BF0000
-7C1D0000 40800018
-83BF0004 7C1D0000
-4080000C 38600000
-48000008 38600002
-BB610024 00000000
-2845bf12 00FF0300
-004807c8 00000001
 
 
 	-==-
@@ -855,12 +699,6 @@ Disable Box Explosions
 [Achilles]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ----- 0x8028639c --- 38600000 -> 38600001
-
-
-	-==-
-
-
-Always Rain Bombs: Disabled/Enabled/Pokeballs
 
 
 
