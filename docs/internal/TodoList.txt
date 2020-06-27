@@ -19,8 +19,11 @@ Probably talk with the SDR team to get approval from whole team before making an
 (Maybe also make a tool for creating Debug screen changes?)
 After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
 Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
+Change brawl airdodge button from L to definable (L or R), per player
 
+Codes that are incomplete or have bugs:
 https://smashboards.com/threads/king-of-the-hill-friendlies-gametype.400011/
+https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
 
 Codes that are interesting but requires testing and character changes:
 https://smashboards.com/threads/brawl-style-363-deg-autolink-angle.449129/
@@ -137,13 +140,8 @@ All Presets
 If custom, Most mechanics items
 Always lagless FOD (for netplay)
 
-Change brawl button from L to definable (L or R), per player
-
 Presets explanations>
-    SERIOUS
-        Disable Box Explosions
     CASUAL
-        Food appears when items disabled
         Marth colors match costume
         https://smashboards.com/threads/roy-sword-trails.449229/
         DK Hold B for DownB
@@ -162,7 +160,7 @@ Presets explanations>
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
 Items>
-    https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
+
 Character>
     Handle this and potentially add to presets: https://smashboards.com/threads/misc-character-codes.446554/
     General >
