@@ -410,6 +410,12 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strBowserMashUpB> ALL
 426f7773 6572204d 61736820 55704200
 
+<strYoshiSmash4UpB> ALL
+596f7368 6920536d 61736820 34205570 42000000
+
+<strYoshiExplodeUpB> ALL
+596f7368 69204578 706c6f64 65205570 42000000
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Title
     00000000                                        # Disabled Type
@@ -435,6 +441,14 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Bowser Mash Up + B
     00000000 00000000
     .long <<strBowserMashUpB>>
+    00000000 00000000 00000000 00000000 00000000
+# Yoshi Smash 4 UpB
+    00000000 00000000
+    .long <<strYoshiSmash4UpB>>
+    00000000 00000000 00000000 00000000 00000000
+# Yoshi Press B to explode UpB
+    00000000 00000000
+    .long <<strYoshiExplodeUpB>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

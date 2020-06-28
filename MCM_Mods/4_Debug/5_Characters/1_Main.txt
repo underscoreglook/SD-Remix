@@ -476,11 +476,47 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strYoshiTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Yoshi Aerial Neutral B Grab Gives Jump Back
+    00000002                                        # String Table
+    00000000
+    .long <<strJumpAfterSwallowOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varYoshiAirBGivesJumpBackEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Smash 4 Yoshi Up B
+    00000002                                        # String Table
+    00000000
+    .long <<strSmash4UpBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varYoshiSmash4UpBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Press B to Explode Yoshi Egg
+    00000002                                        # String Table
+    00000000
+    .long <<strBDuringUpBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varYoshiUpBExplode>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strYoshiTitle> ALL
 3c20596f 73686920 3e000000
+
+<strJumpAfterSwallowOpt> ALL
+4a756d70 20416674 65722053 77616c6c 6f773a00
+
+<strSmash4UpBOpt> ALL
+536d6173 68203420 5570423a 00000000
+
+<strBDuringUpBOpt> ALL
+42204475 72696e67 20557042 3a000000
 
 
 	-==-
