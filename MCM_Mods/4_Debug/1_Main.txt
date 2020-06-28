@@ -227,6 +227,9 @@ SDR Options Menu General Strings
 <strOtherTitle> ALL
 3c204f74 68657220 3e000000
 
+<strHoldBDownBOpt> ALL
+486f6c64 20446f77 6e423a00
+
 
 	-==-
 

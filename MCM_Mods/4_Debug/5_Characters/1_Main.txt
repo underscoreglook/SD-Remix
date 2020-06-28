@@ -260,7 +260,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Mario and Doc Get Jump Back After Down B
     00000002                                        # String Table
     00000000
-    .long <<strJumpAfterDownB>>             # Label
+    .long <<strJumpAfterDownBOpt>>             # Label
     .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
     .long <<varMariosJumpAfterDownBEnabled>>                # Variable
     00000000                                        # n/a
@@ -272,10 +272,7 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strMariosTitle> ALL
 3c204d61 72696f73 203e0000
 
-<strHoldBDownBOpt> ALL
-486f6c64 20446f77 6e423a00
-
-<strJumpAfterDownB> ALL
+<strJumpAfterDownBOpt> ALL
 4a756d70 20416674 65722044 6f776e42 3a000000
 
 
@@ -292,11 +289,44 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strLuigiTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Hold Down B
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldBDownBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varLuigiHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Fully Charged SIde B = Misfire
+    00000002                                        # String Table
+    00000000
+    .long <<strFullChargeMisfireOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varFullChargeMisfireEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Luigi's Fireball is influenced by his momentum
+    00000002                                        # String Table
+    00000000
+    .long <<strLuigiFireballMomentumOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varLuigiFireballMomentumEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strLuigiTitle> ALL
 3c204c75 69676920 3e000000
+
+<strFullChargeMisfireOpt> ALL
+46756c6c 20436861 72676520 4d697366 6972653a 00000000
+
+<strLuigiFireballMomentumOpt> ALL
+4c756967 69204669 72656261 6c6c204d 6f6d656e 74756d3a 00000000
 
 
 	-==-

@@ -134,7 +134,9 @@ Hold Y for Climber Clone v1.2 [UnclePunch]
 Marth - Costume Dependent Marth Sword Swing Colors [Achilles]
 Mario and Doc Hold B [UnclePunch]
 Mario and Doc Get Jump Back After Down B [UnclePunch]
-
+Luigi Hold B [UnclePunch]
+Fully Charged SIde B = Misfire [UnclePunch]
+Luigi's Fireball is influenced by his momentum [UnclePunch]
 
 =============
 = Code dump =
@@ -147,23 +149,8 @@ Always lagless FOD (for netplay)
 
 Presets explanations>
     CASUAL
-        DK Hold B for DownB
     SD DOUBLE REMIX
-        Nana Respawn Time = None, 60 secs
-        Solo Popo Up-B Buff
-        Falcon/Ganon - Grab Ledge with Side+B
-        Ganon Float
-        DK Hold B for DownB
-        GnW Hammer: Modulo
-        Bowser Up+B Mash for Height
-        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
-        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
-        https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
 Character>
-    Luigi >
-        Luigi Hold B
-        Fully Charged SIde B = Misfire
-        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
     Peach >
         Peach turnip: Default, Always 0-7
         Peach infinite float
@@ -892,21 +879,12 @@ GaW Hold B [UnclePunch]
 0414e934 8004065C
 0414e8b0 8004065C
 
-Luigi Hold B [UnclePunch]
-04144ab0 801F065C
-
 IC Hold B [UnclePunch]
 04120554 801F065C
 
 Fox Falco Hold B [UnclePunch]
 040e6aec 801F065C
 040e6b40 801F065C
-
-Fully Charged SIde B = Misfire [UnclePunch]
-C2143544 00000003
-80032344 2C080018
-40820008 38000001
-60000000 00000000
 
 Peach Aerial Down B and Neutral B Swap [UnclePunch]
 043c1514 8011e45c
