@@ -426,6 +426,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strFalconDorfSideBLedgeGrab> ALL
 46616c63 6f6e2047 616e6f6e 20536964 6542204c 65646765 67726162 00000000
 
+<strSpaciesHoldB> ALL
+53706163 69657320 486f6c64 20420000
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Title
     00000000                                        # Disabled Type
@@ -467,6 +470,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # strFalconDorfSideBLedgeGrab
     00000000 00000000
     .long <<strFalconDorfSideBLedgeGrab>>
+# strSpaciesHoldB
+    00000000 00000000
+    .long <<strSpaciesHoldB>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

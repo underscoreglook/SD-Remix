@@ -656,11 +656,83 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strSpaciesTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Fox/Falco Hold B
+    00000002                                        # String Table
+    00000000
+    .long <<strSpaciesHoldBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSpaciesHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Invisible Firefox
+    00000002                                        # String Table
+    00000000
+    .long <<strInvisibleFirefoxOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFirefoxIsInvisible>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Mash Firefox to Increase Length
+    00000002                                        # String Table
+    00000000
+    .long <<strMashFirefoxOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFirefoxMashUpBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Falco Side-B Walljump
+    00000002                                        # String Table
+    00000000
+    .long <<strFalcoSideBWalljumpOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalcoSideBWalljumpEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Falco Up-B Walljump
+    00000002                                        # String Table
+    00000000
+    .long <<strFalcoUpBWalljumpOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalcoUpBWalljumpEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Fox/Falco - Fall Instead of FallSpecial after Side-B
+    00000002                                        # String Table
+    00000000
+    .long <<strActAfterSideBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSpaciesSideBActEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strSpaciesTitle> ALL
 3c205370 61636965 73203e00
+
+<strSpaciesHoldBOpt> ALL
+53706163 69657320 486f6c64 20423a00
+
+<strInvisibleFirefoxOpt> ALL
+496e7669 7369626c 65204669 7265666f 783a0000
+
+<strMashFirefoxOpt> ALL
+4d617368 20466972 65666f78 3a000000
+
+<strFalcoSideBWalljumpOpt> ALL
+46616c63 6f205369 64654220 57616c6c 6a756d70 3a000000
+
+<strFalcoUpBWalljumpOpt> ALL
+46616c63 6f205570 42205761 6c6c6a75 6d703a00
+
+<strActAfterSideBOpt> ALL
+41637420 61667465 72205369 6465423a 00000000
 
 
 	-==-

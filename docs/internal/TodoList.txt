@@ -152,11 +152,16 @@ Aerial Raptor Boost Popup + Midair Control [UnclePunch]
 Walljump Out of Falcon Side B [UnclePunch]
 Walljump Out of Falcon Up B [UnclePunch]
 Ganon Float v1.0 [UnclePunch]
+Fox/Falco Hold B [UnclePunch]
+Invisible Firefox [UnclePunch]
+Mash Firefox to Increase Length [UnclePunch]
+Falco Side-B Walljump [UnclePunch]
+Falco Up-B Walljump [UnclePunch]
+Fox/Falco - Fall Instead of FallSpecial after Side-B [Achilles]
 
 =============
 = Code dump =
 =============
-
 
 Presets explanations>
     CASUAL
@@ -164,14 +169,6 @@ Presets explanations>
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Spacies >
-        Invisible Firefox
-        Mash Firefox to Increase Length
-        Falco Side-B Walljump
-        Falco Up-B Walljump
-        Fox Falco Hold B
-        Fox and Falco Enter Fall After Side B and Retains Jump (a la Smash 4) v2
-        Fox/Falco - Fall Instead of FallSpecial after Side-B
     Ness>
         PKT Doesn't Disappear When Hitting Projectiles
         PKT2 Trajectory = Analog Stick Angle
@@ -215,7 +212,6 @@ Character>
         GaW Hold B
         G&W Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)
 Credits>
-Debug Menu>
 
 
 ==================================================================================
@@ -372,39 +368,6 @@ FC20081E D8210020
 	-==-
 
 
-Mash Firefox to Increase Length [UnclePunch]
-C20E72B0 00000003
-3DC03F7A 61CEE148
-91DF2354 83E1002C
-60000000 00000000
-C20E733C 00000003
-3DC03F7A 61CEE148
-91DF2354 80010034
-60000000 00000000
-C20E73CC 00000006
-81DF0668 55CE05AD
-41820020 3DC03CA3
-61CED70A 91C1FFFC
-C1C1FFFC C1FF2354
-EDCE782A D1DF2354
-83E3002C 00000000
-C20E736C 00000006
-81DF0668 55CE05AD
-41820020 3DC03CA3
-61CED70A 91C1FFFC
-C1C1FFFC C1FF2354
-EDCE782A D1DF2354
-83E3002C 00000000
-C20E7D88 00000002
-C0040068 C1FD2354
-EC0003F2 00000000
-C20E7DAC 00000002
-C05F0074 C1FD2354
-EC4203F2 00000000
-C20E7DC8 00000002
-C01F0074 C1FD2354
-EC0003F2 00000000
-
 Link's Shield Blocks Melee Attacks [UnclePunch]
 040eb3f0 48000028
 
@@ -438,38 +401,6 @@ C206A19C 00000007
 3DC0800E 61CEB3BC
 7DC903A6 4E800421
 800100A4 00000000
-
-Falco Side-B Walljump [UnclePunch]
-*Can only walljump if walljumps used = 0
-C20EAC38 00000008
-83FE002C 801F0004
-2C000016 4082002C
-2C030000 40820024
-881F1969 2C000000
-40820018 7FC3F378
-3DC08008 61CE169C
-7DC903A6 4E800421
-80010024 00000000
-C20EA684 00000008
-83DF002C 801E0004
-2C000016 4082002C
-2C030000 40820024
-881E1969 2C000000
-40820018 7FE3FB78
-3DC08008 61CE169C
-7DC903A6 4E800421
-80010024 00000000
-
-Falco Up-B Walljump [UnclePunch]
-*Can only walljump if walljumps used = 0
-C20E7A58 00000007
-801F0004 2C000016
-40820024 881F1969
-2C000000 40820018
-7F83E378 3DC08008
-61CE169C 7DC903A6
-4E800421 80010044
-60000000 00000000
 
 PKT Doesn't Disappear When Hitting Projectiles [UnclePunch]
 C22AC05C 00000007
@@ -517,18 +448,6 @@ C21137E4 00000002
 38600040 987F0594
 7FE3FB78 00000000
 
-Invisible Firefox [UnclePunch]
-040e7150 60000000
-C20E7E1C 00000002
-38000098 981D221E
-8001003C 00000000
-C20E7C78 00000002
-38000098 981E221E
-8001004C 00000000
-C20E7ADC 00000002
-38000098 981F221E
-80010024 00000000
-
 Aerial Control and Fastfall Shiek UpB [UnclePunch]
 043cc2d4 800e7f20
 
@@ -570,10 +489,6 @@ GaW Hold B [UnclePunch]
 
 IC Hold B [UnclePunch]
 04120554 801F065C
-
-Fox Falco Hold B [UnclePunch]
-040e6aec 801F065C
-040e6b40 801F065C
 
 Samus Shoots Random Item [UnclePunch]
 C22B632C 00000012
@@ -617,11 +532,6 @@ Samus never enters "Charging" action state.
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ----- 0x80128660 --- FC01000040820010 -> 81E4009C91E32230
 
-Fox/Falco - Fall Instead of FallSpecial after Side-B
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800EA988 --- 4BFABF79 -> 4BFE1DA9
-
 Y. Link Boomerang Catch
 [??]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
@@ -650,82 +560,6 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ------ 0x7a24c ---- 987E1968 -> 981e1968
 
 
-
-Special Move Master Code v3 (fix console crash) [UnclePunch]
-Allows characters with corresponding code to:
--use special move from ground and keep your jump
--use special move from air and keep your jump, so long as you havent mid air jumped before the up B (does not apply to mewtwo for design choice reasons)
--you can act out of the special move
--you cannot use the special move after using the special move from the ground or air until youve touched the ground/get hit/get grabbed/grabbed ledge
-you cannot air dodge out of the special move
-================================================
-C20D5C08 00000002 #land
-39C00000 99C31878
-7C7F1B78 00000000
-C20D5AEC 00000002 #specialland1
-39C00000 99C318D8
-7C0802A6 00000000
-C20D5CB0 00000002 #specialland2
-39C00000 99C318D8
-7C0802A6 00000000
-C208A348 00000002 #wait
-39C00000 99DF18D8
-7C0802A6 00000000
-C20D4FF4 00000002 #rebirth
-39C00000 99C318D8
-7C0802A6 00000000
-C2081370 00000002 #cliff catch
-39C00000 99C318D8
-7C0802A6 00000000
-C208DCE0 00000002 #hitstun
-39C00000 99C318D8
-7C0802A6 00000000
-C20DB908 00000002 #get grabbed
-39C00000 99C318D8
-7C0802A6 00000000
-C2099A9C 00000004 #airdodge flag
-89C318D8 2C0E0001
-41820008 48000008
-4E800020 7C0802A6
-60000000 00000000
-
-G&W Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)[UnclePunch]
-0414e274 4BF7E4BD #enters fall
-0414e0d8 60000000 #doesnt lose jump after grounded up B
-0414e178 60000000 #doesnt lose jump after frame perfect upB in air
-C214E158 00000005 #aerial up B
-89DF1878 2C0E0001
-41820010 39C00001
-99DF1878 48000008
-4E800020 7C0802A6
-60000000 00000000
-C214E0AC 00000002 #ground up B
-39C00001 99C318D8
-7C0802A6 00000000
-
-Mewtwo Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)[UnclePunch]
-04145e30 4BF86901
-04145b68 60000000 #ground up b keep jump
-C2145258 00000005 #ground up B lose up B
-89DF1878 2C0E0001
-41820010 39C00001
-99DF1878 48000008
-4E800020 7C0802A6
-60000000 00000000
-C21451DC 00000002 #aerial up B lose up B
-39C00001 99C318D8
-7C0802A6 00000000
-
-Fox and Falco Enter Fall After Side B and Retains Jump (a la Smash 4) v2[UnclePunch]
-040ea988 4BFE1DA9
-040ea6b8 60000000 #ground to air preserve jump
-040e9fe8 60000000 #air to air preserve jump
-C20E9F6C 00000005 #check for side B used
-89C318D8 2C0E0001
-41820010 39C00001
-99DF1878 48000008
-4E800020 7C0802A6
-60000000 00000000
 
 
 
