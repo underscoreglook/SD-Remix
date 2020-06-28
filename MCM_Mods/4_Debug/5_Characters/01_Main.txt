@@ -564,11 +564,83 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strFalcondorfTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Captain Falcon/Ganondorf - Can Grab Ledge on Side-B
+    00000002                                        # String Table
+    00000000
+    .long <<strSideBLedgeGrabOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconDorfSideBLedgeEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Captain Falcon - Raptor Boost Enters "Fall" Action!?
+    00000002                                        # String Table
+    00000000
+    .long <<strActFromSideBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconDorfSideBCanAct>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Aerial Raptor Boost Popup + Midair Control
+    00000002                                        # String Table
+    00000000
+    .long <<strSideBPopupOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconSideBPopupEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Walljump Out of Falcon Side B
+    00000002                                        # String Table
+    00000000
+    .long <<strSideBWalljumpOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconSideBWalljumpEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Walljump Out of Falcon Up B
+    00000002                                        # String Table
+    00000000
+    .long <<strUpBWalljumpOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconUpBWalljumpEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Ganon Float v1.0
+    00000002                                        # String Table
+    00000000
+    .long <<strGanonFloatOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varGanonFloatEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strFalcondorfTitle> ALL
 3c204661 6c636f6e 446f7266 203e0000
+
+<strSideBLedgeGrabOpt> ALL
+53696465 42204c65 64676547 7261623a 00000000
+
+<strActFromSideBOpt> ALL
+41637420 46726f6d 20536964 65423a00
+
+<strSideBPopupOpt> ALL
+53696465 4220506f 7075703a 00000000
+
+<strSideBWalljumpOpt> ALL
+53696465 42205761 6c6c6a75 6d703a00
+
+<strUpBWalljumpOpt> ALL
+55704220 57616c6c 6a756d70 3a000000
+
+<strGanonFloatOpt> ALL
+47616e6f 6e20466c 6f61743a 00000000
 
 
 	-==-

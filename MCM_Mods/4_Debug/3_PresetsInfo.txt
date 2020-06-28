@@ -423,6 +423,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strYoshiExplodeUpB> ALL
 596f7368 69204578 706c6f64 65205570 42000000
 
+<strFalconDorfSideBLedgeGrab> ALL
+46616c63 6f6e2047 616e6f6e 20536964 6542204c 65646765 67726162 00000000
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Title
     00000000                                        # Disabled Type
@@ -460,6 +463,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # DK Hold Down B
     00000000 00000000
     .long <<strDKHoldDownB>>
+    00000000 00000000 00000000 00000000 00000000
+# strFalconDorfSideBLedgeGrab
+    00000000 00000000
+    .long <<strFalconDorfSideBLedgeGrab>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

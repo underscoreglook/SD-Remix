@@ -142,13 +142,24 @@ lis r11, <<varOptionsPreset>>@h
 ori r11, r11, <<varOptionsPreset>>@l
 816B0000    # lwz r11, 0(r11)
 2C0B0001    # cmpwi r11, 1
-4082001C    # bne NORMAL
+40820040    # bne NORMAL
 lis r11, <<varContainerSpawns>>@h
 ori r11, r11, <<varContainerSpawns>>@l
 816B0000    # lwz r11, 0(r11)
 2C0B0001    # cmpwi r11, 1
-blt <funContainerSpawnsDisabled>
-bgt <funRecursiveContainers>
+4180000C    # blt <funContainerSpawnsDisabled>
+41810018    # bgt <funRecursiveContainers>
+48000024    # b NORMAL
+            # funContainerSpawnsDisabled:
+lis r11, <<funContainerSpawnsDisabled>>@h
+ori r11, r11, <<funContainerSpawnsDisabled>>@l
+7D6903A6    # mtctr r11
+4E800420    # bctr
+            # funRecursiveContainers:
+lis r11, <<funRecursiveContainers>>@h
+ori r11, r11, <<funRecursiveContainers>>@l
+7D6903A6    # mtctr r11
+4E800420    # bctr
 7C7C1B78    # NORMAL:
 00000000    # RETURN:
 

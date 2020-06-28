@@ -146,6 +146,12 @@ Smash 4 Yoshi Up B [UnclePunch]
 Press B to Explode Yoshi Egg [UnclePunch]
 Skip DK Down B Startup [UnclePunch]
 DK Hold B for Down B [UnclePunch]
+Captain Falcon/Ganondorf - Can Grab Ledge on Side-B [UnclePunch]
+Captain Falcon - Raptor Boost Enters "Fall" Action [Achilles]
+Aerial Raptor Boost Popup + Midair Control [UnclePunch]
+Walljump Out of Falcon Side B [UnclePunch]
+Walljump Out of Falcon Up B [UnclePunch]
+Ganon Float v1.0 [UnclePunch]
 
 =============
 = Code dump =
@@ -158,15 +164,7 @@ Presets explanations>
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Falcondorf>
-        Falcon Turnaround Up B
-        Walljump Out of Falcon Side B
-        Walljump Out of Falcon Up B
-        Aerial Raptor Boost Popup + Midair Control
-        Falcon Grab Ledge on Side B     or      Falcon/Ganon - Grab Ledge with Side+B
-        Falcon Raptor Boost enters Fall state
-        Ganon Float
-    Space >
+    Spacies >
         Invisible Firefox
         Mash Firefox to Increase Length
         Falco Side-B Walljump
@@ -339,119 +337,6 @@ NTSC 1.02 --- 0x8012A6B8 ---- 900521DC -> 60000000
 	-==-
 
 
-Captain Falcon - Raptor Boost Enters "Fall" Action!?
-For aerial hit and miss, and grounded Raptor Boost that travels offstage.
-FallSpecial is the "helpless" fall state.s
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0xE05B0 ---- 4BFB2F31 -> 4BFE8D61
------------ 0xE08B0 ---- 4BFB2C31 -> 4BFE8A61
-
-
-	-==-
-
-
-Captain Falcon/Ganondorf - Can Grab Ledge on Side-B
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800E3DFC ---- 8083002C -> Branch
-
-83E3002C 7FC3F378
-3DC0800E 61CE4D7C
-7DC903A6 4E800421
-7FC3F378 809E002C
-60000000 00000000
-
-
-	-==-
-
-
-Ganon Float v1.0
-Features:
-
--Applies only to Ganondorf.
--Kills all vertical velocity.
--Allows for aerial movement.
--Can interrupt with jump or aerial attack starting on frame 13. Can also press down after frame 13 to start descending early.
--Descends after 30 frames.
--Landing goes to normal land.
-<https://smashboards.com/threads/ganon-float-v1-0.449465/>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800E2C00 ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-4082002C 881F1969
-2C000001 40820008
-4E800020 38000000
-901F0084 38000030
-901F2354 38000001
-981F1969 7C0802A6
-60000000 00000000
-
-------------- 0x800E31F4 ---- 7C0802A6 -> Branch
-
-801E0004 2C000019
-40820014 3DC0800C
-61CECD78 7DC903A6
-4E800420 7C0802A6
-60000000 00000000
-
-------------- 0x800E2E3C ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-40820090 3821FFFC
-7FA802A6 83E3002C
-7C7E1B78 807F2354
-2C030000 4182000C
-3863FFFF 907F2354
-2C030017 40810008
-48000054 7FC3F378
-3DC08008 61CECD68
-7DC903A6 4E800421
-2C030001 41820038
-7FC3F378 3DC0800C
-61CEB870 7DC903A6
-4E800421 2C030001
-4182001C 89DF065D
-2C0E0002 40820010
-39C00000 91DF2354
-48000004 38210004
-7FA803A6 4E800020
-7C0802A6 00000000
-
-------------- 0x800E3018 ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-408200B8 3821FFFC
-7C0802A6 90010000
-83E3002C 7C7E1B78
-3BDF0110 881F221A
-7FE3FB78 5400EFFF
-41820018 3DC08007
-61CED4E4 7DC903A6
-4E800421 48000020
-C03E005C 7FE3FB78
-C05E0060 3DC08007
-61CED494 7DC903A6
-4E800421 7FE3FB78
-3DC08007 61CED268
-7DC903A6 4E800421
-801F2354 2C000000
-40820024 C1DF0084
-3DC03DA3 61CED70A
-91C1FFFC C1E1FFFC
-EDCE782A D1DF0084
-48000010 38600000
-907F0084 48000004
-80010000 7C0803A6
-38210004 4E800020
-7C0802A6 00000000
-
-
-	-==-
-
-
 Mr. Game and Watch - Always Specific Hammer Value
 Default is 9. Check the text file library to change this.
 (Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-32#post-18703696)
@@ -554,34 +439,6 @@ C206A19C 00000007
 7DC903A6 4E800421
 800100A4 00000000
 
-Walljump Out of Falcon Side B [UnclePunch]
-*Can only walljump if walljumps used = 0
-C20E3E28 00000006
-83FE002C 881F1969
-2C000000 40820018
-7FC3F378 3DC08008
-61CE169C 7DC903A6
-4E800421 80010024
-60000000 00000000
-
-Walljump Out of Falcon Up B [UnclePunch]
-*Can only walljump if walljumps used = 0
-C20E5114 00000005
-881F1969 2C000000
-40820018 7FA3EB78
-3DC08008 61CE169C
-7DC903A6 4E800421
-8001001C 00000000
-
-Falcon Grab Ledge on Side B [UnclePunch]
-*Can only walljump if walljumps used = 0
-C20E3DFC 00000005
-83E3002C 7FC3F378
-3DC0800E 61CE4D7C
-7DC903A6 4E800421
-7FC3F378 809E002C
-60000000 00000000
-
 Falco Side-B Walljump [UnclePunch]
 *Can only walljump if walljumps used = 0
 C20EAC38 00000008
@@ -653,17 +510,6 @@ PKT2 Trajectory = Analog Stick Angle [UnclePunch]
 041185bc C03E0624
 041185a0 C05E0620
 
-Falcon Turnaround Up B [UnclePunch]
-*Turns if control stick is pushed 25% in the opposite direction
-C20E52C4 00000007
-81CDAEB4 C1CE0034
-C1FF0620 C21F002C
-EE0F0432 FC107040
-4C401382 40820010
-C1DF002C FDC07050
-D1DF002C C0429854
-60000000 00000000
-
 Shiek Up B Edge Cancel [UnclePunch]
 041134f4 4BFB923D
 04113500 4BFB9231
@@ -717,16 +563,6 @@ C20DDB70 00000002
 C20DD910 00000002
 7FE3FB78 39C00001
 99C51968 00000000
-
-Aerial Raptor Boost Popup + Midair Control [UnclePunch]
-C20E3BD0 00000007
-81DF0894 3DE03F80
-7C0E7800 40820014
-3DC04000 91DF0084
-39C00000 91DF0080
-3DC08008 61CED5B4
-7DC903A6 4E800420
-60000000 00000000
 
 GaW Hold B [UnclePunch]
 0414e934 8004065C
