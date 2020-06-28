@@ -1128,8 +1128,32 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strGnWTitle>>
     00000000 00000000 00000000 00000000 00000000
+# GaW Hold B
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldBBaconOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varGnWHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# GaW Bucket Fill Amount Based on Damage of Projectile
+    00000002                                        # String Table
+    00000000
+    .long <<strBucketFillsDmgOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varGnWBucketFillEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strGnWTitle> ALL
 3c20476e 57203e00
+
+<strHoldBBaconOpt> ALL
+486f6c64 20422042 61636f6e 3a000000
+
+<strBucketFillsDmgOpt> ALL
+4275636b 65742046 696c6c73 20446d67 3a000000
