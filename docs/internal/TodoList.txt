@@ -137,6 +137,10 @@ Mario and Doc Get Jump Back After Down B [UnclePunch]
 Luigi Hold B [UnclePunch]
 Fully Charged SIde B = Misfire [UnclePunch]
 Luigi's Fireball is influenced by his momentum [UnclePunch]
+Peach - FSmash Angles Determine FSmash Type [UnclePunch]
+Peach - Infinite Float [Achilles]
+Peach - Always Pull Specific Turnip [????]
+
 
 =============
 = Code dump =
@@ -147,15 +151,11 @@ All Presets
 If custom, Most mechanics items
 Always lagless FOD (for netplay)
 
+
 Presets explanations>
     CASUAL
     SD DOUBLE REMIX
 Character>
-    Peach >
-        Peach turnip: Default, Always 0-7
-        Peach infinite float
-        https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
-        Peach Aerial Down B and Neutral B Swap
     Bowser
         Up+B Mash for Height    or      Bowser can mash for height during aerial upB
         Bowsers Flame Doesn't Diminish
@@ -275,43 +275,6 @@ XXXXXXXX    # Code at injection point
 WWWWWWWW    # Do the new thing
             # RETURN:
 00000000    # branch back
-
-
-	-==-
-
-
-Peach - Always Pull Specific Turnip
-The default for this code is Stitch Face, but it can be changed to any of the turnips.
-Check the text files in the library for notes on how to change it.
-[??]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x802BD410 --- 7CC83378 -> 39000007
-1.02 ----- 0x8011D090 --- 40820010 -> 48000010
-1.01 ----- 0x802BC988 --- 7CC83378 -> 39000007
-1.01 ----- 0x8011CE04 --- 40820010 -> 48000010
-1.00 ----- 0x802BBDA0 --- 38C60001 -> 39000007
-1.00 ------ 0x11CA54 ---- 7FE3FB78 -> 48000010
-
-# To change the turnip for the mod above, change the
-# 7 in "39000007" to one of the following numbers:
-
-# 0: Smile
-# 1: T Eyes
-# 2: Line Eyes
-# 3: Circle Eyes
-# 4: Upward Curve Eyes
-# 5: Wink
-# 6: Dot Eyes
-# 7: Stitch Face
-
-
-	-==-
-
-
-Peach - Infinite Float
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8011BBC4 --- C01E000CD01F2230 -> 3DE04A0091FF2230
 
 
 	-==-
@@ -885,12 +848,6 @@ IC Hold B [UnclePunch]
 Fox Falco Hold B [UnclePunch]
 040e6aec 801F065C
 040e6b40 801F065C
-
-Peach Aerial Down B and Neutral B Swap [UnclePunch]
-043c1514 8011e45c
-043c161c 8011d1c4
-043c16a0 8011d11c
-043c1724 8011e3d0
 
 Samus Shoots Random Item [UnclePunch]
 C22B632C 00000012

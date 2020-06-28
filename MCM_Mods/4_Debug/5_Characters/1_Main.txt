@@ -342,12 +342,82 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strPeachTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Peach - FSmash Angles Determine FSmash Type
+    00000002                                        # String Table
+    00000000
+    .long <<strFsmashAnglesOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varPeachBSwapEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Peach - Infinite Float
+    00000002                                        # String Table
+    00000000
+    .long <<strInfiniteFloatOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varPeachInfiniteFloatEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Peach - Always Pull Specific Turnip
+    00000002                                        # String Table
+    00000000
+    .long <<strTurnipOpt>>             # Label
+    .long <<arrTurnip>>
+    .long <<varPeachTurnip>>                # Variable
+    00000000                                        # n/a
+    41100000                                        # 9 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strPeachTitle> ALL
 3c205065 61636820 3e000000
 
+<strFsmashAnglesOpt> ALL
+46536d61 73682041 6e676c65 733a0000
+
+<strInfiniteFloatOpt> ALL
+496e6669 6e697465 20466c6f 61743a00
+
+<strTurnipOpt> ALL
+5475726e 69703a00
+
+<strSmile> ALL
+536d696c 65000000
+
+<strTEyes> ALL
+54204579 65730000
+
+<stLineEyes> ALL
+4c696e65 20457965 73000000
+
+<strCircleEyes> ALL
+43697263 6c652045 79657300
+
+<strUpwardCurve> ALL
+55707761 72642043 75726e65 00000000
+
+<strWink> ALL
+57696e6b 00000000
+
+<strDotEyes> ALL
+446f7420 45796573 00000000
+
+<strStitchFace> ALL
+53746974 63682046 61636500
+
+<arrTurnip> ALL
+.long <<strSmile>>
+.long <<strTEyes>>
+.long <<stLineEyes>>
+.long <<strCircleEyes>>
+.long <<strUpwardCurve>>
+.long <<strWink>>
+.long <<strDotEyes>>
+.long <<strStitchFace>>
+.long <<strNormal>>
 
 	-==-
 

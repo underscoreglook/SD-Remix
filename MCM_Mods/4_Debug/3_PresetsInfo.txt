@@ -404,6 +404,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strAllFromNewMechanics> ALL
 416c6c20 66726f6d 204e6577 204d6563 68616e69 63730000
 
+<strPeachFsmashAngles> ALL
+50656163 68204673 6d617368 20416e67 6c657300
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Title
     00000000                                        # Disabled Type
@@ -421,6 +424,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Marth Colors
     00000000 00000000
     .long <<strMarthColors>>
+    00000000 00000000 00000000 00000000 00000000
+# Peach - FSmash Angles Determine FSmash Type
+    00000000 00000000
+    .long <<strPeachFsmashAngles>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
