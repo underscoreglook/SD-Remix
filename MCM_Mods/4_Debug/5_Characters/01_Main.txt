@@ -780,11 +780,83 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strICsTitle>>
     00000000 00000000 00000000 00000000 00000000
+# IC Hold B
+    00000002                                        # String Table
+    00000000
+    .long <<strIcsHoldBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varIcsHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# ICies - Solo Popo Up-B Gives Increased Vertical Velocity
+    00000002                                        # String Table
+    00000000
+    .long <<strSopoUpBBuffOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSoloPopoUpBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana is always Lvl 9
+    00000002                                        # String Table
+    00000000
+    .long <<strNanaLvl9Opt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varNanaAlwaysLvl9>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana Respawns after 20 Seconds
+    00000002                                        # String Table
+    00000000
+    .long <<strNanaRespawnsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varNanaRespawnEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana and Popo Can Share Ledge
+    00000002                                        # String Table
+    00000000
+    .long <<strIcsShareLedgeOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varIcsShareLedgeEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana direction update bug fix (ICs can Dashdance together etc.)
+    00000002                                        # String Table
+    00000000
+    .long <<strIcsDirectionFixOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varIcsDirectionFixEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strICsTitle> ALL
 3c204943 73203e00
+
+<strIcsHoldBOpt> ALL
+49437320 486f6c64 20423a00
+
+<strSopoUpBBuffOpt> ALL
+536f706f 20557042 20427566 663a0000
+
+<strNanaLvl9Opt> ALL
+4e616e61 204c766c 20393a00
+
+<strNanaRespawnsOpt> ALL
+4e616e61 20526573 7061776e 733a0000
+
+<strIcsShareLedgeOpt> ALL
+49437320 53686172 65204c65 6467653a 00000000
+
+<strIcsDirectionFixOpt> ALL
+49437320 44697265 6374696f 6e204669 783a0000
 
 
 	-==-

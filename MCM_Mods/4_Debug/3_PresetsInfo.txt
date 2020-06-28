@@ -240,8 +240,8 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strAutoLCancel> ALL
 4175746f 204c4361 6e63656c 00000000
 
-<strMariosHoldDownB> ALL
-4d617269 6f732048 6f6c6420 446f776e 42000000
+<strHoldBCodes> ALL
+486f6c64 20422043 6f646573 00000000
 
 <tblDbgPresetCasualInfoSubMenu> NTSC 1.02
 # Entry 0: Title
@@ -309,13 +309,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strMarthColors>>
     00000000 00000000 00000000 00000000 00000000
-# Marios hold downb
+# strHoldBCodes
     00000000 00000000
-    .long <<strMariosHoldDownB>>
-    00000000 00000000 00000000 00000000 00000000
-# DK Hold Down B
-    00000000 00000000
-    .long <<strDKHoldDownB>>
+    .long <<strHoldBCodes>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
@@ -429,6 +425,15 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strSpaciesHoldB> ALL
 53706163 69657320 486f6c64 20420000
 
+<strSopoUpBBuff> ALL
+536f706f 20557042 20427566 66000000
+
+<strNanaLevel9> ALL
+4e616e61 204c766c 20390000
+
+<strNanaRespawns> ALL
+4e616e61 20526573 7061776e 73000000
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Title
     00000000                                        # Disabled Type
@@ -470,9 +475,22 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # strFalconDorfSideBLedgeGrab
     00000000 00000000
     .long <<strFalconDorfSideBLedgeGrab>>
+    00000000 00000000 00000000 00000000 00000000
 # strSpaciesHoldB
     00000000 00000000
     .long <<strSpaciesHoldB>>
+    00000000 00000000 00000000 00000000 00000000
+# strSopoUpBBuff
+    00000000 00000000
+    .long <<strSopoUpBBuff>>
+    00000000 00000000 00000000 00000000 00000000
+# strNanaLevel9
+    00000000 00000000
+    .long <<strNanaLevel9>>
+    00000000 00000000 00000000 00000000 00000000
+# strNanaRespawns
+    00000000 00000000
+    .long <<strNanaRespawns>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

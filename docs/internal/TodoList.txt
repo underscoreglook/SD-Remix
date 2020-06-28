@@ -159,26 +159,22 @@ Falco Side-B Walljump [UnclePunch]
 Falco Up-B Walljump [UnclePunch]
 Fox/Falco - Fall Instead of FallSpecial after Side-B [Achilles]
 Ness Can Up B Once After Hitting a Wall [UnclePunch]
-
+IC Hold B [UnclePunch]
+ICies - Solo Popo Up-B Gives Increased Vertical Velocity [Achilles]
+Nana is always Lvl 9 (1.02) [Achilles]
+Nana Respawns after 20 Seconds [UnclePunch]
+Nana and Popo Can Share Ledge [UnclePunch]
+Nana direction update bug fix (ICs can Dashdance together etc.) (NTSC 1.02) [tauKhan]
 
 =============
 = Code dump =
 =============
 
-
 Presets explanations>
     CASUAL
-        IC Hold B
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Ice Climbers>
-        https://smashboards.com/threads/grab-infinite-removal-code.412693/ [IC Buffs]
-        Nana Respawn Time: None, 60 secs, 20 secs, Instant
-        Solo Popo Up-B Buff
-        https://smashboards.com/threads/nana-and-popo-can-share-ledge.453939/
-        Nana direction update bug fix (ICs can dd together etc.)
-        IC Hold B
     Kirby>
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
@@ -257,62 +253,6 @@ XXXXXXXX    # Code at injection point
 WWWWWWWW    # Do the new thing
             # RETURN:
 00000000    # branch back
-
-
-	-==-
-
-
-Nana Respawns after 20 Seconds
-<https://smashboards.com/threads/sd-remix-3-2-full-lite-released.324620/post-21734645>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8006CA5C ---- 7C0802A6 -> Branch
-
-89C30067 2C0E000B
-4082003C A1C30072
-2C0E000B 40820030
-39C00001 A1E30020
-7DCE7A14 B1C30020
-2C0E04B0 41800018
-39E00008 99E3227F
-3DE0800B 61EFFD9C
-91E32200 7C0802A6
-60000000 00000000
-
-------------- 0x800320E8 ---- 806300B0 -> Branch
-
-81C300B4 2C0E0000
-41820020 A1EE0020
-2C0F04B0 40820014
-39E00000 B1EE0020
-7DC37378 48000008
-806300B0 00000000
-
-------------- 0x800BFE48 ---- 889F221F -> Branch
-
-89DF0007 2C0E000B
-40820024 A1DF0012
-2C0E000B 40820018
-A1FFFFC0 2C0F04B0
-4082000C 38800001
-48000008 889F221F
-60000000 00000000
-
-------------- 0x800D4FF4 ---- 7C0802A6 -> Branch
-
-81C30064 2C0E000A
-40820010 81C30008
-39E00000 B1EE0020
-7C0802A6 00000000
-
-
-	-==-
-
-
-ICies - Solo Popo Up-B Gives Increased Vertical Velocity
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80121E7C --- C00400A4 -> C004013C
 
 
 	-==-
@@ -436,14 +376,6 @@ Aerial Control and Fastfall Shiek UpB [UnclePunch]
 Less Landing Lag on Sheik Up B [UnclePunch]
 04113e10 38800001
 
-Nana direction update bug fix (ICs can dd together etc.) (NTSC 1.02) [tauKhan]
-C20B0AE8 00000005
-38C40444 3863001C
-7C033040 40820008
-386400FC D0030018
-80640444 80C40444
-60000000 00000000
-
 Kirby Can Jump After Up Throw and Forward Throw [UnclePunch]
 C20DDB70 00000002
 7FE3FB78 39C00001
@@ -455,9 +387,6 @@ C20DD910 00000002
 GaW Hold B [UnclePunch]
 0414e934 8004065C
 0414e8b0 8004065C
-
-IC Hold B [UnclePunch]
-04120554 801F065C
 
 Samus Shoots Random Item [UnclePunch]
 C22B632C 00000012
