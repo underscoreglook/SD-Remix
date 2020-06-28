@@ -996,11 +996,23 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strZeldaTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Instant Zelda/Shiek Transform
+    00000002                                        # String Table
+    00000000
+    .long <<strInstantTransformOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varZeldaInstantTransformEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strZeldaTitle> ALL
 3c205a65 6c646120 3e000000
+
+<strInstantTransformOpt> ALL
+496e7374 616e7420 5472616e 73666f72 6d3a0000
 
 
 	-==-
@@ -1016,11 +1028,35 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strLinksTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Link's Shield Reflects
+    00000002                                        # String Table
+    00000000
+    .long <<strShieldReflectsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varLinkShieldReflectsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Link Shield Always Active
+    00000002                                        # String Table
+    00000000
+    .long <<strShieldActiveOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varLinkShieldAlwaysActiveEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strLinksTitle> ALL
 3c204c69 6e6b7320 3e000000
+
+<strShieldReflectsOpt> ALL
+53686965 6c642052 65666c65 6374733a 00000000
+
+<strShieldActiveOpt> ALL
+53686965 6c642041 63746976 653a0000
 
 
 	-==-

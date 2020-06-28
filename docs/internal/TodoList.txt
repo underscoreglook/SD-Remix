@@ -172,6 +172,10 @@ Samus Keeps Charge Shot When Hit During Up B (Fixed) [UnclePunch]
 Samus - Always Full Charge Shot [Achilles]
 Aim Charge Shot [UnclePunch]
 Samus Shoots Random Item [UnclePunch]
+Instant Zelda/Shiek Transform [UnclePunch]
+Link's Shield Reflects [UnclePunch]
+Link Shield Always Active [UnclePunch]
+
 
 =============
 = Code dump =
@@ -183,16 +187,6 @@ Presets explanations>
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Zelda >
-        Aerial Control and Fastfall Shiek UpB
-        Shiek Up B Edge Cancel
-        Instant Zelda/Shiek Transform
-    Links >
-        Link's Shield Blocks Melee Attacks
-        Link's Shield Reflects
-        Link Shield Always Active
-        Link Boomerang Catch
-        Y. Link Boomerang Catch
     Mewtwo >
         https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
         Mewtwo Can Actually Reflect Stuff
@@ -243,48 +237,6 @@ FC20081E D8210020
 	-==-
 
 
-Link's Shield Blocks Melee Attacks [UnclePunch]
-040eb3f0 48000028
-
-Link's Shield Reflects [UnclePunch]
-0400a9dc 60000000
-C20EB3EC 0000000F
-3881FFB0 38000044
-90040000 38000032
-90040004 C00298C8
-D0040008 C00298C8
-D004000C C00298C8
-D0040010 C00298CC
-D0040014 3C003F00
-90040018 C00298CC
-D004001C 81C3002C
-38000000 886E19E8
-50033E30 980E19E8
-38000000 90040020
-7FC3F378 3DC08007
-61CEB23C 7DC903A6
-4E800421 00000000
-
-Link Shield Always Active [UnclePunch]
-04007c44 60000000
-0400a80c 60000000
-C206A19C 00000007
-81DE002C 89CE0007
-2C0E0006 41820010
-2C0E0014 41820008
-48000018 7FC3F378
-3DC0800E 61CEB3BC
-7DC903A6 4E800421
-800100A4 00000000
-
-Instant Zelda/Shiek Transform [UnclePunch]
-04114184 C042A1DC
-0413b510 C042A1DC
-0413af04 C042A1DC
-04114790 C042A1DC
-04114248 C042A1DC
-0413afc8 C042A1DC
-
 GaW Bucket Fill Amount Based on Damage of Projectile [UnclePunch]
 *If projectile dealt 1->8 damage, fill 1
 *If projectile dealt 9->12 damage, fill 2
@@ -298,29 +250,9 @@ C214D9D4 00000007
 4800000C 38000003
 48000004 00000000
 
-Shiek Up B Edge Cancel [UnclePunch]
-041134f4 4BFB923D
-04113500 4BFB9231
-C21137E4 00000002
-38600040 987F0594
-7FE3FB78 00000000
-
-Aerial Control and Fastfall Shiek UpB [UnclePunch]
-043cc2d4 800e7f20
-
 GaW Hold B [UnclePunch]
 0414e934 8004065C
 0414e8b0 8004065C
-
-Y. Link Boomerang Catch
-[??]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x803D1204 --- 043D1204 -> 00000000
-
-Link Boomerang Catch
-[??]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x803c807c --- 043c807c -> 00000000
 
 Mewtwo Can Actually Reflect Stuff
 [UnclePunch]
