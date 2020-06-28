@@ -872,11 +872,47 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strKirbyTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Kirby Throws retain one mid air jump
+    00000002                                        # String Table
+    00000000
+    .long <<strJumpAfterThrowOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varKirbyJumpAfterThrowEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Kirby Uses Non-Special Dash Attack
+    00000002                                        # String Table
+    00000000
+    .long <<strDashAtkNonSpecialOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varKirbyDashAttackNonSpecialEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Kirbys Taunt Without Ability Gives Random Ability v1.1
+    00000002                                        # String Table
+    00000000
+    .long <<strTauntGivesAbilityOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varKirbyTauntRandomAbilityEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strKirbyTitle> ALL
 3c204b69 72627920 3e000000
+
+<strJumpAfterThrowOpt> ALL
+4a756d70 20416674 65722054 68726f77 3a000000
+
+<strDashAtkNonSpecialOpt> ALL
+44617368 2041746b 204e6f6e 53706563 69616c3a 00000000
+
+<strTauntGivesAbilityOpt> ALL
+5461756e 74204769 76657320 4162696c 6974793a 00000000
 
 
 	-==-
