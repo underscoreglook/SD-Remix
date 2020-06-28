@@ -1,0 +1,187 @@
+Samus Keeps Charge Shot When Hit During Up B (Fixed)
+Should make her charge work as it does in the PAL version.
+<https://smashboards.com/threads/misc-character-codes.446554/post-21830983>
+[UnclePunch]
+<varSamusKeepShotWhenHitEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x8012A6B8 ---- 900521DC -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusKeepShotWhenHitEnabled>>@h
+ori r11, r11, <<varSamusKeepShotWhenHitEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+900521DC    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x8012A784 ---- 900521DC -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusKeepShotWhenHitEnabled>>@h
+ori r11, r11, <<varSamusKeepShotWhenHitEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+900521DC    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Samus - Always Full Charge Shot
+Full charge shot blink is always on.
+Samus never enters "Charging" action state.
+[Achilles]
+<varSamusAlwaysChargeShotEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80128660 ---- FC010000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820024    # bne NORMAL
+lis r11, <<varSamusAlwaysChargeShotEnabled>>@h
+ori r11, r11, <<varSamusAlwaysChargeShotEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820010    # beq NORMAL
+81E4009C    # NEW_CODE:
+91E32230
+b 0x80128668    # Go past
+FC010000    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Aim Charge Shot
+https://smashboards.com/threads/samus-aimable-charge-shot.449577/
+[UnclePunch]
+<varSamusAimShotEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x802b5e74 ---- D01F0040 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusAimShotEnabled>>@h
+ori r11, r11, <<varSamusAimShotEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+D01F0040    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x802b5e88 ---- D01F0044 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusAimShotEnabled>>@h
+ori r11, r11, <<varSamusAimShotEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+D01F0044    # NORMAL:
+00000000    # RETURN:
+
+<funSamusAimShotPart1> NTSC 1.02
+83FE0518 83FF002C C03F0624 C05F0620 C0628BEC FC011840 41820008 4800000C
+FC021840 418200CC 3DC08002 61CE2C30 7DC903A6 4E800421 FCE00890 3DC08032
+61CE6240 7DC903A6 4E800421 C01E0DDC EC000072 D01E0040 FC203890 3DC08032
+61CE63D4 7DC903A6 4E800421 C01E0DDC EC000072 D01E0044 C01E0040 C0228BEC
+FC000840 41800014 887F002C 2C0300BF 40820050 48000014 887F002C 2C03003F
+40820040 48000004 C1BF002C FDA06850 D1BF002C 807E0518 809F0010 38A00002
+C03F0894 C04297BC C06297B8 38C00000 3DC08006 61CE93AC 7DC903A6 4E800421
+3DC0802B 61CE58B0 7DC903A6 4E800420 C03E0DD8
+b 0x802B5888
+NTSC 1.02 ---- 0x802B5884 ---- C03E0DD8 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusAimShotEnabled>>@h
+ori r11, r11, <<varSamusAimShotEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funSamusAimShotPart1>    # NEW_CODE:
+48000008    # b RETURN
+C03E0DD8    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Samus Shoots Random Item
+[UnclePunch]
+<varSamusShootItemsEnabled> ALL
+00000000
+
+<funSamusShootItemsPart1> NTSC 1.02
+D3E10054 38600023 3D808038 618C0580 7D8903A6 4E800421 7C7F1B78 2C030002
+4182FFE4 2C030005 4182FFDC 2C030008 4182FFD4 2C030009 4182FFCC 2C03000A
+4182FFC4 2C030012 4182FFBC 2C03001A 4182FFB4 2C03001B 4182FFAC 2C03001C
+4182FFA4 2C03001D 4182FF9C 2C03001F 4182FF94 2C030020 4182FF8C 2C030021
+4182FF84 93E10024 60000000
+b 0x802B6330
+NTSC 1.02 ---- 0x802B632C ---- D3E10054 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusShootItemsEnabled>>@h
+ori r11, r11, <<varSamusShootItemsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funSamusShootItemsPart1>    # NEW_CODE:
+48000008    # b RETURN
+D3E10054    # NORMAL:
+00000000    # RETURN:
+
+<funSamusShootItemsPart2> NTSC 1.02
+7C7F1B78 807F002C 806300B8 81830014 2C030000 4182003C 7D8803A6 7FE3FB78
+4E800021 48000025 7C6802A6 C0230000 807F002C C043002C EC2100B2 D0230040
+93830518 4800000C 4E800021 40B00000 3D80802B 618C63D0 7D8903A6 4E800420 60000000
+b 0x802B6374
+NTSC 1.02 ---- 0x802B6370 ---- 7C7F1B79 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSamusShootItemsEnabled>>@h
+ori r11, r11, <<varSamusShootItemsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funSamusShootItemsPart2>    # NEW_CODE:
+48000008    # b RETURN
+7C7F1B79    # NORMAL:
+00000000    # RETURN:

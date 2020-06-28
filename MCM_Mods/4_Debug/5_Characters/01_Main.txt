@@ -928,11 +928,59 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strSamusTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Samus Keeps Charge Shot When Hit During Up B (Fixed)
+    00000002                                        # String Table
+    00000000
+    .long <<strKeepShotWhenHitOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusKeepShotWhenHitEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Samus - Always Full Charge Shot
+    00000002                                        # String Table
+    00000000
+    .long <<strAlwaysFullShotOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusAlwaysChargeShotEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Aim Charge Shot
+    00000002                                        # String Table
+    00000000
+    .long <<strAimChargeShotOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusAimShotEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Samus Shoots Random Item
+    00000002                                        # String Table
+    00000000
+    .long <<strShootsItemsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusShootItemsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strSamusTitle> ALL
 3c205361 6d757320 3e000000
+
+<strKeepShotWhenHitOpt> ALL
+4b656570 2053686f 74205768 656e2048 69743a00
+
+<strAlwaysFullShotOpt> ALL
+416c7761 79732046 756c6c20 53686f74 3a000000
+
+<strAimChargeShotOpt> ALL
+41696d20 43686172 67652053 686f743a 00000000
+
+<strShootsItemsOpt> ALL
+53686f6f 74732049 74656d73 3a000000
 
 
 	-==-

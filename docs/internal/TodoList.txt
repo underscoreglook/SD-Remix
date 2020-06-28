@@ -168,6 +168,10 @@ Nana direction update bug fix (ICs can Dashdance together etc.) (NTSC 1.02) [tau
 Kirby Throws retain one mid air jump [The Cape]
 Kirby Uses Non-Special Dash Attack [UnclePunch]
 Kirbys Taunt Without Ability Gives Random Ability v1.1 [UnclePunch]
+Samus Keeps Charge Shot When Hit During Up B (Fixed) [UnclePunch]
+Samus - Always Full Charge Shot [Achilles]
+Aim Charge Shot [UnclePunch]
+Samus Shoots Random Item [UnclePunch]
 
 =============
 = Code dump =
@@ -179,11 +183,6 @@ Presets explanations>
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Samus>
-        Samus Keeps Charge Shot When Hit During Up B
-        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
-        Samus - Always Full Charge Shot
-        Samus Shoots Random Item
     Zelda >
         Aerial Control and Fastfall Shiek UpB
         Shiek Up B Edge Cancel
@@ -207,21 +206,6 @@ Credits>
 
 ==================================================================================
 
-
-
-	-==-
-
-
-Samus Keeps Charge Shot When Hit During Up B (Fixed)
-Should make her charge work as it does in the PAL version.
-<https://smashboards.com/threads/misc-character-codes.446554/post-21830983>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8012A6B8 ---- 900521DC -> 60000000
-------------- 0x8012A784 ---- 900521DC -> 60000000
-
-
-	-==-
 
 
 Mr. Game and Watch - Always Specific Hammer Value
@@ -327,48 +311,6 @@ Aerial Control and Fastfall Shiek UpB [UnclePunch]
 GaW Hold B [UnclePunch]
 0414e934 8004065C
 0414e8b0 8004065C
-
-Samus Shoots Random Item [UnclePunch]
-C22B632C 00000012
-D3E10054 38600023
-3D808038 618C0580
-7D8903A6 4E800421
-7C7F1B78 2C030002
-4182FFE4 2C030005
-4182FFDC 2C030008
-4182FFD4 2C030009
-4182FFCC 2C03000A
-4182FFC4 2C030012
-4182FFBC 2C03001A
-4182FFB4 2C03001B
-4182FFAC 2C03001C
-4182FFA4 2C03001D
-4182FF9C 2C03001F
-4182FF94 2C030020
-4182FF8C 2C030021
-4182FF84 93E10024
-60000000 00000000
-C22B6370 0000000D
-7C7F1B78 807F002C
-806300B8 81830014
-2C030000 4182003C
-7D8803A6 7FE3FB78
-4E800021 48000025
-7C6802A6 C0230000
-807F002C C043002C
-EC2100B2 D0230040
-93830518 4800000C
-4E800021 40B00000
-3D80802B 618C63D0
-7D8903A6 4E800420
-60000000 00000000
-
-Samus - Always Full Charge Shot
-Full charge shot blink is always on.
-Samus never enters "Charging" action state.
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80128660 --- FC01000040820010 -> 81E4009C91E32230
 
 Y. Link Boomerang Catch
 [??]
