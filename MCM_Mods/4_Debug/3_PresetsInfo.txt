@@ -237,6 +237,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strAutoLCancel> ALL
 4175746f 204c4361 6e63656c 00000000
 
+<strMariosHoldDownB> ALL
+4d617269 6f732048 6f6c6420 446f776e 42000000
+
 <tblDbgPresetCasualInfoSubMenu> NTSC 1.02
 # Entry 0: Title
     00000000                                        # Disabled Type
@@ -302,6 +305,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Marth Colors
     00000000 00000000
     .long <<strMarthColors>>
+    00000000 00000000 00000000 00000000 00000000
+# Marios hold downb
+    00000000 00000000
+    .long <<strMariosHoldDownB>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

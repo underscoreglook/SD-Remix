@@ -132,6 +132,9 @@ Disable Box Explosions [Achilles]
 Fastfall whenever [UnclePunch]
 Hold Y for Climber Clone v1.2 [UnclePunch]
 Marth - Costume Dependent Marth Sword Swing Colors [Achilles]
+Mario and Doc Hold B [UnclePunch]
+Mario and Doc Get Jump Back After Down B [UnclePunch]
+
 
 =============
 = Code dump =
@@ -157,9 +160,6 @@ Presets explanations>
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
 Character>
-    Marios >
-        Mario and Doc Hold B
-        Mario and Doc Get Jump Back After Down B
     Luigi >
         Luigi Hold B
         Fully Charged SIde B = Misfire
@@ -892,9 +892,6 @@ GaW Hold B [UnclePunch]
 0414e934 8004065C
 0414e8b0 8004065C
 
-Mario and Doc Hold B [UnclePunch]
-040e253c 801F065C
-
 Luigi Hold B [UnclePunch]
 04144ab0 801F065C
 
@@ -909,13 +906,6 @@ Fully Charged SIde B = Misfire [UnclePunch]
 C2143544 00000003
 80032344 2C080018
 40820008 38000001
-60000000 00000000
-
-Mario and Doc Get Jump Back After Down B [UnclePunch]
-C20E2390 00000004
-7C832378 3DC08007
-61CED5D4 7DC903A6
-4E800421 7FC3F378
 60000000 00000000
 
 Peach Aerial Down B and Neutral B Swap [UnclePunch]

@@ -1,0 +1,9 @@
+# XXXXXXXXXXXX
+    00000002                                        # String Table
+    00000000
+    .long <<STRING>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<VARIABLE>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
