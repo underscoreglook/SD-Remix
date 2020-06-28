@@ -547,9 +547,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strDKTitle> ALL
 3c20444b 203e0000
 
-<strSkipDownBStartupOpt> ALL
-536b6970 20446f77 6e422053 74617274 75703a00
-
 <strDownBHoldOpt> ALL
 446f776e 4220486f 6c643a00
 

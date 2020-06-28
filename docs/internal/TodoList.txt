@@ -144,7 +144,6 @@ Bowsers Flame Doesn't Diminish [UnclePunch]
 Yoshi Aerial Neutral B Grab Gives Jump Back [UnclePunch]
 Smash 4 Yoshi Up B [UnclePunch]
 Press B to Explode Yoshi Egg [UnclePunch]
-
 Skip DK Down B Startup [UnclePunch]
 DK Hold B for Down B [UnclePunch]
 
