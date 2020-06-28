@@ -159,43 +159,92 @@ Presets explanations>
         https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
-Items>
-
 Character>
-    Handle this and potentially add to presets: https://smashboards.com/threads/misc-character-codes.446554/
-    General >
+    Other >
+        Fastfall whenever
         https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
         https://smashboards.com/threads/standalone-transformation-codes.452675/
-    Marth colors match costume
-    Peach>
+        Marth colors match costume
+        https://smashboards.com/threads/roy-sword-trails.449229/
+    Space >
+        Invisible Firefox
+        Mash Firefox to Increase Length
+        Falco Side-B Walljump
+        Falco Up-B Walljump
+        Fox Falco Hold B
+        Fox and Falco Enter Fall After Side B and Retains Jump (a la Smash 4) v2
+        Fox/Falco - Fall Instead of FallSpecial after Side-B
+            Samus>
+        Samus Keeps Charge Shot When Hit During Up B
+        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
+        Samus Shoots Random Item
+        Samus - Always Full Charge Shot
+    Mushrooms >
         Peach turnip: Default, Always 0-7
         Peach infinite float
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
+        Peach Aerial Down B and Neutral B Swap
+        Mario and Doc Hold B
+        Luigi Hold B
+        Fully Charged SIde B = Misfire
+        Mario and Doc Get Jump Back After Down B
+        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
+    Other Mario >
+            Yoshi >
+        https://smashboards.com/threads/press-b-to-explode-yoshi-egg-and-teleport-v1-1.448803/
+        Press B to Explode Yoshi Egg
+        Smash 4 Yoshi Up B
+        Yoshi Aerial Neutral B Grab Gives Jump Back
+            Bowser
+        Up+B Mash for Height    or      Bowser can mash for height during aerial upB
+        Bowsers Flame Doesn't Diminish
+            Donkey Kong>
+        DK Skip DownB Startup
+        DK Hold B for DownB
+    Links & Zelda >
+        Link's Shield Blocks Melee Attacks
+        Link's Shield Reflects
+        Link Shield Always Active
+        Link Boomerang Catch
+        Y. Link Boomerang Catch
+        Aerial Control and Fastfall Shiek UpB
+        Shiek Up B Edge Cancel
+        Less Landing Lag on Sheik Up B
+        Instant Zelda/Shiek Transform
+    Falcondorf>
+        Falcon Turnaround Up B
+        Walljump Out of Falcon Side B
+        Walljump Out of Falcon Up B
+        Aerial Raptor Boost Popup + Midair Control
+        Falcon Grab Ledge on Side B     or      Falcon/Ganon - Grab Ledge with Side+B
+        Falcon Raptor Boost enters Fall state
+        Ganon Float
     Ice Climbers>
         https://smashboards.com/threads/grab-infinite-removal-code.412693/ [IC Buffs]
         Nana Respawn Time: None, 60 secs, 20 secs, Instant
         Solo Popo Up-B Buff
         https://smashboards.com/threads/nana-and-popo-can-share-ledge.453939/
-    Samus>
-        Samus Keeps Charge Shot When Hit During Up B
-        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
-    Falcondorf>
-        Falcon Raptor Boost enters Fall state
-        Falcon/Ganon - Grab Ledge with Side+B
-        Ganon Float
-    https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
-    https://smashboards.com/threads/links-shield-blocks-melee-attacks-other-shield-codes.450150/
-    Donkey Kong>
-        DK Skip DownB Startup
-        DK Hold B for DownB
-    https://smashboards.com/threads/press-b-to-explode-yoshi-egg-and-teleport-v1-1.448803/
-    https://smashboards.com/threads/roy-sword-trails.449229/
-    https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
-    GnW Hammer: Random, Modulo, Always 1-9
-    Bowser Up+B Mash for Height
+        Nana direction update bug fix (ICs can dd together etc.)
+        IC Hold B
+    Mewtwo >
+        https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
+        Mewtwo Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again
+        Mewtwo Can Actually Reflect Stuff
+        Confusion works like a normal throw
+    G&W >
+        GnW Hammer: Random, Modulo, Always 1-9
+        GaW Bucket Fill Amount Based on Damage of Projectile
+        GaW Hold B
+        G&W Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)
+    Ness>
+        PKT Doesn't Disappear When Hitting Projectiles
+        PKT2 Trajectory = Analog Stick Angle
+        Ness Can Up B Once After Hitting a Wall
     Kirby>
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
         https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
+        Kirby Uses Non-Special Dash Attack
+        Kirby Can Jump After Up Throw and Forward Throw     Kirby Throws retain one mid air jump
 Credits>
 Debug Menu>
 
@@ -566,6 +615,9 @@ Skip DK Down B Startup
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 --- 0x803C170C ---- 8010DC80 -> 8010de88
 
+Skip DK Down B Startup [UnclePunch
+043c170c 8010de88
+
 
 	-==-
 
@@ -635,24 +687,495 @@ C0440004 3C008007
 	-==-
 
 
-Disable Box Explosions
+Mash Firefox to Increase Length [UnclePunch]
+C20E72B0 00000003
+3DC03F7A 61CEE148
+91DF2354 83E1002C
+60000000 00000000
+C20E733C 00000003
+3DC03F7A 61CEE148
+91DF2354 80010034
+60000000 00000000
+C20E73CC 00000006
+81DF0668 55CE05AD
+41820020 3DC03CA3
+61CED70A 91C1FFFC
+C1C1FFFC C1FF2354
+EDCE782A D1DF2354
+83E3002C 00000000
+C20E736C 00000006
+81DF0668 55CE05AD
+41820020 3DC03CA3
+61CED70A 91C1FFFC
+C1C1FFFC C1FF2354
+EDCE782A D1DF2354
+83E3002C 00000000
+C20E7D88 00000002
+C0040068 C1FD2354
+EC0003F2 00000000
+C20E7DAC 00000002
+C05F0074 C1FD2354
+EC4203F2 00000000
+C20E7DC8 00000002
+C01F0074 C1FD2354
+EC0003F2 00000000
+
+Link's Shield Blocks Melee Attacks [UnclePunch]
+040eb3f0 48000028
+
+Link's Shield Reflects [UnclePunch]
+0400a9dc 60000000
+C20EB3EC 0000000F
+3881FFB0 38000044
+90040000 38000032
+90040004 C00298C8
+D0040008 C00298C8
+D004000C C00298C8
+D0040010 C00298CC
+D0040014 3C003F00
+90040018 C00298CC
+D004001C 81C3002C
+38000000 886E19E8
+50033E30 980E19E8
+38000000 90040020
+7FC3F378 3DC08007
+61CEB23C 7DC903A6
+4E800421 00000000
+
+Link Shield Always Active [UnclePunch]
+04007c44 60000000
+0400a80c 60000000
+C206A19C 00000007
+81DE002C 89CE0007
+2C0E0006 41820010
+2C0E0014 41820008
+48000018 7FC3F378
+3DC0800E 61CEB3BC
+7DC903A6 4E800421
+800100A4 00000000
+
+Walljump Out of Falcon Side B [UnclePunch]
+*Can only walljump if walljumps used = 0
+C20E3E28 00000006
+83FE002C 881F1969
+2C000000 40820018
+7FC3F378 3DC08008
+61CE169C 7DC903A6
+4E800421 80010024
+60000000 00000000
+
+Walljump Out of Falcon Up B [UnclePunch]
+*Can only walljump if walljumps used = 0
+C20E5114 00000005
+881F1969 2C000000
+40820018 7FA3EB78
+3DC08008 61CE169C
+7DC903A6 4E800421
+8001001C 00000000
+
+Falcon Grab Ledge on Side B [UnclePunch]
+*Can only walljump if walljumps used = 0
+C20E3DFC 00000005
+83E3002C 7FC3F378
+3DC0800E 61CE4D7C
+7DC903A6 4E800421
+7FC3F378 809E002C
+60000000 00000000
+
+Falco Side-B Walljump [UnclePunch]
+*Can only walljump if walljumps used = 0
+C20EAC38 00000008
+83FE002C 801F0004
+2C000016 4082002C
+2C030000 40820024
+881F1969 2C000000
+40820018 7FC3F378
+3DC08008 61CE169C
+7DC903A6 4E800421
+80010024 00000000
+C20EA684 00000008
+83DF002C 801E0004
+2C000016 4082002C
+2C030000 40820024
+881E1969 2C000000
+40820018 7FE3FB78
+3DC08008 61CE169C
+7DC903A6 4E800421
+80010024 00000000
+
+Falco Up-B Walljump [UnclePunch]
+*Can only walljump if walljumps used = 0
+C20E7A58 00000007
+801F0004 2C000016
+40820024 881F1969
+2C000000 40820018
+7F83E378 3DC08008
+61CE169C 7DC903A6
+4E800421 80010044
+60000000 00000000
+
+PKT Doesn't Disappear When Hitting Projectiles [UnclePunch]
+C22AC05C 00000007
+81DE002C 81CE0CF4
+2C0E0000 40820018
+38600000 3DC0802A
+61CEC064 7DC903A6
+4E800420 3DC0802A
+61CEB90C 7DC903A6
+
+Instant Zelda/Shiek Transform [UnclePunch]
+04114184 C042A1DC
+0413b510 C042A1DC
+0413af04 C042A1DC
+04114790 C042A1DC
+04114248 C042A1DC
+0413afc8 C042A1DC
+
+Kirby Uses Non-Special Dash Attack [UnclePunch]
+0408b4b0 60000000
+
+GaW Bucket Fill Amount Based on Damage of Projectile [UnclePunch]
+*If projectile dealt 1->8 damage, fill 1
+*If projectile dealt 9->12 damage, fill 2
+*If projectile dealt 13+ damage, fill 3
+C214D9D4 00000007
+801F1A44 2C000008
+40810014 2C00000C
+40810014 2C00000D
+40800014 38000001
+48000014 38000002
+4800000C 38000003
+48000004 00000000
+
+PKT2 Trajectory = Analog Stick Angle [UnclePunch]
+04118c18 C03D0624
+04118bfc C05D0620
+041185bc C03E0624
+041185a0 C05E0620
+
+Falcon Turnaround Up B [UnclePunch]
+*Turns if control stick is pushed 25% in the opposite direction
+C20E52C4 00000007
+81CDAEB4 C1CE0034
+C1FF0620 C21F002C
+EE0F0432 FC107040
+4C401382 40820010
+C1DF002C FDC07050
+D1DF002C C0429854
+60000000 00000000
+
+Shiek Up B Edge Cancel [UnclePunch]
+041134f4 4BFB923D
+04113500 4BFB9231
+C21137E4 00000002
+38600040 987F0594
+7FE3FB78 00000000
+
+Invisible Firefox [UnclePunch]
+040e7150 60000000
+C20E7E1C 00000002
+38000098 981D221E
+8001003C 00000000
+C20E7C78 00000002
+38000098 981E221E
+8001004C 00000000
+C20E7ADC 00000002
+38000098 981F221E
+80010024 00000000
+
+Aerial Control and Fastfall Shiek UpB [UnclePunch]
+043cc2d4 800e7f20
+
+Less Landing Lag on Sheik Up B [UnclePunch]
+04113e10 38800001
+
+Nana direction update bug fix (ICs can dd together etc.) (NTSC 1.02) [tauKhan]
+C20B0AE8 00000005
+38C40444 3863001C
+7C033040 40820008
+386400FC D0030018
+80640444 80C40444
+60000000 00000000
+
+Press B to Explode Yoshi Egg [UnclePunch]
+C22B2B74 00000005
+81DF0518 81CE002C
+89EE066A 2C0F0002
+40820010 39C00000
+91C1FFFC C021FFFC
+FC010040 00000000
+
+Smash 4 Yoshi Up B [UnclePunch]
+C212E3A0 00000009
+89C31969 39CE0001
+99C31969 6DCE8000
+3E404330 CA028B90
+92420000 91C20004
+C9E20000 EDEF8028
+3DC04000 61CE0000
+91C1FFFC C1C1FFFC
+EDCE7824 D1C30084
+80010034 00000000
+C212E5C0 0000000F
+3821FFFC 7C0802A6
+90010000 3BDF0110
+881F221A 7FE3FB78
+5400EFFF 41820018
+3DC08007 61CED4E4
+7DC903A6 4E800421
+48000020 C03E005C
+7FE3FB78 C05E0060
+3DC08007 61CED494
+7DC903A6 4E800421
+7FE3FB78 3DC08007
+61CED268 7DC903A6
+4E800421 80010000
+7C0803A6 38210004
+60000000 00000000
+
+Ness Can Up B Once After Hitting a Wall [UnclePunch]
+C2118FA0 0000000A
+89DF1969 2C0E0000
+4082003C 3821FFFC
+7C0802A6 90010000
+3DC08009 61CE665C
+7DC903A6 4E800421
+80010000 7C0803A6
+38210004 2C030001
+4082000C 39C00001
+99DF1969 4E800020
+60000000 00000000
+
+Yoshi Aerial Neutral B Grab Gives Jump Back [UnclePunch]
+C212D110 00000003
+3DC08007 61CED5D4
+7DC903A6 4E800421
+8001001C 00000000
+
+Bowser can mash for height during aerial upB [rmn]
+C2135E34 00000009
+48000010 4E800021
+3F99999A 3FB33333
+801F0668 540005AD
+41A20024 4BFFFFE9
+7C8802A6 C0240000
+C0440004 3C008007
+6000D508 7C0903A6
+4E800421 80010024
+60000000 00000000
+
+Bowsers Flame Doesn't Diminish [UnclePunch]
+041352a0 60000000
+0413527c 60000000
+
+Kirby Can Jump After Up Throw and Forward Throw [UnclePunch]
+C20DDB70 00000002
+7FE3FB78 39C00001
+99C51968 00000000
+C20DD910 00000002
+7FE3FB78 39C00001
+99C51968 00000000
+
+Aerial Raptor Boost Popup + Midair Control [UnclePunch]
+C20E3BD0 00000007
+81DF0894 3DE03F80
+7C0E7800 40820014
+3DC04000 91DF0084
+39C00000 91DF0080
+3DC08008 61CED5B4
+7DC903A6 4E800420
+60000000 00000000
+
+GaW Hold B [UnclePunch]
+0414e934 8004065C
+0414e8b0 8004065C
+
+Mario and Doc Hold B [UnclePunch]
+040e253c 801F065C
+
+Luigi Hold B [UnclePunch]
+04144ab0 801F065C
+
+IC Hold B [UnclePunch]
+04120554 801F065C
+
+Fox Falco Hold B [UnclePunch]
+040e6aec 801F065C
+040e6b40 801F065C
+
+Fully Charged SIde B = Misfire [UnclePunch]
+C2143544 00000003
+80032344 2C080018
+40820008 38000001
+60000000 00000000
+
+Mario and Doc Get Jump Back After Down B [UnclePunch]
+C20E2390 00000004
+7C832378 3DC08007
+61CED5D4 7DC903A6
+4E800421 7FC3F378
+60000000 00000000
+
+Peach Aerial Down B and Neutral B Swap [UnclePunch]
+043c1514 8011e45c
+043c161c 8011d1c4
+043c16a0 8011d11c
+043c1724 8011e3d0
+
+Fastfall Whenever [UnclePunch]
+0407d54c 60000000
+
+Samus Shoots Random Item [UnclePunch]
+C22B632C 00000012
+D3E10054 38600023
+3D808038 618C0580
+7D8903A6 4E800421
+7C7F1B78 2C030002
+4182FFE4 2C030005
+4182FFDC 2C030008
+4182FFD4 2C030009
+4182FFCC 2C03000A
+4182FFC4 2C030012
+4182FFBC 2C03001A
+4182FFB4 2C03001B
+4182FFAC 2C03001C
+4182FFA4 2C03001D
+4182FF9C 2C03001F
+4182FF94 2C030020
+4182FF8C 2C030021
+4182FF84 93E10024
+60000000 00000000
+C22B6370 0000000D
+7C7F1B78 807F002C
+806300B8 81830014
+2C030000 4182003C
+7D8803A6 7FE3FB78
+4E800021 48000025
+7C6802A6 C0230000
+807F002C C043002C
+EC2100B2 D0230040
+93830518 4800000C
+4E800021 40B00000
+3D80802B 618C63D0
+7D8903A6 4E800420
+60000000 00000000
+
+Samus - Always Full Charge Shot
+Full charge shot blink is always on.
+Samus never enters "Charging" action state.
 [Achilles]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8028639c --- 38600000 -> 38600001
+1.02 ----- 0x80128660 --- FC01000040820010 -> 81E4009C91E32230
+
+Fox/Falco - Fall Instead of FallSpecial after Side-B
+[Achilles]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x800EA988 --- 4BFABF79 -> 4BFE1DA9
+
+Y. Link Boomerang Catch
+[??]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x803D1204 --- 043D1204 -> 00000000
+
+Link Boomerang Catch
+[??]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x803c807c --- 043c807c -> 00000000
+
+Mewtwo Can Actually Reflect Stuff
+[UnclePunch]
+1.02
+04146C58 60000000
+
+Confusion works like a normal throw
+[UnclePunch, jjhoho]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ----- 0x80146940 --- 4BF49E41 -> 60000000
+---------- 0x801468ac --- 4BF49ED5 -> 60000000
+The normal throw piece is actually already a DOL overwrite. The reflect stuff is set up as a one line Gecko code
+
+Kirby Throws retain one mid air jump
+[The Cape]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+1.02 ------ 0x7a24c ---- 987E1968 -> 981e1968
 
 
 
+Special Move Master Code v3 (fix console crash) [UnclePunch]
+Allows characters with corresponding code to:
+-use special move from ground and keep your jump
+-use special move from air and keep your jump, so long as you havent mid air jumped before the up B (does not apply to mewtwo for design choice reasons)
+-you can act out of the special move
+-you cannot use the special move after using the special move from the ground or air until youve touched the ground/get hit/get grabbed/grabbed ledge
+you cannot air dodge out of the special move
+================================================
+C20D5C08 00000002 #land
+39C00000 99C31878
+7C7F1B78 00000000
+C20D5AEC 00000002 #specialland1
+39C00000 99C318D8
+7C0802A6 00000000
+C20D5CB0 00000002 #specialland2
+39C00000 99C318D8
+7C0802A6 00000000
+C208A348 00000002 #wait
+39C00000 99DF18D8
+7C0802A6 00000000
+C20D4FF4 00000002 #rebirth
+39C00000 99C318D8
+7C0802A6 00000000
+C2081370 00000002 #cliff catch
+39C00000 99C318D8
+7C0802A6 00000000
+C208DCE0 00000002 #hitstun
+39C00000 99C318D8
+7C0802A6 00000000
+C20DB908 00000002 #get grabbed
+39C00000 99C318D8
+7C0802A6 00000000
+C2099A9C 00000004 #airdodge flag
+89C318D8 2C0E0001
+41820008 48000008
+4E800020 7C0802A6
+60000000 00000000
 
+G&W Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)[UnclePunch]
+0414e274 4BF7E4BD #enters fall
+0414e0d8 60000000 #doesnt lose jump after grounded up B
+0414e178 60000000 #doesnt lose jump after frame perfect upB in air
+C214E158 00000005 #aerial up B
+89DF1878 2C0E0001
+41820010 39C00001
+99DF1878 48000008
+4E800020 7C0802A6
+60000000 00000000
+C214E0AC 00000002 #ground up B
+39C00001 99C318D8
+7C0802A6 00000000
 
+Mewtwo Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)[UnclePunch]
+04145e30 4BF86901
+04145b68 60000000 #ground up b keep jump
+C2145258 00000005 #ground up B lose up B
+89DF1878 2C0E0001
+41820010 39C00001
+99DF1878 48000008
+4E800020 7C0802A6
+60000000 00000000
+C21451DC 00000002 #aerial up B lose up B
+39C00001 99C318D8
+7C0802A6 00000000
 
-
-
-
-
-
-
-
-
+Fox and Falco Enter Fall After Side B and Retains Jump (a la Smash 4) v2[UnclePunch]
+040ea988 4BFE1DA9
+040ea6b8 60000000 #ground to air preserve jump
+040e9fe8 60000000 #air to air preserve jump
+C20E9F6C 00000005 #check for side B used
+89C318D8 2C0E0001
+41820010 39C00001
+99DF1878 48000008
+4E800020 7C0802A6
+60000000 00000000
 
 
 
