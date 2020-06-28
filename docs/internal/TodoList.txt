@@ -4,7 +4,7 @@ Finish character codes in debug menu
 Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
     See https://smashboards.com/threads/shrinking-max-number-of-tags-and-tag-storage-location.405120/
     or https://smashboards.com/threads/memory-card-variables.483420/
-Update Credits page, have a credits page on the site
+Update Credits page, have a credits page on the website
 SDRE32.ini needs automatic toggles for:
     All General toggles
     All Presets
@@ -175,22 +175,19 @@ Samus Shoots Random Item [UnclePunch]
 Instant Zelda/Shiek Transform [UnclePunch]
 Link's Shield Reflects [UnclePunch]
 Link Shield Always Active [UnclePunch]
-
+Mewtwo Can Actually Reflect Stuff [UnclePunch]
+Confusion works like a normal throw [UnclePunch, jjhoho]
+Mewtwo Float [UnclePunch]
 
 =============
 = Code dump =
 =============
-
 
 Presets explanations>
     CASUAL
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Mewtwo >
-        https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
-        Mewtwo Can Actually Reflect Stuff
-        Confusion works like a normal throw
     G&W >
         GnW Hammer: Random, Modulo, Always 1-9
         GaW Bucket Fill Amount Based on Damage of Projectile
@@ -253,18 +250,6 @@ C214D9D4 00000007
 GaW Hold B [UnclePunch]
 0414e934 8004065C
 0414e8b0 8004065C
-
-Mewtwo Can Actually Reflect Stuff
-[UnclePunch]
-1.02
-04146C58 60000000
-
-Confusion works like a normal throw
-[UnclePunch, jjhoho]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80146940 --- 4BF49E41 -> 60000000
----------- 0x801468ac --- 4BF49ED5 -> 60000000
-The normal throw piece is actually already a DOL overwrite. The reflect stuff is set up as a one line Gecko code
 
 
 

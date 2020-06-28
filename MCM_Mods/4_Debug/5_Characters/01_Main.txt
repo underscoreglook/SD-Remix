@@ -1072,11 +1072,47 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strMewtwoTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Mewtwo Can Actually Reflect Stuff
+    00000002                                        # String Table
+    00000000
+    .long <<strReflectReflectsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varMewtwoReflectsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Confusion works like a normal throw
+    00000002                                        # String Table
+    00000000
+    .long <<strConfusionGrabsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varConfusionThrowsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Mewtwo Float v1.1
+    00000002                                        # String Table
+    00000000
+    .long <<strFloatOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varMewtwoFloatEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strMewtwoTitle> ALL
 3c204d65 7774776f 203e0000
+
+<strReflectReflectsOpt> ALL
+5265666c 65637420 5265666c 65637473 3a000000
+
+<strConfusionGrabsOpt> ALL
+436f6e66 7573696f 6e204772 6162733a 00000000
+
+<strFloatOpt> ALL
+466c6f61 743a0000
 
 
 	-==-
