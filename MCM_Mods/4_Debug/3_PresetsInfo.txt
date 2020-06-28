@@ -407,6 +407,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strPeachFsmashAngles> ALL
 50656163 68204673 6d617368 20416e67 6c657300
 
+<strBowserMashUpB> ALL
+426f7773 6572204d 61736820 55704200
+
 <tblDbgPresetSddrInfoSubMenu> NTSC 1.02
 # Title
     00000000                                        # Disabled Type
@@ -428,6 +431,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Peach - FSmash Angles Determine FSmash Type
     00000000 00000000
     .long <<strPeachFsmashAngles>>
+    00000000 00000000 00000000 00000000 00000000
+# Bowser Mash Up + B
+    00000000 00000000
+    .long <<strBowserMashUpB>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

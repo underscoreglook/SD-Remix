@@ -432,11 +432,35 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strBowserTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Bowser can mash for height during aerial upB
+    00000002                                        # String Table
+    00000000
+    .long <<strMashUpBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varBowserUpBMashEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Bowser Infinite Flame
+    00000002                                        # String Table
+    00000000
+    .long <<strInfiniteFlameOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varBowserInfiniteFlameEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strBowserTitle> ALL
 3c20426f 77736572 203e0000
+
+<strMashUpBOpt> ALL
+4d617368 20557042 3a000000
+
+<strInfiniteFlameOpt> ALL
+496e6669 6e697465 20466c61 6d653a00
 
 
 	-==-
