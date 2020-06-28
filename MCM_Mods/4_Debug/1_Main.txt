@@ -221,6 +221,12 @@ SDR Options Menu General Strings
 <strPlayer4Opt> ALL
 506c6179 65722034 3a000000
 
+<strOtherSub> ALL
+4f746865 72203e00
+
+<strOtherTitle> ALL
+3c204f74 68657220 3e000000
+
 
 	-==-
 

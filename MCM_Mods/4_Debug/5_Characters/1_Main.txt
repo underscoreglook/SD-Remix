@@ -11,5 +11,65 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strCharactersTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Others
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strOtherSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterOtherSubMenu>>           # Submenu table
+    00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Other Submenu
+The functions, strings, and data for the submenu "Characters > Other".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterOtherSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strOtherTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Fastfall Whenever
+    00000002                                        # String Table
+    00000000
+    .long <<strAlwaysFastfallOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varFastfallWheneverEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Hold Y for Clone
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldYForCloneOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varCloneEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Marth Colors
+    00000002                                        # String Table
+    00000000
+    .long <<strMarthColorsOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varMarthColorsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strAlwaysFastfallOpt> ALL
+416c7761 79732046 61737466 616c6c3a 00000000
+
+<strHoldYForCloneOpt> ALL
+486f6c64 20592066 6f722043 6c6f6e65 3a000000
+
+<strMarthColorsOpt> ALL
+4d617274 6820436f 6c6f7273 3a000000

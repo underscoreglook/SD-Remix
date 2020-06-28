@@ -129,7 +129,9 @@ Containers spawn containers [Punkline]
 Disable Capsule Explosions [Achilles]
 Disable Barrel Explosions [Achilles]
 Disable Box Explosions [Achilles]
-
+Fastfall whenever [UnclePunch]
+Hold Y for Climber Clone v1.2 [UnclePunch]
+Marth - Costume Dependent Marth Sword Swing Colors [Achilles]
 
 =============
 = Code dump =
@@ -142,13 +144,8 @@ Always lagless FOD (for netplay)
 
 Presets explanations>
     CASUAL
-        Marth colors match costume
-        https://smashboards.com/threads/roy-sword-trails.449229/
         DK Hold B for DownB
     SD DOUBLE REMIX
-        Food appears when items disabled
-        Marth colors match costume
-        https://smashboards.com/threads/roy-sword-trails.449229/
         Nana Respawn Time = None, 60 secs
         Solo Popo Up-B Buff
         Falcon/Ganon - Grab Ledge with Side+B
@@ -160,57 +157,29 @@ Presets explanations>
         https://smashboards.com/threads/samus-aimable-charge-shot.449577/
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
 Character>
-    Other >
-        Fastfall whenever
-        https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
-        https://smashboards.com/threads/standalone-transformation-codes.452675/
-        Marth colors match costume
-        https://smashboards.com/threads/roy-sword-trails.449229/
-    Space >
-        Invisible Firefox
-        Mash Firefox to Increase Length
-        Falco Side-B Walljump
-        Falco Up-B Walljump
-        Fox Falco Hold B
-        Fox and Falco Enter Fall After Side B and Retains Jump (a la Smash 4) v2
-        Fox/Falco - Fall Instead of FallSpecial after Side-B
-            Samus>
-        Samus Keeps Charge Shot When Hit During Up B
-        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
-        Samus Shoots Random Item
-        Samus - Always Full Charge Shot
-    Mushrooms >
+    Marios >
+        Mario and Doc Hold B
+        Mario and Doc Get Jump Back After Down B
+    Luigi >
+        Luigi Hold B
+        Fully Charged SIde B = Misfire
+        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
+    Peach >
         Peach turnip: Default, Always 0-7
         Peach infinite float
         https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
         Peach Aerial Down B and Neutral B Swap
-        Mario and Doc Hold B
-        Luigi Hold B
-        Fully Charged SIde B = Misfire
-        Mario and Doc Get Jump Back After Down B
-        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
-    Other Mario >
-            Yoshi >
+    Bowser
+        Up+B Mash for Height    or      Bowser can mash for height during aerial upB
+        Bowsers Flame Doesn't Diminish
+    Yoshi >
         https://smashboards.com/threads/press-b-to-explode-yoshi-egg-and-teleport-v1-1.448803/
         Press B to Explode Yoshi Egg
         Smash 4 Yoshi Up B
         Yoshi Aerial Neutral B Grab Gives Jump Back
-            Bowser
-        Up+B Mash for Height    or      Bowser can mash for height during aerial upB
-        Bowsers Flame Doesn't Diminish
-            Donkey Kong>
+    Donkey Kong>
         DK Skip DownB Startup
         DK Hold B for DownB
-    Links & Zelda >
-        Link's Shield Blocks Melee Attacks
-        Link's Shield Reflects
-        Link Shield Always Active
-        Link Boomerang Catch
-        Y. Link Boomerang Catch
-        Aerial Control and Fastfall Shiek UpB
-        Shiek Up B Edge Cancel
-        Less Landing Lag on Sheik Up B
-        Instant Zelda/Shiek Transform
     Falcondorf>
         Falcon Turnaround Up B
         Walljump Out of Falcon Side B
@@ -219,6 +188,18 @@ Character>
         Falcon Grab Ledge on Side B     or      Falcon/Ganon - Grab Ledge with Side+B
         Falcon Raptor Boost enters Fall state
         Ganon Float
+    Space >
+        Invisible Firefox
+        Mash Firefox to Increase Length
+        Falco Side-B Walljump
+        Falco Up-B Walljump
+        Fox Falco Hold B
+        Fox and Falco Enter Fall After Side B and Retains Jump (a la Smash 4) v2
+        Fox/Falco - Fall Instead of FallSpecial after Side-B
+    Ness>
+        PKT Doesn't Disappear When Hitting Projectiles
+        PKT2 Trajectory = Analog Stick Angle
+        Ness Can Up B Once After Hitting a Wall
     Ice Climbers>
         https://smashboards.com/threads/grab-infinite-removal-code.412693/ [IC Buffs]
         Nana Respawn Time: None, 60 secs, 20 secs, Instant
@@ -226,6 +207,27 @@ Character>
         https://smashboards.com/threads/nana-and-popo-can-share-ledge.453939/
         Nana direction update bug fix (ICs can dd together etc.)
         IC Hold B
+    Kirby>
+        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
+        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
+        Kirby Uses Non-Special Dash Attack
+        Kirby Can Jump After Up Throw and Forward Throw     Kirby Throws retain one mid air jump
+    Samus>
+        Samus Keeps Charge Shot When Hit During Up B
+        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
+        Samus Shoots Random Item
+        Samus - Always Full Charge Shot
+    Zelda >
+        Aerial Control and Fastfall Shiek UpB
+        Shiek Up B Edge Cancel
+        Less Landing Lag on Sheik Up B
+        Instant Zelda/Shiek Transform
+    Links >
+        Link's Shield Blocks Melee Attacks
+        Link's Shield Reflects
+        Link Shield Always Active
+        Link Boomerang Catch
+        Y. Link Boomerang Catch
     Mewtwo >
         https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
         Mewtwo Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again
@@ -236,15 +238,6 @@ Character>
         GaW Bucket Fill Amount Based on Damage of Projectile
         GaW Hold B
         G&W Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)
-    Ness>
-        PKT Doesn't Disappear When Hitting Projectiles
-        PKT2 Trajectory = Analog Stick Angle
-        Ness Can Up B Once After Hitting a Wall
-    Kirby>
-        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
-        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
-        Kirby Uses Non-Special Dash Attack
-        Kirby Can Jump After Up Throw and Forward Throw     Kirby Throws retain one mid air jump
 Credits>
 Debug Menu>
 
@@ -300,96 +293,6 @@ WWWWWWWW    # Do the new thing
 	-==-
 
 
-Marth - Costume Dependent Marth Sword Swing Colors
-Color 1 of Marth's sword swing is changed on a per costume basis
-Blue costume [default] = Default swing color (teal)
-Red costume = Red swing color
-Green costume = Green swing color
-White costume = Light purple swing color
-Black costume = Gold swing color
-Code can be modified to change the colors to whatever you like (check the text file library for more notes).
-(Updated 4/29 with slightly shortened code.)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80136510 --- 94650008 -> Branch
-
-3DC0FF00 61CEFFFF
-7C007000 40820060
-39E5E181 89EF0000
-2C0F0001 40820010
-3C60FF00 6063BE0C
-3C001900 2C0F0002
-40820010 3C60FF00
-60638DD5 3C002E00
-2C0F0003 40820010
-3C60FF00 6063F7E1
-3C008300 2C0F0004
-40820010 3C60FF00
-60637D77 3C00C800
-6000FFFF 94650008
-60000000 48000000
-
-1.00 ----- 0x80135E98 --- 94650008 -> Branch
-
-3DC0FF00 61CEFFFF
-7C007000 40820060
-39E5E181 89EF0000
-2C0F0001 40820010
-3C60FF00 6063BE0C
-3C001900 2C0F0002
-40820010 3C60FF00
-60638DD5 3C002E00
-2C0F0003 40820010
-3C60FF00 6063F7E1
-3C008300 2C0F0004
-40820010 3C60FF00
-60637D77 3C00C800
-6000FFFF 94650008
-60000000 48000000
-
-PAL ------ 0x80136CB4 --- 94650008 -> Branch
-
-3DC0FF00 61CEFFFF
-7C007000 40820060
-39E5E181 89EF0000
-2C0F0001 40820010
-3C60FF00 6063BE0C
-3C001900 2C0F0002
-40820010 3C60FF00
-60638DD5 3C002E00
-2C0F0003 40820010
-3C60FF00 6063F7E1
-3C008300 2C0F0004
-40820010 3C60FF00
-60637D77 3C00C800
-6000FFFF 94650008
-60000000 48000000
-
-# How to change the colors to whatever you'd like:
-#
-# 1) Get the RGB value of the color you would like (in format RRGGBB)
-# 2) Plug the values into the places for colors shown below:
-#
-# 3DC0FF00 61CEFFFF
-# 7C007000 40820060
-# 39E5E181 89EF0000
-# 2C0F0001 40820010
-# 3C60FF00 6063RRGG // these RRGGBB values refer to Red Marth costume
-# 3C00BB00 2C0F0002 //
-# 40820010 3C60FF00
-# 6063RRGG 3C00BB00 // these RRGGBB values refer to Green Marth costume
-# 2C0F0003 40820010
-# 3C60FF00 6063RRGG // these RRGGBB values refer to Black Marth costume
-# 3C00BB00 2C0F0004 //
-# 40820010 3C60FF00
-# 6063RRGG 3C00BB00 // these RRGGBB values refer to White Marth costume
-# 6000FFFF 94650008
-# 60000000 00000000
-
-
-	-==-
-
-
 Peach - Always Pull Specific Turnip
 The default for this code is Stitch Face, but it can be changed to any of the turnips.
 Check the text files in the library for notes on how to change it.
@@ -422,7 +325,6 @@ Peach - Infinite Float
 [Achilles]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 1.02 ----- 0x8011BBC4 --- C01E000CD01F2230 -> 3DE04A0091FF2230
-
 
 
 	-==-
@@ -1021,9 +923,6 @@ Peach Aerial Down B and Neutral B Swap [UnclePunch]
 043c161c 8011d1c4
 043c16a0 8011d11c
 043c1724 8011e3d0
-
-Fastfall Whenever [UnclePunch]
-0407d54c 60000000
 
 Samus Shoots Random Item [UnclePunch]
 C22B632C 00000012

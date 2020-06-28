@@ -17,9 +17,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strSequelsSub> ALL
 53657175 656c7320 3e000000
 
-<strOtherSub> ALL
-4f746865 72203e00
-
 <tblDbgMechanicsSubMenu> NTSC 1.02
 # Entry 0: Menu Title
     00000000                                        # Disabled
@@ -579,9 +576,6 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-
-<strOtherTitle> ALL
-3c204f74 68657220 3e000000
 
 <strSmashOutOfDashOpt> ALL
 536d6173 68204f75 74206f66 20446173 683a0000

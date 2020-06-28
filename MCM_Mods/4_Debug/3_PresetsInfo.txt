@@ -123,6 +123,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strFoodItems> ALL
 466f6f64 20497465 6d730000
 
+<strMarthColors> ALL
+4d617274 6820436f 6c6f7273 00000000
+
 
 	-==-
 
@@ -296,6 +299,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strFoodItems>>
     00000000 00000000 00000000 00000000 00000000
+# Marth Colors
+    00000000 00000000
+    .long <<strMarthColors>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -403,6 +410,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Food appears when items disabled
     00000000 00000000
     .long <<strFoodItems>>
+    00000000 00000000 00000000 00000000 00000000
+# Marth Colors
+    00000000 00000000
+    .long <<strMarthColors>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
