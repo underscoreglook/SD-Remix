@@ -532,11 +532,26 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strDKTitle>>
     00000000 00000000 00000000 00000000 00000000
+# DK Hold B for Down B
+    00000002                                        # String Table
+    00000000
+    .long <<strDownBHoldOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varDKHoldDownBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strDKTitle> ALL
 3c20444b 203e0000
+
+<strSkipDownBStartupOpt> ALL
+536b6970 20446f77 6e422053 74617274 75703a00
+
+<strDownBHoldOpt> ALL
+446f776e 4220486f 6c643a00
 
 
 	-==-

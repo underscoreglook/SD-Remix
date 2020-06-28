@@ -126,6 +126,9 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <strMarthColors> ALL
 4d617274 6820436f 6c6f7273 00000000
 
+<strDKHoldDownB> ALL
+444b2044 6f776e42 20486f6c 64000000
+
 
 	-==-
 
@@ -310,6 +313,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strMariosHoldDownB>>
     00000000 00000000 00000000 00000000 00000000
+# DK Hold Down B
+    00000000 00000000
+    .long <<strDKHoldDownB>>
+    00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
@@ -449,6 +456,10 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 # Yoshi Press B to explode UpB
     00000000 00000000
     .long <<strYoshiExplodeUpB>>
+    00000000 00000000 00000000 00000000 00000000
+# DK Hold Down B
+    00000000 00000000
+    .long <<strDKHoldDownB>>
     00000000 00000000 00000000 00000000 00000000
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
