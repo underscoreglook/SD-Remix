@@ -158,10 +158,13 @@ Mash Firefox to Increase Length [UnclePunch]
 Falco Side-B Walljump [UnclePunch]
 Falco Up-B Walljump [UnclePunch]
 Fox/Falco - Fall Instead of FallSpecial after Side-B [Achilles]
+Ness Can Up B Once After Hitting a Wall [UnclePunch]
+
 
 =============
 = Code dump =
 =============
+
 
 Presets explanations>
     CASUAL
@@ -169,10 +172,6 @@ Presets explanations>
         GaW Hold B
     SD DOUBLE REMIX
 Character>
-    Ness>
-        PKT Doesn't Disappear When Hitting Projectiles
-        PKT2 Trajectory = Analog Stick Angle
-        Ness Can Up B Once After Hitting a Wall
     Ice Climbers>
         https://smashboards.com/threads/grab-infinite-removal-code.412693/ [IC Buffs]
         Nana Respawn Time: None, 60 secs, 20 secs, Instant
@@ -203,14 +202,12 @@ Character>
         Y. Link Boomerang Catch
     Mewtwo >
         https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
-        Mewtwo Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again
         Mewtwo Can Actually Reflect Stuff
         Confusion works like a normal throw
     G&W >
         GnW Hammer: Random, Modulo, Always 1-9
         GaW Bucket Fill Amount Based on Damage of Projectile
         GaW Hold B
-        G&W Enters Fall After Up-B, Keeps Jump from Ground, and Cannot Up-B Again (a la PM)
 Credits>
 
 
@@ -402,15 +399,6 @@ C206A19C 00000007
 7DC903A6 4E800421
 800100A4 00000000
 
-PKT Doesn't Disappear When Hitting Projectiles [UnclePunch]
-C22AC05C 00000007
-81DE002C 81CE0CF4
-2C0E0000 40820018
-38600000 3DC0802A
-61CEC064 7DC903A6
-4E800420 3DC0802A
-61CEB90C 7DC903A6
-
 Instant Zelda/Shiek Transform [UnclePunch]
 04114184 C042A1DC
 0413b510 C042A1DC
@@ -435,12 +423,6 @@ C214D9D4 00000007
 4800000C 38000003
 48000004 00000000
 
-PKT2 Trajectory = Analog Stick Angle [UnclePunch]
-04118c18 C03D0624
-04118bfc C05D0620
-041185bc C03E0624
-041185a0 C05E0620
-
 Shiek Up B Edge Cancel [UnclePunch]
 041134f4 4BFB923D
 04113500 4BFB9231
@@ -460,19 +442,6 @@ C20B0AE8 00000005
 7C033040 40820008
 386400FC D0030018
 80640444 80C40444
-60000000 00000000
-
-Ness Can Up B Once After Hitting a Wall [UnclePunch]
-C2118FA0 0000000A
-89DF1969 2C0E0000
-4082003C 3821FFFC
-7C0802A6 90010000
-3DC08009 61CE665C
-7DC903A6 4E800421
-80010000 7C0803A6
-38210004 2C030001
-4082000C 39C00001
-99DF1969 4E800020
 60000000 00000000
 
 Kirby Can Jump After Up Throw and Forward Throw [UnclePunch]

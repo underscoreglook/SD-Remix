@@ -748,11 +748,23 @@ Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
     00000000 00000000
     .long <<strNessTitle>>
     00000000 00000000 00000000 00000000 00000000
+# Ness Can Up B Once After Hitting a Wall
+    00000002                                        # String Table
+    00000000
+    .long <<strUpBAfterWallHitOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varNessUpBAfterWallEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
 # END OF LIST
     00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 
 <strNessTitle> ALL
 3c204e65 7373203e 00000000
+
+<strUpBAfterWallHitOpt> ALL
+55704220 41667465 72205761 6c6c2048 69743a00
 
 
 	-==-
