@@ -1,0 +1,251 @@
+IC Hold B
+[UnclePunch]
+<varIcsHoldBEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80120554 ---- 801F0668 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varIcsHoldBEnabled>>@h
+ori r11, r11, <<varIcsHoldBEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+801F065C    # NEW_CODE:
+48000008    # b RETURN
+801F0668    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+ICies - Solo Popo Up-B Gives Increased Vertical Velocity
+[Achilles]
+<varSoloPopoUpBEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80121E7C ---- C00400A4 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varSoloPopoUpBEnabled>>@h
+ori r11, r11, <<varSoloPopoUpBEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C004013C    # NEW_CODE:
+48000008    # b RETURN
+C00400A4    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Nana is always Lvl 9
+[Achilles]
+<varNanaAlwaysLvl9> ALL
+00000000
+
+NTSC 1.02 ---- 0x800B10FC ---- 40810008 -> Branch       # NORMAL; ble 0x800B1104
+41810038    # bgt RETURN # Just return if it shouldn't do it anyway
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800024    # bge RETURN
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varNanaAlwaysLvl9>>@h
+ori r11, r11, <<varNanaAlwaysLvl9>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+41820008    # beq RETURN
+b 0x800B1104    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Nana Respawns after 20 Seconds
+<https://smashboards.com/threads/sd-remix-3-2-full-lite-released.324620/post-21734645>
+[UnclePunch]
+<varNanaRespawnEnabled> ALL
+00000000
+
+<funNanaRespawnPart1> NTSC 1.02
+89C30067 2C0E000B 4082003C A1C30072 2C0E000B 40820030 39C00001 A1E30020
+7DCE7A14 B1C30020 2C0E04B0 41800018 39E00008 99E3227F 3DE0800B 61EFFD9C
+91E32200 7C0802A6 60000000
+b 0x8006CA60
+NTSC 1.02 ---- 0x8006CA5C ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varNanaRespawnEnabled>>@h
+ori r11, r11, <<varNanaRespawnEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funNanaRespawnPart1>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:
+
+<funNanaRespawnPart2> NTSC 1.02
+81C300B4 2C0E0000 41820020 A1EE0020 2C0F04B0 40820014 39E00000 B1EE0020
+7DC37378 48000008 806300B0
+b 0x800320EC
+NTSC 1.02 ---- 0x800320E8 ---- 806300B0 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varNanaRespawnEnabled>>@h
+ori r11, r11, <<varNanaRespawnEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funNanaRespawnPart2>    # NEW_CODE:
+48000008    # b RETURN
+806300B0    # NORMAL:
+00000000    # RETURN:
+
+<funNanaRespawnPart3> NTSC 1.02
+89DF0007 2C0E000B 40820024 A1DF0012 2C0E000B 40820018 A1FFFFC0 2C0F04B0
+4082000C 38800001 48000008 889F221F 60000000
+b 0x800BFE4C
+NTSC 1.02 ---- 0x800BFE48 ---- 889F221F -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varNanaRespawnEnabled>>@h
+ori r11, r11, <<varNanaRespawnEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funNanaRespawnPart3>    # NEW_CODE:
+48000008    # b RETURN
+889F221F    # NORMAL:
+00000000    # RETURN:
+
+<funNanaRespawnPart4> NTSC 1.02
+81C30064 2C0E000A 40820010 81C30008 39E00000 B1EE0020 7C0802A6
+b 0x800D4FF8
+NTSC 1.02 ---- 0x800D4FF4 ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varNanaRespawnEnabled>>@h
+ori r11, r11, <<varNanaRespawnEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funNanaRespawnPart4>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Nana and Popo Can Share Ledge
+https://smashboards.com/threads/nana-and-popo-can-share-ledge.453939/
+[UnclePunch]
+<varIcsShareLedgeEnabled> ALL
+00000000
+
+<funIcsShareLedgePart1> NTSC 1.02
+887F000C 889E221F 5484EFFE 3D808003 618C418C 7D8903A6 4E800421 2C030000
+41820020 8063002C 7C03F000 40820014 3D808008 618C2EC0 7D8903A6 4E800420 809E0734
+b 0x80082EA8
+NTSC 1.02 ---- 0x80082EA4 ---- 809E0734 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varIcsShareLedgeEnabled>>@h
+ori r11, r11, <<varIcsShareLedgeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funIcsShareLedgePart1>    # NEW_CODE:
+48000008    # b RETURN
+809E0734    # NORMAL:
+00000000    # RETURN:
+
+<funIcsShareLedgePart2> NTSC 1.02
+887F000C 889E221F 5484EFFE 3D808003 618C418C 7D8903A6 4E800421 2C030000
+41820020 8063002C 7C03F000 40820014 3D808008 618C2EF4 7D8903A6 4E800420 809E0730
+b 0x80082EDC
+NTSC 1.02 ---- 0x80082ED8 ---- 809E0730 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varIcsShareLedgeEnabled>>@h
+ori r11, r11, <<varIcsShareLedgeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funIcsShareLedgePart2>    # NEW_CODE:
+48000008    # b RETURN
+809E0730    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Nana direction update bug fix (ICs can Dashdance together etc.)
+[tauKhan]
+<varIcsDirectionFixEnabled> ALL
+00000000
+
+<funIcsDirectionFixPart1> NTSC 1.02
+38C40444 3863001C 7C033040 40820008 386400FC D0030018 80640444 80C40444 60000000
+b 0x800B0AEC
+NTSC 1.02 ---- 0x800B0AE8 ---- D0030018 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varIcsDirectionFixEnabled>>@h
+ori r11, r11, <<varIcsDirectionFixEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funIcsDirectionFixPart1>    # NEW_CODE:
+48000008    # b RETURN
+D0030018    # NORMAL:
+00000000    # RETURN:

@@ -1,0 +1,218 @@
+Disable KO Stars
+Deaths off of the top of the screen happen as they do on the side/bottom blastzones.
+[Dan Salvato]
+<varKoStars> ALL
+00000001
+
+NTSC 1.02 ---- 0x800d3258 ---- 41820010 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0005    # cmpwi r11, 5
+40800028    # bge NEW_CODE
+2C0B0003    # cmpwi r11, 3
+41820020    # beq NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varKoStars>>@h
+ori r11, r11, <<varKoStars>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4182000C    # beq NORMAL
+60000000    # NEW_CODE:
+48000008    # b RETURN
+b 0x800d3268    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Throw Bug Fix v2
+Fixes the hitstun differences between ports on throws, to make it so they all have the full amount of hitstun, i.e. the first frame of hitstun is never skipped.
+<https://smashboards.com/threads/throw-hitstun-bug-fix.444506/post-21603633>
+[Achilles]
+<varThrowBugFixEnabled> ALL
+00000000
+
+<funThrowBugFixPart1> NTSC 1.02
+38C00000 8118002C 80E818C4 8928000C 7C093800 41800050 80E80010 2C0700EF
+41800044 2C0700F3 4181003C 3CE03F80 90E20000 C0820000 C0A82340 FC84282A
+D0882340 3CE08006 60E793AC 7CE803A6 4E800021 3CE08008 60E7E260 7CE803A6 4E800020
+b 0x8008E254
+NTSC 1.02 ---- 0x8008E250 ---- 38C00000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0003    # cmpwi r11, 3
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varThrowBugFixEnabled>>@h
+ori r11, r11, <<varThrowBugFixEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funThrowBugFixPart1>    # NEW_CODE:
+48000008    # b RETURN
+38C00000    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+When over 75%, each 2 additional percents make meteor cancel 1 frame later
+<https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/>
+[flieskiller]
+<varMeteorCancelNerfEnabled> ALL
+00000000
+
+<funMeteorCancelNerfPart1> NTSC 1.02
+800307F0 C21F1830 3E204296 92220020 C2220020 FC108840 4180002C EE108828
+3E204000 62310000 92220020 C2220020 EE108824 FE00801E DA020020 82020024 7C100214
+b 0x8008D82C
+NTSC 1.02 ---- 0x8008D828 ---- 800307F0 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0005    # cmpwi r11, 5
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varMeteorCancelNerfEnabled>>@h
+ori r11, r11, <<varMeteorCancelNerfEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funMeteorCancelNerfPart1>    # NEW_CODE:
+48000008    # b RETURN
+800307F0    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Ledge Invincibility Attrition
+This basically make ledge invincibility behave similarly to shields, in that after grabbing the ledge a few times in quick succession, subsequent grabs will reduces ledge invincibility. The ledge invincibility recovers over time, like shields, and is reset when you die, just like shields. (I figure this is a better solution that the one PM has, not only because I feel it feels more natural, but also because of things like the haxdash that can circumvent it. - _glook)
+<http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-35#post-19218896>
+[_glook]
+<varLedgeInvincibilityAttritionEnabled> ALL
+00000000
+
+<funLedgeInvincibilityAttritionPart1> NTSC 1.02
+7C671B78 8063002C 8084049C 80A31068 7CA62B78 38A50020 2C050140 40A10008
+38A00140 90A31068 7CC631D6 54C6A33E 7C062000 41A0000C 38800000 48000008
+7C862050 7CE33B78 60000000
+b 0x8009A8B0
+NTSC 1.02 ---- 0x8009A8AC ---- 8084049C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varLedgeInvincibilityAttritionEnabled>>@h
+ori r11, r11, <<varLedgeInvincibilityAttritionEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funLedgeInvincibilityAttritionPart1>    # NEW_CODE:
+48000008    # b RETURN
+8084049C    # NORMAL:
+00000000    # RETURN:
+
+<funLedgeInvincibilityAttritionPart2> NTSC 1.02
+807F198C 809F1988 7C632378 2C030000 40820018 807F1068 2C030000 41A2000C
+3863FFFF 907F1068 807F1990
+b 0x8006A418
+NTSC 1.02 ---- 0x8006A414 ---- 807F1990 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varLedgeInvincibilityAttritionEnabled>>@h
+ori r11, r11, <<varLedgeInvincibilityAttritionEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funLedgeInvincibilityAttritionPart2>    # NEW_CODE:
+48000008    # b RETURN
+807F1990    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Wall Bracing
+Its main purpose is to get rid of wall infinites.
+If you are on the ground and you're moving into a wall (either by purposely walking/running into it or, more likely, if you're being shined into the wall), if you get hit by a non-launching attack, you can press the analog stick left or right to brace against the wall, which will make your feet leave the ground. The direction you press doesn't matter, and this was purposefully done to help with Smash DI (which is actually just a justification for my laziness. - _glook).
+[_glook]
+<varWallBracingEnabled> ALL
+00000000
+
+<funWallBracingPart1> NTSC 1.02
+2C1C0003 41820030 887D0724 70630004 2C030004 40A20020 807D0620 2C030000
+4082000C 38600001 48000008 38600000 2C030000
+b 0x8008DFB0
+NTSC 1.02 ---- 0x8008DFAC ---- 2C1C0003 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varWallBracingEnabled>>@h
+ori r11, r11, <<varWallBracingEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funWallBracingPart1>    # NEW_CODE:
+48000008    # b RETURN
+2C1C0003    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Grab Infinite Removal v3
+This removes grab infinites by making any attack knock opponents out of a grab when the grip has run out. This keeps everything else about grabs the same except for the ability to extend grabs into infinity.
+
+This revision of the code ignores the following action states from grabber:
+0x0D9 - "CatchAttack" for all characters
+0x163 - Up+B catch for Captain Falcon and Ganondorf
+<https://smashboards.com/threads/grab-infinite-removal-code.412693/>
+[_glook, Punkline]
+<varGrabInfiniteRemoved> ALL
+00000000
+
+<funGrabInfiniteRemovalPart1> NTSC 1.02
+807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
+4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
+C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 60000000
+b 0x8008EE4C
+NTSC 1.02 ---- 0x8008EE48 ---- 2C000000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varGrabInfiniteRemoved>>@h
+ori r11, r11, <<varGrabInfiniteRemoved>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funGrabInfiniteRemovalPart1>    # NEW_CODE:
+48000008    # b RETURN
+2C000000    # NORMAL:
+00000000    # RETURN:

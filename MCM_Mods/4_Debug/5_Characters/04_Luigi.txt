@@ -1,0 +1,80 @@
+Luigi Hold B
+[UnclePunch]
+<varLuigiHoldBEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80144ab0 ---- 801F0668 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varLuigiHoldBEnabled>>@h
+ori r11, r11, <<varLuigiHoldBEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+801F065C    # NEW_CODE:
+48000008    # b RETURN
+801F0668    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Fully Charged SIde B = Misfire
+[UnclePunch]
+<varFullChargeMisfireEnabled> ALL
+00000000
+
+<funFullChargeMisfirePart1> NTSC 1.02
+80032344 2C080018 40820008 38000001 60000000
+b 0x80143548
+NTSC 1.02 ---- 0x80143544 ---- 80032344 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varFullChargeMisfireEnabled>>@h
+ori r11, r11, <<varFullChargeMisfireEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funFullChargeMisfirePart1>    # NEW_CODE:
+48000008    # b RETURN
+80032344    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Luigi's Fireball is influenced by his momentum
+<https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/>
+[UnclePunch]
+<varLuigiFireballMomentumEnabled> ALL
+00000000
+
+<funLuigiFireballMomentumPart1> NTSC 1.02
+C0240000 39F80128 C10F0000 820F0000 39EFFF64 81EF0000 2C0F0000 4180000C
+FC21402A 48000008 FC214028
+b 0x802C02A4
+NTSC 1.02 ---- 0x802C02A0 ---- C0240000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varLuigiFireballMomentumEnabled>>@h
+ori r11, r11, <<varLuigiFireballMomentumEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funLuigiFireballMomentumPart1>    # NEW_CODE:
+48000008    # b RETURN
+C0240000    # NORMAL:
+00000000    # RETURN:

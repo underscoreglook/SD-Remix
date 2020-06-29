@@ -1,24 +1,25 @@
 End Goal, Netplay build:
 -----------------------
-Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
-Probably should update to new versions of existing codes, like grab attrition and widescreen.
-Probably should get around to addressing the to do's in the codebase
-Other suggestions from people?
-* Non-balance Bug fixes (See old todolist)
-* Updated features
-* New codes, like hide nametag on teleport and UCF by default.
-* New toggleable features like 20XX neutral spawns.
-* More debug menu presets, like maybe one with "Beta" character changes.
-* Reorganized debug menu.
-Look at other todolists and finish converting badhacks
-Probably rework the debug screen.
-Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
-    See https://smashboards.com/threads/shrinking-max-number-of-tags-and-tag-storage-location.405120/
-    or https://smashboards.com/threads/memory-card-variables.483420/
-Probably talk with the SDR team to get approval from whole team before making any changes.
-(Maybe also make a tool for creating Debug screen changes?)
-After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this, with xdelta, dios mios, and IOS set.
+SDRE32.ini needs automatic toggles for:
+    All General toggles
+    All Presets
+    Some obvious stuff, like neutral spawns and ko stars
+    Always lagless FOD (for netplay)
+After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this
 Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
+
+Further later:
+Change brawl airdodge button from L to definable (L or R), per player (also fix brawl airdodge)
+https://smashboards.com/threads/misc-character-codes.446554/
+    Special Move Master Code v3, and integration with a few of the other mods
+Look at other todolists (older ones)
+Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
+Update build mode to cover deleted items
+
+
+Codes that are incomplete or have bugs:
+https://smashboards.com/threads/king-of-the-hill-friendlies-gametype.400011/
+https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
 
 Codes that are interesting but requires testing and character changes:
 https://smashboards.com/threads/brawl-style-363-deg-autolink-angle.449129/
@@ -44,1152 +45,147 @@ The location on all versions are different, so depending on build target, this w
 This should be a command line tool in C#.
 Take changed character files and stages and compile the data differences to put in. Automatically add them to a list so that character loader and stage loader can work.
 
-Changes from 3.2.1
-==================
-Whispy's Battlegrounds crash fixed
-Moved Hold Start code from debug menu to always on
-Changed stage striking to transparent version
-Revert alpha stage list to Melee stage list
-New Omega stage list
-Random Stage setting now defaults to current alpha/omega toggle, and can be changed with holding L or R
-Updated 1.00 hitlag code to latest. (rice for codes)
-Get rid of special messages
-Dolphin no longer complains when entering debug menu.
-UCF 0.73 added
-CSS Hands Default to HMN Button
-Disable Rumble When Controller is Unplugged
-L+R+A+START to Pause Game when Pause is Disabled
-Rumble when character is selected
-DPad Down at CSS for Random Stage
-Fix alpha/omega stage list for Random stage from CSS (as opposed to SSS)
-DPad Left at CSS goes to rumble options screen
-DPad Right at CSS goes to debug menu
-Hide Nametag When Invisible
-Box Glitch Fix [tauKhan]
-Update TopN Location In ECB Calculation [tauKhan]
-Break the Targets Intangibility Glitch Fix [UnclePunch]
-Fix Samus Extender Crash [UnclePunch]
-Freeze glitch fix [tauKhan]
-Invisible ceiling glitch fix [tauKhan]
-Updated Dynamic Lagless FoD to latest actually working version [Achilles, Myougi, Dan Salvato, _glook]
-"RANDOM" is Default Highlighted on Stage Select Screen [Jorgams]
-CSS Banner color change should work on Dolphin [Dan Salvato, _glook]
-Display Custom Text in stock mode when using options preset [UnclePunch, _glook]
-Update widescreen code to new version [Dan Salvato]
-Neutral Spawns to options menu [Achilles, Jorgasms]
-Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
-Fix broken random stage unlock and score display
-Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
-CSS Color customization, including rules frame changing based on preset [UnclePunch]
-Extend presets, and update colors and rules text, and refactor code to update colors and text
-20XX Neutral Spawns [Achilles, Jorgasms]
-Moved Stock Control/Crew Battle Mode from BADHACKS [Jorgasms]
-L Cancel % in Results Screen (revised 2/11/15)
-Fix percents not breaking ties in tournament overtime (and move it from badhacks) [_glook]
-Moved Capped Points/Tennis Mode away from badhacks
-Per controller tap jump [fileskiller, achilles]
-Add cstick to jump cancel upsmash [Achilles]
-Add extended short hop window [tauKhan]
-X/Y dedicated short hop buttons [UnclePunch]
-Charge with c-stick [UnclePunch]
-Shield drop with dpad down [UnclePunch]
-Wavedash out of jumpsquat [UnclePunch]
 
 
-=============
-= Code dump =
-=============
-SDRE32.ini needs automatic toggles for:
-All General toggles
-All Presets
-If custom, Most mechanics items
-Always lagless FOD (for netplay)
 
-New debug menu should be in a folder, splitting various items in separate txt.
 
-Presets:
-    0           1       2       3       4       5       6       7
-    Disabled    Custom  Tourney Serious Casual  Mechs   SDDR    SDDR+Brawl
-Presets explanations>
-    SERIOUS
-        Disable Star KO = Enabled
-        Throw Bug Fix
-        Disable Capsule Explosions
-        Disable Barrel Explosions
-        Disable Box Explosions
-    CASUAL
-        Ledge Invincibility: Dynamic
-        Wall Bracing: Enabled
-        Grab Infinite Removal
-        Throw Bug Fix
-        Automatic L-Cancel
-        Marth colors match costume
-        Food appears when items disabled
-        DK Hold B for DownB
-    NEW MECHANICS
-        Disable Star KO
-        Ledge Invincibility: Dynamic
-        Wall Bracing: Enabled
-        Grab Infinite Removal
-        Throw Bug Fix
-        Marth colors match costume
-        https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
-        https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
-        https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
-    < SD DOUBLE REMIX
-        Detection Bubbles Continue Hurtbox Collision Check
-        Marth colors match costume
-        https://smashboards.com/threads/roy-sword-trails.449229/
-        Nana Respawn Time = None, 60 secs
-        Solo Popo Up-B Buff
-        Falcon/Ganon - Grab Ledge with Side+B
-        Ganon Float
-        DK Hold B for DownB
-        GnW Hammer: Modulo
-        Bowser Up+B Mash for Height
-        Food appears when items disabled
-        https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
-        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
-        https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
-     << SDDR & BRAWLKLES
-        https://smashboards.com/threads/tech-grab.459113/
-        https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
-        https://smashboards.com/threads/dacus.419467/
-        https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
-        https://smashboards.com/threads/l-brawl-airdodge-r-melee-airdodge.449247/
-        https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
-        https://smashboards.com/threads/grab-items-with-airdodge.499655/
-        https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
-Mechanics>
-    Melee>
-        Disable Star KO
-        Throw Bug Fix
-        Detection Bubbles Continue Hurtbox Collision Check
-        https://smashboards.com/threads/cannot-be-put-in-sleep-while-in-sleep.447532/
-        https://smashboards.com/threads/ledge-grab-port-priority-fix.463581/
-        Ledge Invincibility: Disabled, Dynamic, Limit
-            https://smashboards.com/threads/ledge-grab-limit.475802/
-        Wall Bracing: Enabled
-        Grab Infinite Removal
-        https://smashboards.com/threads/meteor-cancel-change-frames-for-cancel-based-on-dmg.420732/
-    Brawl & Sequels>
-        Automatic L-Cancel
-        https://smashboards.com/threads/reverse-aerial-rush-rar.406871/
-        https://smashboards.com/threads/dacus.419467/
-        https://smashboards.com/threads/brawl-style-b-reverse-1-1.450010/
-        https://smashboards.com/threads/l-brawl-airdodge-r-melee-airdodge.449247/
-        https://smashboards.com/threads/perfect-shield-ala-smash-ultimate.455831/
-        https://smashboards.com/threads/grab-items-with-airdodge.499655/
-        https://smashboards.com/threads/reverse-ledge-grab-ascending-snap-based-on-action-state.447846/
-    Other>
-        https://smashboards.com/threads/tech-grab.459113/
-        https://smashboards.com/threads/dash-attack-smash-attack-out-of-dash.447334/
-        https://smashboards.com/threads/glide-toss-codes-aerial-retreating-grounded.448611/
-        https://smashboards.com/threads/reverse-aerial-moves.446842/
-        https://smashboards.com/threads/airdash.426124/
-        https://smashboards.com/threads/air-grabs.447884/
-        Shields: Normal/Infinite
-        Random Hitbox Elements
-Character>
-    Handle this and potentially add to presets: https://smashboards.com/threads/misc-character-codes.446554/
-    https://smashboards.com/threads/hold-y-for-climber-clone-v1-2.452687/
-    https://smashboards.com/threads/standalone-transformation-codes.452675/
-    Marth colors match costume
-    Peach>
-        Peach turnip: Default, Always 0-7
-        Peach infinite float
-        https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/
-    Ice Climbers>
-        https://smashboards.com/threads/grab-infinite-removal-code.412693/ [IC Buffs]
-        Nana Respawn Time: None, 60 secs, 20 secs, Instant
-        Solo Popo Up-B Buff
-        https://smashboards.com/threads/nana-and-popo-can-share-ledge.453939/
-    Samus>
-        Samus Keeps Charge Shot When Hit During Up B
-        https://smashboards.com/threads/samus-aimable-charge-shot.449577/
-    Falcondorf>
-        Falcon Raptor Boost enters Fall state
-        Falcon/Ganon - Grab Ledge with Side+B
-        Ganon Float
-    https://smashboards.com/threads/luigis-momentum-affects-fireball-speed.443700/
-    https://smashboards.com/threads/links-shield-blocks-melee-attacks-other-shield-codes.450150/
-    Donkey Kong>
-        DK Skip DownB Startup
-        DK Hold B for DownB
-    https://smashboards.com/threads/press-b-to-explode-yoshi-egg-and-teleport-v1-1.448803/
-    https://smashboards.com/threads/roy-sword-trails.449229/
-    https://smashboards.com/threads/mewtwo-float-ala-project-m.449872/
-    GnW Hammer: Random, Modulo, Always 1-9
-    Bowser Up+B Mash for Height
-    Kirby>
-        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.453155/
-        https://smashboards.com/threads/kirbys-taunt-without-ability-gives-random-ability-v1-1.484561/
-Game Modes>
-    https://smashboards.com/threads/big-head-mode.505030/
-    Hot Potato Mr. Saturn Mode
-    Taunt Battle
-    Always Rain Bombs: Disabled/Enabled/Pokeballs
-    https://smashboards.com/threads/its-the-most-innovative-melee-ive-seen-in-years.432226/ [superhot mode]
-    https://smashboards.com/threads/king-of-the-hill-friendlies-gametype.400011/
-    https://smashboards.com/threads/berserk-mode.447864/
-    https://smashboards.com/threads/game-mode-one-stock-rotations-v1-1.480903/
-    https://smashboards.com/threads/game-mode-chess-melee-standalone-1-1.480845/
-    https://smashboards.com/threads/turbo-mode-replaces-single-button-mode-v1-3-20xx-4-07-compatible.449823/
-Items>
-    Food appears when items disabled
-    Disable Container Spawns
-    Containers spawn containers
-    Disable Capsule Explosions
-    Disable Barrel Explosions
-    Disable Box Explosions
-    https://smashboards.com/threads/taunt-to-gain-item-v1-0.453746/
-Credits>
-Debug Menu>
 
 
-==================================================================================
-<varZZZZZZZZZ> ALL
-00000000
 
 
-# Normal code injection
-<funZZZZZZZZZ> NTSC 1.02
-b 0x80YYYYYY+4
-NTSC 1.02 ---- 0x80YYYYYY ----- XXXXXXXX -> Branch
-lis r11, <<varOptionsPreset>>@h
-ori r11, r11, <<varOptionsPreset>>@l
-816B0000    # lwz r11, 0(r11)
-2C0B0004    # cmpwi r11, 4
-bge <funZZZZZZZZZ>
-2C0B0001    # cmpwi r11, 1
-40820018    # bne NORMAL
-lis r11, <<varZZZZZZZZZ>>@h
-ori r11, r11, <<varZZZZZZZZZ>>@l
-816B0000    # lwz r11, 0(r11)
-2C0B0001    # cmpwi r11, 1
-beq <funZZZZZZZZZ>
-            # NORMAL:
-XXXXXXXX    # Code at injection point
-00000000    # branch back
 
-# Single Code replacement
-NTSC 1.02 ---- 0x80YYYYYY ----- XXXXXXXX -> Branch
-lis r11, <<varOptionsPreset>>@h
-ori r11, r11, <<varOptionsPreset>>@l
-816B0000    # lwz r11, 0(r11)
-2C0B0004    # cmpwi r11, 4
-40800028    # bge NEW_ACTION_LABEL
-2C0B0001    # cmpwi r11, 1
-40820018    # bne NORMAL
-lis r11, <<varZZZZZZZZZ>>@h
-ori r11, r11, <<varZZZZZZZZZ>>@l
-816B0000    # lwz r11, 0(r11)
-2C0B0001    # cmpwi r11, 1
-4182000C    # beq NEW_ACTION_LABEL
-            # NORMAL:
-XXXXXXXX    # Code at injection point
-48000008    # b RETURN
-            # NEW_ACTION_LABEL
-WWWWWWWW    # Do the new thing
-            # RETURN:
-00000000    # branch back
 
 
-
-	-==-
-
-
-$Disable KO Stars
-0425D22C 3BA00000
-
-Disable Star KOs
-Deaths off of the top of the screen happen as they do on the side/bottom blastzones.
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800d3258 --- 41820010 -> 60000000
-
-
-	-==-
-
-
-Ledge Invincibility Attrition
-This basically make ledge invincibility behave similarly to shields, in that after grabbing the ledge a few times in quick succession, subsequent grabs will reduces ledge invincibility. The ledge invincibility recovers over time, like shields, and is reset when you die, just like shields. (I figure this is a better solution that the one PM has, not only because I feel it feels more natural, but also because of things like the haxdash that can circumvent it. - _glook)
-Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-35#post-19218896
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8009A8AC --- 8084049C -> Branch
-
-7C671B78 8063002C
-8084049C 80A31068
-7CA62B78 38A50020
-2C050140 40A10008
-38A00140 90A31068
-7CC631D6 54C6A33E
-7C062000 41A0000C
-38800000 48000008
-7C862050 7CE33B78
-60000000 48000000
-
-1.02 ----- 0x8006A414 --- 807F1990 -> Branch
-
-807F198C 809F1988
-7C632378 2C030000
-40820018 807F1068
-2C030000 41A2000C
-3863FFFF 907F1068
-807F1990 48000000
-
-
-	-==-
-
-
-Wall Bracing
-Its main purpose is to get rid of wall infinites.
-If you are on the ground and you're moving into a wall (either by purposely walking/running into it or, more likely, if you're being shined into the wall), if you get hit by a non-launching attack, you can press the analog stick left or right to brace against the wall, which will make your feet leave the ground. The direction you press doesn't matter, and this was purposefully done to help with Smash DI (which is actually just a justification for my laziness. - _glook).
-[_glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8008DFAC --- 2C1C0003 -> Branch
-
-2C1C0003 41820030
-887D0724 70630004
-2C030004 40A20020
-807D0620 2C030000
-4082000C 38600001
-48000008 38600000
-2C030000 48000000
-
-
-	-==-
-
-
-Grab Infinite Removal v3
-This removes grab infinites by making any attack knock opponents out of a grab when the grip has run out. This keeps everything else about grabs the same except for the ability to extend grabs into infinity.
-
-This revision of the code ignores the following action states from grabber:
-0x0D9 - "CatchAttack" for all characters
-0x163 - Up+B catch for Captain Falcon and Ganondorf
-<https://smashboards.com/threads/grab-infinite-removal-code.412693/>
-[_glook, Punkline]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-
-NTSC 1.02 --- 0x8008EE48 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-PAL 1.00 ---- 0x8008F500 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-NTSC 1.01 --- 0x8008EC88 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-NTSC 1.00 --- 0x8008EBA0 ---- 2c000000 -> Branch
-807B0010 2C0300D9 4182004C 2C030163 40A20018 807B0004 2C030002 2C830019
-4C423382 41820030 887D2226 70630020 40820024 C01D1A4C 38600000 9061FFF0
-C021FFF0 FC000840 4C401382 40820008 38000000 2C000000 00000000
-
-
-	-==-
-
-
-Throw Bug Fix v2
-Fixes the hitstun differences between ports on throws, to make it so they all have the full amount of hitstun, i.e. the first frame of hitstun is never skipped.
-<https://smashboards.com/threads/throw-hitstun-bug-fix.444506/post-21603633>
-[Achilles]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8008E250 ---- 38C00000 -> Branch
-
-38C00000 8118002C
-80E818C4 8928000C
-7C093800 41800050
-80E80010 2C0700EF
-41800044 2C0700F3
-4181003C 3CE03F80
-90E20000 C0820000
-C0A82340 FC84282A
-D0882340 3CE08006
-60E793AC 7CE803A6
-4E800021 3CE08008
-60E7E260 7CE803A6
-4E800020 00000000
-
-
-	-==-
-
-
-Detection Bubbles Continue Hurtbox Collision Check
-Phenomenon that affects Falcon and Ganon side-b ignoring projectiles
-<https://smashboards.com/threads/bug-fixes.471624/post-22931202>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800796E0 ---- 3A400001 -> 60000000
-
-
-	-==-
-
-
-Aerials are Automatically L-Cancelled
-[Dan Salvato]
-Version -- DOL Offset ------ Hex to Replace
-1.02 ------ 0x68200 ---- 41820010 -> 60000000
-
-
-	-==-
-
-
-Hot Potato Mr. Saturn mode
-If you are holding a Mr. Saturn when the seconds remaining in the match is a multiple of 5, you die. If you are hit with a Mr. Saturn while not holding another item, you are forced to catch it and are stunned for a second or so.
-[wParam]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x28059C ---- 7C0802A6 -> Branch
-
-7C0802A6 90010004
-9421FFE8 BFA10008
-7C7F1B78 80A3002C
-83C50CF4 2C1E0000
-4182004C 83BE002C
-811D1974 2C080000
-4082003C 7FE4FB78
-7FC3F378 3C608031
-60633618 7C6903A6
-4E800421 7FC3F378
-38800001 3C608034
-60631EF0 7C6903A6
-4E800421 3C804170
-909D1A4C 7FE3FB78
-BBA10008 8001001C
-38210018 7C0803A6
-7C0802A6 4827ED44
-
-1.02 ------ 0x66f40 ---- 7C0802A6 -> Branch
-
-80C3002C 80E61974
-2C070000 4182004C
-8107002C 81080010
-2C080007 4082003C
-3CC08047 80C6B6C8
-2C060000 4182002C
-38E00005 7D063BD6
-7D2839D6 7C093000
-40820018 3C608013
-60639264 7C6903A6
-4E800421 7C0802A6
-60000000 48065698
-
-
-	-==-
-
-
-Taunt Battle (r2) [InternetExplorer]:
-C2261BE0 00000005
-3E208045 6231BF12
-8A310000 2C110003
-40820010 2C040001
-40820008 38840001
-9899000A 00000000
-C22617CC 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000001
-48000008 540007FE
-60000000 00000000
-C2167C08 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000000
-48000008 881E0002
-60000000 00000000
-C2167F70 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000001
-48000008 881E000B
-60000000 00000000
-C2167F7C 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000000
-48000008 881E0002
-60000000 00000000
-C20DED14 0000000D
-3E208045 6231BF12
-8A310000 2C110003
-40820050 887E067B
-809E008C 80BE0020
-7C042800 40820008
-48000018 2C030000
-4082000C 38600002
-48000008 38600000
-3CC0803C 60C66630
-2C030000 41820008
-38C60004 80E60000
-38E70001 90E60000
-7FE3FB78 00000000
-C20DEBD0 00000003
-8063008C 907E0020
-7FC3F378 7C0802A6
-60000000 00000000
-C2165A64 0000000E
-3E208045 6231BF12
-8A310000 2C110003
-40820054 3E20803C
-62316630 3E4080BD
-6252A4A0 82520000
-7F53D378 2C130000
-41820010 3A73FFFF
-82520008 4BFFFFF0
-8A72067B 2C130000
-41820008 3A310004
-80110000 3E208016
-62315AA4 7E2903A6
-4E800420 7C0601D6
-60000000 00000000
-C2036D70 00000003
-3BE00000 3C60803C
-60636630 93E30000
-93E30004 00000000
-C20DED40 00000013
-7C7F1B78 3E208045
-6231BF12 8A310000
-2C110003 4082007C
-887F067B 809F008C
-80BF0020 7C042800
-40820008 48000018
-2C030000 4082000C
-38600001 48000008
-38600000 2C030002
-40820008 38600001
-5463103A 38630518
-38800000 909F0518
-909F051C 909F0520
-909F0528 909F052C
-909F0530 909F0534
-3C804344 909F0524
-38800091 989F0564
-3C80437F 7C9F192E
-7FE3FB78 00000000
-C20D50CC 00000005
-3E208045 6231BF12
-8A310000 2C110003
-4082000C 38000096
-48000008 800505D0
-60000000 00000000
-C216C348 00000008
-3FC08045 63DEBF14
-881E0000 3FE0803C
-63FF6630 83BF0000
-7C1D0000 40800018
-83BF0004 7C1D0000
-4080000C 38600000
-48000008 38600002
-BB610024 00000000
-2845bf12 00FF0300
-004807c8 00000001
-
-
-	-==-
-
-
-Marth - Costume Dependent Marth Sword Swing Colors
-Color 1 of Marth's sword swing is changed on a per costume basis
-Blue costume [default] = Default swing color (teal)
-Red costume = Red swing color
-Green costume = Green swing color
-White costume = Light purple swing color
-Black costume = Gold swing color
-Code can be modified to change the colors to whatever you like (check the text file library for more notes).
-(Updated 4/29 with slightly shortened code.)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80136510 --- 94650008 -> Branch
-
-3DC0FF00 61CEFFFF
-7C007000 40820060
-39E5E181 89EF0000
-2C0F0001 40820010
-3C60FF00 6063BE0C
-3C001900 2C0F0002
-40820010 3C60FF00
-60638DD5 3C002E00
-2C0F0003 40820010
-3C60FF00 6063F7E1
-3C008300 2C0F0004
-40820010 3C60FF00
-60637D77 3C00C800
-6000FFFF 94650008
-60000000 48000000
-
-1.00 ----- 0x80135E98 --- 94650008 -> Branch
-
-3DC0FF00 61CEFFFF
-7C007000 40820060
-39E5E181 89EF0000
-2C0F0001 40820010
-3C60FF00 6063BE0C
-3C001900 2C0F0002
-40820010 3C60FF00
-60638DD5 3C002E00
-2C0F0003 40820010
-3C60FF00 6063F7E1
-3C008300 2C0F0004
-40820010 3C60FF00
-60637D77 3C00C800
-6000FFFF 94650008
-60000000 48000000
-
-PAL ------ 0x80136CB4 --- 94650008 -> Branch
-
-3DC0FF00 61CEFFFF
-7C007000 40820060
-39E5E181 89EF0000
-2C0F0001 40820010
-3C60FF00 6063BE0C
-3C001900 2C0F0002
-40820010 3C60FF00
-60638DD5 3C002E00
-2C0F0003 40820010
-3C60FF00 6063F7E1
-3C008300 2C0F0004
-40820010 3C60FF00
-60637D77 3C00C800
-6000FFFF 94650008
-60000000 48000000
-
-# How to change the colors to whatever you'd like:
-#
-# 1) Get the RGB value of the color you would like (in format RRGGBB)
-# 2) Plug the values into the places for colors shown below:
-#
-# 3DC0FF00 61CEFFFF
-# 7C007000 40820060
-# 39E5E181 89EF0000
-# 2C0F0001 40820010
-# 3C60FF00 6063RRGG // these RRGGBB values refer to Red Marth costume
-# 3C00BB00 2C0F0002 //
-# 40820010 3C60FF00
-# 6063RRGG 3C00BB00 // these RRGGBB values refer to Green Marth costume
-# 2C0F0003 40820010
-# 3C60FF00 6063RRGG // these RRGGBB values refer to Black Marth costume
-# 3C00BB00 2C0F0004 //
-# 40820010 3C60FF00
-# 6063RRGG 3C00BB00 // these RRGGBB values refer to White Marth costume
-# 6000FFFF 94650008
-# 60000000 00000000
-
-
-	-==-
-
-
-Peach - Always Pull Specific Turnip
-The default for this code is Stitch Face, but it can be changed to any of the turnips.
-Check the text files in the library for notes on how to change it.
-[??]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x802BD410 --- 7CC83378 -> 39000007
-1.02 ----- 0x8011D090 --- 40820010 -> 48000010
-1.01 ----- 0x802BC988 --- 7CC83378 -> 39000007
-1.01 ----- 0x8011CE04 --- 40820010 -> 48000010
-1.00 ----- 0x802BBDA0 --- 38C60001 -> 39000007
-1.00 ------ 0x11CA54 ---- 7FE3FB78 -> 48000010
-
-# To change the turnip for the mod above, change the
-# 7 in "39000007" to one of the following numbers:
-
-# 0: Smile
-# 1: T Eyes
-# 2: Line Eyes
-# 3: Circle Eyes
-# 4: Upward Curve Eyes
-# 5: Wink
-# 6: Dot Eyes
-# 7: Stitch Face
-
-
-	-==-
-
-
-Peach - Infinite Float
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8011BBC4 --- C01E000CD01F2230 -> 3DE04A0091FF2230
-
-
-
-	-==-
-
-
-Nana Respawns after 20 Seconds
-<https://smashboards.com/threads/sd-remix-3-2-full-lite-released.324620/post-21734645>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8006CA5C ---- 7C0802A6 -> Branch
-
-89C30067 2C0E000B
-4082003C A1C30072
-2C0E000B 40820030
-39C00001 A1E30020
-7DCE7A14 B1C30020
-2C0E04B0 41800018
-39E00008 99E3227F
-3DE0800B 61EFFD9C
-91E32200 7C0802A6
-60000000 00000000
-
-------------- 0x800320E8 ---- 806300B0 -> Branch
-
-81C300B4 2C0E0000
-41820020 A1EE0020
-2C0F04B0 40820014
-39E00000 B1EE0020
-7DC37378 48000008
-806300B0 00000000
-
-------------- 0x800BFE48 ---- 889F221F -> Branch
-
-89DF0007 2C0E000B
-40820024 A1DF0012
-2C0E000B 40820018
-A1FFFFC0 2C0F04B0
-4082000C 38800001
-48000008 889F221F
-60000000 00000000
-
-------------- 0x800D4FF4 ---- 7C0802A6 -> Branch
-
-81C30064 2C0E000A
-40820010 81C30008
-39E00000 B1EE0020
-7C0802A6 00000000
-
-
-	-==-
-
-
-ICies - Solo Popo Up-B Gives Increased Vertical Velocity
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80121E7C --- C00400A4 -> C004013C
-
-
-	-==-
-
-
-Samus Keeps Charge Shot When Hit During Up B (Fixed)
-Should make her charge work as it does in the PAL version.
-<https://smashboards.com/threads/misc-character-codes.446554/post-21830983>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8012A6B8 ---- 900521DC -> 60000000
-------------- 0x8012A784 ---- 900521DC -> 60000000
-
-
-	-==-
-
-
-Captain Falcon - Raptor Boost Enters "Fall" Action!?
-For aerial hit and miss, and grounded Raptor Boost that travels offstage.
-FallSpecial is the "helpless" fall state.s
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0xE05B0 ---- 4BFB2F31 -> 4BFE8D61
------------ 0xE08B0 ---- 4BFB2C31 -> 4BFE8A61
-
-
-	-==-
-
-
-Captain Falcon/Ganondorf - Can Grab Ledge on Side-B
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800E3DFC ---- 8083002C -> Branch
-
-83E3002C 7FC3F378
-3DC0800E 61CE4D7C
-7DC903A6 4E800421
-7FC3F378 809E002C
-60000000 00000000
-
-
-	-==-
-
-
-Ganon Float v1.0
-Features:
-
--Applies only to Ganondorf.
--Kills all vertical velocity.
--Allows for aerial movement.
--Can interrupt with jump or aerial attack starting on frame 13. Can also press down after frame 13 to start descending early.
--Descends after 30 frames.
--Landing goes to normal land.
-<https://smashboards.com/threads/ganon-float-v1-0.449465/>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x800E2C00 ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-4082002C 881F1969
-2C000001 40820008
-4E800020 38000000
-901F0084 38000030
-901F2354 38000001
-981F1969 7C0802A6
-60000000 00000000
-
-------------- 0x800E31F4 ---- 7C0802A6 -> Branch
-
-801E0004 2C000019
-40820014 3DC0800C
-61CECD78 7DC903A6
-4E800420 7C0802A6
-60000000 00000000
-
-------------- 0x800E2E3C ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-40820090 3821FFFC
-7FA802A6 83E3002C
-7C7E1B78 807F2354
-2C030000 4182000C
-3863FFFF 907F2354
-2C030017 40810008
-48000054 7FC3F378
-3DC08008 61CECD68
-7DC903A6 4E800421
-2C030001 41820038
-7FC3F378 3DC0800C
-61CEB870 7DC903A6
-4E800421 2C030001
-4182001C 89DF065D
-2C0E0002 40820010
-39C00000 91DF2354
-48000004 38210004
-7FA803A6 4E800020
-7C0802A6 00000000
-
-------------- 0x800E3018 ---- 7C0802A6 -> Branch
-
-801F0004 2C000019
-408200B8 3821FFFC
-7C0802A6 90010000
-83E3002C 7C7E1B78
-3BDF0110 881F221A
-7FE3FB78 5400EFFF
-41820018 3DC08007
-61CED4E4 7DC903A6
-4E800421 48000020
-C03E005C 7FE3FB78
-C05E0060 3DC08007
-61CED494 7DC903A6
-4E800421 7FE3FB78
-3DC08007 61CED268
-7DC903A6 4E800421
-801F2354 2C000000
-40820024 C1DF0084
-3DC03DA3 61CED70A
-91C1FFFC C1E1FFFC
-EDCE782A D1DF0084
-48000010 38600000
-907F0084 48000004
-80010000 7C0803A6
-38210004 4E800020
-7C0802A6 00000000
-
-
-	-==-
-
-
-Skip DK Down B Startup
-<https://smashboards.com/threads/misc-character-codes.446554/post-21699985>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x803C170C ---- 8010DC80 -> 8010de88
-
-
-	-==-
-
-
-DK Hold B for Down B
-<https://smashboards.com/threads/misc-character-codes.446554/post-21699985>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8010DDE0 ---- 80030668 -> 80030660
-
-
-	-==-
-
-
-Mr. Game and Watch - Always Specific Hammer Value
-Default is 9. Check the text file library to change this.
-(Notes: http://smashboards.com/threads/melee-gecko-codes-guide-and-discussion.327311/page-32#post-18703696)
-[Wooggle]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8014C760 --- 7FC3002E -> 3BC00008
-
-# To change the above code to give a different number (N), use '3BC0000X', where X = N - 1.
-
-
-	-==-
-
-
-GaW Modulo 10 Hammer
-GaW hammer number equals the rightmost digit of his current percent.
-<https://smashboards.com/threads/gaw-modulo-10-hammer.492028/>
-[UnclePunch]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x8014C784 ---- 8001007C -> Branch
-
-48000041 7C6802A6
-C03F1830 C0430000
-3D808036 618C4340
-7D8903A6 4E800421
-FC20081E D8210020
-80610024 2C030000
-41820018 3863FFFF
-907F222C 4800000C
-4E800021 41200000
-8001007C 00000000
-
-
-	-==-
-
-
-Bowser can mash for height during aerial upB
-<https://smashboards.com/threads/misc-character-codes.446554/post-21776218>
-[rmn]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.02 --- 0x80135E34 ---- 80010024 -> Branch
-
-48000010 4E800021
-3F99999A 3FB33333
-801F0668 540005AD
-41A20024 4BFFFFE9
-7C8802A6 C0240000
-C0440004 3C008007
-6000D508 7C0903A6
-4E800421 80010024
-60000000 00000000
-
-
-	-==-
-
-
-Food appears when items disabled (1.02)[flieskiller]
-0428fb1c 4800000c
-I've discovered today that this is a check for anything that drops food, so with this code, G&W hammer 7 now drops food
- as well, even if the food item is at off.
-
-
-	-==-
-
-
-Disable Container Spawns
-Prevents capsules, boxes, barrels, and eggs from spawning randomly.
-[Punkline]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8026C784 --- 7C7C1B78 -> Branch
-
-609C0E34 7C03E040
-40820008 60830E50
-7C7C1B78 00000000
-
-
-	-==-
-
-
-Containers spawn containers
-Containers can contain more containers.
-[Punkline]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ------ 0x269364 ---- 7C7C1B78 -> Branch
-
-609C0E50 7C03E040
-40820008 60830E34
-7C7C1B78 00000000
-
-
-	-==-
-
-
-Disable Capsule Explosions
-(Normal chance for explosion: 12.5%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8027CF8C --- 40820018 -> 48000018
-
-
-	-==-
-
-
-Disable Barrel Explosions
-(Normal chance for explosion: 10%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x80288b28 --- 4080000C -> 60000000
-
-
-	-==-
-
-
-Disable Box Explosions
-(Normal chance for explosion: 10%)
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x8028639c --- 38600000 -> 38600001
-
-
-	-==-
-
-
-Shields: Normal/Infinite
-
-
-	-==-
-
-
-Disable Tap Jump
-Affects all players
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x800CBBC0 --- 7C0802A6 -> Branch
-
-89FD06BE 2C0F0004
-40800008 4E800020
-7C0802A6 48000000
-
-1.02 ----- 0x800CB4E0 --- 7C0802A6 -> Branch
-
-2C040001 40820008
-4E800020 7C0802A6
-60000000 48000000
-
-
-	-==-
-
-
-Always Rain Bombs: Disabled/Enabled/Pokeballs
-
-
-	-==-
-
-
-Random Hitbox Elements - Every Non-projectile Attack
-All Non-projectile attacks will have a random effect, rather than their normal one.
-[Achilles]
-1.02
-C20715B0 00000009
-7C0F0378 38600010
-3C808038 60840580
-7C8903A6 4E800421
-2C030004 41A2FFE8
-2C030007 41A2FFE0
-2C030008 41A2FFD8
-2C03000B 41A2FFD0
-907E0030 7DE07B78
-28000009 00000000
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-When rewriting Debug menu, here are some standard debug menu functions:
-
-Set debug menu publicity:
-mflr r0
-lis r4,-32704
-stw r0,4(r1)
-subi r4,r4,23976
-stwu r1,-8(r1)
-lwz r0,4(r4)
-cmpwi r0,0
-beq- 0x34
-cmpwi r3,1
-bne- 0x34
-li r3,1
-bl -0x2dc244
-bl -0x1a0710
-li r3,0
-lwz r0,12(r1)
-addi r1,r1,8
-mtlr r0
-blr
-
-Something else:
-mflr r0
-cmpwi r3,1
-stw r0,4(r1)
-stwu r1,-24(r1)
-stw r31,20(r1)
-bne- 0x9c
-bl 0x2b48
-addi r31,r3,0
-li r3,1
-bl -0x2dc284
-lis r3,-32704
-subi r4,r3,22952
-addi r3,r31,0
-li r5,0
-li r6,-60
-li r7,0
-bl 0x3f40
-bl 0x2b1c
-lis r4,-32720
-subi r4,r4,404
-bl 0x2b18
-lwz r0,28(r1)
-li r3,0
-lwz r31,20(r1)
-addi r1,r1,24
-mtlr r0
-blr
-
-Something else:
-mflr r0
-cmpwi r3,1
-stw r0,4(r1)
-stwu r1,-8(r1)
-bne- 0xdc
-li r3,1
-bl -0x2dc2e4
-li r3,2
-bl -0x15c07c
-bl -0x15b7c0
-li r3,0
-lwz r0,12(r1)
-addi r1,r1,8
-mtlr r0
-blr
-
-Something else:
-lis r3,-32704
-subi r4,r3,24280
-lis r3,-32698
-lhz r0,544(r4)
-subi r3,r3,22848
-add r5,r3,r0
-lbz r0,6248(r5)
-li r3,0
-stb r0,548(r4)
-lbz r0,6249(r5)
-stb r0,549(r4)
-lbz r0,6250(r5)
-stb r0,550(r4)
-lbz r0,6251(r5)
-stb r0,551(r4)
-blr
+Put this on the site's credits page after release:
+3.2.1 Netplay Details
+* ALl Credits from 3.2.1
+* Support Details;
+** Melee Code Manager [DGRN]
+** DAT Texture Manager [DGRN]
+* Dol Codes Details
+** Transparent Stage Striking [Sham Rock, Achilles]
+** Random Stage setting for alpha/omega, and can be changed with holding L or R [_glook]
+** Updated 1.00 hitlag code to latest. [rice, Magus420]
+** Get rid of special messages [Achilles]
+** Dolphin no longer complains when entering sdr options menu [_glook]
+** UCF 0.73 [Dan Salvato]
+** CSS Hands Default to HMN Button [Achilles]
+** Disable Rumble When Controller is Unplugged [Dan Salvato]
+** L+R+A+START to Pause Game when Pause is Disabled [Achilles]
+** Rumble when character is selected [Dan Salvato]
+** DPad Down at CSS for Random Stage [Achilles]
+** Fix alpha/omega stage list for Random stage from CSS (as opposed to SSS) [_glook]
+** DPad Left at CSS goes to rumble options screen [Achilles]
+** DPad Right at CSS goes to debug menu [_glook]
+** Hide Nametag When Invisible [????]
+** Box Glitch Fix [tauKhan]
+** Update TopN Location In ECB Calculation [tauKhan]
+** Break the Targets Intangibility Glitch Fix [UnclePunch]
+** Fix Samus Extender Crash [UnclePunch]
+** Freeze glitch fix [tauKhan]
+** Invisible ceiling glitch fix [tauKhan]
+** Updated Dynamic Lagless FoD to latest actually working version [Achilles, Myougi, Dan Salvato, _glook]
+** "RANDOM" is Default Highlighted on Stage Select Screen [Jorgams]
+** CSS Banner color change should work on Dolphin [Dan Salvato, _glook]
+** Display Custom Text in stock mode when using options preset [UnclePunch, _glook]
+** Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
+** Fix broken random stage unlock and score display [_glook]
+** Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
+** CSS Color customization, including rules frame changing based on preset [UnclePunch]
+** Extend presets, and update colors and rules text, and refactor code to update colors and text [_glook]
+** 20XX Neutral Spawns [Achilles, Jorgasms]
+** L Cancel % in Results Screen (revised 2/11/15) [Wooggle]
+** Fix percents not breaking ties in tournament overtime [_glook]
+** Per controller tap jump [flieskiller, achilles]
+** Add cstick to jump cancel upsmash [Achilles]
+** Add extended short hop window [tauKhan]
+** X/Y dedicated short hop buttons [UnclePunch]
+** Charge with c-stick [UnclePunch]
+** Shield drop with dpad down [UnclePunch]
+** Wavedash out of jumpsquat [UnclePunch]
+** Disable KO Stars [Dan Salvato]
+** Throw Bug Fix v2 [Achilles]
+** When over 75%, each 2 additional percents make meteor cancel 1 frame later [flieskiller]
+** Adds Grab Infinite Removal v3 toggle [_glook, Punkline]
+** Auto L-Cancel added [Dan Salvato]
+** Reverse Aerial Rush [Achilles]
+** DACUS [tatata]
+** Brawl-style B Reverse [UnclePunch]
+** Add L = Brawl Airdodge [UnclePunch]
+** Grab Items With Airdodge [UnclePunch]
+** Up+B Ledge Grab Buffs for Ness, Zelda, and Mewtwo [rmn]
+** Perfect Shield ala Smash Ultimate [UnclePunch]
+** Tech Grabs [Punkline]
+** CStick can be use to dash attack [UnclePunch]
+** Smash Attacks Out of Dash [UnclePunch]
+** Enable retreating glide toss [rmn]
+** Aerial Glide Toss [rmn]
+** Reverse Aerial Moves [UnclePunch]
+** Air Dodge replaced by Air Boost [flieskiller]
+** Air Grabs v3 [UnclePunch]
+** Big Head Mode [UnclePunch]
+** Berserk Mode [UnclePunch]
+** Superfox [SinsOfApathy]
+** Giant Melee is One Stock Rotation [UnclePunch]
+** Super Sudden Death is Chess Mode [Achilles, UnclePunch]
+** Single Button Mode is Turbo Mode [UnclePunch]
+** Food appears when items disabled [flieskiller]
+** Disable Container Spawns [Punkline]
+** Containers spawn containers [Punkline]
+** Disable Capsule Explosions [Achilles]
+** Disable Barrel Explosions [Achilles]
+** Disable Box Explosions [Achilles]
+** Fastfall whenever [UnclePunch]
+** Hold Y for Climber Clone v1.2 [UnclePunch]
+** Marth - Costume Dependent Marth Sword Swing Colors [Achilles]
+** Mario and Doc Hold B [UnclePunch]
+** Mario and Doc Get Jump Back After Down B [UnclePunch]
+** Luigi Hold B [UnclePunch]
+** Fully Charged SIde B = Misfire [UnclePunch]
+** Luigi's Fireball is influenced by his momentum [UnclePunch]
+** Peach - FSmash Angles Determine FSmash Type [UnclePunch]
+** Peach - Infinite Float [Achilles]
+** Peach - Always Pull Specific Turnip [????]
+** Bowser can mash for height during aerial upB [rmn]
+** Bowsers Flame Doesn't Diminish [UnclePunch]
+** Yoshi Aerial Neutral B Grab Gives Jump Back [UnclePunch]
+** Smash 4 Yoshi Up B [UnclePunch]
+** Press B to Explode Yoshi Egg [UnclePunch]
+** Skip DK Down B Startup [UnclePunch]
+** DK Hold B for Down B [UnclePunch]
+** Captain Falcon/Ganondorf - Can Grab Ledge on Side-B [UnclePunch]
+** Captain Falcon - Raptor Boost Enters "Fall" Action [Achilles]
+** Aerial Raptor Boost Popup + Midair Control [UnclePunch]
+** Walljump Out of Falcon Side B [UnclePunch]
+** Walljump Out of Falcon Up B [UnclePunch]
+** Ganon Float v1.0 [UnclePunch]
+** Fox/Falco Hold B [UnclePunch]
+** Invisible Firefox [UnclePunch]
+** Mash Firefox to Increase Length [UnclePunch]
+** Falco Side-B Walljump [UnclePunch]
+** Falco Up-B Walljump [UnclePunch]
+** Fox/Falco - Fall Instead of FallSpecial after Side-B [Achilles]
+** Ness Can Up B Once After Hitting a Wall [UnclePunch]
+** IC Hold B [UnclePunch]
+** ICies - Solo Popo Up-B Gives Increased Vertical Velocity [Achilles]
+** Nana is always Lvl 9 (1.02) [Achilles]
+** Nana Respawns after 20 Seconds [UnclePunch]
+** Nana and Popo Can Share Ledge [UnclePunch]
+** Nana direction update bug fix (ICs can Dashdance together etc.) (NTSC 1.02) [tauKhan]
+** Kirby Throws retain one mid air jump [The Cape]
+** Kirby Uses Non-Special Dash Attack [UnclePunch]
+** Kirbys Taunt Without Ability Gives Random Ability v1.1 [UnclePunch]
+** Samus Keeps Charge Shot When Hit During Up B (Fixed) [UnclePunch]
+** Samus - Always Full Charge Shot [Achilles]
+** Aim Charge Shot [UnclePunch]
+** Samus Shoots Random Item [UnclePunch]
+** Instant Zelda/Shiek Transform [UnclePunch]
+** Link's Shield Reflects [UnclePunch]
+** Link Shield Always Active [UnclePunch]
+** Mewtwo Can Actually Reflect Stuff [UnclePunch]
+** Confusion works like a normal throw [UnclePunch, jjhoho]
+** Mewtwo Float [UnclePunch]
+** GaW Hold B [UnclePunch]
+** GaW Bucket Fill Amount Based on Damage of Projectile [UnclePunch]
+** Memory Card Variables [Punkline]
+** Save and Load SDR Options to memory card [_glook]
