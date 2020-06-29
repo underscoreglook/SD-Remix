@@ -1,9 +1,53 @@
-# XXXXXXXXXXXX
-    00000002                                        # String Table
-    00000000
-    .long <<STRING>>             # Label
-    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
-    .long <<VARIABLE>>                # Variable
-    00000000                                        # n/a
-    40000000                                        # 2 item table
-    00000000                                        # n/a
+80003210    Overwrites the memory card data
+
+Address: 8000321C
+HEX:     4E800020
+Thing:   blr
+
+801952f0
+
+
+Stack trace:
+80003210    Overwrite, always hit   sub_800031F4 , arg1 is 8045C394
+> 80357d28  sub_80357C10, arg 1 is 8045C394
+> 803547dc  sub_80354720, arg 1 is 8045C394
+> 80352528  sub_80352498, arg 1 is 8045C394
+> 80346b70  sub_8034698C, where
+> 80347b48
+> 803aaab4
+> 8001bdd4
+> 8001cc00
+> 801af6e8
+> 801a4e84
+
+At 80346b70, r3 is set from r30, which is a bunch of stuff
+
+
+
+
+8001BE18 is after the memory card loads and only gets called once
+801965a4
+
+
+8019528C
+
+Memcard  to RAM
+806ee74c => 8045c394
+
+80390d80, before that is 80390d7c going to 80390E88,
+
+8001BE18
+Possible memory card items?
+80019cb0    ?       Keep calling?, called after below
+8001be30    Called once? again
+80301800    Debug
+
+
+801a5054 - Gets called every frame
+801a40f0
+
+
+801A4D94
+801A507C
+
+801A5088 - When debug menu exists

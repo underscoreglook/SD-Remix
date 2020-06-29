@@ -1,20 +1,18 @@
 End Goal, Netplay build:
 -----------------------
-Finish character codes in debug menu
-Save debug options in the memory card. (1.02: 8045B888 is start of name tags, goes to 80469120, end of save data)
-    See https://smashboards.com/threads/shrinking-max-number-of-tags-and-tag-storage-location.405120/
-    or https://smashboards.com/threads/memory-card-variables.483420/
 Update Credits page, have a credits page on the website
 SDRE32.ini needs automatic toggles for:
     All General toggles
     All Presets
-    If custom, Most mechanics items
+    Some obvious stuff, like neutral spawns and ko stars
     Always lagless FOD (for netplay)
 After it's done, tag it as 3.2.2 or 3.2.Netplay release, and create a release set from this
 Update the website with new instructions (such as new quicker xdelta methods) and new downloads.
 
 Further later:
-Change brawl airdodge button from L to definable (L or R), per player
+Change brawl airdodge button from L to definable (L or R), per player (also fix brawl airdodge)
+https://smashboards.com/threads/misc-character-codes.446554/
+    Special Move Master Code v3, and integration with a few of the other mods
 Look at other todolists (older ones)
 Try to figure out what that random USER_LENGTH config option actually does. Maybe it's in the notes somewhere.
 Update build mode to cover deleted items
@@ -180,3 +178,5 @@ Confusion works like a normal throw [UnclePunch, jjhoho]
 Mewtwo Float [UnclePunch]
 GaW Hold B [UnclePunch]
 GaW Bucket Fill Amount Based on Damage of Projectile [UnclePunch]
+Memory Card Variables [Punkline]
+Save and Load SDR Options to memory card [_glook]
