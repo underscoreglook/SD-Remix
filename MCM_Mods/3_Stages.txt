@@ -29,7 +29,7 @@ Banned stages can't be selected anymore, however they can still be selected when
 
 Changed to make it compatible with Alpha/Omega toggle.
 <https://smashboards.com/threads/stage-striking-invisible-struck-stages.422589/post-20401006>
-[Sham Rock, Achilles,]
+[Sham Rock, Achilles]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.02 --- 0x8025A3BC ---- C022C9E8 -> Branch
 39E00001 3E008046 6210B0FC 1E2F000C 7E31802E 5630014B 4182000C 3A200001

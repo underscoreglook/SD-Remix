@@ -51,3 +51,60 @@ Possible memory card items?
 801A507C
 
 801A5088 - When debug menu exists
+
+
+
+
+
+
+# Entry 15: DRGN
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strDrgnSub>>            # Label
+    00000000 00000000
+    .long <<tblDbgDrgn>>            # Submenu
+    00000000 00000000
+# Entry 16: ShamRock
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strShamRockSub>>        # Label
+    00000000 00000000
+    .long <<tblDbgShamrock>>        # Submenu
+    00000000 00000000
+# Entry 17: Cell
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strCellSub>>            # Label
+    00000000 00000000
+    .long <<tblDbgCell>>
+    00000000 00000000
+# Entry 18: Steelia
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strSteeliaSub>>         # Label
+    00000000 00000000
+    .long <<tblDbgSteelia>>         # Submenu
+    00000000 00000000
+# Entry 19: felipe_9595
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strFelipe9595Sub>>      # Label
+    00000000 00000000
+    .long <<tblDbgFelipe>>
+    00000000 00000000
+# Entry 20: wparam
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strWparamSub>>          # Label
+    00000000 00000000
+    .long <<tblDbgWparam>>          # Submenu
+    00000000 00000000
+# Entry 21: Name Tag code entry
+    00000001                        # Pressable
+    .long <<funDebugSubmenu>>       # Call submenu
+    .long <<strNameTagSub>>         # Label
+    00000000 00000000
+    .long <<tblDbgNameTag>>         # Submenu
+    00000000 00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
