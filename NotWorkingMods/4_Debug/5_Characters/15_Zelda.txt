@@ -1,0 +1,100 @@
+Instant Zelda/Shiek Transform
+[UnclePunch]
+<varZeldaInstantTransformEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x80114184 ---- C0429CC8 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varZeldaInstantTransformEnabled>>@h
+ori r11, r11, <<varZeldaInstantTransformEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C042A1DC    # NEW_CODE:
+48000008    # b RETURN
+C0429CC8    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x8013b510 ---- C042A218 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varZeldaInstantTransformEnabled>>@h
+ori r11, r11, <<varZeldaInstantTransformEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C042A1DC    # NEW_CODE:
+48000008    # b RETURN
+C042A218    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x8013af04 ---- C042A218 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varZeldaInstantTransformEnabled>>@h
+ori r11, r11, <<varZeldaInstantTransformEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C042A1DC    # NEW_CODE:
+48000008    # b RETURN
+C042A218    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80114790 ---- C0429CC8 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varZeldaInstantTransformEnabled>>@h
+ori r11, r11, <<varZeldaInstantTransformEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C042A1DC    # NEW_CODE:
+48000008    # b RETURN
+C0429CC8    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80114248 ---- C0429CC8 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varZeldaInstantTransformEnabled>>@h
+ori r11, r11, <<varZeldaInstantTransformEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C042A1DC    # NEW_CODE:
+48000008    # b RETURN
+C0429CC8    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x8013afc8 ---- C042A218 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varZeldaInstantTransformEnabled>>@h
+ori r11, r11, <<varZeldaInstantTransformEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+C042A1DC    # NEW_CODE:
+48000008    # b RETURN
+C042A218    # NORMAL:
+00000000    # RETURN:

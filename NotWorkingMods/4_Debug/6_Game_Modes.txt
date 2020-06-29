@@ -1,0 +1,245 @@
+Debug Menu: Game Modes Submenu
+The functions, strings, and data for the submenu "Game Modes".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strGameModesTitle> ALL
+3c204761 6d65204d 6f646573 203e0000
+
+<strBigHeadOpt> ALL
+42696720 48656164 3a000000
+
+<strItemRainOpt> ALL
+4974656d 20526169 6e3a0000
+
+<strBobOmbs> ALL
+426f6220 4f6d6273 00000000
+
+<strPokeballs> ALL
+506F6B65 62616C6C 73000000
+
+<arrItemRain> ALL
+.long <<strDisabled>>
+.long <<strBobOmbs>>
+.long <<strPokeballs>>
+
+<strBerserkModeOpt> ALL
+42657273 65726b20 4d6f6465 3a000000
+
+<strSuperFoxOpt> ALL
+53757065 72466f78 3a000000
+
+<tblDbgGameModesSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strGameModesTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Big Head
+    00000002                                        # String Table
+    00000000
+    .long <<strBigHeadOpt>>                         # Label
+    .long <<arrEnabledDisabled>>                    # [Disabled, Enabled]
+    .long <<varBigHeadEnabled>>                     # Variable
+    00000000
+    40000000                                        # 2 item table
+    00000000
+# Item Rain
+    00000002                                        # String Table
+    00000000
+    .long <<strItemRainOpt>>                        # Label
+    .long <<arrItemRain>>                           # Options
+    .long <<varItemRainItem>>                       # Variable
+    00000000
+    40400000                                        # 3 item table
+    00000000
+# Berserk Mode
+    00000002                                        # String Table
+    00000000
+    .long <<strBerserkModeOpt>>                     # Label
+    .long <<arrEnabledDisabled>>                    # [Disabled, Enabled]
+    .long <<varBerserkModeEnabled>>                 # Variable
+    00000000
+    40000000                                        # 2 item table
+    00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Big Head Mode
+<https://smashboards.com/threads/big-head-mode.505030/>
+[UnclePunch]
+<varBigHeadEnabled> ALL
+00000000
+
+<funBigHeadPart1> NTSC 1.02
+7FE3FB78 38800023 3D808007 618C500C 7D8903A6 4E800421 7C630774 2C03FFFF
+40820024 807F010C 80630008 88630012 809F05E8 1C630010 7C63202E 8063000C
+48000010 809F05E8 1C630010 7C63202E 4800001D 7C8802A6 C0840000 D083002C
+D0830030 D0830034 4800000C 4E800021 40A00000 8001007C 60000000
+b 0x8006B810
+NTSC 1.02 ---- 0x8006B80C ---- 8001007C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varBigHeadEnabled>>@h
+ori r11, r11, <<varBigHeadEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funBigHeadPart1>    # NEW_CODE:
+48000008    # b RETURN
+8001007C    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Item Rain Codes
+Always rain bob ombs or pokeballs
+[_glook, Achilles]
+<varItemRainItem> ALL
+00000000    # 0 = no bomb rain, 1 = rain bob ombs, 2 = rain pokeballs
+
+NTSC 1.02 ---- 0x8026BEC0 ---- 801E0014 -> Branch
+# Possibly change to pokeball 1
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varItemRainItem>>@h
+ori r11, r11, <<varItemRainItem>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0002    # cmpwi r11, 2
+4082000C    # bne NORMAL
+3800001F    # POKEBALLS:
+48000008    # b RETURN
+801E0014    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x80294DCC ---- 3800001F -> Branch
+# Possibly change to pokeball 2
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varItemRainItem>>@h
+ori r11, r11, <<varItemRainItem>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0002    # cmpwi r11, 2
+4082000C    # bne NORMAL
+38000022    # POKEBALLS:
+48000008    # b RETURN
+3800001F    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x801C0EB4 ---- 40810094 -> Branch
+# Enable bomb rain part 1
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varItemRainItem>>@h
+ori r11, r11, <<varItemRainItem>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4082001C    # bne RETURN (skip)
+2C0304B0    # NORMAL, cmpwi r3, 0x4B0 (comparison before)
+41810014    # bgt RETURN    # Code at location
+3D60801C    # lis r11, 0x801C
+616B0F48    # ori r11, r11, 0x0F48
+7D6903A6    # mtctr r11
+4E800420    # bctr
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x801C0EA8 ---- 418200A0 -> Branch
+# Enable bomb rain part 2
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NORMAL
+lis r11, <<varItemRainItem>>@h
+ori r11, r11, <<varItemRainItem>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4082001C    # bne RETURN (skip)
+2C030000    # NORMAL, cmpwi r3, 0 (comparison before)
+40820014    # bne RETURN    # Code at location
+3D60801C    # lis r11, 0x801C
+616B0F48    # ori r11, r11, 0x0F48
+7D6903A6    # mtctr r11
+4E800420    # bctr
+00000000    # RETURN:
+
+
+	-==-
+
+
+Bomb Rain toggling
+If tournament overtime is enabled, disable bomb rain.
+Otherwise, the "Always rain bombs" and "always rain pokeballs" will both enable this
+[_glook, Achilles]
+1.02 ----- 0x801C0EB0 --- 2C0304B0 -> Branch
+# Disable or enable Bomb Rain
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820034    # beq NORMAL
+2C0B0004    # cmpwi r11, 4
+4182002C    # beq NORMAL
+2C0B0001    # cmpwi r11, 1
+40820018    # bne DISABLE  # Disable Bomb Rain
+lis r11, <<varTournamentStyleOvertimeEnabled>>@h
+ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+41820010    # beq NORMAL    # If 0, do normal stuff
+            # DISABLE:
+39600000    # li r11, 0
+2C0B0001    # cmpwi r11, 1    # The ble branch at return point will always succeed
+48000008    # b RETURN
+            # NORMAL:
+2C0304B0    # cmpwi r3, 0x4B0   # Comparison at injection point
+            # RETURN:
+00000000    # Branch Back
+
+
+	-==-
+
+
+Berserk Mode
+Taunting gives you 15% but adds 0.5 to your dash speed.
+<https://smashboards.com/threads/berserk-mode.447864/>
+[UnclePunch]
+<varBerserkModeEnabled> ALL
+00000000
+
+<funBerserkModePart1> NTSC 1.02
+7FE3FB78 C022E370 3821FFFC 7C0802A6 90010000 3DC08006 61CECC7C 7DC903A6
+4E800421 C1C2E918 C1FF012C EDEE782A D1FF012C C1FF0138 EDEE782A D1FF0138
+C1FF0154 EDEE782A D1FF0154 80010000 7C0803A6 38210004 7FC3F378 7C0802A6 60000000
+b 0x800DEBD4
+NTSC 1.02 ---- 0x800DEBD0 ---- 7C0802A6 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varBerserkModeEnabled>>@h
+ori r11, r11, <<varBerserkModeEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funBerserkModePart1>    # NEW_CODE:
+48000008    # b RETURN
+7C0802A6    # NORMAL:
+00000000    # RETURN:

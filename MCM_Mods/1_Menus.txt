@@ -489,8 +489,8 @@ NTSC 1.02 ---- 0x1A1750 ------ 4E800020 -> Branch
 
 
 	-==-
-
-
+!
+TODO REENABLE THIS LATER
 Change CSS Banner Color
 This is a version of Salvato's code that allows us to toggle which color from preset colors to load.
 We base this off of <<varOptionsPreset>>. It should be an index into tblCssBannerColors
@@ -545,8 +545,8 @@ ori r12, r12, <<tblCssBannerColors>>@l
 
 
 	-==-
-
-
+!
+TODO REENABLE THIS LATER
 Display Custom Text at top right of CSS (in game mode display)
 Bosed on Display Time at Top Right of CSS (v1.1), see Smashboards link
 Since stock is the only mode that is played for serious, we only display with stock mode.
@@ -665,8 +665,8 @@ B1F0000A 39E00019 B1EE0002 39E00001
 
 
 	-==-
-
-
+!
+TODO REENABLE THIS LATER
 CSS Colors
 Changed with the SD Remix colors.
 The rule frame depends on <<varOptionsPreset>>, indexed into <<arrCssRuleFrameColors>>

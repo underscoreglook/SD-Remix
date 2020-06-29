@@ -1,0 +1,172 @@
+Fastfall Whenever
+[UnclePunch]
+<varFastfallWheneverEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x8007d54c ---- 4080005C -> Branch
+41800030    # blt FASTFALL
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820018    # bne NO_FASTFALL
+lis r11, <<varFastfallWheneverEnabled>>@h
+ori r11, r11, <<varFastfallWheneverEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+41820008    # beq FASTFALL
+b 0x8007D5A8    # NO_FASTFALL:
+00000000    # FASTFALL:
+
+
+	-==-
+
+
+Hold Y for Climber Clone v1.2
+[UnclePunch]
+<varCloneEnabled> ALL
+00000000
+
+<funClonePart1> NTSC 1.02
+8063002C 8863000C 3C80804C 608420BC 1CA30044 7C84282E 54840529 41820088
+809E0004 3CA0803B 60A5CDE0 1C840003 7CA52214 88850001 2C0400FF 40820068
+3C80804D 6084EC10 38A00001 7CA419AE 38800001 881E00AC 50802EB4 981E00AC
+38000001 981E0046 807E00B0 8063002C 88032222 38800001 5080177A 98032222
+38600080 9861002A 38610024 3DC08006 61CE8E98 7DC903A6 4E800421 907E00B4
+48000014 3C80804D 6084EC10 38A00000 7CA419AE 38000002 60000000
+b 0x80031BD4
+NTSC 1.02 ---- 0x80031BD0 ---- 38000002 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varCloneEnabled>>@h
+ori r11, r11, <<varCloneEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funClonePart1>    # NEW_CODE:
+48000008    # b RETURN
+38000002    # NORMAL:
+00000000    # RETURN:
+
+<funClonePart2> NTSC 1.02
+7C9C2378 881F221F 54000739 41820030 887F000C 3C80804D 6084EC10 7C6320AE
+2C030001 40820018 7F84E378 3DC0800A 61CE104C 7DC903A6 4E800420 7F84E378 801D0004
+b 0x800A1044
+NTSC 1.02 ---- 0x800A1040 ---- 80030004 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varCloneEnabled>>@h
+ori r11, r11, <<varCloneEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funClonePart2>    # NEW_CODE:
+48000008    # b RETURN
+80030004    # NORMAL:
+00000000    # RETURN:
+
+<funClonePart3> NTSC 1.02
+80070004 2C00000A 41820014 3DC0800B 61CE0BD8 7DC903A6 4E800420 80070010 60000000
+b 0x800B0B9C
+NTSC 1.02 ---- 0x800B0B98 ---- 80070010 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varCloneEnabled>>@h
+ori r11, r11, <<varCloneEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funClonePart3>    # NEW_CODE:
+48000008    # b RETURN
+80070010    # NORMAL:
+00000000    # RETURN:
+
+<funClonePart4> NTSC 1.02
+80BE0004 2C05000B 4182000C 3800000E 48000008 801E0010 60000000
+b 0x800B1120
+NTSC 1.02 ---- 0x800B111C ---- 801E0010 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varCloneEnabled>>@h
+ori r11, r11, <<varCloneEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funClonePart4>    # NEW_CODE:
+48000008    # b RETURN
+801E0010    # NORMAL:
+00000000    # RETURN:
+
+<funClonePart5> NTSC 1.02
+80BE0004 2C05000B 4182000C 38600001 48000004 2C030000 60000000
+b 0x800B11A0
+NTSC 1.02 ---- 0x800B119C ---- 2C030000 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varCloneEnabled>>@h
+ori r11, r11, <<varCloneEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funClonePart5>    # NEW_CODE:
+48000008    # b RETURN
+2C030000    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Marth - Costume Dependent Marth Sword Swing Colors
+Color 1 of Marth's sword swing is changed on a per costume basis
+Blue costume [default] = Default swing color (teal)
+Red costume = Red swing color
+Green costume = Green swing color
+White costume = Light purple swing color
+Black costume = Gold swing color
+Code can be modified to change the colors to whatever you like (check the text file library for more notes).
+(Updated 4/29 with slightly shortened code.)
+[Achilles]
+<varMarthColorsEnabled> ALL
+00000000
+
+<funMarthColorsPart1> NTSC 1.02
+3DC0FF00 61CEFFFF 7C007000 40820060 39E5E181 89EF0000 2C0F0001 40820010
+3C60FF00 6063BE0C 3C001900 2C0F0002 40820010 3C60FF00 60638DD5 3C002E00
+2C0F0003 40820010 3C60FF00 6063F7E1 3C008300 2C0F0004 40820010 3C60FF00
+60637D77 3C00C800 6000FFFF 94650008 60000000
+b 0x80136514
+NTSC 1.02 ---- 0x80136510 ---- 94650008 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800028    # bge NEW_CODE
+2C0B0004    # cmpwi r11, 4
+41820020    # beq NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varMarthColorsEnabled>>@h
+ori r11, r11, <<varMarthColorsEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funMarthColorsPart1>    # NEW_CODE:
+48000008    # b RETURN
+94650008    # NORMAL:
+00000000    # RETURN:

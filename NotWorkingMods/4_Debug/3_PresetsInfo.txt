@@ -1,0 +1,12 @@
+Presets Info Debug Menu Table
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<strPresetInfoUrl> ALL
+56697369 74206874 74703a2f 2f736472 656d6978 2e67616d 65730000
+
+<tblDbgPresetsInfoSubMenu> NTSC 1.02
+00000000 00000000
+    .long <<strPresetInfoUrl>>                    # Label
+    00000000 00000000 00000000 00000000 00000000    # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000

@@ -133,35 +133,6 @@ NTSC 1.02 --- 0x80376BB4 ---- 80010030 -> Branch
 	-==-
 
 
-Name Tag Shadow Box Automatically Scales to Tag Length
-[Achilles]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-1.02 ----- 0x802FCCE8 --- 807E0010 -> Branch
-
-3C608003 6063556C
-7C6803A6 887F0000
-4E800021 5460063E
-28000078 41820070
-3C608045 6063D84F
-1C0001A4 7C630214
-38800000 8C030001
-2C000000 41820018
-38840001 2C000080
-41A0FFEC 8C030001
-4BFFFFE4 2C040005
-41800034 3C604080
-9061FFF0 C221FFF0
-3E404330 CA028C58
-9241FFEC 9081FFF0
-C9E1FFEC EDEF8028
-EDEF8824 807E0010
-D1E3002C 807E0010
-60000000 48000000
-
-
-	-==-
-
-
 Hold A+B For Salty Runbacks
 - Holding A+B at the end of a match immediately starts a new match on that stage.
 [Dan Salvato and Sham Rock]
@@ -384,31 +355,25 @@ NTSC 1.02 --- 0x8006BB14 ---- D01E0004 -> D01D0004
 	-==-
 
 
-Bomb Rain toggling
-If tournament overtime is enabled, disable bomb rain.
-Otherwise, the "Always rain bombs" and "always rain pokeballs" will both enable this
-[_glook, Achilles]
-1.02 ----- 0x801C0EB0 --- 2C0304B0 -> Branch
-# Disable or enable Bomb Rain
-lis r11, <<varOptionsPreset>>@h
-ori r11, r11, <<varOptionsPreset>>@l
-816B0000    # lwz r11, 0(r11)
-2C0B0000    # cmpwi r11, 0
-41820034    # beq NORMAL
-2C0B0004    # cmpwi r11, 4
-4182002C    # beq NORMAL
-2C0B0001    # cmpwi r11, 1
-40820018    # bne DISABLE  # Disable Bomb Rain
-lis r11, <<varTournamentStyleOvertimeEnabled>>@h
-ori r11, r11, <<varTournamentStyleOvertimeEnabled>>@l
-816B0000    # lwz r11, 0(r11)
-2C0B0000    # cmpwi r11, 0
-41820010    # beq NORMAL    # If 0, do normal stuff
-            # DISABLE:
-39600000    # li r11, 0
-2C0B0001    # cmpwi r11, 1    # The ble branch at return point will always succeed
-48000008    # b RETURN
-            # NORMAL:
-2C0304B0    # cmpwi r3, 0x4B0   # Comparison at injection point
-            # RETURN:
-00000000    # Branch Back
+Boot to CSS
+[Dan Salvato, Achilles]
+NTSC 1.02 --- 0x801A45A0 ---- 38000028 -> 3C000202
+NTSC 1.02 --- 0x801A45A4 ---- 981E0000 -> 901E0000
+
+
+	-==-
+
+
+Faster CSS Load
+[UnclePunch]
+NTSC 1.02 --- 0x802641B0 ---- 3800001E -> 38000001
+
+
+	-==-
+
+
+External/Skip Memcard Prompt/Skip Memcard Prompt.asm
+[UnclePunch]
+NTSC 1.02 ---- 0x801AF6F4 ------ 2C1D0000 -> Branch
+2C1D000F 41820010 2C1D000D 41820008 48000014 3D80801B 618C01AC 7D8903A6
+4E800420 2C1D0000 60000000 00000000

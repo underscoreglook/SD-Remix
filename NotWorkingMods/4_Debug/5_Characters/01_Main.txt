@@ -1,0 +1,1057 @@
+Debug Menu: Characters Submenu
+The functions, strings, and data for the submenu "Characters".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<strCharactersTitle> ALL
+3c204368 61726163 74657273 203e0000
+
+<strMariosSub> ALL
+4d617269 6f73203e 00000000
+
+<strLuigiSub> ALL
+4c756967 69203e00
+
+<strPeachSub> ALL
+50656163 68203e00
+
+<strBowserSub> ALL
+426f7773 6572203e 00000000
+
+<strYoshiSub> ALL
+596f 73686920 3e00
+
+<strDKSub> ALL
+444b 203e 0000 0000
+
+<strFalcondorfSub> ALL
+4661 6c636f6e 446f7266 203e0000 0000
+
+<strNessSub> ALL
+4e65 7373203e 0000
+
+<strICsSub> ALL
+4943 73203e00 0000
+
+<strKirbySub> ALL
+4b69 72627920 3e00
+
+<strSamusSub> ALL
+5361 6d757320 3e00
+
+<strZeldaSub> ALL
+5a65 6c646120 3e00
+
+<strLinksSub> ALL
+4c69 6e6b7320 3e00
+
+<strMewtwoSub> ALL
+4d65 7774776f 203e0000 0000
+
+<strGnWSub> ALL
+476e 57203e00 0000
+
+<tblDbgCharacterSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strCharactersTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Others
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strOtherSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterOtherSubMenu>>           # Submenu table
+    00000000 00000000
+# Marios
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strMariosSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterMarioSubMenu>>           # Submenu table
+    00000000 00000000
+# Luigi
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strLuigiSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterLuigiSubMenu>>           # Submenu table
+    00000000 00000000
+# Peach
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strPeachSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterPeachSubMenu>>           # Submenu table
+    00000000 00000000
+# Bowser
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strBowserSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterBowserSubMenu>>           # Submenu table
+    00000000 00000000
+# Yoshi
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strYoshiSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterYoshiSubMenu>>           # Submenu table
+    00000000 00000000
+# DK
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strDKSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterDKSubMenu>>           # Submenu table
+    00000000 00000000
+# Falcondorf
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strFalcondorfSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterFalcondorfSubMenu>>           # Submenu table
+    00000000 00000000
+# Ness
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strNessSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterNessSubMenu>>           # Submenu table
+    00000000 00000000
+# ICs
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strICsSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterICsSubMenu>>           # Submenu table
+    00000000 00000000
+# Kirby
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strKirbySub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterKirbySubMenu>>           # Submenu table
+    00000000 00000000
+# Samus
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strSamusSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterSamusSubMenu>>           # Submenu table
+    00000000 00000000
+# Zelda
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strZeldaSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterZeldaSubMenu>>           # Submenu table
+    00000000 00000000
+# Links
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strLinksSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterLinksSubMenu>>           # Submenu table
+    00000000 00000000
+# Mewtwo
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strMewtwoSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterMewtwoSubMenu>>           # Submenu table
+    00000000 00000000
+# GnW
+    00000001                                        # Press-able
+    .long <<funDebugSubmenu>>                       # Call submenu
+    .long <<strGnWSub>>                           # Label
+    00000000 00000000
+    .long <<tblDbgCharacterGnWSubMenu>>           # Submenu table
+    00000000 00000000
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Other Submenu
+The functions, strings, and data for the submenu "Characters > Other".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterOtherSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strOtherTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Fastfall Whenever
+    00000002                                        # String Table
+    00000000
+    .long <<strAlwaysFastfallOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varFastfallWheneverEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Hold Y for Clone
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldYForCloneOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varCloneEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Marth Colors
+    00000002                                        # String Table
+    00000000
+    .long <<strMarthColorsOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varMarthColorsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strAlwaysFastfallOpt> ALL
+416c7761 79732046 61737466 616c6c3a 00000000
+
+<strHoldYForCloneOpt> ALL
+486f6c64 20592066 6f722043 6c6f6e65 3a000000
+
+<strMarthColorsOpt> ALL
+4d617274 6820436f 6c6f7273 3a000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Mario Submenu
+The functions, strings, and data for the submenu "Characters > Mario".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterMarioSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strMariosTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Mario and Doc Hold B
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldBDownBOpt>>                           # Label
+    .long <<arrEnabledDisabled>>                    # Options
+    .long <<varMariosHoldBEnabled>>                       # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Mario and Doc Get Jump Back After Down B
+    00000002                                        # String Table
+    00000000
+    .long <<strJumpAfterDownBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varMariosJumpAfterDownBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strMariosTitle> ALL
+3c204d61 72696f73 203e0000
+
+<strJumpAfterDownBOpt> ALL
+4a756d70 20416674 65722044 6f776e42 3a000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Luigi Submenu
+The functions, strings, and data for the submenu "Characters > Luigi".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterLuigiSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strLuigiTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Hold Down B
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldBDownBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varLuigiHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Fully Charged SIde B = Misfire
+    00000002                                        # String Table
+    00000000
+    .long <<strFullChargeMisfireOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varFullChargeMisfireEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Luigi's Fireball is influenced by his momentum
+    00000002                                        # String Table
+    00000000
+    .long <<strLuigiFireballMomentumOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varLuigiFireballMomentumEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strLuigiTitle> ALL
+3c204c75 69676920 3e000000
+
+<strFullChargeMisfireOpt> ALL
+46756c6c 20436861 72676520 4d697366 6972653a 00000000
+
+<strLuigiFireballMomentumOpt> ALL
+4c756967 69204669 72656261 6c6c204d 6f6d656e 74756d3a 00000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Peach Submenu
+The functions, strings, and data for the submenu "Characters > Peach".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterPeachSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strPeachTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Peach - FSmash Angles Determine FSmash Type
+    00000002                                        # String Table
+    00000000
+    .long <<strFsmashAnglesOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varPeachBSwapEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Peach - Infinite Float
+    00000002                                        # String Table
+    00000000
+    .long <<strInfiniteFloatOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varPeachInfiniteFloatEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Peach - Always Pull Specific Turnip
+    00000002                                        # String Table
+    00000000
+    .long <<strTurnipOpt>>             # Label
+    .long <<arrTurnip>>
+    .long <<varPeachTurnip>>                # Variable
+    00000000                                        # n/a
+    41100000                                        # 9 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strPeachTitle> ALL
+3c205065 61636820 3e000000
+
+<strFsmashAnglesOpt> ALL
+46536d61 73682041 6e676c65 733a0000
+
+<strInfiniteFloatOpt> ALL
+496e6669 6e697465 20466c6f 61743a00
+
+<strTurnipOpt> ALL
+5475726e 69703a00
+
+<strSmile> ALL
+536d696c 65000000
+
+<strTEyes> ALL
+54204579 65730000
+
+<stLineEyes> ALL
+4c696e65 20457965 73000000
+
+<strCircleEyes> ALL
+43697263 6c652045 79657300
+
+<strUpwardCurve> ALL
+55707761 72642043 75726e65 00000000
+
+<strWink> ALL
+57696e6b 00000000
+
+<strDotEyes> ALL
+446f7420 45796573 00000000
+
+<strStitchFace> ALL
+53746974 63682046 61636500
+
+<arrTurnip> ALL
+.long <<strSmile>>
+.long <<strTEyes>>
+.long <<stLineEyes>>
+.long <<strCircleEyes>>
+.long <<strUpwardCurve>>
+.long <<strWink>>
+.long <<strDotEyes>>
+.long <<strStitchFace>>
+.long <<strNormal>>
+
+	-==-
+
+
+Debug Menu: Characters > Bowser Submenu
+The functions, strings, and data for the submenu "Characters > Bowser".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterBowserSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strBowserTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Bowser can mash for height during aerial upB
+    00000002                                        # String Table
+    00000000
+    .long <<strMashUpBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varBowserUpBMashEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Bowser Infinite Flame
+    00000002                                        # String Table
+    00000000
+    .long <<strInfiniteFlameOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varBowserInfiniteFlameEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strBowserTitle> ALL
+3c20426f 77736572 203e0000
+
+<strMashUpBOpt> ALL
+4d617368 20557042 3a000000
+
+<strInfiniteFlameOpt> ALL
+496e6669 6e697465 20466c61 6d653a00
+
+
+	-==-
+
+
+Debug Menu: Characters > Yoshi Submenu
+The functions, strings, and data for the submenu "Characters > Yoshi".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterYoshiSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strYoshiTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Yoshi Aerial Neutral B Grab Gives Jump Back
+    00000002                                        # String Table
+    00000000
+    .long <<strJumpAfterSwallowOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varYoshiAirBGivesJumpBackEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Smash 4 Yoshi Up B
+    00000002                                        # String Table
+    00000000
+    .long <<strSmash4UpBOpt>>             # Label
+    .long <<arrEnabledDisabled>>                # [Disabled, Enabled]
+    .long <<varYoshiSmash4UpBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Press B to Explode Yoshi Egg
+    00000002                                        # String Table
+    00000000
+    .long <<strBDuringUpBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varYoshiUpBExplode>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strYoshiTitle> ALL
+3c20596f 73686920 3e000000
+
+<strJumpAfterSwallowOpt> ALL
+4a756d70 20416674 65722053 77616c6c 6f773a00
+
+<strSmash4UpBOpt> ALL
+536d6173 68203420 5570423a 00000000
+
+<strBDuringUpBOpt> ALL
+42204475 72696e67 20557042 3a000000
+
+
+	-==-
+
+
+Debug Menu: Characters > DK Submenu
+The functions, strings, and data for the submenu "Characters > DK".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterDKSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strDKTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# DK Hold B for Down B
+    00000002                                        # String Table
+    00000000
+    .long <<strDownBHoldOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varDKHoldDownBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strDKTitle> ALL
+3c20444b 203e0000
+
+<strDownBHoldOpt> ALL
+446f776e 4220486f 6c643a00
+
+
+	-==-
+
+
+Debug Menu: Characters > Falcondorf Submenu
+The functions, strings, and data for the submenu "Characters > Falcondorf".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterFalcondorfSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strFalcondorfTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Captain Falcon/Ganondorf - Can Grab Ledge on Side-B
+    00000002                                        # String Table
+    00000000
+    .long <<strSideBLedgeGrabOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconDorfSideBLedgeEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Captain Falcon - Raptor Boost Enters "Fall" Action!?
+    00000002                                        # String Table
+    00000000
+    .long <<strActFromSideBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconDorfSideBCanAct>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Aerial Raptor Boost Popup + Midair Control
+    00000002                                        # String Table
+    00000000
+    .long <<strSideBPopupOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconSideBPopupEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Walljump Out of Falcon Side B
+    00000002                                        # String Table
+    00000000
+    .long <<strSideBWalljumpOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconSideBWalljumpEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Walljump Out of Falcon Up B
+    00000002                                        # String Table
+    00000000
+    .long <<strUpBWalljumpOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varFalconUpBWalljumpEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Ganon Float v1.0
+    00000002                                        # String Table
+    00000000
+    .long <<strGanonFloatOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varGanonFloatEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strFalcondorfTitle> ALL
+3c204661 6c636f6e 446f7266 203e0000
+
+<strSideBLedgeGrabOpt> ALL
+53696465 42204c65 64676547 7261623a 00000000
+
+<strActFromSideBOpt> ALL
+41637420 46726f6d 20536964 65423a00
+
+<strSideBPopupOpt> ALL
+53696465 4220506f 7075703a 00000000
+
+<strSideBWalljumpOpt> ALL
+53696465 42205761 6c6c6a75 6d703a00
+
+<strUpBWalljumpOpt> ALL
+55704220 57616c6c 6a756d70 3a000000
+
+<strGanonFloatOpt> ALL
+47616e6f 6e20466c 6f61743a 00000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Ness Submenu
+The functions, strings, and data for the submenu "Characters > Ness".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterNessSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strNessTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Ness Can Up B Once After Hitting a Wall
+    00000002                                        # String Table
+    00000000
+    .long <<strUpBAfterWallHitOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varNessUpBAfterWallEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strNessTitle> ALL
+3c204e65 7373203e 00000000
+
+<strUpBAfterWallHitOpt> ALL
+55704220 41667465 72205761 6c6c2048 69743a00
+
+
+	-==-
+
+
+Debug Menu: Characters > ICs Submenu
+The functions, strings, and data for the submenu "Characters > ICs".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterICsSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strICsTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# IC Hold B
+    00000002                                        # String Table
+    00000000
+    .long <<strIcsHoldBOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varIcsHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# ICies - Solo Popo Up-B Gives Increased Vertical Velocity
+    00000002                                        # String Table
+    00000000
+    .long <<strSopoUpBBuffOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSoloPopoUpBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana is always Lvl 9
+    00000002                                        # String Table
+    00000000
+    .long <<strNanaLvl9Opt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varNanaAlwaysLvl9>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana Respawns after 20 Seconds
+    00000002                                        # String Table
+    00000000
+    .long <<strNanaRespawnsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varNanaRespawnEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana and Popo Can Share Ledge
+    00000002                                        # String Table
+    00000000
+    .long <<strIcsShareLedgeOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varIcsShareLedgeEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Nana direction update bug fix (ICs can Dashdance together etc.)
+    00000002                                        # String Table
+    00000000
+    .long <<strIcsDirectionFixOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varIcsDirectionFixEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strICsTitle> ALL
+3c204943 73203e00
+
+<strIcsHoldBOpt> ALL
+49437320 486f6c64 20423a00
+
+<strSopoUpBBuffOpt> ALL
+536f706f 20557042 20427566 663a0000
+
+<strNanaLvl9Opt> ALL
+4e616e61 204c766c 20393a00
+
+<strNanaRespawnsOpt> ALL
+4e616e61 20526573 7061776e 733a0000
+
+<strIcsShareLedgeOpt> ALL
+49437320 53686172 65204c65 6467653a 00000000
+
+<strIcsDirectionFixOpt> ALL
+49437320 44697265 6374696f 6e204669 783a0000
+
+
+	-==-
+
+
+Debug Menu: Characters > Kirby Submenu
+The functions, strings, and data for the submenu "Characters > Kirby".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterKirbySubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strKirbyTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Kirby Throws retain one mid air jump
+    00000002                                        # String Table
+    00000000
+    .long <<strJumpAfterThrowOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varKirbyJumpAfterThrowEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Kirby Uses Non-Special Dash Attack
+    00000002                                        # String Table
+    00000000
+    .long <<strDashAtkNonSpecialOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varKirbyDashAttackNonSpecialEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Kirbys Taunt Without Ability Gives Random Ability v1.1
+    00000002                                        # String Table
+    00000000
+    .long <<strTauntGivesAbilityOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varKirbyTauntRandomAbilityEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strKirbyTitle> ALL
+3c204b69 72627920 3e000000
+
+<strJumpAfterThrowOpt> ALL
+4a756d70 20416674 65722054 68726f77 3a000000
+
+<strDashAtkNonSpecialOpt> ALL
+44617368 2041746b 204e6f6e 53706563 69616c3a 00000000
+
+<strTauntGivesAbilityOpt> ALL
+5461756e 74204769 76657320 4162696c 6974793a 00000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Samus Submenu
+The functions, strings, and data for the submenu "Characters > Samus".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterSamusSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strSamusTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Samus Keeps Charge Shot When Hit During Up B (Fixed)
+    00000002                                        # String Table
+    00000000
+    .long <<strKeepShotWhenHitOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusKeepShotWhenHitEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Samus - Always Full Charge Shot
+    00000002                                        # String Table
+    00000000
+    .long <<strAlwaysFullShotOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusAlwaysChargeShotEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Aim Charge Shot
+    00000002                                        # String Table
+    00000000
+    .long <<strAimChargeShotOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusAimShotEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Samus Shoots Random Item
+    00000002                                        # String Table
+    00000000
+    .long <<strShootsItemsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varSamusShootItemsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strSamusTitle> ALL
+3c205361 6d757320 3e000000
+
+<strKeepShotWhenHitOpt> ALL
+4b656570 2053686f 74205768 656e2048 69743a00
+
+<strAlwaysFullShotOpt> ALL
+416c7761 79732046 756c6c20 53686f74 3a000000
+
+<strAimChargeShotOpt> ALL
+41696d20 43686172 67652053 686f743a 00000000
+
+<strShootsItemsOpt> ALL
+53686f6f 74732049 74656d73 3a000000
+
+
+	-==-
+
+
+Debug Menu: Characters > Zelda Submenu
+The functions, strings, and data for the submenu "Characters > Zelda".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterZeldaSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strZeldaTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Instant Zelda/Shiek Transform
+    00000002                                        # String Table
+    00000000
+    .long <<strInstantTransformOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varZeldaInstantTransformEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strZeldaTitle> ALL
+3c205a65 6c646120 3e000000
+
+<strInstantTransformOpt> ALL
+496e7374 616e7420 5472616e 73666f72 6d3a0000
+
+
+	-==-
+
+
+Debug Menu: Characters > Links Submenu
+The functions, strings, and data for the submenu "Characters > Links".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterLinksSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strLinksTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Link's Shield Reflects
+    00000002                                        # String Table
+    00000000
+    .long <<strShieldReflectsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varLinkShieldReflectsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Link Shield Always Active
+    00000002                                        # String Table
+    00000000
+    .long <<strShieldActiveOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varLinkShieldAlwaysActiveEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strLinksTitle> ALL
+3c204c69 6e6b7320 3e000000
+
+<strShieldReflectsOpt> ALL
+53686965 6c642052 65666c65 6374733a 00000000
+
+<strShieldActiveOpt> ALL
+53686965 6c642041 63746976 653a0000
+
+
+	-==-
+
+
+Debug Menu: Characters > Mewtwo Submenu
+The functions, strings, and data for the submenu "Characters > Mewtwo".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterMewtwoSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strMewtwoTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# Mewtwo Can Actually Reflect Stuff
+    00000002                                        # String Table
+    00000000
+    .long <<strReflectReflectsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varMewtwoReflectsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Confusion works like a normal throw
+    00000002                                        # String Table
+    00000000
+    .long <<strConfusionGrabsOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varConfusionThrowsEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# Mewtwo Float v1.1
+    00000002                                        # String Table
+    00000000
+    .long <<strFloatOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varMewtwoFloatEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strMewtwoTitle> ALL
+3c204d65 7774776f 203e0000
+
+<strReflectReflectsOpt> ALL
+5265666c 65637420 5265666c 65637473 3a000000
+
+<strConfusionGrabsOpt> ALL
+436f6e66 7573696f 6e204772 6162733a 00000000
+
+<strFloatOpt> ALL
+466c6f61 743a0000
+
+
+	-==-
+
+
+Debug Menu: Characters > GnW Submenu
+The functions, strings, and data for the submenu "Characters > GnW".
+[_glook]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+
+<tblDbgCharacterGnWSubMenu> NTSC 1.02
+# Menu Title
+    00000000 00000000
+    .long <<strGnWTitle>>
+    00000000 00000000 00000000 00000000 00000000
+# GaW Hold B
+    00000002                                        # String Table
+    00000000
+    .long <<strHoldBBaconOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varGnWHoldBEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# GaW Bucket Fill Amount Based on Damage of Projectile
+    00000002                                        # String Table
+    00000000
+    .long <<strBucketFillsDmgOpt>>             # Label
+    .long <<arrEnabledDisabled>>
+    .long <<varGnWBucketFillEnabled>>                # Variable
+    00000000                                        # n/a
+    40000000                                        # 2 item table
+    00000000                                        # n/a
+# END OF LIST
+    00000009 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+<strGnWTitle> ALL
+3c20476e 57203e00
+
+<strHoldBBaconOpt> ALL
+486f6c64 20422042 61636f6e 3a000000
+
+<strBucketFillsDmgOpt> ALL
+4275636b 65742046 696c6c73 20446d67 3a000000

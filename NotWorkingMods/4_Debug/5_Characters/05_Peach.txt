@@ -1,0 +1,123 @@
+Peach - FSmash Angles Determine FSmash Type
+*Nuetral = Racket
+*Up = Pan
+*Down = Golf Club
+<https://smashboards.com/threads/peach-fsmash-angles-determine-fsmash-type.454303/>
+[UnclePunch]
+<varPeachBSwapEnabled> ALL
+00000000
+
+<funPeachBSwapPart1> NTSC 1.02
+3821FFF0 D3E10000 7FE3FB78 3D80800D 618CF1C8 7D8903A6 4E800421 2C030000
+41820020 7FE3FB78 3D808007 618CD99C 7D8903A6 4E800421 FFE00890 4800001C
+7FE3FB78 3D808007 618CD964 7D8903A6 4E800421 FFE00890 808DAEB4 C00400B8
+FC1F0040 40810010 387F0000 3880015E 48000024 806DAEB4 C00300C4 FC1F0040
+40800010 387F0000 3880015D 48000008 3880015F C3E10000 38210010
+b 0x8011C20C
+NTSC 1.02 ---- 0x8011C208 ---- 909F2234 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0006    # cmpwi r11, 6
+40800020    # bge NEW_CODE
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varPeachBSwapEnabled>>@h
+ori r11, r11, <<varPeachBSwapEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+b <funPeachBSwapPart1>    # NEW_CODE:
+48000008    # b RETURN
+909F2234    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Peach - Infinite Float
+[Achilles]
+<varPeachInfiniteFloatEnabled> ALL
+00000000
+
+NTSC 1.02 ---- 0x8011BBC4 ---- C01E000C -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varPeachInfiniteFloatEnabled>>@h
+ori r11, r11, <<varPeachInfiniteFloatEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+3DE04A00    # NEW_CODE:
+48000008    # b RETURN
+C01E000C    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x8011BBC8 ---- D01F2230 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varPeachInfiniteFloatEnabled>>@h
+ori r11, r11, <<varPeachInfiniteFloatEnabled>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0000    # cmpwi r11, 0
+4182000C    # beq NORMAL
+91FF2230    # NEW_CODE:
+48000008    # b RETURN
+D01F2230    # NORMAL:
+00000000    # RETURN:
+
+
+	-==-
+
+
+Peach - Always Pull Specific Turnip
+[Unknown]
+<varPeachTurnip> ALL
+00000008
+# 0: Smile
+# 1: T Eyes
+# 2: Line Eyes
+# 3: Circle Eyes
+# 4: Upward Curve Eyes
+# 5: Wink
+# 6: Dot Eyes
+# 7: Stitch Face
+# 8: Normal Behavior
+
+NTSC 1.02 ---- 0x802BD410 ---- 7CC83378 -> Branch
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+40820020    # bne NORMAL
+lis r11, <<varPeachTurnip>>@h
+ori r11, r11, <<varPeachTurnip>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0008    # cmpwi r11, 8
+4182000C    # beq NORMAL
+7D685B78    # NEW_CODE:
+48000008    # b RETURN
+7CC83378    # NORMAL:
+00000000    # RETURN:
+
+NTSC 1.02 ---- 0x8011D090 ---- 40820010 -> Branch
+4082002C    # bne NEW_CODE, if we have to go anyway then go
+lis r11, <<varOptionsPreset>>@h
+ori r11, r11, <<varOptionsPreset>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0001    # cmpwi r11, 1
+4082001C    # bne RETURN
+lis r11, <<varPeachTurnip>>@h
+ori r11, r11, <<varPeachTurnip>>@l
+816B0000    # lwz r11, 0(r11)
+2C0B0008    # cmpwi r11, 8
+41820008    # beq RETURN
+b 0x8011D0A0    # NEW_CODE:
+00000000    # RETURN:

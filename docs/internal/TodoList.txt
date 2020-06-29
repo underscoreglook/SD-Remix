@@ -1,3 +1,25 @@
+SLIPPI List
+----------------
+Stages are all just Melee stages, possibly get other stages working
+Matchmaking doesn't work, maybe make it work
+Get debug menu working again
+
+CHANGELIST TO SLIPPI:
+---------------------
+Most game modes removed for space reasons
+Space animal toggles removed for space reasons
+
+
+
+
+
+
+
+
+
+
+
+
 End Goal, Netplay build:
 -----------------------
 SDRE32.ini needs automatic toggles for:
@@ -44,148 +66,3 @@ Do it like MCM: separate mods into own groups. Compile these into the direct ove
 The location on all versions are different, so depending on build target, this will have to be changed.
 This should be a command line tool in C#.
 Take changed character files and stages and compile the data differences to put in. Automatically add them to a list so that character loader and stage loader can work.
-
-
-
-
-
-
-
-
-
-
-
-
-Put this on the site's credits page after release:
-3.2.1 Netplay Details
-* ALl Credits from 3.2.1
-* Support Details;
-** Melee Code Manager [DGRN]
-** DAT Texture Manager [DGRN]
-* Dol Codes Details
-** Transparent Stage Striking [Sham Rock, Achilles]
-** Random Stage setting for alpha/omega, and can be changed with holding L or R [_glook]
-** Updated 1.00 hitlag code to latest. [rice, Magus420]
-** Get rid of special messages [Achilles]
-** Dolphin no longer complains when entering sdr options menu [_glook]
-** UCF 0.73 [Dan Salvato]
-** CSS Hands Default to HMN Button [Achilles]
-** Disable Rumble When Controller is Unplugged [Dan Salvato]
-** L+R+A+START to Pause Game when Pause is Disabled [Achilles]
-** Rumble when character is selected [Dan Salvato]
-** DPad Down at CSS for Random Stage [Achilles]
-** Fix alpha/omega stage list for Random stage from CSS (as opposed to SSS) [_glook]
-** DPad Left at CSS goes to rumble options screen [Achilles]
-** DPad Right at CSS goes to debug menu [_glook]
-** Hide Nametag When Invisible [????]
-** Box Glitch Fix [tauKhan]
-** Update TopN Location In ECB Calculation [tauKhan]
-** Break the Targets Intangibility Glitch Fix [UnclePunch]
-** Fix Samus Extender Crash [UnclePunch]
-** Freeze glitch fix [tauKhan]
-** Invisible ceiling glitch fix [tauKhan]
-** Updated Dynamic Lagless FoD to latest actually working version [Achilles, Myougi, Dan Salvato, _glook]
-** "RANDOM" is Default Highlighted on Stage Select Screen [Jorgams]
-** CSS Banner color change should work on Dolphin [Dan Salvato, _glook]
-** Display Custom Text in stock mode when using options preset [UnclePunch, _glook]
-** Always Skip the Result Screen, and Star Count = Placement [Sham Rock]
-** Fix broken random stage unlock and score display [_glook]
-** Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute [UnclePunch]
-** CSS Color customization, including rules frame changing based on preset [UnclePunch]
-** Extend presets, and update colors and rules text, and refactor code to update colors and text [_glook]
-** 20XX Neutral Spawns [Achilles, Jorgasms]
-** L Cancel % in Results Screen (revised 2/11/15) [Wooggle]
-** Fix percents not breaking ties in tournament overtime [_glook]
-** Per controller tap jump [flieskiller, achilles]
-** Add cstick to jump cancel upsmash [Achilles]
-** Add extended short hop window [tauKhan]
-** X/Y dedicated short hop buttons [UnclePunch]
-** Charge with c-stick [UnclePunch]
-** Shield drop with dpad down [UnclePunch]
-** Wavedash out of jumpsquat [UnclePunch]
-** Disable KO Stars [Dan Salvato]
-** Throw Bug Fix v2 [Achilles]
-** When over 75%, each 2 additional percents make meteor cancel 1 frame later [flieskiller]
-** Adds Grab Infinite Removal v3 toggle [_glook, Punkline]
-** Auto L-Cancel added [Dan Salvato]
-** Reverse Aerial Rush [Achilles]
-** DACUS [tatata]
-** Brawl-style B Reverse [UnclePunch]
-** Add L = Brawl Airdodge [UnclePunch]
-** Grab Items With Airdodge [UnclePunch]
-** Up+B Ledge Grab Buffs for Ness, Zelda, and Mewtwo [rmn]
-** Perfect Shield ala Smash Ultimate [UnclePunch]
-** Tech Grabs [Punkline]
-** CStick can be use to dash attack [UnclePunch]
-** Smash Attacks Out of Dash [UnclePunch]
-** Enable retreating glide toss [rmn]
-** Aerial Glide Toss [rmn]
-** Reverse Aerial Moves [UnclePunch]
-** Air Dodge replaced by Air Boost [flieskiller]
-** Air Grabs v3 [UnclePunch]
-** Big Head Mode [UnclePunch]
-** Berserk Mode [UnclePunch]
-** Superfox [SinsOfApathy]
-** Giant Melee is One Stock Rotation [UnclePunch]
-** Super Sudden Death is Chess Mode [Achilles, UnclePunch]
-** Single Button Mode is Turbo Mode [UnclePunch]
-** Food appears when items disabled [flieskiller]
-** Disable Container Spawns [Punkline]
-** Containers spawn containers [Punkline]
-** Disable Capsule Explosions [Achilles]
-** Disable Barrel Explosions [Achilles]
-** Disable Box Explosions [Achilles]
-** Fastfall whenever [UnclePunch]
-** Hold Y for Climber Clone v1.2 [UnclePunch]
-** Marth - Costume Dependent Marth Sword Swing Colors [Achilles]
-** Mario and Doc Hold B [UnclePunch]
-** Mario and Doc Get Jump Back After Down B [UnclePunch]
-** Luigi Hold B [UnclePunch]
-** Fully Charged SIde B = Misfire [UnclePunch]
-** Luigi's Fireball is influenced by his momentum [UnclePunch]
-** Peach - FSmash Angles Determine FSmash Type [UnclePunch]
-** Peach - Infinite Float [Achilles]
-** Peach - Always Pull Specific Turnip [????]
-** Bowser can mash for height during aerial upB [rmn]
-** Bowsers Flame Doesn't Diminish [UnclePunch]
-** Yoshi Aerial Neutral B Grab Gives Jump Back [UnclePunch]
-** Smash 4 Yoshi Up B [UnclePunch]
-** Press B to Explode Yoshi Egg [UnclePunch]
-** Skip DK Down B Startup [UnclePunch]
-** DK Hold B for Down B [UnclePunch]
-** Captain Falcon/Ganondorf - Can Grab Ledge on Side-B [UnclePunch]
-** Captain Falcon - Raptor Boost Enters "Fall" Action [Achilles]
-** Aerial Raptor Boost Popup + Midair Control [UnclePunch]
-** Walljump Out of Falcon Side B [UnclePunch]
-** Walljump Out of Falcon Up B [UnclePunch]
-** Ganon Float v1.0 [UnclePunch]
-** Fox/Falco Hold B [UnclePunch]
-** Invisible Firefox [UnclePunch]
-** Mash Firefox to Increase Length [UnclePunch]
-** Falco Side-B Walljump [UnclePunch]
-** Falco Up-B Walljump [UnclePunch]
-** Fox/Falco - Fall Instead of FallSpecial after Side-B [Achilles]
-** Ness Can Up B Once After Hitting a Wall [UnclePunch]
-** IC Hold B [UnclePunch]
-** ICies - Solo Popo Up-B Gives Increased Vertical Velocity [Achilles]
-** Nana is always Lvl 9 (1.02) [Achilles]
-** Nana Respawns after 20 Seconds [UnclePunch]
-** Nana and Popo Can Share Ledge [UnclePunch]
-** Nana direction update bug fix (ICs can Dashdance together etc.) (NTSC 1.02) [tauKhan]
-** Kirby Throws retain one mid air jump [The Cape]
-** Kirby Uses Non-Special Dash Attack [UnclePunch]
-** Kirbys Taunt Without Ability Gives Random Ability v1.1 [UnclePunch]
-** Samus Keeps Charge Shot When Hit During Up B (Fixed) [UnclePunch]
-** Samus - Always Full Charge Shot [Achilles]
-** Aim Charge Shot [UnclePunch]
-** Samus Shoots Random Item [UnclePunch]
-** Instant Zelda/Shiek Transform [UnclePunch]
-** Link's Shield Reflects [UnclePunch]
-** Link Shield Always Active [UnclePunch]
-** Mewtwo Can Actually Reflect Stuff [UnclePunch]
-** Confusion works like a normal throw [UnclePunch, jjhoho]
-** Mewtwo Float [UnclePunch]
-** GaW Hold B [UnclePunch]
-** GaW Bucket Fill Amount Based on Damage of Projectile [UnclePunch]
-** Memory Card Variables [Punkline]
-** Save and Load SDR Options to memory card [_glook]

@@ -60,7 +60,8 @@ customCodeRegions = OrderedDict([
 	# The following regions are used for the multiplayer tournament mode (which of course will no longer be functional if you use this space). 
 	# If you use this space, you may want to add a code that prevents people from accessing this mode so that the game doesn't crash when someone tries to use it.
 	# Slippi uses the tournament mode region to inject its codes, so we probably don't want to use it
-	#( 'NTSC 1.02|Tournament Mode Region', [ ( 0x18DCC0, 0x197B30 ) ] ), 	# Total space: 0x9E70
+	( 'NTSC 1.02|Tournament Gecko Region', [ ( 0x18DCC0, 0x193510 ) ] ), 	# Total space: 0x5850
+	( 'NTSC 1.02|Tournament Remaining Region', [ ( 0x193510, 0x197B30 ) ] ), 	# Total space: 0x4620
 	( 'NTSC 1.01|Tournament Mode Region', [ ( 0x18D674, 0x1974E4 ) ] ), 	# Total space: 0x9E70
 	( 'NTSC 1.00|Tournament Mode Region', [ ( 0x18CDC0, 0x196DE4 ) ] ), 	# Total space: 0xA024
 	( 'PAL 1.00|Tournament Mode Region', [ ( 0x18E804, 0x1986A0 ) ] ), 		# Total space: 0x9E9C
@@ -109,7 +110,9 @@ customCodeRegions = OrderedDict([
 	# These are unused areas containing text likely used for debugging the game, and have been tested to be safe for overwriting.
 	# However, they will disable the use of the OSReport mod.
 	# CrazyHand places the FSM Engine and FSM Entries directly after this region.
-	( 'NTSC 1.02|Aux Code Regions', [ ( 0x407540, 0x4088B0 ) ] ), # Total space: 0x1370
+	#( 'NTSC 1.02|Aux Code Regions', [ ( 0x407540, 0x4088B0 ) ] ), # Total space: 0x1370
+	( 'NTSC 1.02|Other Aux Code Regions', [ ( 0x407540, 0x407FEC ) ] ), # Total space: 0xAAC
+	( 'NTSC 1.02|Gecko Aux Code Regions', [ ( 0x407FEC, 0x4088B0 ) ] ), # Total space: 0x8C4
 	( 'NTSC 1.01|Aux Code Regions', [ ( 0x406860, 0x407BD0 ) ] ),
 	( 'NTSC 1.00|Aux Code Regions', [ ( 0x405580, 0x4068F0 ) ] ),
 	( 'PAL 1.00|Aux Code Regions', [ ( 0x408400, 0x409770 ) ] ),
@@ -140,8 +143,8 @@ customCodeRegions = OrderedDict([
 # and/or standalone functions.
 geckoConfiguration = {
 	'hookOffsets': { 'NTSC 1.02': 0x3738E0, 'NTSC 1.01': 0x372c00, 'NTSC 1.00': 0x371a2c, 'PAL 1.00': 0x3737e4 },
-	'codelistRegion': 'Tournament Mode Region', # If Gecko codes are used, the codelist will be placed at the start of this region (must exist in customCodeRegions)
-	'codehandlerRegion': 'Aux Code Regions' # If Gecko codes are used, the codehandler will be placed at the start of this region (must exist in customCodeRegions)
+	'codelistRegion': 'Tournament Gecko Region', # If Gecko codes are used, the codelist will be placed at the start of this region (must exist in customCodeRegions)
+	'codehandlerRegion': 'Gecko Aux Code Regions' # If Gecko codes are used, the codehandler will be placed at the start of this region (must exist in customCodeRegions)
 } # Recommended defaults: Tournament Mode Region for the codelist, and Aux Code Regions for the codehandler
 
 # The following codehandler is a modified version of the one posted and discussed here: http://smashboards.com/threads/ssbm-dol-that-accepts-gecko-codes.403755/
