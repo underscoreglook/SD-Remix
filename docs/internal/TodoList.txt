@@ -1,13 +1,10 @@
-SLIPPI List
-----------------
-Change banner to something else ("SD Remix SLIPPI")
-
 CHANGELIST TO SLIPPI:
 ---------------------
 The SDR Options menu removed, as syncing those for rollback would be too complicated, both from a player and coding perspective.
 The game code changed back to GALE01r2 to be slippi gecko codes compatible
 Added SDR Stages to rotation.
 Disabled Unranked mode.
+New banner and metadata.
 
 
 
