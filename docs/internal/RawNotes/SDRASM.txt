@@ -1,0 +1,782 @@
+Start: 0x8040A540
+loc_0x0:
+  stwu r1, -168(r1)
+  stw r0, 8(r1)
+  mflr r0
+  stw r0, 172(r1)
+  mfcr r0
+  stw r0, 12(r1)
+  mfctr r0
+  stw r0, 16(r1)
+  mfxer r0
+  stw r0, 20(r1)
+  stmw r3, 24(r1)
+  mfmsr r25
+  ori r26, r25, 0x2000
+  andi. r26, r26, 0xF9FF
+  mtmsr r26
+  stfd f2, 152(r1)
+  stfd f3, 160(r1)
+  lis r31, 0x8000
+  lis r20, 0xCC00
+  lhz r28, 16400(r20)
+  ori r21, r28, 0xFF
+  sth r21, 16400(r20)
+  mflr r29
+  lis r15, 0x8019
+  ori r15, r15, 0x10E0
+  ori r7, r31, 0x1808
+  lis r6, 0x8000
+  mr r16, r6
+  li r8, 0x0
+  lis r3, 0xD0
+  ori r3, r3, 0xC0DE
+  lwz r4, 0(r15)
+  cmpw r3, r4
+  bne- loc_0x9C
+  lwz r4, 4(r15)
+  cmpw r3, r4
+  bne- loc_0x9C
+  addi r15, r15, 0x8
+  b loc_0xE4
+
+loc_0x9C:
+  mtlr r29
+  sth r28, 16400(r20)
+  lfd f2, 152(r1)
+  lfd f3, 160(r1)
+  mfmsr r25
+  lwz r0, 172(r1)
+  mtlr r0
+  lwz r0, 12(r1)
+  mtcr r0
+  lwz r0, 16(r1)
+  mtctr r0
+  lwz r0, 20(r1)
+  mtxer r0
+  lmw r3, 24(r1)
+  lwz r0, 8(r1)
+  addi r1, r1, 0xA8
+  isync 
+  blr 
+
+loc_0xE4:
+  lwz r3, 0(r15)
+  lwz r4, 4(r15)
+  addi r15, r15, 0x8
+  andi. r9, r8, 0x1
+  cmpwi cr7, r9, 0x0
+  li r9, 0x0
+  rlwinm r10, r3, 3, 29, 31
+  rlwinm r5, r3, 7, 29, 31
+  andis. r11, r3, 0x1000
+  rlwinm r3, r3, 0, 7, 31
+  bne- loc_0x118
+  rlwinm r12, r6, 0, 0, 6
+  b loc_0x11C
+
+loc_0x118:
+  mr r12, r16
+
+loc_0x11C:
+  cmpwi cr4, r5, 0x0
+  cmpwi r10, 0x1
+  blt+ loc_0x150
+  beq+ loc_0x20C
+  cmpwi r10, 0x3
+  blt+ loc_0x2DC
+  beq- loc_0x384
+  cmpwi r10, 0x5
+  blt- loc_0x410
+  beq+ loc_0x620
+  cmpwi r10, 0x7
+  blt+ loc_0x654
+  b loc_0x73C
+
+loc_0x150:
+  add r12, r12, r3
+  cmpwi r5, 0x3
+  beq- loc_0x1A0
+  bgt- loc_0x1BC
+  bne- cr7, loc_0xE4
+  cmpwi cr4, r5, 0x1
+  bgt- cr4, loc_0x194
+  rlwinm r10, r4, 16, 16, 31
+
+loc_0x170:
+  beq- cr4, loc_0x180
+  stbx r4, r9, r12
+  addi r9, r9, 0x1
+  b loc_0x188
+
+loc_0x180:
+  sthx r4, r9, r12
+  addi r9, r9, 0x2
+
+loc_0x188:
+  subic. r10, r10, 1
+  bge- loc_0x170
+  b loc_0xE4
+
+loc_0x194:
+  rlwinm r12, r12, 0, 0, 29
+  stw r4, 0(r12)
+  b loc_0xE4
+
+loc_0x1A0:
+  mr r9, r4
+  bne- cr7, loc_0x66C
+
+loc_0x1A8:
+  subic. r9, r9, 1
+  blt- loc_0x66C
+  lbzx r5, r9, r15
+  stbx r5, r9, r12
+  b loc_0x1A8
+
+loc_0x1BC:
+  addi r15, r15, 0x8
+  bne- cr7, loc_0xE4
+  lwz r5, -8(r15)
+  lwz r11, -4(r15)
+  rlwinm r17, r5, 0, 16, 31
+  rlwinm r10, r5, 16, 20, 31
+  rlwinm r5, r5, 4, 28, 31
+
+loc_0x1D8:
+  cmpwi cr5, r5, 0x1
+  beq- cr5, loc_0x1EC
+  bgt+ cr5, loc_0x1F4
+  stbx r4, r9, r12
+  b loc_0x1F8
+
+loc_0x1EC:
+  sthx r4, r9, r12
+  b loc_0x1F8
+
+loc_0x1F4:
+  stwx r4, r9, r12
+
+loc_0x1F8:
+  add r4, r4, r11
+  add r9, r9, r17
+  subic. r10, r10, 1
+  bge+ loc_0x1D8
+  b loc_0xE4
+
+loc_0x20C:
+  rlwinm. r9, r3, 0, 31, 31
+  beq- loc_0x220
+  rlwinm r8, r8, 31, 1, 31
+  andi. r9, r8, 0x1
+  cmpwi cr7, r9, 0x0
+
+loc_0x220:
+  cmpwi cr5, r5, 0x4
+  cmpwi cr3, r10, 0x5
+  rlwimi r8, r8, 1, 0, 30
+  bne- cr7, loc_0x2A4
+  bgt- cr3, loc_0x6E8
+  add r12, r12, r3
+  blt- cr3, loc_0x244
+  blt- cr5, loc_0x26C
+  b loc_0x25C
+
+loc_0x244:
+  bge- cr5, loc_0x254
+  rlwinm r12, r12, 0, 0, 29
+  lwz r11, 0(r12)
+  b loc_0x26C
+
+loc_0x254:
+  rlwinm r12, r12, 0, 0, 30
+  lhz r11, 0(r12)
+
+loc_0x25C:
+  not r9, r4
+  rlwinm r9, r9, 16, 16, 31
+  and r11, r11, r9
+  rlwinm r4, r4, 0, 16, 31
+
+loc_0x26C:
+  cmplw cr6, r11, r4
+  andi. r9, r5, 0x3
+  beq- loc_0x28C
+  cmpwi r9, 0x2
+  beq- loc_0x294
+  bgt- loc_0x29C
+  bne- cr6, loc_0x2A4
+  b loc_0x2A0
+
+loc_0x28C:
+  beq- cr6, loc_0x2A4
+  b loc_0x2A0
+
+loc_0x294:
+  bgt- cr6, loc_0x2A4
+  b loc_0x2A0
+
+loc_0x29C:
+  blt- cr6, loc_0x2A4
+
+loc_0x2A0:
+  ori r8, r8, 0x1
+
+loc_0x2A4:
+  bne+ cr3, loc_0xE4
+  blt+ cr5, loc_0xE4
+  lwz r11, -8(r15)
+  bne- cr7, loc_0x2D0
+  andi. r12, r3, 0x8
+  beq- loc_0x2C4
+  andi. r12, r8, 0x1
+  beq- loc_0x2D0
+
+loc_0x2C4:
+  addi r12, r11, 0x10
+  rlwimi r11, r12, 0, 12, 27
+  b loc_0x2D4
+
+loc_0x2D0:
+  rlwinm r11, r11, 0, 28, 11
+
+loc_0x2D4:
+  stw r11, -8(r15)
+  b loc_0xE4
+
+loc_0x2DC:
+  bne- cr7, loc_0xE4
+  rlwinm r9, r3, 2, 26, 29
+  rlwinm r14, r3, 16, 31, 31
+  cmpwi cr3, r14, 0x0
+  cmpwi cr4, r5, 0x4
+  andi. r14, r5, 0x3
+  cmpwi cr5, r14, 0x2
+  blt- cr5, loc_0x30C
+  beq- cr5, loc_0x34C
+  extsh r4, r3
+  add r4, r4, r15
+  b loc_0x370
+
+loc_0x30C:
+  rlwinm. r5, r3, 20, 31, 31
+  beq- loc_0x31C
+  lwzx r9, r7, r9
+  add r4, r4, r9
+
+loc_0x31C:
+  beq- cr3, loc_0x324
+  add r4, r12, r4
+
+loc_0x324:
+  cmpwi cr5, r14, 0x1
+  beq- cr5, loc_0x330
+  lwz r4, 0(r4)
+
+loc_0x330:
+  rlwinm. r3, r3, 12, 31, 31
+  beq- loc_0x370
+  bge- cr4, loc_0x344
+  add r4, r4, r6
+  b loc_0x370
+
+loc_0x344:
+  add r4, r4, r16
+  b loc_0x370
+
+loc_0x34C:
+  rlwinm. r5, r3, 20, 31, 31
+  beq- loc_0x35C
+  lwzx r9, r7, r9
+  add r4, r4, r9
+
+loc_0x35C:
+  bge- cr4, loc_0x368
+  stwx r6, r12, r4
+  b loc_0xE4
+
+loc_0x368:
+  stwx r16, r12, r4
+  b loc_0xE4
+
+loc_0x370:
+  bge- cr4, loc_0x37C
+  mr r6, r4
+  b loc_0xE4
+
+loc_0x37C:
+  mr r16, r4
+  b loc_0xE4
+
+loc_0x384:
+  rlwinm r9, r4, 3, 25, 28
+  addi r9, r9, 0x40
+  cmpwi r5, 0x2
+  blt- loc_0x3D8
+  rlwinm. r11, r3, 10, 0, 1
+  beq- loc_0x3AC
+  bgt- loc_0x3A4
+  b loc_0x3B0
+
+loc_0x3A4:
+  beq- cr7, loc_0xE4
+  b loc_0x3B0
+
+loc_0x3AC:
+  bne- cr7, loc_0xE4
+
+loc_0x3B0:
+  cmpwi r5, 0x3
+  bgt- loc_0x3C4
+  beq+ loc_0x3C8
+  lwzx r15, r7, r9
+  b loc_0xE4
+
+loc_0x3C4:
+  stwx r15, r7, r9
+
+loc_0x3C8:
+  extsh r4, r3
+  rlwinm r4, r4, 3, 9, 28
+  add r15, r15, r4
+  b loc_0xE4
+
+loc_0x3D8:
+  bne- cr7, loc_0xE4
+  add r5, r7, r9
+  bne- cr4, loc_0x3F4
+  rlwinm r4, r3, 0, 16, 31
+  stw r15, 0(r5)
+  stw r4, 4(r5)
+  b loc_0xE4
+
+loc_0x3F4:
+  lwz r9, 4(r5)
+  cmpwi r9, 0x0
+  beq- loc_0xE4
+  subi r9, r9, 0x1
+  stw r9, 4(r5)
+  lwz r15, 0(r5)
+  b loc_0xE4
+
+loc_0x410:
+  bne- cr7, loc_0xE4
+  rlwinm r11, r3, 2, 26, 29
+  add r26, r7, r11
+  lwz r9, 0(r26)
+  rlwinm r14, r3, 12, 30, 31
+  beq- cr4, loc_0x4A8
+  cmpwi cr4, r5, 0x5
+  bge- cr4, loc_0x5A0
+  cmpwi cr4, r5, 0x3
+  bge- cr4, loc_0x4C4
+  cmpwi cr4, r5, 0x1
+  rlwinm. r5, r3, 16, 31, 31
+  beq- loc_0x448
+  add r4, r12, r4
+
+loc_0x448:
+  cmpwi cr6, r14, 0x1
+  bne- cr4, loc_0x470
+  bgt+ cr6, loc_0x468
+  beq- cr6, loc_0x460
+  lbz r4, 0(r4)
+  b loc_0x554
+
+loc_0x460:
+  lhz r4, 0(r4)
+  b loc_0x554
+
+loc_0x468:
+  lwz r4, 0(r4)
+  b loc_0x554
+
+loc_0x470:
+  rlwinm r19, r3, 28, 20, 31
+
+loc_0x474:
+  bgt+ cr6, loc_0x494
+  beq- cr6, loc_0x488
+  stb r9, 0(r4)
+  addi r4, r4, 0x1
+  b loc_0x49C
+
+loc_0x488:
+  sth r9, 0(r4)
+  addi r4, r4, 0x2
+  b loc_0x49C
+
+loc_0x494:
+  stw r9, 0(r4)
+  addi r4, r4, 0x4
+
+loc_0x49C:
+  subic. r19, r19, 1
+  bge+ loc_0x474
+  b loc_0xE4
+
+loc_0x4A8:
+  rlwinm. r5, r3, 16, 31, 31
+  beq- loc_0x4B4
+  add r4, r4, r12
+
+loc_0x4B4:
+  andi. r5, r14, 0x1
+  beq- loc_0x554
+  add r4, r4, r9
+  b loc_0x554
+
+loc_0x4C4:
+  rlwinm r10, r3, 16, 30, 31
+  rlwinm r14, r4, 2, 26, 29
+  add r19, r7, r14
+  bne- cr4, loc_0x4D8
+  subi r19, r15, 0x4
+
+loc_0x4D8:
+  lwz r4, 0(r26)
+  lwz r9, 0(r19)
+  andi. r11, r10, 0x1
+  beq- loc_0x4EC
+  mr r26, r4
+
+loc_0x4EC:
+  andi. r11, r10, 0x2
+  beq- loc_0x500
+  mr r19, r9
+  bne+ cr4, loc_0x500
+  add r19, r12, r19
+
+loc_0x500:
+  rlwinm. r5, r3, 12, 28, 31
+  cmpwi r5, 0x9
+  bge- loc_0x55C
+  bl loc_0x584
+  add r4, r9, r4
+  b loc_0x554
+  mullw r4, r9, r4
+  b loc_0x554
+  or r4, r9, r4
+  b loc_0x554
+  and r4, r9, r4
+  b loc_0x554
+  xor r4, r9, r4
+  b loc_0x554
+  slw r4, r9, r4
+  b loc_0x554
+  srw r4, r9, r4
+  b loc_0x554
+  rlwnm r4, r9, r4, 0, 31
+  b loc_0x554
+  sraw r4, r9, r4
+
+loc_0x554:
+  stw r4, 0(r26)
+  b loc_0xE4
+
+loc_0x55C:
+  cmpwi r5, 0xA
+  bgt+ loc_0xE4
+  lfs f2, 0(r26)
+  lfs f3, 0(r19)
+  beq- loc_0x578
+  fadds f2, f3, f2
+  b loc_0x57C
+
+loc_0x578:
+  fmuls f2, f3, f2
+
+loc_0x57C:
+  stfs f2, 0(r26)
+  b loc_0xE4
+
+loc_0x584:
+  mflr r10
+  rlwinm r5, r5, 3, 25, 28
+  add r10, r10, r5
+  lwz r4, 0(r26)
+  lwz r9, 0(r19)
+  mtlr r10
+  blr 
+
+loc_0x5A0:
+  bne- cr7, loc_0xE4
+  rlwinm r9, r3, 24, 0, 31
+  mr r14, r12
+  bl loc_0x5E0
+  beq- cr4, loc_0x5BC
+  add r17, r17, r4
+  b loc_0x5C0
+
+loc_0x5BC:
+  add r9, r9, r4
+
+loc_0x5C0:
+  rlwinm. r4, r3, 24, 16, 31
+  li r5, 0x0
+
+loc_0x5C8:
+  beq+ loc_0xE4
+  lbzx r10, r5, r17
+  stbx r10, r5, r9
+  addi r5, r5, 0x1
+  cmpw r5, r4
+  b loc_0x5C8
+
+loc_0x5E0:
+  cmpwi cr5, r10, 0x4
+  rlwinm r17, r9, 6, 26, 29
+  cmpwi r17, 0x3C
+  lwzx r17, r7, r17
+  bne- loc_0x5F8
+  mr r17, r14
+
+loc_0x5F8:
+  beq- cr5, loc_0x600
+  lhz r17, 0(r17)
+
+loc_0x600:
+  rlwinm r9, r9, 10, 26, 29
+  cmpwi r9, 0x3C
+  lwzx r9, r7, r9
+  bne- loc_0x614
+  mr r9, r14
+
+loc_0x614:
+  beq- cr5, loc_0x61C
+  lhz r9, 0(r9)
+
+loc_0x61C:
+  blr 
+
+loc_0x620:
+  cmpwi r5, 0x4
+  bge- loc_0x64C
+  mr r9, r4
+  add r14, r3, r12
+  rlwinm r14, r14, 0, 0, 30
+  bl loc_0x5E0
+  not r4, r4
+  rlwinm r4, r4, 0, 16, 31
+  and r11, r9, r4
+  and r4, r17, r4
+  b loc_0x20C
+
+loc_0x64C:
+  rlwinm r11, r3, 28, 16, 31
+  b loc_0x20C
+
+loc_0x654:
+  mr r26, r4
+  rlwinm r4, r4, 3, 0, 28
+  bne- cr4, loc_0x67C
+  bne- cr7, loc_0x66C
+  mtlr r15
+  blrl 
+
+loc_0x66C:
+  add r15, r4, r15
+  nop 
+  nop 
+  b loc_0xE4
+
+loc_0x67C:
+  cmpwi cr4, r5, 0x3
+  bgt- cr4, loc_0x6DC
+  lis r5, 0x4800
+  add r12, r3, r12
+  rlwinm r12, r12, 0, 0, 29
+  bne- cr4, loc_0x6B0
+  bne- cr7, loc_0xE4
+  rlwinm r4, r26, 0, 0, 29
+  sub r4, r4, r12
+  rlwimi r5, r4, 0, 6, 29
+  rlwimi r5, r3, 0, 31, 31
+  stw r5, 0(r12)
+  b loc_0xE4
+
+loc_0x6B0:
+  bne- cr7, loc_0x66C
+  sub r9, r15, r12
+  rlwimi r5, r9, 0, 6, 29
+  stw r5, 0(r12)
+  addi r12, r12, 0x4
+  add r11, r15, r4
+  subi r11, r11, 0x4
+  sub r9, r12, r11
+  rlwimi r5, r9, 0, 6, 29
+  stw r5, 0(r11)
+  b loc_0x66C
+
+loc_0x6DC:
+  cmpwi cr4, r5, 0x6
+  beq- cr4, loc_0x708
+  b loc_0x20C
+
+loc_0x6E8:
+  rlwinm r12, r12, 16, 16, 31
+  rlwinm r4, r26, 16, 16, 31
+  rlwinm r26, r26, 0, 16, 31
+  cmpw r12, r4
+  blt+ loc_0x2A0
+  cmpw r12, r26
+  bge+ loc_0x2A0
+  b loc_0xE4
+
+loc_0x708:
+  rlwinm r5, r26, 31, 31, 31
+  xori r5, r5, 1
+  andi. r3, r8, 0x1
+  cmpw r5, r3
+  beq- loc_0x734
+  rlwimi r26, r8, 1, 30, 30
+  xori r26, r26, 2
+  rlwinm. r5, r26, 31, 31, 31
+  beq- loc_0x730
+  xori r26, r26, 1
+
+loc_0x730:
+  stw r26, -4(r15)
+
+loc_0x734:
+  rlwimi r8, r26, 0, 31, 31
+  b loc_0xE4
+
+loc_0x73C:
+  cmpwi r11, 0x0
+  beq- loc_0x878
+  cmpwi r5, 0x1
+  beq- loc_0x760
+  cmpwi r5, 0x2
+  beq- loc_0x764
+  cmpwi r5, 0x3
+  beq- loc_0x7C8
+  b loc_0x9C
+
+loc_0x760:
+  rlwinm r12, r6, 0, 0, 6
+
+loc_0x764:
+  rlwinm r23, r4, 8, 24, 31
+  rlwinm r24, r4, 24, 16, 31
+  rlwinm r4, r4, 0, 24, 31
+  bne- cr7, loc_0x86C
+  rlwinm. r25, r23, 0, 24, 24
+  mr r26, r12
+  add r26, r3, r26
+  rlwinm r26, r26, 0, 0, 29
+  beq- loc_0x79C
+  extsb r23, r23
+  neg r23, r23
+  mulli r25, r23, 0x2
+  addi r25, r25, 0x4
+  sub r26, r26, r25
+
+loc_0x79C:
+  cmpwi r23, 0x0
+  beq- loc_0x7BC
+  li r25, 0x0
+  mtctr r23
+
+loc_0x7AC:
+  lhz r27, 4(r26)
+  xor r25, r27, r25
+  addi r26, r26, 0x2
+  bdnz+ loc_0x7AC
+
+loc_0x7BC:
+  cmpw r24, r25
+  bne- loc_0x86C
+  b loc_0x654
+
+loc_0x7C8:
+  rlwimi r8, r8, 1, 0, 30
+  bne- cr7, loc_0x868
+  rlwinm. r23, r3, 22, 0, 1
+  bgt- loc_0x85C
+  blt- loc_0x864
+  rlwinm r30, r3, 0, 24, 31
+  mulli r30, r30, 0x2
+  rlwinm r23, r4, 0, 0, 15
+  xoris r24, r23, 32768
+  cmpwi r24, 0x0
+  bne- loc_0x7F8
+  ori r23, r23, 0x3000
+
+loc_0x7F8:
+  rlwinm r24, r4, 16, 0, 15
+  mulli r25, r30, 0x4
+  sub r24, r24, r25
+
+loc_0x804:
+  li r25, 0x0
+
+loc_0x808:
+  mulli r26, r25, 0x4
+  lwzx r27, r15, r26
+  lwzx r26, r23, r26
+  addi r25, r25, 0x1
+  cmplw r23, r24
+  bgt- loc_0x850
+  cmpw r25, r30
+  bgt- loc_0x838
+  cmpw r26, r27
+  beq+ loc_0x808
+  addi r23, r23, 0x4
+  b loc_0x804
+
+loc_0x838:
+  lwz r3, -8(r15)
+  ori r3, r3, 0x300
+  stw r3, -8(r15)
+  stw r23, -4(r15)
+  mr r16, r23
+  b loc_0x868
+
+loc_0x850:
+  lwz r3, -8(r15)
+  ori r3, r3, 0x100
+  stw r3, -8(r15)
+
+loc_0x85C:
+  ori r8, r8, 0x1
+  b loc_0x868
+
+loc_0x864:
+  mr r16, r4
+
+loc_0x868:
+  rlwinm r4, r3, 0, 24, 31
+
+loc_0x86C:
+  mulli r4, r4, 0x8
+  add r15, r4, r15
+  b loc_0xE4
+
+loc_0x878:
+  bne- cr4, loc_0x884
+  li r8, 0x0
+  b loc_0x894
+
+loc_0x884:
+  rlwinm. r9, r3, 0, 27, 31
+  rlwinm r5, r3, 12, 31, 31
+  srw r8, r8, r9
+  rlwinm. r23, r8, 31, 31, 31
+
+loc_0x894:
+  bne- loc_0x89C
+  xor r8, r8, r5
+
+loc_0x89C:
+  rlwinm. r5, r4, 0, 0, 15
+  beq- loc_0x8A8
+  mr r6, r5
+
+loc_0x8A8:
+  rlwinm. r5, r4, 16, 0, 15
+  beq- loc_0x8B4
+  mr r16, r5
+
+loc_0x8B4:
+  b loc_0xE4

@@ -489,160 +489,6 @@ NTSC 1.02 ---- 0x1A1750 ------ 4E800020 -> Branch
 
 
 	-==-
-!
-TODO REENABLE THIS LATER
-Change CSS Banner Color
-This is a version of Salvato's code that allows us to toggle which color from preset colors to load.
-We base this off of <<varOptionsPreset>>. It should be an index into tblCssBannerColors
-<https://smashboards.com/threads/changing-the-color-of-the-ready-to-fight-banner.403839/>
-[Dan Salvato, _glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-<tblCssBannerColors> ALL
-# Each Dword is an element, of the format 00XXYYZZ.
-000C0D0E    # Index 0: Yellow (default)
-000D0D0C    # Index 1: Green
-000C0E0D    # Index 2: Magenta
-000C0E0E    # Index 3: Red
-000D0E0C    # Index 4: Teal
-000E0D0C    # Index 5: Cyan
-000E0C0D    # Index 6: Purple
-000D0C0E    # Index 7: Lime
-
-1.02 ------ 0x8036B004 ---- 7D8803A6 -> Branch
-            # START:
-7D8803A6    # mtlr r12
-807D000C    # lwz r3, 12(r29)
-2C03001F    # cmpwi r3, 0x1F
-4082005C    # bne- RETURN
-lis r3, <<varOptionsPreset>>@h
-ori r3, r3, <<varOptionsPreset>>@l
-80630000    # lwz r3, 0(r3)     # Get index into table
-5463103A    # slwi r3, r3, 2    # Multiply by 4 to get bytes into table
-lis r12, <<tblCssBannerColors>>@h
-ori r12, r12, <<tblCssBannerColors>>@l
-7C636214    # add r3, r3, r12
-7D8802A6    # mflr r12
-2C04000C    # cmpwi r4, 0xC
-41820018    # beq- COLOR1
-2C04000D    # cmpwi r4, 0xD
-41820018    # beq- COLOR2
-2C04000E    # cmpwi r4, 0xE
-41820018    # beq- COLOR3
-4800001C    # b CLEANUP
-            # COLOR1:
-88830001    # lbz r4, 1(r3)
-48000014    # b CLEANUP
-            # COLOR2:
-88830002    # lbz r4, 2(r3)
-4800000C    # b CLEANUP
-            # COLOR3:
-88830003    # lbz r4, 3(r3)
-48000004    # b CLEANUP
-            # CLEANUP:
-3860001F    # li r3, 0x1F
-            # RETURN:
-00000000    # branch back
-
-
-	-==-
-!
-TODO REENABLE THIS LATER
-Display Custom Text at top right of CSS (in game mode display)
-Bosed on Display Time at Top Right of CSS (v1.1), see Smashboards link
-Since stock is the only mode that is played for serious, we only display with stock mode.
-Also, it displays as normal if there's nothing to display.
-The text to write must be 5 words, including the terminating character.
-Uses <<varOptionsPreset>> as index into the array of strings <<arrCssGameModeReplacements>>
-<https://smashboards.com/threads/display-time-at-top-right-of-css-1-1.450591/>
-[UnclePunch, _glook]
-Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-<strCssGameModeReplacement> NTSC 1.02  # "Stocks!      " (null replacement starts at 0x14)
-201C 2037  2032 2026  202E 2036  20EC 1A 1A
-1A1A1A1A 00000000 00000000
-00000000 00000000 00000000
-
-<arrCssGameModeReplacements> ALL    # Each element is 5 words
-200d 202c 2036 2024 2025 202f 2028 2027 0000 0000   # Disabled
-200c 2038 2036 2037 2032 2030 0000 0000 0000 0000   # Custom
-201d 2032 2038 2035 2031 2028 203c 0000 0000 0000   # Tourney
-201c 2028 2035 202c 2032 2038 2036 0000 0000 0000   # Serious
-200c 2024 2036 2038 2024 202f 0000 0000 0000 0000   # Casual
-2016 2028 2026 202b 2024 2031 202c 2026 2036 0000   # Mechanics
-201c 200d 200d 201b 0000 0000 0000 0000 0000 0000   # SDDR
-201c 200d 200d 201b 200b 2035 2024 203a 202f 0000   # SDDRBrawl
-
-NTSC 1.02 --- 0x8025C00C ---- 80010014 -> Branch
-# Check the game mode. Inject @ 8025c00c (end of CSS_LoadRules)
-2C05004C    # cmpwi r5,0x4c
-40820024    # bne NO_CUSTOM_TEXT
-# Is stock mode
-lis r5, <<varOptionsPreset>>@h
-ori r5, r5, <<varOptionsPreset>>@l
-80A50000    # lwz r5, 0(r5)
-2C050000    # cmpwi r5, 0
-38A0004C    # li r5, 0x4C
-4182000C    # beq NO_CUSTOM_TEXT
-            # ENABLE_CUSTOM_TEXT:
-3863FFDE    # subi r3,r3,0x22
-48000008    # b STORE
-            # NO_CUSTOM_TEXT:
-38600000    # li r3,0x0
-            # STORE:
-9062FDB0    # stw r3,-0x250(rtoc)
-            # END:
-80010014    # lwz r0, 0x0014 (sp)    # Thing at branch
-00000000    # branch back
-
-------------- 0x8026339C ---- 8001001C -> Branch
-# Actually write the text. Inject @ 8026339c (end of CSS_LoadButtonInputs)
-# Can use r14 and r5, r6, r7
-            # IS_STOCK_MODE:
-8062FDB0    # lwz r3,-0x250(rtoc)
-2C030000    # cmpwi r3,0x0
-41820078    # beq PROCEED_AS_NORMAL
-
-            # Check if custom text
-lis r3, <<varOptionsPreset>>@h
-ori r3, r3, <<varOptionsPreset>>@l
-80630000    # lwz r3, 0(r3)
-2C030000    # cmpwi r3, 0
-41820064    # beq PROCEED_AS_NORMAL
-
-# Get and set the text to write
-lis r6, <<strCssGameModeReplacement>>@h
-ori r6, r6, <<strCssGameModeReplacement>>@l
-lis r7, <<arrCssGameModeReplacements>>@h
-ori r7, r7, <<arrCssGameModeReplacements>>@l
-1C630014    # mulli r3, r3, 0x14   # Times bytes in array
-7C633A14    # add r3, r3, r7
-38A00004    # li r5, 5              # Set loop var to r5
-            # COPY_TEXT:
-80E30000    # lwz r7, 0(r3)         # Load string word
-90E60014    # stw r7, 0x14(r6)      # Store string word
-38630004    # addi r3, r3, 4
-38C60004    # addi r6, r6, 4
-2C070000    # cmpwi r7, 0
-41820010    # beq copyToRulesFrame
-38A5FFFF    # subi r5, r5, 1
-2C050000    # cmpwi r5, 0
-4181FFE0    # bgt COPY_TEXT
-
-            # copyToRulesFrame:
-8062FDB0    # lwz r3,-0x250(rtoc)            #destination
-lis r4, <<strCssGameModeReplacement>>@h
-ori r4, r4, <<strCssGameModeReplacement>>@l  #source
-38A00028    # li r5, 0x28
-3DC08000    # lis r14,0x8000
-61CE31F4    # ori r14,r14,0x31F4
-7DC903A6    # mtctr r14
-4E800421    # bctrl     # branch to memcpy, 0x800031f4
-
-            # PROCEED_AS_NORMAL:
-8001001C    # lwz r0, 0x001C (sp)
-00000000    # branch back
-
-
-	-==-
 
 
 Music Plays at 20% Volume When All Controllers Are Idle For 1 Minute
@@ -665,11 +511,10 @@ B1F0000A 39E00019 B1EE0002 39E00001
 
 
 	-==-
-!
-TODO REENABLE THIS LATER
+
+
 CSS Colors
 Changed with the SD Remix colors.
-The rule frame depends on <<varOptionsPreset>>, indexed into <<arrCssRuleFrameColors>>
 <https://smashboards.com/threads/standalone-css-color-modification.450087/>
 [UnclePunch]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
@@ -677,16 +522,6 @@ Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
 00000088    # Background        733BA8CC
 733BA8CC    # Top Frame         733BA8CC
 2030C0CC    # Bottom Frame      2030C0CC
-
-<arrCssRuleFrameColors> ALL
-FFFFFFFF    # Disabled: White
-00FF00FF    # Index 1: Green
-FF00FFFF    # Index 2: Magenta
-FF0000FF    # Index 3: Red
-008080FF    # Index 4: Teal
-00FFFFFF    # Index 5: Cyan
-800080FF    # Index 6: Purple
-BFFF00FF    # Index 7: Lime
 
 NTSC 1.02 --- 0x80266980 ---- 906DB634 -> Branch
 906DB634    # stw r3, -18892(r13)   # Code at hook point
@@ -703,16 +538,5 @@ ori r5, r5, <<arrCssColors>>@l
 80650008    # lwz r3, 8(r5)
 3C8080F3    # lis r4, 0x80F3
 608455AC    # ori r4, r4, 0x55AC
-90640000    # stw r3, 0(r4)
-lis r5, <<varOptionsPreset>>@h
-ori r5, r5, <<varOptionsPreset>>@l
-80A50000    # lwz r5, 0(r5)
-54A5103A    # slwi r5, r5, 2  # Multiply by 4 to get bytes
-lis r3, <<arrCssRuleFrameColors>>@h
-ori r3, r3, <<arrCssRuleFrameColors>>@l
-7CA32A14    # add r5, r3, r5
-80650000    # lwz r3, 0(r5)
-3C8080F3    # lis r4, 0x80F3
-6084566C    # ori r4, r4, 0x566C
 90640000    # stw r3, 0(r4)
 00000000    # branch back

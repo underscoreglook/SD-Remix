@@ -731,13 +731,13 @@ loadScene
 801a4120
 	8025BB5C - Probably function for loading the stage
 	8025bbbc
-		80018254
+		80018254 - Queue Stage Load
 		8001870c
 			80017960
 			800179a4
 				802251B4
 				802251d4
-					801C06B8
+					801C06B8 - Get Filename??
 					801c06e8 - First read location (word 0x8 of a data structure)
 
 Few frames pass, and then:

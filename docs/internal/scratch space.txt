@@ -1,67 +1,57 @@
-8000221C, invalid write to 0xB463FFFF
-
-# TODO Convert non-debug menu items into gecko codes, as there's a lot of space left in that area.
-
-8000218C
-556B0716 916FFFF8 4BFFFE0C 40BEFE08 546916BA 546E87FE 2D8E0000 2E050004 70AE0003 2E8E0002 41940014 41960050
-800021BC
-7C640734 7C847A14 48000068 5465A7FF 4182000C 7D27482E 7C844A14 418E0008 7C8C2214 2E8E0001 41960008 80840000
-800021EC
-546367FF 4182003C 4090000C 7C843214 48000030 7C848214 48000028 5465A7FF 4182000C 7D27482E 7C844A14 4090000C
-8000221C
-7CCC212E 4BFFFD80 7E0C212E 4BFFFD78 4090000C 7C 86 23 78 4B FF FD 6C 7C 90 23 78 4B FF FD 64 54 89 1E 78 39 29 00 40 2C 05 00 02 41 80 00 48 54 6B 50 03 41 82 00 14 41 81 00 08 48 00 00 10 41 BE FD 40 48 00 00 08 40 BE FD 38 2C 05 00 03 41 81 00 10 41 A2 00 10 7D E7 48 2E 4B FF FD 24 7D E7 49 2E 7C 64 07 34 54 84 1A 78
-
-
-80003210    Overwrites the memory card data
-
-Address: 8000321C
-HEX:     4E800020
-Thing:   blr
-
-801952f0
-
-
-Stack trace:
-80003210    Overwrite, always hit   sub_800031F4 , arg1 is 8045C394
-> 80357d28  sub_80357C10, arg 1 is 8045C394
-> 803547dc  sub_80354720, arg 1 is 8045C394
-> 80352528  sub_80352498, arg 1 is 8045C394
-> 80346b70  sub_8034698C, where
-> 80347b48
-> 803aaab4
-> 8001bdd4
-> 8001cc00
-> 801af6e8
-> 801a4e84
-
-At 80346b70, r3 is set from r30, which is a bunch of stuff
+Then check if we're online:
 
 
 
 
-8001BE18 is after the memory card loads and only gets called once
-801965a4
+
+54841838	# slwi r4, r4, 3        # x8 for bytes
 
 
-8019528C
-
-Memcard  to RAM
-806ee74c => 8045c394
-
-80390d80, before that is 80390d7c going to 80390E88,
-
-8001BE18
-Possible memory card items?
-80019cb0    ?       Keep calling?, called after below
-8001be30    Called once? again
-80301800    Debug
 
 
-801a5054 - Gets called every frame
-801a40f0
+bl 0x803a6368
 
 
-801A4D94
-801A507C
 
-801A5088 - When debug menu exists
+
+
+
+803dad30
+
+803dad38
+
+200f202c20312024202f
+
+
+Final D
+80D57134    80D5712f
+
+Battefield  starts at 80D57111
+80D57114
+
+
+
+Pointer?
+80bd6240    <- this is the one
+
+80004858
+
+8000414C
+
+
+
+
+
+
+
+
+.set MSRB_CONNECTION_STATE, 0 # u8, matchmaking state defined above
+
+
+.set MSRB_RNG_OFFSET, 0005 # u32
+
+
+
+
+80003684 is dol changes bool
+varSlippiStageId == 80003688

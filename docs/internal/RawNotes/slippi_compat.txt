@@ -1,0 +1,42 @@
+super basic diffs from clean, before gecko runs:
+Address	  STOCK		SDRE		MCM Null	MCM Slippi
+80001800: D01F1BAD	00000000
+80001804: 00000001	00000000
+80001808: 80002774	00000000
+800030D8: 005D1199	005D1315	005D1305	005D121F
+800030DC: 20F226A0	65D83480 	6C8C76C0	ABBA7220
+80376D00: 					    4E800020	48093840	This is the end of HSD_PadRenewRawStatus, goes to gecko code handler.
+812013A4: 			00456E00	00457000
+812013B4: 			00460000	01F23800
+8130000C: 			00456E00	00457000
+
+Starting around 817F8ADC and stopping at 817FC38C, there's a bunch of changes from just code change (SDRE) to MCM Null. There doesn't seem to be any rhyme or reason
+
+8040A540
+
+
+Address	  STOCK		SDRE		MCM Null	MCM Slippi
+80002778  00000000							80019610
+800030C4  818A1363							818C40BB
+	End of start data changes
+80197180  FF								F0
+80407188  3A683D7C 3BF9478F 3C0041A2		3A6776A4 3BF92EB4 3BFE3B2C
+A bunch of data changes, not included
+80682678  2048414C							00000000
+8068267C  50535400							00000000
+806E426C  00100000							00000000
+806F9E1C  00001E7C							00000000
+806FA04C  00100000							00000000
+806FB2AC  00100000							00000000
+806FB2E4  40E00000							40000000
+806FB33C  40E00000							40000000
+806FB39C  40E00000							40000000
+806FB3FC  40E00000							40000000
+806FFFD4  00000056							00000000
+806FFFD8  00000020							00000000
+806FFFDC  00000001							00000000
+
+Starting 8061CC48 and stopping at 8065CBF0, there's a bunch of small items all around here. There's a bunch of similar changes, but they're offset weirdly, for instance, there's one:
+8061CC49 -> 8061CC91 (0x48 ahead in SDR), where the value of the replaced item is:
+800004C1 -> 80000440 (0x81 behind in SDR)
+What is this?

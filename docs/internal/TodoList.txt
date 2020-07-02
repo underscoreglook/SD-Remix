@@ -1,22 +1,13 @@
 SLIPPI List
 ----------------
-Stages are all just Melee stages, possibly get other stages working
-Matchmaking doesn't work, maybe make it work
-Get debug menu working again
+The vs splash screen has the wrong stage name
+Matchmaking doesn't work, maybe make it work or hide it
+Change banner to something else ("SD Remix SLIPPI")
 
 CHANGELIST TO SLIPPI:
 ---------------------
-Most game modes removed for space reasons
-Space animal toggles removed for space reasons
-
-
-
-
-
-
-
-
-
+The SDR Options menu removed, as syncing those for rollback would be too complicated, both from a player and coding perspective.
+The game code changed back to GALE01r2 to be slippi gecko codes compatible
 
 
 
