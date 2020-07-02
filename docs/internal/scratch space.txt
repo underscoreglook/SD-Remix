@@ -1,57 +1,70 @@
-Then check if we're online:
+0x801b1040 is scene prep
+0x801b1044 to overwrite?
+
+Start of online submenu entry: 0x803eb750
+
+Theory: Try and overwrite menu data so that we don't allow unranked to be selected.
+Replace the button text with "No Unranked"
+Replace the description text with "Go to http://smashladder.com/SDRemix to find matches".
+
+
+81323600 is the location of the "play unranked matches" string
+
+
+80BD5D00 - Address of pointer to currently displayed text at menu description section
+8131A504 - 8131A5A4 - Pointer to "Play unranked matches" string
+
+Text string:
+100C RRGGBB 0E 00B3
+00B3 1606 0000 0000
+18
+TEXT (8 aligned)
+0F0D00
+
+Longer string:
+120C RRGGBB 0E 00B3
+0080 1607 0000 FFEC
+03
+06 0000 0000 18
+First Line
+19
+03 # Newline
+06 00000000 18
+Second Line
+190f0d00
+
+
+0x804A04F0  <= Menus_regularMatch
+804A04F2 is currently highlighted menu item
+
+branch starts with: 0b010010
+Address portion is 0x03FFFFFF
+OnMenuPrep hook location: 801B1040
+Instruction offset of branch: 0x2F0
+What to replace it with 0x24: beq 0x24, or 41820024
+
+
+Online submenu: 0x803eb750 (0x14 long
+
+
+
+
+8131A500
+
+
+Text overwritten at:
+803A5C38    (zero out?)
+803A63A4    set to actual thing
+
+On 803A63A4,
+r4 = index into a place to find the text to the menu description
+r3 = 0x804D1124 + (arg1.bytes[0x4F] * 4)
+r3 = r3.words[0]
 
 
 
 
 
-54841838	# slwi r4, r4, 3        # x8 for bytes
+-0x49ec(r13) == SWITCH_TO_ONLINE_SUBMENU
 
-
-
-
-bl 0x803a6368
-
-
-
-
-
-
-803dad30
-
-803dad38
-
-200f202c20312024202f
-
-
-Final D
-80D57134    80D5712f
-
-Battefield  starts at 80D57111
-80D57114
-
-
-
-Pointer?
-80bd6240    <- this is the one
-
-80004858
-
-8000414C
-
-
-
-
-
-
-
-
-.set MSRB_CONNECTION_STATE, 0 # u8, matchmaking state defined above
-
-
-.set MSRB_RNG_OFFSET, 0005 # u32
-
-
-
-
-80003684 is dol changes bool
-varSlippiStageId == 80003688
+0x803eb760 is location to OnlineSubmenuThink function, which we want to
