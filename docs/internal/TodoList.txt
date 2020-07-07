@@ -1,3 +1,7 @@
+The stage ID in a .slp file is at 0x40
+
+
+
 CHANGELIST TO SLIPPI:
 ---------------------
 The SDR Options menu removed, as syncing those for rollback would be too complicated, both from a player and coding perspective.
