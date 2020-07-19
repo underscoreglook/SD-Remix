@@ -1,16 +1,284 @@
-Dreamland N64 - Disable Wind
-[Zauron]
+
+
+Disable Trophy Spawn if in versus mode (Snag the Trophies Stage)
+[wparam, _glook]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x20E024 ------ 4800059C -> 60000000
+NTSC 1.02 ---- 0x802199FC ---- 480D8699 -> Branch
+3D808047 618C9D30 898C0000 2C0C0003
+40820014 3D80802F 618C2094 7D8903A6
+4E800421 00000000
 
 
 	-==-
 
 
-Yoshi's Story - Disable Shy Guy Spawns
+Pokemon Stadium - Disable Stage Transformations (SDR Toggleable)
+Uses varStageDolChangesEnabled to toggle on or off.
 [Zauron]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x1DFF28 ------ 480000D1 -> 60000000
+NTSC 1.02 ---- 0x1CE128 ------ 48003001 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801D    # lis r12, 0x801D
+618C4548    # ori r12, r12, 0x4548 # Transformation function
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # Return
+
+
+	-==-
+
+
+Dreamland N64 - Disable Wind (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x20E024 ------ 4800059C -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D808021    # lis r12, 0x8021
+618C19E0    # ori r12, r12, 0x19E0  # Call wind function
+7D8903A6    # mtctr r12
+4E800420    # bctr
+# RETURN:
+00000000
+
+
+	-==-
+
+
+Yoshi's Story - Disable Shy Guy Spawns (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1DFF28 ------ 480000D1 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne OMEGA
+3D80801E    # lis r12, 0x801E
+618C3418    # ori r12, r12, 0x3418
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Corneria - Disable Arwing Spawns (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1DA628 ------ 4BFFF3D5 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801D    # lis r12, 0x801D
+618CCE1C    # ori r12, r12, 0xCE1C
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000
+
+
+	-==-
+
+
+Corneria - Disable Great Fox's Gun (starts out dead) (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1DDF70 ------ 40800018 -> Branch
+41800038    # blt RETURN
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820014    # beq ALPHA
+# OMEGA:
+3D80801E    # lis r12, 0x801E
+618C17C0    # ori r12, r12, 0x17C0
+7D8903A6    # mtctr r12
+4E800420    # bctr
+# ALPHA:
+3D80801E    # lis r12, 0x801E
+618C13A8    # ori r12, r12, 0x13A8
+7D8903A6    # mtctr r12
+4E800420    # bctr
+# RETURN:
+00000000
+
+
+	-==-
+
+
+Brinstar - Disable Acid (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1D65C0 ------ 7C0802A6 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820008    # beq RETURN
+4E800020    # blr
+# RETURN:
+7C0802A6    # mflr r0
+00000000    # Branch
+
+
+	-==-
+
+
+Mute City Disable cars (SDR Toggleable)
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1ECD68 ------ 480018AD -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D80801F    # lis r12, 0x801F
+618C1A34    # ori r12, r12, 0x1A34
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # branch
+
+
+	-==-
+
+
+Fountain of Dreams - Remove Side Platforms (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1C9494 ------ 801B0014 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820014    # beq ALPHA
+# OMEGA:
+3D80801C    # lis r12, 0x801C
+618CC9F0    # ori r12, r12, 0xC9F0
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# ALPHA:
+801B0014    # lwz r0, 0x14(r27)
+# RETURN:
+00000000    # branch
+
+
+	-==-
+
+
+Fountain of Dreams - Disables the Water Jets (SDR Dol Toggled)
+[Zauron, _glook]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x801CC8AC ---- EC0007FA -> Branch
+# Enable/Disable water jets
+# Check if stage dol changes are enabled
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+4182000C    # beq ENABLE_JETS
+# DISABLE_JETS:
+FC000028    # fsub f0,f0,f0
+48000008    # b RETURN
+# ENABLE_JETS:
+EC0007FA    # fmadds f0, f0, f31, f0
+# RETURN:
+00000000    # branch
+
+
+	-==-
+
+
+Peach's Castle - Disable Switches and Bullet Bills (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1CA488 ------ 7C0802A6 -> Branch
+7C0802A6    # mflr r0
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0x0
+41820008    # beq- RETURN
+4E800020    # blr
+# RETURN:
+00000000    # return
+
+
+	-==-
+
+
+Green Greens - Disable Whispy Woods (Wind & Apples) (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2107F0 ------ 7C0802A6 -> Branch
+7C0802A6    # mflr r0
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820008    # beq BLANK_ALPHA
+4E800020    # blr
+# BLANK_ALPHA:
+00000000    # return
+
+
+	-==-
+
+
+Green Greens - Disable Initial Bricks on Green Greens (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x2112CC ------ 4800046D -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D808021    # lis r12, 0x8021
+618C4B58    # ori r12, r12, 0x4B58
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Green Greens - Disable Falling Bricks (SDR Toggleable)
+[Zauron]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x21369C ------ 4BFFE89D -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12, r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D808021    # lis r12, 0x8021
+618C5358    # ori r12, r12, 0x5358
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
 
 
 	-==-
@@ -19,9 +287,93 @@ NTSC 1.02 ---- 0x1DFF28 ------ 480000D1 -> 60000000
 Jungle Japes No water or klaptraps (SDR Toggleable)
 [Achilles]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x1FF7AC ------ 480000AD -> 60000000
--------------- 0x1FF97C ------ 7C0802A6 -> 4E800020
--------------- 0x1FF75C ------ 4BFC1E7D -> 60000000
+NTSC 1.02 ---- 0x1FF7AC ------ 480000AD -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D808020    # lis r12, 0x8020
+618C2C78    # ori r12, r12, 0x2C78
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+-------------- 0x1FF97C ------ 7C0802A6 -> Branch
+7C0802A6    # mflr r0
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+41820008    # beq BLANK_ALPHA
+4E800020    # blr
+# BLANK_ALPHA:
+00000000    # return
+-------------- 0x1FF75C ------ 4BFC1E7D -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D80801C    # lis r12, 0x801C
+618C49F8    # ori r12, r12, 0x49F8
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # return
+
+
+	-==-
+
+
+Kongo Jungle 64 (past stage) Remove Barrel (SDR Toggleable)
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x20C0A0 ------ 4800006D -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D808020    # lis r12, 0x8020
+618CF52C    # ori r12, r12, 0xF52C
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # return
+
+
+	-==-
+
+
+Mushroom Kingdom 2 Disable Pidgit/Birdo (SDR Toggleable)
+[flieskiller]
+Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
+NTSC 1.02 ---- 0x1F9BD0 ------ 480007B9 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D80801F    # lis r12, 0x801F
+618CD7A8    # ori r12, r12, 0xD7A8
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # Return
+-------------- 0x1F9BC8 ------ 480003E5 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne BLANK_OMEGA
+3D80801F    # lis r12, 0x801F
+618CD3CC    # ori r12, r12, 0xD3CC
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# BLANK_OMEGA:
+00000000    # Return
 
 
 	-==-
@@ -30,4 +382,16 @@ NTSC 1.02 ---- 0x1FF7AC ------ 480000AD -> 60000000
 Final Destination - Disable Background Transitions (SDR Toggleable)
 [Achilles, Dan Salvato]
 Version -- DOL Offset ------ Hex to Replace ---------- ASM Code
-NTSC 1.02 ---- 0x2176C4 ------ 48000805 -> 60000000
+NTSC 1.02 ---- 0x2176C4 ------ 48000805 -> Branch
+lis r12, <<varStageDolChangesEnabled>>@h
+ori r12,r12, <<varStageDolChangesEnabled>>@l
+818C0000    # lwz r12, 0(r12)
+2C0C0000    # cmpwi r12, 0
+40820014    # bne RETURN
+# ALPHA:
+3D808021    # lis r12, 0x8021
+618CB2E8    # ori r12, r12, 0xB2E8
+7D8903A6    # mtctr r12
+4E800421    # bctrl
+# RETURN:
+00000000    # Return

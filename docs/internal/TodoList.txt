@@ -4,6 +4,11 @@ The stage ID in a .slp file is at 0x40
 
 CHANGELIST TO SLIPPI:
 ---------------------
+Slippi 2.2.0
+No longer needs slp fixer script
+Can replay any played stage
+
+Slippi 2.11
 The SDR Options menu removed, as syncing those for rollback would be too complicated, both from a player and coding perspective.
 The game code changed back to GALE01r2 to be slippi gecko codes compatible
 Added SDR Stages to rotation.

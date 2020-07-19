@@ -1,0 +1,150 @@
+Stage ID Handler
+If stage ID < 0x30, make sure it's frozen
+If stage ID < 0x60, make sure Filename is Gr and stage dol toggles = false, subtract by 0x30
+If stage ID > 0x60, then use omega toggles
+[_glook]
+
+<varStageDolChangesEnabled> ALL
+00000000
+
+<tblStageChanges> ALL
+# This is a table of elements that ar 4 bytes long (dword). This controls what happens on alpha/omega toggle.
+# The index into the table is (chosen_stage_ID - 2).
+# Each dword in an element is the behavior data, for stage loading, for omega stage list.
+# bytes 0,1 - Half word, alternate stage id. If 0, we keep normal stage id. If != 0, loads that stage id instead.
+# byte 2 - 0 to load normal version (GrXx.dat), 1 to load alt version (GoXx.dat)
+# byte 3 - Controls dol stage mod triggers. This value is stored in varStageDolChangesEnabled. 0 is usually "all off".
+# Alt  Go Dol  SID  Original Stage                      SDR Stage
+  0000 00 01  # 02  Fountain of Dreams (Izumi)          No side platforms FoD
+  0005 01 00  # 03  Pokemon Stadium (Pstadium)          Omega Kongo Jungle
+  0000 00 01  # 04  Princess Peach's Castle (Castle)    Omega Peach's Castle
+  0018 01 00  # 05  Kongo Jungle (Kongo)                Omega Big Blue
+  0000 00 01  # 06  Brinstar (Zebes)                    No Acid Brinstar
+  0000 00 01  # 07  Corneria                            Omega Corneria
+  001F 01 00  # 08  Yoshi's Story (Story)               Reverse Battlefield
+  0004 01 01  # 09  Onett                               Princess Peach's Flat
+  0014 01 01  # 0A  Mute City                           Omega Mushroom Kingdom II
+  0013 01 00  # 0B  Rainbow Cruise (RCruise)            Omega Mushroom Kingdom I
+  000A 00 01  # 0C  Jungle Japes (Garden)               Omega Mute City
+  0000 01 00  # 0D  GreatBay                            High Tide @ Great Bay
+  0000 01 00  # 0E  Hyrule Temple (Shrine)              Skyrule
+  0002 00 00  # 0F  Brinstar Depths (Kraid)             Fountain of Dreams (normal)
+  0000 01 00  # 10  Yoshi's Island (Yoster)             Omega Yoshi's Island
+  0000 00 01  # 11  Green Greens (Greens)               Omega Green Greens
+  0000 01 00  # 12  Fourside                            Fourside Smashville
+  001E 00 01  # 13  Mushroom Kingdom I (Inishie1)       Omega Kongo Jungle 64
+  0003 00 00  # 14  Mushroom Kingdom II (Inishie2)      Pokemon Stadium (normal)
+  0000 00 00  # 15  Akaneia (Deleted Stage)             <No Change>
+  0047 00 00  # 16  Venom                               Warzone Corneria
+  001D 01 00  # 17  Poke Floats (Pura)                  Omega Yoshi Island 64
+  000C 01 01  # 18  Big Blue                            Cranky's Treehouse
+  0053 00 00  # 19  Icicle Mountain (Icemt)             Trophy Tussle
+  0000 00 00  # 1A  Icetop                              <No Change>
+  0053 01 00  # 1B  Flat Zone                           Mount Olympus
+  0000 00 01  # 1C  Dream Land N64 (old ppp)            No Wind Dreamland 64
+  0008 00 01  # 1D  Yoshi's Story N64 (old yosh)        No Flyguys Yoshi's Story
+  0011 01 00  # 1E  Kongo Jungle N64 (old kong)         Whispy's Battlegrounds
+  0000 00 00  # 1F  Battlefield (battle)                <No Change>
+  0000 00 01  # 20  Final Destination (last)            No BG Transitions Final Destination
+  0000 00 00  # ??  Unknown, maybe padding              <No Change>
+
+<tblStageFilenameAddresses> ALL
+# Each element is a word, first half is stage id and second half is the lower halfword of addr to its filename
+# All filename addresses start with 0x803e. Last element is 0.
+0011 76C4   # Whispy's Battlegrounds
+0012 3D88   # Smashville Fourside
+000C 52D4   # Cranky's Treehouse
+001D 6500   # Omega Yoshi's Story 64
+0004 1198   # Princess Peach's Flat
+0014 4bf4   # Omega Mushroom Kingdom II
+0005 17f4   # Omega Kongo Jungle
+000D 3f60   # High Tide @ Great Bay
+000E 5124   # Skyrule
+0053 7d28   # Mount olympus
+001F 7e2c   # Reverse Battlefield
+0013 4944   # Omega Mushroom Kingdom I
+0010 51c0   # Omega Yoshi's Island
+0018 2d14   # Omega Big Blue
+00000000    # END
+
+<funSlippiStageIdHandler> NTSC 1.02
+# Stage loader for Slippi Online
+# r12 == Dol toggle
+# r11 == Stage ID (or 0 if no change)
+# r10 == 0 for Gr stage, 1 for Go stage
+li r12, 0
+li r10, 0
+# Get the stage id in r11, 8048053F
+lis r3, 0x8048
+ori r3, r3, 0x053F
+lbz r11, 0(r3)
+cmpwi r11, 0x30
+blt RANDOM_STAGE
+cmpwi r11, 0x60
+blt ALPHA_STAGE
+b OMEGA_STAGE
+RANDOM_STAGE:
+cmpwi r11, 0x08  # Turn Yoshi's Flyguys off
+beq RANDOM_DOL_TOGGLE_ON
+cmpwi r11, 0x1C  # Turn DL64 Wind off
+bne SET_STAGE_DATA
+RANDOM_DOL_TOGGLE_ON:
+li r12, 1
+b SET_STAGE_DATA
+ALPHA_STAGE:
+subi r11, r11, 0x30
+b SET_STAGE_DATA
+OMEGA_STAGE:
+subi r11, r11, 0x60
+lis r4, <<tblStageChanges>>@h
+ori r4, r4, <<tblStageChanges>>@l
+subi r5, r11, 0x2               # Get index into stage table
+slwi r5, r5, 2                  # Multiply by 4 to get bytes offset
+add r4, r4, r5                  # r4 is now address of stage change data
+lbz r10, 2(r4)                  # Get if we should load Go stage dats
+lbz r12, 3(r4)                  # Get if we should do DOL mods
+lhz r3, 0(r4)                   # Get alternate stage id
+cmpwi r3, 0                     # No alt id, keep normal id
+beq SET_STAGE_DATA
+mr r11, r3                      # Set id to alt id
+SET_STAGE_DATA:
+# Dol toggle first
+lis r4, <<varStageDolChangesEnabled>>@h
+ori r4, r4, <<varStageDolChangesEnabled>>@l
+stw r12, 0(r4)
+# Store stage ID
+lis r3, 0x8048
+ori r3, r3, 0x53F   # 0x8048053F == Stage ID
+stb r11, 0(r3)
+# Set filename to Go or Gr
+lis r4, <<tblStageFilenameAddresses>>@h
+ori r4, r4, <<tblStageFilenameAddresses>>@l
+LOOP_FIND_FILENAME_ADDR:
+lhz r5, 0(r4)
+cmpwi r5, 0
+beq RETURN
+cmpw r5, r11
+bne NEXT_ELEMENT
+lhz r4, 2(r4)
+oris r4, r4, 0x803E
+cmpwi r10, 0
+bne USE_O
+li r3, 0x72    # The letter 'r'
+b WRITE_LETTER
+USE_O:
+li r3, 0x6f    # The letter 'o'
+WRITE_LETTER:
+stb r3, 2(r4)
+b RETURN
+NEXT_ELEMENT:
+addi r4, r4, 4      # Next element
+b LOOP_FIND_FILENAME_ADDR
+RETURN:
+blr
+
+NTSC 1.02 ---- 0x8016E750 ------ 3C808017 -> Branch
+# r31 is match struct
+bl <funSlippiStageIdHandler>
+3C608017    # lis r3, 0x8017    # Restore what was in r3
+3C808017    # lis r4, 0x8017    # Code at injection point
+00000000    # Branch Back
