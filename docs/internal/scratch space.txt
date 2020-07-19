@@ -1,70 +1,279 @@
-0x801b1040 is scene prep
-0x801b1044 to overwrite?
 
-Start of online submenu entry: 0x803eb750
+NTSC 1.02 ---- 0x80186ec8 ------ 900DAF68 -> Branch
+# Hooked right after splash screen with Slippi Online
+# Pick a stage at this point, display it, and store for later
+900DAF68    # stw r0, -0x5098(r13) | Code at hook point
+# check if we're in online state
+3C608048    # lis r3,-32696
+80639D30    # lwz r3,-25296(r3)
+5463443E    # rlwinm r3,r3,8,16,31
+2C030408    # cmpwi r3,1032
+40820074	# bne- RETURN   # If not "slippi online", then skip this
 
-Theory: Try and overwrite menu data so that we don't allow unranked to be selected.
-Replace the button text with "No Unranked"
-Replace the description text with "Go to http://smashladder.com/SDRemix to find matches".
+# Get index into random stage pools
+38600000    # li r3, 0
+bl 0x80005610   # FN_LoadMatchState
+80830005    # lwz r4, 0x5(r3) # Load random seed
+3980000A	# li r12, 0xA         # <<Size of tblSlippiOnlineStages>>
+7D646396	# divwu r11, r4, r12    # int division
+7D6B61D6	# mullw r11, r11, r12   # seed without remainder
+7C8B2050	# sub r4, r4, r11       # Get remainder, this is index
+
+# Get the stage text and put it in r3
+lis r3, <<tblSlippiOnlineStages>>@h
+ori r3, r3, <<tblSlippiOnlineStages>>@l
+1D84000C    # mulli r12, r4, 0xC    # mult by element size
+7D836214    # add r12, r3, r12      # Address into array
+
+# Store Dol Changes bool
+886C0003    # lbz r3, 3(r12)
+lis r11, <<varSlippiDolToggle>>@h
+ori r11, r11, <<varSlippiDolToggle>>@l
+906B0000    # stw r3, 0(r11)     # Store the DOL toggle
+
+# Store stage ID for later
+A06C0000    # lhz r3, 0(r12)
+lis r11, <<varSlippiStageId>>@h
+ori r11, r11, <<varSlippiStageId>>@l
+906B0000    # stw r3, 0(r11)
+
+# Replace displayed text
+806C0008    # lwz r3, 0x8(r12)      # The stage text location
+3C8080BD    # lis r4, 0x80bd
+60846240    # ori r4, r4, 0x6240    # Display Text location
+90640000    # stw r3, 0(r4)
+
+# Change filename
+806C0004    # lwz r3, 4(r12)
+2C030000    # cmpwi r3, 0
+4182000C    # beq RETURN
+3880006F    # li r4, 0x6f    # The letter 'o'
+98830002    # stb r4, 2(r3)
+
+            # RETURN
+00000000    # Branch Back
+
+<tblSlippiOnlineStages> ALL
+# This table is similar to tblStageChanges except is a random pool of items to randomly select for Slippi Online.
+# The second word of every section is the location of the filename to overwrite. 0 if doesn't matter.
+# The third word is the string to display on splash screen
+# The code that uses this has to make sure that the index is right
+0020 00 01 00000000 # No transition Final Destination
+    .long <<wsrFinalDestination>>
+001F 00 00 00000000 # Battlefield
+    .long <<wsrBattlefield>>
+001C 00 01 00000000 # No wind Dreamland
+    .long <<wsrDreamlandN64>>
+0008 00 01 00000000 # No flyguys Yoshi's Story
+    .long <<wsrYoshisStory>>
+0002 00 00 00000000 # Normal Fountain of Dreams
+    .long <<wsrFoD>>
+0003 00 00 00000000 # Normal Pokemon Stadium
+    .long <<wsrPokemonStadium>>
+0012 01 00 803E3D88 # Fourside Smashville           /GrFs.dat
+    .long <<wsrFourside>>
+000C 01 01 803E52D4 # Cranky's Treehouse            /GrGd.dat
+    .long <<wsrCrankysTreehouse>>
+0011 01 00 803E76C4 # Whispy's Battlegrounds        /GrGr.dat
+    .long <<wsrWhispysBattlegrounds>>
+001D 01 00 803E6500 # Yoshi's 64 special            /GrOy.dat
+    .long <<wsrYoshisIsland64>>
+Omega Kongo Jungle: /GrKg.dat   803e17f4
+Omega Big Blue:     /GrBb.dat   803e2d14
+Reverse BF:         /GrNBa.dat  803e7e2c
+Peach's Flat:       /GrCs.dat   803e1198
+Omega Mushroom II:  /GrI2.dat   803e4bf4
+Omega Mushroom I:   /GrI1.dat   803e4944
+Great Bay:          /GrGb.dat   803e3f60
+Skyrule:            /GrSh.dat   803e5124
+Omega Yoshi Island: /GrYt.dat   803e51c0
+Omega Yoshis 64:    /GrOy.dat   803E6500
+Smashville 4Side:   /GrFs.dat   803E3D88
+Cranky's Treehouse: /GrGd.dat   803E52D4
+Mount Olympus:      /GrNFg.dat  803e7d28
+Whispy's BattleGrd: /GrGr.dat   803E76C4
 
 
-81323600 is the location of the "play unranked matches" string
-
-
-80BD5D00 - Address of pointer to currently displayed text at menu description section
-8131A504 - 8131A5A4 - Pointer to "Play unranked matches" string
-
-Text string:
-100C RRGGBB 0E 00B3
-00B3 1606 0000 0000
-18
-TEXT (8 aligned)
-0F0D00
-
-Longer string:
-120C RRGGBB 0E 00B3
-0080 1607 0000 FFEC
-03
-06 0000 0000 18
-First Line
-19
-03 # Newline
-06 00000000 18
-Second Line
-190f0d00
-
-
-0x804A04F0  <= Menus_regularMatch
-804A04F2 is currently highlighted menu item
-
-branch starts with: 0b010010
-Address portion is 0x03FFFFFF
-OnMenuPrep hook location: 801B1040
-Instruction offset of branch: 0x2F0
-What to replace it with 0x24: beq 0x24, or 41820024
-
-
-Online submenu: 0x803eb750 (0x14 long
-
-
-
-
-8131A500
-
-
-Text overwritten at:
-803A5C38    (zero out?)
-803A63A4    set to actual thing
-
-On 803A63A4,
-r4 = index into a place to find the text to the menu description
-r3 = 0x804D1124 + (arg1.bytes[0x4F] * 4)
-r3 = r3.words[0]
 
 
 
 
 
--0x49ec(r13) == SWITCH_TO_ONLINE_SUBMENU
 
-0x803eb760 is location to OnlineSubmenuThink function, which we want to
+
+
+
+C2186EC4 00000056 #Online/Menus/VSScreen/InitVsSplash.asm
+3C608048 80639D30
+5463443E 2C030408
+40820294 4800004C
+4E800021 00000000
+3F800000 3F000000
+3F19999A F15959FF
+6565FEFF 42700000
+43C80000 436E0000
+42700000 43DC0000
+41F00000 43200000
+43960000 41B00000
+50310050 32000000
+7C0802A6 90010004
+9421FF50 BE810008
+38600000 3C80803F
+608411A4 3CA0803F
+60A51194 3D80803A
+618C62A0 7D8903A6
+4E800421
+38600000
+3D808000 618C5610
+7D8903A6 4E800421
+7C7D1B78
+4BFFFF6D
+7FE802A6 38600000
+38800000 3D80803A
+618C6754 7D8903A6
+4E800421 7C7E1B78
+38800001 989E0049
+38800000 989E004A
+C03F0000 D03E0008
+C03F0004 D03E0024
+D03E0028 387F0010
+389F003C 38BD000A
+C03F0018 480000D1
+387F0014 389F003F
+38BD0029 C03F001C
+480000BD 38600000
+38800000 C03F0020
+C05F0028 C07F002C
+C09F0030 C0BF0034
+3D80803A 618C5ACC
+7D8903A6 4E800421
+7C7E1B78 C03F0004
+D03E0024 D03E0028
+38800001 989E004A
+989E0049 C03F0000
+D03E0008
+3CA0803B
+60A57808 A0DD0166
+38600000 1C830002
+7C85222E 7C043000
+41820014 38630001
+2C03001D 4180FFE8
+38600000
+3C80803E 6084D488 7C841A14 8884005C
+7FC3F378
+3D80803A 618C6368
+7D8903A6 4E800421
+
+BA810008 800100B4
+382100B0 7C0803A6
+480000D4 7C0802A6
+90010004 9421FF50
+BE810008 D0210080
+7C7D1B78 7CBC2B78
+C05F0024 7FC3F378
+3D80803A 618C6B98
+7D8903A6 4E800421
+7C7B1B78 7FC3F378
+7F64DB78 C03F0008
+C05F0008 3D80803A
+618C7548 7D8903A6
+4E800421 7FC3F378
+7F64DB78 7FA5EB78
+3D80803A 618C74F0
+7D8903A6 4E800421
+C0210080 C05F0024
+C07F0038 EC42182A
+7FC3F378 7F84E378
+3D80803A 618C6B98
+7D8903A6 4E800421
+7C641B78 7FC3F378
+C03F000C C05F000C
+3D80803A 618C7548
+7D8903A6 4E800421
+BA810008 800100B4
+382100B0 7C0803A6
+4E800020 3800FFFF
+60000000 00000000
+
+
+803A6368
+160E008A008A
+200f202c20312024202f1a200d202820362037202c203120242037202c20322031
+
+810d0eaf or 8131b744 == wsrFinalDestination
+81318d10 == &wsrFinalDestination
+
+810D0BC7 == wsrPrincessPeach'sCastle
+80bd5d00 or 810D03E0
+
+804D1124 is important to text somehow
+804D1124 =>
+0x803a6368
+
+0x803f11a4 or 0x803f1194 are important?
+
+Structure that starts at 81318CA4
+81318CA4 => Fountain of Dreams
+81318CA8 => Kongo
+81318CAC => Peach's Castle
+81318CB0 => Jungle Japes
+
+
+<tblSlippiOnlineStages> ALL
+# This table is similar to tblStageChanges except is a random pool of items to randomly select for Slippi Online.
+# The second word of every section is the location of the filename to overwrite. 0 if doesn't matter.
+# The third word is the string to display on splash screen
+# The code that uses this has to make sure that the index is right
+0020 00 01 00000000 # No transition Final Destination
+    .long <<wsrFinalDestination>>
+001F 00 00 00000000 # Battlefield
+    .long <<wsrBattlefield>>
+001C 00 01 00000000 # No wind Dreamland
+    .long <<wsrDreamlandN64>>
+0008 00 01 00000000 # No flyguys Yoshi's Story
+    .long <<wsrYoshisStory>>
+0002 00 00 00000000 # Normal Fountain of Dreams
+    .long <<wsrFoD>>
+0003 00 00 00000000 # Normal Pokemon Stadium
+    .long <<wsrPokemonStadium>>
+0012 01 00 803E3D88 # Fourside Smashville           /GrFs.dat
+    .long <<wsrFourside>>
+000C 01 01 803E52D4 # Cranky's Treehouse            /GrGd.dat
+    .long <<wsrCrankysTreehouse>>
+0011 01 00 803E76C4 # Whispy's Battlegrounds        /GrGr.dat
+    .long <<wsrWhispysBattlegrounds>>
+001D 01 00 803E6500 # Yoshi's 64 special            /GrOy.dat
+    .long <<wsrYoshisIsland64>>
+
+
+More names:
+
+
+
+Peach's castle string start: 80d16707
+Pointer to string: 80bd6134
+Pointer is in structure, at 0x5C: 80bd60d8
+
+Points to:
+804ee894 -> 804ee878 : 804ee858
+804ee8d4 ->
+80bd5fb8 -> ????  80bd5f68
+80bd60d0 ->
+80d18d6c ->
+
+
+80bd5f68
+
+804D1158 -> 804ee770
+BOTTOM OF STACK: 804D1124
+
+
+
+lwz r30, -0x3D28(r13)
+if 0, then follow 0x50
+If addr, then follow addr
+804db6a0 - 3D28 = 804D7978 -> r30
+r30 == 80bd5c88, which is 0, so follow +0x50 (80BD5CD8)
+> 80bd5df8 == 0, +0x50 (80BD5E48)
+>> 80bd5f68 == 0, +0x50 (80BD5FB8)
+>>> 80bd60d8 == not 0, stop, get 0x5C

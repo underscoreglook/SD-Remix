@@ -1,8 +1,14 @@
 CHANGELIST TO SLIPPI:
 ---------------------
+Slippi 2.2.0:
+First random stages reverted to 6 neutral stages, but have no wind or flyguys.
+Loser picking stages is fully supported with alpha/omega toggles.
+Banner updated with slippi 2.2.0 as banner item
+
+Original:
 The SDR Options menu removed, as syncing those for rollback would be too complicated, both from a player and coding perspective.
 The game code changed back to GALE01r2 to be slippi gecko codes compatible
-Added SDR Stages to rotation.
+Random stages are SD Remix stages.
 Disabled Unranked mode.
 New banner and metadata.
 

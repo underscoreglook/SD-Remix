@@ -186,3 +186,341 @@ ori r0, r0, <<wsrDisabledUnrankedDescription>>@l
 7D806378    # mr r0, r12  # Set the normal text
             # RETURN:
 00000000    # Branch back
+
+
+    -==-
+
+
+Slippi compatible Alpha/Omega in Loser SSS
+[_glook]
+<funGetSlippiCompatibleStageId> NTSC 1.02
+lbz r3, 0xB(r3)     # Get the stage ID
+# Check if online SSS
+lis r4, 0x8048
+lwz r4,-0x62D0(r4)  # 80479D30, major/minor scene
+rlwinm r4,r4,8,16,31
+cmpwi r4, 0x108     # 108 == SCENE_ONLINE_SSS
+bne EXIT
+# If alpha, add 0x30, if omega add 0x60
+lis r4, <<varIsAlphaOrOmega>>@h
+ori r4, r4, <<varIsAlphaOrOmega>>@l
+lwz r4, 0(r4)       # Get alpha/omega toggle
+addi r4, r4, 1
+mulli r4, r4, 0x30
+add r3, r3, r4
+EXIT:
+blr                 # Exit from 8025BC08
+
+NTSC 1.02 --- 0x8025BC18 ---- 8863000B -> Branch
+# This normally sets the currently selected stage id (from SSS) to r3.
+# Instead, use r4-r12 to determine if we're in online SSS if we should send an alternative id
+b <funGetSlippiCompatibleStageId>
+00000000
+
+
+    -==-
+
+
+Stage ID Handler
+If stage ID < 0x30, make sure it's frozen
+If stage ID < 0x60, make sure Filename is Gr and stage dol toggles = false, subtract by 0x30
+If stage ID > 0x60, then use omega toggles
+[_glook]
+
+<tblStageFilenameAddresses> ALL
+# Each element is a word, first half is stage id and second half is the lower halfword of addr to its filename
+# All filename addresses start with 0x803e. Last element is 0.
+0011 76C4   # Whispy's Battlegrounds
+0012 3D88   # Smashville Fourside
+000C 52D4   # Cranky's Treehouse
+001D 6500   # Omega Yoshi's Story 64
+0004 1198   # Princess Peach's Flat
+0014 4bf4   # Omega Mushroom Kingdom II
+0005 17f4   # Omega Kongo Jungle
+000D 3f60   # High Tide @ Great Bay
+000E 5124   # Skyrule
+0053 7d28   # Mount olympus
+001F 7e2c   # Reverse Battlefield
+0013 4944   # Omega Mushroom Kingdom I
+0010 51c0   # Omega Yoshi's Island
+0018 2d14   # Omega Big Blue
+00000000    # END
+
+<funSlippiStageIdHandler> NTSC 1.02
+# Stage loader for Slippi Online
+# r12 == Dol toggle
+# r11 == Stage ID (or 0 if no change)
+# r10 == 0 for Gr stage, 1 for Go stage
+li r12, 0
+li r10, 0
+lis r4, 0x8048
+lwz r4, -25296(r4)
+rlwinm r4, r4, 8, 16, 31
+cmpwi r4, 0x208
+bne RETURN   # If not "slippi online", then skip this
+# Get the stage id in r11, 8048053F
+lis r3, 0x8048
+ori r3, r3, 0x053F
+lbz r11, 0(r3)
+cmpwi r11, 0x30
+blt RANDOM_STAGE
+cmpwi r11, 0x60
+blt ALPHA_STAGE
+b OMEGA_STAGE
+RANDOM_STAGE:
+cmpwi r11, 0x08  # Turn Yoshi's Flyguys off
+beq RANDOM_DOL_TOGGLE_ON
+cmpwi r11, 0x1C  # Turn DL64 Wind off
+bne SET_STAGE_DATA
+RANDOM_DOL_TOGGLE_ON:
+li r12, 1
+b SET_STAGE_DATA
+ALPHA_STAGE:
+subi r11, r11, 0x30
+b SET_STAGE_DATA
+OMEGA_STAGE:
+subi r11, r11, 0x60
+lis r4, <<tblStageChanges>>@h
+ori r4, r4, <<tblStageChanges>>@l
+subi r5, r11, 0x2               # Get index into stage table
+slwi r5, r5, 2                  # Multiply by 4 to get bytes offset
+add r4, r4, r5                  # r4 is now address of stage change data
+lbz r10, 2(r4)                  # Get if we should load Go stage dats
+lbz r12, 3(r4)                  # Get if we should do DOL mods
+lhz r3, 0(r4)                   # Get alternate stage id
+cmpwi r3, 0                     # No alt id, keep normal id
+beq SET_STAGE_DATA
+mr r11, r3                      # Set id to alt id
+SET_STAGE_DATA:
+# Dol toggle first
+lis r4, <<varStageDolChangesEnabled>>@h
+ori r4, r4, <<varStageDolChangesEnabled>>@l
+stw r12, 0(r4)
+# Store stage ID
+lis r3, 0x8048
+ori r3, r3, 0x53F   # 0x8048053F == Stage ID
+stb r11, 0(r3)
+# Set filename to Go or Gr
+lis r4, <<tblStageFilenameAddresses>>@h
+ori r4, r4, <<tblStageFilenameAddresses>>@l
+LOOP_FIND_FILENAME_ADDR:
+lhz r5, 0(r4)
+cmpwi r5, 0
+beq RETURN
+cmpw r5, r11
+bne NEXT_ELEMENT
+lhz r4, 2(r4)
+oris r4, r4, 0x803E
+cmpwi r10, 0
+bne USE_O
+li r3, 0x72    # The letter 'r'
+b WRITE_LETTER
+USE_O:
+li r3, 0x6f    # The letter 'o'
+WRITE_LETTER:
+stb r3, 2(r4)
+b RETURN
+NEXT_ELEMENT:
+addi r4, r4, 4      # Next element
+b LOOP_FIND_FILENAME_ADDR
+RETURN:
+blr
+
+NTSC 1.02 ---- 0x8016E750 ------ 3C808017 -> Branch
+bl <funSlippiStageIdHandler>
+3C608017    # lis r3, 0x8017    # Restore what was in r3
+3C808017    # lis r4, 0x8017    # Code at injection point
+00000000    # Branch Back
+
+
+    -==-
+
+
+Correct text for stage ids >= 0x30
+These are the Loser picked SSS stages
+If one of our special stages, 0x30 or higher, change it to a normal stage
+[_glook]
+
+<wsrSmashvilleFourside> ALL
+160E 008A 008A 201c 2030 2024 2036 202b 2039 202c 202f 202f 2028 1a 200f 2032 2038 2035 2036 202c 2027 2028
+0F00 000000
+
+<wsrOmegaYoshisStoryN64> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2022 2032 2036 202b 202c 20f3 2036 1a 201c 2037 2032 2035 203c 1a 2017 2006 2004
+0F00 00
+
+<wsrOmegaMushroomKingdomI> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2016 2038 2036 202b 2035 2032 2032 2030 1a 2014 202c 2031 202a 2027 2032 2030 1a 2012
+0F00 000000
+
+<wsrOmegaMushroomKingdomII> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2016 2038 2036 202b 2035 2032 2032 2030 1a 2014 202c 2031 202a 2027 2032 2030 1a 2012 2012
+0F00 00
+
+<wsrOmegaKongoJungle> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2014 2032 2031 202a 2032 1a 2013 2038 2031 202a 202f 2028
+0F00 0000
+
+<wsrOmegaKongoJungleN64> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2014 2032 2031 202a 2032 1a 2013 2038 2031 202a 202f 2028 1a 2017 2006 2004
+0F00 000000
+
+<wsrOmegaPeachsCastle> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2019 2028 2024 2026 202b 20f3 2036 1a 200c 2024 2036 2037 202f 2028
+0F00 0000
+
+<wsrOmegaBigBlue> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 200b 202c 202a 1a 200b 202f 2038 2028
+0F00 0000
+
+<wsrNoLavaBrinstar> ALL
+160E 008A 008A
+2017 2032 1a 2015 2024 2039 2024 1a 200b 2035 202c 2031 2036 2037 2024 2035
+0F00 0000
+
+<wsrOmegaCorneria> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 200c 2032 2035 2031 2028 2035 202c 2024
+0F00 00
+
+<wsrOmegaMuteCity> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2016 2038 2037 2028 1a 200c 202c 2037 203c
+0F00
+
+<wsrHighTideAtGreatBay> ALL
+160E 008A 008A
+2011 202c 202a 202b 1a 201d 202c 2027 2028 1a 200a 2037 1a 2010 2035 2028 2024 2037 1a 200b 2024 203c
+0F00
+
+<wsrOmegaYoshisIsland> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2022 2032 2036 202b 202c 20f3 2036 1a 2012 2036 202f 2024 2031 2027
+0F00 0000
+
+<wsrOmegaGreenGreens> ALL
+160E 008A 008A
+2018 2030 2028 202a 2024 1a 2010 2035 2028 2028 2031 1a 2010 2035 2028 2028 2031 2036
+0F00 0000
+
+<arrOmegaStageSplashScreenNames> ALL
+  # Each word is a pointer to the wide string for the stage.
+  # If it's less than 0x100, then it is a stage id to be used with normal stage names.
+  # The index is omega stage id - 2
+  .long <<wsrFodNoSides>>               # 02  No side platforms FoD
+  .long <<wsrOmegaKongoJungle>>         # 03  Omega Kongo Jungle
+  .long <<wsrOmegaPeachsCastle>>        # 04  Omega Peach's Castle
+  .long <<wsrOmegaBigBlue>>             # 05  Omega Big Blue
+  .long <<wsrNoLavaBrinstar>>           # 06  No Acid Brinstar
+  .long <<wsrOmegaCorneria>>            # 07  Omega Corneria
+  .long <<wsrReverseBattlefield>>       # 08  Reverse Battlefield
+  .long <<wsrPeachesFlat>>              # 09  Princess Peach's Flat
+  .long <<wsrOmegaMushroomKingdomII>>   # 0A  Omega Mushroom Kingdom II
+  .long <<wsrOmegaMushroomKingdomI>>    # 0B  Omega Mushroom Kingdom I
+  .long <<wsrOmegaMuteCity>>            # 0C  Omega Mute City
+  .long <<wsrHighTideAtGreatBay>>       # 0D  High Tide @ Great Bay
+  .long <<wsrSkyrule>>                  # 0E  Skyrule
+  00000002                              # 0F  Fountain of Dreams (normal)
+  .long <<wsrOmegaYoshisIsland>>        # 10  Omega Yoshi's Island
+  .long <<wsrOmegaGreenGreens>>         # 11  Omega Green Greens
+  .long <<wsrSmashvilleFourside>>       # 12  Fourside Smashville
+  .long <<wsrOmegaKongoJungleN64>>      # 13  Omega Kongo Jungle 64
+  00000003                              # 14  Pokemon Stadium (normal)
+  00000000                              # 15  Invalid
+  .long <<wsrWarzoneCorneria>>          # 16  Warzone Corneria
+  .long <<wsrOmegaYoshisStoryN64>>      # 17  Omega Yoshi's Story 64
+  .long <<wsrCrankysTreehouse>>         # 18  Cranky's Treehouse
+  .long <<wsrTrophyTussle>>             # 19  Trophy Tussle
+  00000000                              # 1A  Invalid
+  .long <<wsrMountOlympus>>             # 1B  Mount Olympus
+  0000001C                              # 1C  Dreamland 64
+  00000008                              # 1D  Yoshi's Story
+  .long <<wsrWhispysBattlegrounds>>     # 1E  Whispy's Battlegrounds
+  0000001F                              # 1F  Battlefield
+  00000020                              # 20  Final Destination
+  00000000                              # ??  Invalid
+
+<funCorrectSlippiOnlineSplashStageName> NTSC 1.02
+lis r3,-32696
+lwz r3,-25296(r3)
+rlwinm r3,r3,8,16,31
+cmpwi r3,1032
+bne RETURN   # If not "slippi online", then skip this
+# Get stage ID
+li r3, 0
+bl 0x80005610       # FN_LoadMatchState
+lhz r6, 358(r3)     # Stage ID
+# Also, find the text struct for the stage name
+lwz r12, -0x3D28(r13)    # Get text struct start
+FIND_TEXT_STRUCT:
+lwz r3, 0(r12)
+cmpwi r3, 0
+bne FOUND_TEXT_STRUCT
+lwz r12, 0x50(r12)
+b FIND_TEXT_STRUCT
+FOUND_TEXT_STRUCT:
+cmpwi r6, 0x30
+blt RETURN  # Normal stage id, was handled correctly anyway
+cmpwi r6, 0x60
+blt ALPHA_STAGE
+OMEGA_STAGE:
+subi r6, r6, 0x60
+subi r5, r6, 0x2                # Get index into stage table
+slwi r5, r5, 2                  # Multiply by 4 to get bytes offset
+lis r4, <<arrOmegaStageSplashScreenNames>>@h
+ori r4, r4, <<arrOmegaStageSplashScreenNames>>@l
+add r4, r4, r5                  # r4 is now address of element
+lwz r6, 0(r4)                   # r6 is now either a stage ID or wsr address
+cmplwi r6, 0x100
+blt NORMAL_STAGE_NAME           # If less than 0x100 (unsigned), then go to normal stage name selection
+b OVERWRITE_TEXT
+ALPHA_STAGE:
+subi r6, r6, 0x30
+NORMAL_STAGE_NAME:
+# Assumption, r6 contains real stage id
+lis r5, 0x803B
+ori r5, r5, 0x7808              # 0x803B7808: Start address of SelectID -> ExtID lookup
+li r3, 0                        # Current RSS ID
+LOOP_FIND_RANDOM_ID_START:
+mulli r4, r3, 2
+lhzx r4, r5, r4                 # ExtID at this index
+cmpw r4, r6
+beq LOOP_FIND_RANDOM_ID_END
+addi r3, r3, 1
+cmpwi r3, 0x1d # End of the lookup
+blt LOOP_FIND_RANDOM_ID_START
+li r3, 0 # Default if ext ID not found?
+LOOP_FIND_RANDOM_ID_END:
+# Given random stage select ID, get the premade text ID
+# First, get bytes into the array
+lis r4, 0x803e
+ori r4, r4, 0xd488
+add r4, r4, r3
+lbz r4, 0x5C(r4)
+slwi r4, r4, 2
+# Now, try and emulate what's in Text_CopyPremadeTextDataToStruct
+lbz r5, 0x4F(r12)
+slwi r5, r5, 2
+lis r3, 0x804D
+ori r3, r3, 0x1124
+add r3, r3, r5
+lwz r3, 0(r3)
+lwzx r6, r3, r4
+OVERWRITE_TEXT:
+# Assumption: r6 contains wsr address
+stw r6, 0x5C(r12)        # Store string in text struct
+RETURN:
+b 0x80186ecc
+
+NTSC 1.02 ---- 0x80186ec8 ------ 900DAF68 -> Branch
+# Hooked right after splash screen with Slippi Online
+900DAF68    # stw r0, -0x5098(r13) | Code at hook point
+b <funCorrectSlippiOnlineSplashStageName>
+00000000
